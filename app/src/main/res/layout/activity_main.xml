@@ -8,6 +8,7 @@
     android:id="@+id/drawer_layout"
     android:fitsSystemWindows="true"
     tools:openDrawer="start"
+    android:background="@color/black"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -16,18 +17,19 @@
         android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:id="@+id/toolbar"
+            android:background="@color/black"
             android:elevation="4dp"
-            android:background="@color/dark_purple"
+            android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            android:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+            app:itemTextColor="@color/white" />
 
         <FrameLayout
+            android:id="@+id/frame_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/frame_layout"/>
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 
@@ -52,7 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="@color/white"
+            android:background="@color/black"
             app:fabCradleMargin="10dp"
             app:fabCradleRoundedCornerRadius="50dp">
 
@@ -61,21 +63,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
-                android:background="@android:color/transparent"
+                android:background="@color/dark_purple"
                 app:labelVisibilityMode="labeled"
-                app:menu="@menu/bottom_menu" />
+                app:menu="@menu/bottom_menu" >
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/white"
+                    android:src="@drawable/baseline_add_24"
+                    app:maxImageSize="40dp"
+                    app:tint="@color/dark_purple" />
+            </com.google.android.material.bottomnavigation.BottomNavigationView>
 
         </com.google.android.material.bottomappbar.BottomAppBar>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:src="@drawable/baseline_add_24"
-            app:layout_anchor="@id/bottomAppBar"
-            app:maxImageSize="40dp"
-            android:id="@+id/fab"
-            app:tint="@color/dark_purple" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.drawerlayout.widget.DrawerLayout>
