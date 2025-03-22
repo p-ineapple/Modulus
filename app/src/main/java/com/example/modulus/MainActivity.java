@@ -8,6 +8,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -57,30 +60,18 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        //bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
+
+        /*
         if(savedInstanceState == null){
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, new HomeFragment()).commit();
             navigationView.setCheckedItem(nav_home);
-        }
+        }*/
+        bottomNavigationView.setSelectedItemId(nav_home);
+        bottomNavigationView.setOnItemSelectedListener(navListener);
+        Fragment selectedFragment = new HomeFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,selectedFragment).commit();
 
-        replaceFragment(new HomeFragment());
-
-        bottomNavigationView.setBackground(null);
-        NavigationBarView.OnItemSelectedListener navListener = item -> {
-            // By using switch we can easily get the selected fragment by using there id.
-            int itemId = item.getItemId();
-            if (itemId == R.id.home) {
-                replaceFragment(new HomeFragment());
-            } else if (itemId == R.id.calendar) {
-                Log.d("calallsdkjn", "butooooon");
-                replaceFragment(new CalendarFragment());
-            } else if (itemId == R.id.planner) {
-                replaceFragment(new PlannerFragment());
-            } else if (itemId == R.id.insights) {
-                replaceFragment(new InsightsFragment());
-            }
-
-            return true;
-        };
 
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +82,50 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     //outside onCreate
+    /*
+    private BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Fragment selectedFragment = null;
+            switch (item.getItemId()) {
+                case R.id.home:
+                    selectedFragment = new HomeFragment();
+                    break;
 
+                case R.id.calendar:
+                    selectedFragment = new CalendarFragment();
+                    break;
+
+                case R.id.planner:
+                    selectedFragment = new PlannerFragment();
+                    break;
+                case R.id.insights:
+                    selectedFragment = new InsightsFragment();
+                    break;
+            }
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,selectedFragment).commit();
+            return true;
+        }
+    };
+
+    */
+
+    private NavigationBarView.OnItemSelectedListener navListener = item -> {
+        // By using switch we can easily get the selected fragment by using there id.
+        int itemId = item.getItemId();
+        if (itemId == R.id.home) {
+            replaceFragment(new HomeFragment());
+        } else if (itemId == R.id.calendar) {
+            Log.d("calallsdkjn", "butooooon");
+            replaceFragment(new CalendarFragment());
+        } else if (itemId == R.id.planner) {
+            replaceFragment(new PlannerFragment());
+        } else if (itemId == R.id.insights) {
+            replaceFragment(new InsightsFragment());
+        }
+
+        return true;
+    };
     private  void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
