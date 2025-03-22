@@ -13,14 +13,16 @@
         android:theme="@style/Theme.Modulus"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".ActivityLogIn"
+            android:exported="true"
+            android:theme="@style/Theme.Login.BackgroundImageStyle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity"
+            android:parentActivityName=".ActivityLogIn"/>
     </application>
 
 </manifest>
