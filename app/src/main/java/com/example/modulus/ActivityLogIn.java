@@ -29,8 +29,6 @@ public class ActivityLogIn extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        //loginButton = findViewById(R.id.loginButton);
-        //bgImageView = findViewById(R.id.bgImageView);
         register = findViewById(R.id.register);
         email = findViewById(R.id.et_email_address);
         password = findViewById(R.id.et_password);

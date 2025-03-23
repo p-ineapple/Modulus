@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.NavBot" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
@@ -9,16 +9,14 @@
         <item name="colorOnSecondary">@color/dark_pink</item>
     </style>
 
-    <style name="Theme.Modulus" parent="Base.Theme.Modulus" />
+    <style name="Theme.Modulus" parent="Theme.NavBot" />
 
     <style name="Dialoganimation"> <!--might need to change this-->
         <item name="android:windowEnterAnimation">@anim/slide_in</item>
         <item name="android:windowExitAnimation">@anim/slide_out</item>
     </style>
 
-
-
-    <style name="Theme.Login" parent="Base.Theme.Modulus" />
+    <style name="Theme.Login" parent="Theme.NavBot" />
     <style name="Theme.Login.BackgroundImageStyle">
         <item name="android:windowBackground">@drawable/lofi_crop</item>
     </style>
