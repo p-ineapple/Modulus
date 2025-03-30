@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
+import androidx.core.widget.ImageViewCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.Gravity;
@@ -17,6 +18,7 @@ import android.content.Intent;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -40,21 +42,18 @@ import java.util.Objects;
 public class InsightsFragment extends Fragment{
     static ArrayList<Module> moduleList = new ArrayList<Module>();
     ArrayList<String> selectedFilters = new ArrayList<String>();
+    String currentSearchText = "";
     ListView list;
     SearchView search;
-    Button sortButton;
-    Button filterButton;
-    LinearLayout sortView;
-    boolean sortHidden = true;
-    boolean filterHidden = true;
+    ImageButton filterButton;
     Chip asdChip, esdChip, epdChip, daiChip, istdChip, hassChip, smtChip,
             term1Chip, term2Chip, term3Chip, term4Chip, term5Chip, term6Chip, term7Chip, term8Chip,
     coreChip, coreEChip, electiveChip, fCoreChip, fElectiveChip;
     boolean asdChipCheck, esdChipCheck, epdChipCheck, daiChipCheck, istdChipCheck, hassChipCheck, smtChipCheck,
             term1ChipCheck, term2ChipCheck, term3ChipCheck, term4ChipCheck, term5ChipCheck, term6ChipCheck, term7ChipCheck, term8ChipCheck,
     coreChipCheck, coreEChipCheck, electiveChipCheck, fCoreChipCheck, fElectiveChipCheck;
-    Button allButton, idAscButton, idDescButton, nameAscButton, nameDescButton;
-    String currentSearchText = "";
+//    boolean sortHidden = true; boolean filterHidden = true; LinearLayout sortView; Button sortButton;
+//    Button allButton, idAscButton, idDescButton, nameAscButton, nameDescButton;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_insights, container, false);
@@ -75,72 +74,11 @@ public class InsightsFragment extends Fragment{
             }
         });
         //initWidgets
-        sortButton = view.findViewById(R.id.sortButton);
-        sortButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(sortHidden) {
-                    sortHidden = false;
-                    showSort();
-                } else {
-                    sortHidden = true;
-                    hideSort();
-                }
-            }
-        });
         filterButton = view.findViewById(R.id.filterButton);
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showFilterDialog();
-            }
-        });
-
-        sortView = view.findViewById(R.id.sortTabsLayout2);
-
-        allButton = view.findViewById(R.id.allFilter);
-        allButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectedFilters.clear();
-                selectedFilters.add("all");
-
-                list.setAdapter(new ModuleAdaptor(getContext(), 0, moduleList));
-            }
-        });
-
-        idAscButton = view.findViewById(R.id.idAsc);
-        idAscButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collections.sort(moduleList,Module.idAscending);
-                checkForFilter();
-            }
-        });
-        idDescButton = view.findViewById(R.id.idDesc);
-        idDescButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collections.sort(moduleList, Module.idAscending);
-                Collections.reverse(moduleList);
-                checkForFilter();
-            }
-        });
-        nameAscButton = view.findViewById(R.id.nameAsc);
-        nameAscButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collections.sort(moduleList, Module.nameAscending);
-                checkForFilter();
-            }
-        });
-        nameDescButton = view.findViewById(R.id.nameDesc);
-        nameDescButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collections.sort(moduleList, Module.nameAscending);
-                Collections.reverse(moduleList);
-                checkForFilter();
             }
         });
 
@@ -156,12 +94,12 @@ public class InsightsFragment extends Fragment{
                 currentSearchText = s;
                 ArrayList<Module> filteredModules = new ArrayList<Module>();
                 for(Module module: moduleList) {
-                    if(module.getName().toLowerCase().contains(s.toLowerCase())) {
-                        if(selectedFilters.contains("all")) {
+                    if(module.getName().toLowerCase().contains(s.toLowerCase()) || module.getId().contains(s)) {
+                        if(selectedFilters.size() == 1) {
                             filteredModules.add(module);
                         } else {
                             for(String filter: selectedFilters) {
-                                if (module.getName().toLowerCase().contains(filter)) {
+                                if (module.getName().toLowerCase().contains(filter) || module.getId().contains(s)) {
                                     filteredModules.add(module);
                                 }
                             }
@@ -173,7 +111,7 @@ public class InsightsFragment extends Fragment{
             }
         });
 //        hideFilter();
-        hideSort();
+//        hideSort();
         selectedFilters.add("all");
         return view;
     }
@@ -196,10 +134,10 @@ public class InsightsFragment extends Fragment{
         if(status != null && !selectedFilters.contains(status))
             selectedFilters.add(status);
     }
-    private void removeFilter(String status) {
-        selectedFilters.remove(status);
-        applyFilter();
-    }
+//    private void removeFilter(String status) {
+//        selectedFilters.remove(status);
+//        applyFilter();
+//    }
     private void applyFilter() {
         ArrayList<Module> filteredModules = new ArrayList<Module>();
         for(Module module : moduleList) {
@@ -210,14 +148,6 @@ public class InsightsFragment extends Fragment{
                 }
             }
         list.setAdapter(new ModuleAdaptor(getContext(), 0, filteredModules));
-    }
-    private void hideSort() {
-        sortView.setVisibility(View.GONE);
-        sortButton.setText("SORT");
-    }
-    private void showSort() {
-        sortView.setVisibility(View.VISIBLE);
-        sortButton.setText("HIDE");
     }
 
     private void checkForFilter() {
@@ -601,3 +531,75 @@ public class InsightsFragment extends Fragment{
 //    public void onNothingSelected(AdapterView<?> parent) {
 //        // No action needed when no selection is made
 //    }
+
+//sort methods
+//sortButton = view.findViewById(R.id.sortButton);
+//        sortButton.setOnClickListener(new View.OnClickListener() {
+//    @Override
+//    public void onClick(View v) {
+//        if(sortHidden) {
+//            sortHidden = false;
+//            showSort();
+//        } else {
+//            sortHidden = true;
+//            hideSort();
+//        }
+//    }
+//});
+//
+//sortView = view.findViewById(R.id.sortTabsLayout2);
+//
+//allButton = view.findViewById(R.id.allFilter);
+//        allButton.setOnClickListener(new View.OnClickListener() {
+//    @Override
+//    public void onClick(View v) {
+//        selectedFilters.clear();
+//        selectedFilters.add("all");
+//
+//        list.setAdapter(new ModuleAdaptor(getContext(), 0, moduleList));
+//    }
+//});
+//
+//idAscButton = view.findViewById(R.id.idAsc);
+//        idAscButton.setOnClickListener(new View.OnClickListener() {
+//    @Override
+//    public void onClick(View v) {
+//        Collections.sort(moduleList,Module.idAscending);
+//        checkForFilter();
+//    }
+//});
+//idDescButton = view.findViewById(R.id.idDesc);
+//        idDescButton.setOnClickListener(new View.OnClickListener() {
+//    @Override
+//    public void onClick(View v) {
+//        Collections.sort(moduleList, Module.idAscending);
+//        Collections.reverse(moduleList);
+//        checkForFilter();
+//    }
+//});
+//nameAscButton = view.findViewById(R.id.nameAsc);
+//        nameAscButton.setOnClickListener(new View.OnClickListener() {
+//    @Override
+//    public void onClick(View v) {
+//        Collections.sort(moduleList, Module.nameAscending);
+//        checkForFilter();
+//    }
+//});
+//nameDescButton = view.findViewById(R.id.nameDesc);
+//        nameDescButton.setOnClickListener(new View.OnClickListener() {
+//    @Override
+//    public void onClick(View v) {
+//        Collections.sort(moduleList, Module.nameAscending);
+//        Collections.reverse(moduleList);
+//        checkForFilter();
+//    }
+//});
+//
+//private void hideSort() {
+//    sortView.setVisibility(View.GONE);
+//    sortButton.setText("SORT");
+//}
+//private void showSort() {
+//    sortView.setVisibility(View.VISIBLE);
+//    sortButton.setText("HIDE");
+//}
