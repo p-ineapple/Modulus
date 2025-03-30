@@ -1,0 +1,788 @@
+Index: app/src/main/res/layout/fragment_insights.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<FrameLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    tools:context=\".InsightsFragment\">\n\n    <!-- TODO: Update blank fragment layout -->\n    <TextView\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"match_parent\"\n        android:text=\"Insights\"\n        android:gravity=\"center\"\n        android:textSize=\"30sp\"\n        android:textColor=\"@color/dark_purple\"/>\n\n</FrameLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_insights.xml b/app/src/main/res/layout/fragment_insights.xml
+--- a/app/src/main/res/layout/fragment_insights.xml	(revision 6a064f89b8d3e219e948eb05c21da94b73007648)
++++ b/app/src/main/res/layout/fragment_insights.xml	(date 1742820797874)
+@@ -3,15 +3,16 @@
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
++    android:id="@+id/filter"
+     tools:context=".InsightsFragment">
+ 
+-    <!-- TODO: Update blank fragment layout -->
+-    <TextView
++    <!--Spinner widget-->
++    <Spinner
++        android:id="@+id/spinner"
+         android:layout_width="match_parent"
+-        android:layout_height="match_parent"
+-        android:text="Insights"
+-        android:gravity="center"
+-        android:textSize="30sp"
+-        android:textColor="@color/dark_purple"/>
+-
++        android:layout_height="50dp"
++        android:paddingHorizontal="20dp"
++        android:paddingVertical="10dp"
++        android:layout_marginTop="10dp"
++        android:background="@color/purple_200"/>
+ </FrameLayout>
+\ No newline at end of file
+Index: app/src/main/java/com/example/modulus/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus;\n\nimport static com.example.modulus.R.id.nav_home;\n\nimport android.app.Dialog;\nimport android.graphics.Color;\nimport android.graphics.drawable.ColorDrawable;\nimport android.os.Bundle;\nimport android.util.Log;\nimport android.view.Gravity;\nimport android.view.Menu;\nimport android.view.MenuItem;\nimport android.view.View;\nimport android.view.ViewGroup;\nimport android.view.Window;\nimport android.widget.ImageView;\nimport android.widget.LinearLayout;\nimport android.widget.Toast;\n\n\nimport androidx.activity.EdgeToEdge;\nimport androidx.annotation.NonNull;\nimport androidx.appcompat.app.ActionBarDrawerToggle;\nimport androidx.appcompat.app.AppCompatActivity;\nimport androidx.appcompat.widget.Toolbar;\nimport androidx.core.graphics.Insets;\nimport androidx.core.view.ViewCompat;\nimport androidx.core.view.WindowInsetsCompat;\nimport androidx.drawerlayout.widget.DrawerLayout;\nimport androidx.fragment.app.Fragment;\nimport androidx.fragment.app.FragmentManager;\nimport androidx.fragment.app.FragmentTransaction;\n\nimport com.google.android.material.bottomnavigation.BottomNavigationView;\nimport com.google.android.material.floatingactionbutton.FloatingActionButton;\nimport com.google.android.material.navigation.NavigationBarView;\nimport com.google.android.material.navigation.NavigationView;\n\n\n\npublic class MainActivity extends AppCompatActivity {\n\n    FloatingActionButton fab;\n    DrawerLayout drawerLayout;\n    BottomNavigationView bottomNavigationView;\n\n    @Override\n    protected void onCreate(Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n        //EdgeToEdge.enable(this);\n        setContentView(R.layout.activity_main);\n\n        bottomNavigationView = findViewById(R.id.bottomNavigationView);\n        fab = findViewById(R.id.fab);\n        drawerLayout = findViewById(R.id.drawer_layout);\n        NavigationView navigationView = findViewById(R.id.nav_view);\n        Toolbar toolbar = findViewById(R.id.toolbar);\n        setSupportActionBar(toolbar);\n        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout,toolbar, R.string.open_nav, R.string.close_nav);\n        drawerLayout.addDrawerListener(toggle);\n        toggle.syncState();\n\n        //bottomNavigationView.setOnNavigationItemSelectedListener(navListener);\n\n        /*\n        if(savedInstanceState == null){\n            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, new HomeFragment()).commit();\n            navigationView.setCheckedItem(nav_home);\n        }*/\n        bottomNavigationView.setSelectedItemId(nav_home);\n        bottomNavigationView.setOnItemSelectedListener(navListener);\n        Fragment selectedFragment = new HomeFragment();\n        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,selectedFragment).commit();\n\n\n\n        fab.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View view) {\n                showBottomDialog();\n            }\n        });\n    }\n    //outside onCreate\n    /*\n    private BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {\n        @Override\n        public boolean onNavigationItemSelected(@NonNull MenuItem item) {\n            Fragment selectedFragment = null;\n            switch (item.getItemId()) {\n                case R.id.home:\n                    selectedFragment = new HomeFragment();\n                    break;\n\n                case R.id.calendar:\n                    selectedFragment = new CalendarFragment();\n                    break;\n\n                case R.id.planner:\n                    selectedFragment = new PlannerFragment();\n                    break;\n                case R.id.insights:\n                    selectedFragment = new InsightsFragment();\n                    break;\n            }\n            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,selectedFragment).commit();\n            return true;\n        }\n    };\n\n    */\n\n    private NavigationBarView.OnItemSelectedListener navListener = item -> {\n        // By using switch we can easily get the selected fragment by using there id.\n        int itemId = item.getItemId();\n        if (itemId == R.id.home) {\n            replaceFragment(new HomeFragment());\n        } else if (itemId == R.id.calendar) {\n            Log.d(\"calallsdkjn\", \"butooooon\");\n            replaceFragment(new CalendarFragment());\n        } else if (itemId == R.id.planner) {\n            replaceFragment(new PlannerFragment());\n        } else if (itemId == R.id.insights) {\n            replaceFragment(new InsightsFragment());\n        }\n\n        return true;\n    };\n    private  void replaceFragment(Fragment fragment) {\n        FragmentManager fragmentManager = getSupportFragmentManager();\n        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();\n        fragmentTransaction.replace(R.id.frame_layout, fragment);\n        fragmentTransaction.commit();\n    }\n\n    private void showBottomDialog() {\n\n        final Dialog dialog = new Dialog(this);\n        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);\n        dialog.setContentView(R.layout.bottomsheetlayout);\n\n        LinearLayout eventLayout = dialog.findViewById(R.id.layoutEvent);\n        LinearLayout taskLayout = dialog.findViewById(R.id.layoutTask);\n        ImageView cancelButton = dialog.findViewById(R.id.cancelButton);\n\n        eventLayout.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n\n                dialog.dismiss();\n                Toast.makeText(MainActivity.this,\"Upload event lmao\",Toast.LENGTH_SHORT).show();\n\n            }\n        });\n\n        taskLayout.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n\n                dialog.dismiss();\n                Toast.makeText(MainActivity.this,\"task task atsdk aajfkwbjkav\",Toast.LENGTH_SHORT).show();\n\n            }\n        });\n\n\n        cancelButton.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View view) {\n                dialog.dismiss();\n            }\n        });\n\n        dialog.show();\n        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);\n        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));\n        //dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;\n        dialog.getWindow().setGravity(Gravity.BOTTOM);\n\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/MainActivity.java b/app/src/main/java/com/example/modulus/MainActivity.java
+--- a/app/src/main/java/com/example/modulus/MainActivity.java	(revision 6a064f89b8d3e219e948eb05c21da94b73007648)
++++ b/app/src/main/java/com/example/modulus/MainActivity.java	(date 1742782995616)
+@@ -3,6 +3,7 @@
+ import static com.example.modulus.R.id.nav_home;
+ 
+ import android.app.Dialog;
++import android.content.Intent;
+ import android.graphics.Color;
+ import android.graphics.drawable.ColorDrawable;
+ import android.os.Bundle;
+@@ -43,6 +44,8 @@
+     FloatingActionButton fab;
+     DrawerLayout drawerLayout;
+     BottomNavigationView bottomNavigationView;
++    NavigationView navigationView;
++    ActionBarDrawerToggle toggle;
+ 
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+@@ -53,33 +56,79 @@
+         bottomNavigationView = findViewById(R.id.bottomNavigationView);
+         fab = findViewById(R.id.fab);
+         drawerLayout = findViewById(R.id.drawer_layout);
+-        NavigationView navigationView = findViewById(R.id.nav_view);
++        navigationView = findViewById(R.id.nav_view);
+         Toolbar toolbar = findViewById(R.id.toolbar);
+         setSupportActionBar(toolbar);
+-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout,toolbar, R.string.open_nav, R.string.close_nav);
++        toggle = new ActionBarDrawerToggle(this, drawerLayout,toolbar, R.string.open_nav, R.string.close_nav);
+         drawerLayout.addDrawerListener(toggle);
+         toggle.syncState();
+ 
+         //bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
+ 
+-        /*
+-        if(savedInstanceState == null){
++        /*if(savedInstanceState == null){
+             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, new HomeFragment()).commit();
+             navigationView.setCheckedItem(nav_home);
+         }*/
++
+         bottomNavigationView.setSelectedItemId(nav_home);
+         bottomNavigationView.setOnItemSelectedListener(navListener);
+         Fragment selectedFragment = new HomeFragment();
+         getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,selectedFragment).commit();
+ 
+-
+-
+         fab.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 showBottomDialog();
+             }
+         });
++
++        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
++            // Called when an item in the NavigationView is selected.
++            @Override
++            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
++                // Handle the selected item based on its ID
++                if (item.getItemId() == R.id.nav_home) {
++                    // Show a Toast message for the Account item
++                    Toast.makeText(MainActivity.this, "Account Details", Toast.LENGTH_SHORT).show();
++                }
++                if (item.getItemId() == R.id.nav_settings) {
++                    // Show a Toast message for the Settings item
++                    Toast.makeText(MainActivity.this, "Settings Opened", Toast.LENGTH_SHORT).show();
++                }
++                if (item.getItemId() == R.id.nav_about) {
++                    // Show a Toast message for the Settings item
++                    Toast.makeText(MainActivity.this, "About Us", Toast.LENGTH_SHORT).show();
++                }
++                if (item.getItemId() == R.id.nav_logout) {
++                    // Show a Toast message for the Logout item
++                    Toast.makeText(MainActivity.this, "You are Logged Out", Toast.LENGTH_SHORT).show();
++                    Log.d("Logout", "LOGOUTTTTT");
++                    Intent intent = new Intent(MainActivity.this, ActivityLogIn.class);
++                    startActivity(intent);
++                }
++
++                // Close the drawer after selection
++                //drawerLayout.closeDrawers();
++                // Indicate that the item selection has been handled
++                return true;
++            }
++        });
++
++        /*// Add a callback to handle the back button press
++        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
++            // Called when the back button is pressed.
++            @Override
++            public void handleOnBackPressed() {
++                // Check if the drawer is open
++                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
++                    // Close the drawer if it's open
++                    drawerLayout.closeDrawer(GravityCompat.START);
++                } else {
++                    // Finish the activity if the drawer is closed
++                    finish();
++                }
++            }
++        });*/
+     }
+     //outside onCreate
+     /*
+@@ -110,6 +159,14 @@
+ 
+     */
+ 
++    @Override
++    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
++        if (toggle.onOptionsItemSelected(item)) {
++            return true;
++        }
++        return super.onOptionsItemSelected(item);
++    }
++
+     private NavigationBarView.OnItemSelectedListener navListener = item -> {
+         // By using switch we can easily get the selected fragment by using there id.
+         int itemId = item.getItemId();
+@@ -126,7 +183,7 @@
+ 
+         return true;
+     };
+-    private  void replaceFragment(Fragment fragment) {
++    private void replaceFragment(Fragment fragment) {
+         FragmentManager fragmentManager = getSupportFragmentManager();
+         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+         fragmentTransaction.replace(R.id.frame_layout, fragment);
+Index: app/src/main/java/com/example/modulus/InsightsFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus;\n\nimport android.os.Bundle;\n\nimport androidx.fragment.app.Fragment;\n\nimport android.view.LayoutInflater;\nimport android.view.View;\nimport android.view.ViewGroup;\n\n\npublic class InsightsFragment extends Fragment {\n    public View onCreateView(LayoutInflater inflater, ViewGroup container,\n                             Bundle savedInstanceState) {\n        // Inflate the layout for this fragment\n        return inflater.inflate(R.layout.fragment_insights, container, false);\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/InsightsFragment.java b/app/src/main/java/com/example/modulus/InsightsFragment.java
+--- a/app/src/main/java/com/example/modulus/InsightsFragment.java	(revision 6a064f89b8d3e219e948eb05c21da94b73007648)
++++ b/app/src/main/java/com/example/modulus/InsightsFragment.java	(date 1742821337041)
+@@ -7,12 +7,48 @@
+ import android.view.LayoutInflater;
+ import android.view.View;
+ import android.view.ViewGroup;
+-
++import android.widget.AdapterView;
++import android.widget.ArrayAdapter;
++import android.widget.Spinner;
++import android.widget.Toast;
+ 
+-public class InsightsFragment extends Fragment {
+-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+-                             Bundle savedInstanceState) {
+-        // Inflate the layout for this fragment
++public class InsightsFragment extends Fragment{
++    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+         return inflater.inflate(R.layout.fragment_insights, container, false);
+     }
+-}
+\ No newline at end of file
++}
++
++//noob filter
++//public class InsightsFragment extends Fragment implements AdapterView.OnItemSelectedListener{
++//    private String[] filter = {
++//            "ASD", "ESD", "EPD", "CSD", "DAI"
++//    };
++//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
++//                             Bundle savedInstanceState) {
++//        View view = inflater.inflate(R.layout.fragment_insights, container, false);
++//        Spinner spin = view.findViewById(R.id.spinner);
++//        spin.setOnItemSelectedListener(this);
++//
++//        // Create the instance of ArrayAdapter having the list of courses
++//        ArrayAdapter<String> ad = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_item, filter);
++//
++//        // Set simple layout resource file for each item of spinner
++//        ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
++//
++//        // Set the ArrayAdapter (ad) data on the Spinner which binds data to spinner
++//        spin.setAdapter(ad);
++//        // Inflate the layout for this fragment
++//        return view;
++//    }
++//
++//    @Override
++//    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
++//        // Make toast of the name of the course which is selected in the spinner
++//        Toast.makeText(this.getContext(), filter[position], Toast.LENGTH_SHORT).show();
++//    }
++//
++//    @Override
++//    public void onNothingSelected(AdapterView<?> parent) {
++//        // No action needed when no selection is made
++//    }
++//}
+\ No newline at end of file
+Index: app/src/main/res/menu/nav_menu.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<menu\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    tools:showIn = \"navigation_view\">\n\n    <group\n        android:checkableBehavior=\"single\">\n\n        <item\n            android:id=\"@+id/nav_home\"\n            android:icon=\"@drawable/home\"\n            android:title=\"Home\" />\n\n        <item\n            android:id=\"@+id/nav_settings\"\n            android:icon=\"@drawable/settings\"\n            android:title=\"Settings\"/>\n\n        <!--item\n            android:id=\"@+id/nav_share\"\n            android:icon=\"@drawable/nav_share\"\n            android:title=\"Share\"/-->\n\n        <item\n            android:id=\"@+id/nav_about\"\n            android:icon=\"@drawable/about_tbr\"\n            android:title=\"About Us\"/>\n    </group>\n    <item\n        android:title=\"\">\n\n        <menu>\n            <item\n                android:id=\"@+id/nav_logout\"\n                android:icon=\"@drawable/logout\"\n                android:title=\"Logout\"/>\n        </menu>\n\n    </item>\n\n</menu>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/menu/nav_menu.xml b/app/src/main/res/menu/nav_menu.xml
+--- a/app/src/main/res/menu/nav_menu.xml	(revision 6a064f89b8d3e219e948eb05c21da94b73007648)
++++ b/app/src/main/res/menu/nav_menu.xml	(date 1742723520069)
+@@ -2,6 +2,7 @@
+ <menu
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:tools="http://schemas.android.com/tools"
++    tools:ignore="HardcodedText"
+     tools:showIn = "navigation_view">
+ 
+     <group
+Index: app/src/main/res/layout/activity_main.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<androidx.drawerlayout.widget.DrawerLayout\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    android:id=\"@+id/drawer_layout\"\n    android:fitsSystemWindows=\"true\"\n    tools:openDrawer=\"start\"\n    android:background=\"@color/black\"\n    tools:context=\".MainActivity\">\n\n    <LinearLayout\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"match_parent\"\n        android:orientation=\"vertical\">\n\n        <androidx.appcompat.widget.Toolbar\n            android:id=\"@+id/toolbar\"\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"56dp\"\n            android:background=\"@color/black\"\n            android:elevation=\"4dp\"\n            android:popupTheme=\"@style/ThemeOverlay.AppCompat.Light\"\n            android:theme=\"@style/ThemeOverlay.AppCompat.Dark.ActionBar\"\n            app:itemTextColor=\"@color/white\" />\n\n        <FrameLayout\n            android:id=\"@+id/frame_layout\"\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"match_parent\" />\n\n    </LinearLayout>\n\n    <com.google.android.material.navigation.NavigationView\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"match_parent\"\n        android:id=\"@+id/nav_view\"\n        android:layout_gravity=\"start\"\n        app:headerLayout=\"@layout/nav_header\"\n        app:menu=\"@menu/nav_menu\"\n        app:itemIconTint=\"@color/dark_purple\"\n        app:itemTextColor=\"@color/dark_purple\"/>\n\n\n    <androidx.coordinatorlayout.widget.CoordinatorLayout\n\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"match_parent\">\n\n        <com.google.android.material.bottomappbar.BottomAppBar\n            android:id=\"@+id/bottomAppBar\"\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"wrap_content\"\n            android:layout_gravity=\"bottom\"\n            android:background=\"@color/light_purple\"\n            app:fabCradleMargin=\"10dp\"\n            app:fabCradleRoundedCornerRadius=\"50dp\">\n\n            <com.google.android.material.bottomnavigation.BottomNavigationView\n                android:id=\"@+id/bottomNavigationView\"\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"wrap_content\"\n                android:background=\"@color/light_purple\"\n                android:layout_marginEnd=\"20dp\"\n                app:labelVisibilityMode=\"labeled\"\n                app:menu=\"@menu/bottom_menu\" />\n\n        </com.google.android.material.bottomappbar.BottomAppBar>\n        <com.google.android.material.floatingactionbutton.FloatingActionButton\n            android:id=\"@+id/fab\"\n            android:layout_width=\"wrap_content\"\n            android:layout_height=\"wrap_content\"\n            android:backgroundTint=\"@color/light_purple\"\n            android:src=\"@drawable/baseline_add_24\"\n            app:layout_anchor=\"@id/bottomAppBar\"\n            app:maxImageSize=\"40dp\"\n            app:tint=\"@color/dark_purple\" />\n    </androidx.coordinatorlayout.widget.CoordinatorLayout>\n</androidx.drawerlayout.widget.DrawerLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_main.xml b/app/src/main/res/layout/activity_main.xml
+--- a/app/src/main/res/layout/activity_main.xml	(revision 6a064f89b8d3e219e948eb05c21da94b73007648)
++++ b/app/src/main/res/layout/activity_main.xml	(date 1742712884749)
+@@ -24,7 +24,7 @@
+             android:elevation="4dp"
+             android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+-            app:itemTextColor="@color/white" />
++            app:itemTextColor="@color/white"/>
+ 
+         <FrameLayout
+             android:id="@+id/frame_layout"
+Index: app/src/main/res/layout/bottom_sheet_filter.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/bottom_sheet_filter.xml b/app/src/main/res/layout/bottom_sheet_filter.xml
+new file mode 100644
+--- /dev/null	(date 1742821451584)
++++ b/app/src/main/res/layout/bottom_sheet_filter.xml	(date 1742821451584)
+@@ -0,0 +1,210 @@
++<?xml version="1.0" encoding="utf-8"?>
++<layout>
++
++    <data>
++
++        <variable
++            name="viewModel"
++            type="com.example.restcountries.ui.filter.FilterViewModel" />
++
++    </data>
++
++    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
++        xmlns:app="http://schemas.android.com/apk/res-auto"
++        xmlns:tools="http://schemas.android.com/tools"
++        android:id="@+id/bottomSheetParent"
++        android:layout_width="match_parent"
++        android:layout_height="match_parent">
++
++        <androidx.constraintlayout.widget.ConstraintLayout
++            android:id="@+id/bottomSheet"
++            style="@style/Widget.Material3.BottomSheet.Modal"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:paddingHorizontal="24dp"
++            android:paddingBottom="16dp"
++            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
++
++            <com.google.android.material.bottomsheet.BottomSheetDragHandleView
++                android:id="@+id/dragHandle"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                app:layout_constraintEnd_toEndOf="parent"
++                app:layout_constraintStart_toStartOf="parent"
++                app:layout_constraintTop_toTopOf="parent" />
++
++            <TextView
++                android:id="@+id/lblTitle"
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:text="@string/countries_filter_title"
++                android:textAppearance="?textAppearanceTitleLarge"
++                app:layout_constraintEnd_toEndOf="parent"
++                app:layout_constraintStart_toStartOf="parent"
++                app:layout_constraintTop_toBottomOf="@id/dragHandle" />
++
++            <TextView
++                android:id="@+id/lblSortBy"
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_marginTop="12dp"
++                android:text="@string/filter_sheet_label_sort_by"
++                android:textAppearance="?textAppearanceLabelLarge"
++                app:layout_constraintStart_toStartOf="parent"
++                app:layout_constraintTop_toBottomOf="@id/lblTitle" />
++
++            <HorizontalScrollView
++                android:id="@+id/layoutSorts"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_marginHorizontal="16dp"
++                app:layout_constraintEnd_toEndOf="parent"
++                app:layout_constraintStart_toStartOf="parent"
++                app:layout_constraintTop_toBottomOf="@id/lblSortBy">
++
++                <com.google.android.material.chip.ChipGroup
++                    android:id="@+id/cg_sort_types"
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
++                    app:selectionRequired="false"
++                    app:singleSelection="true">
++
++                    <com.google.android.material.chip.Chip
++                        android:id="@+id/chipAlphabeticalSort"
++                        style="@style/Widget.Material3.Chip.Filter"
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:checked="@{ viewModel.uiState.chipAlphabeticalSortIsChecked }"
++                        android:text="@string/filter_sheet_sort_alphabetical_order"
++                        tools:checked="true" />
++
++                    <com.google.android.material.chip.Chip
++                        android:id="@+id/chipByPopulationSort"
++                        style="@style/Widget.Material3.Chip.Filter"
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:checked="@{ viewModel.uiState.chipByPopulationSortIsChecked }"
++                        android:text="@string/filter_sheet_sort_population" />
++
++                </com.google.android.material.chip.ChipGroup>
++
++            </HorizontalScrollView>
++
++            <com.google.android.material.divider.MaterialDivider
++                android:id="@+id/sortDivider"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_marginTop="8dp"
++                app:layout_constraintEnd_toEndOf="parent"
++                app:layout_constraintStart_toStartOf="parent"
++                app:layout_constraintTop_toBottomOf="@id/layoutSorts" />
++
++            <TextView
++                android:id="@+id/lblSubregion"
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_marginTop="24dp"
++                android:text="@string/filter_sheet_label_subregion"
++                android:textAppearance="?textAppearanceLabelLarge"
++                app:layout_constraintStart_toStartOf="parent"
++                app:layout_constraintTop_toBottomOf="@id/sortDivider" />
++
++            <com.google.android.material.chip.ChipGroup
++                android:id="@+id/cgSubregion"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_marginHorizontal="16dp"
++                app:chipSpacingVertical="0dp"
++                app:layout_constraintEnd_toEndOf="parent"
++                app:layout_constraintStart_toStartOf="parent"
++                app:layout_constraintTop_toBottomOf="@id/lblSubregion"
++                app:selectionRequired="false"
++                app:singleSelection="false">
++
++                <com.google.android.material.chip.Chip
++                    style="@style/Widget.Material3.Chip.Filter"
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
++                    android:text="Northern Europe"
++                    tools:checked="true" />
++
++                <com.google.android.material.chip.Chip
++                    style="@style/Widget.Material3.Chip.Filter"
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
++                    android:text="Western Europe" />
++
++                <com.google.android.material.chip.Chip
++                    style="@style/Widget.Material3.Chip.Filter"
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
++                    android:text="Southern Europe" />
++
++                <com.google.android.material.chip.Chip
++                    style="@style/Widget.Material3.Chip.Filter"
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
++                    android:text="Southeast Europe" />
++
++                <com.google.android.material.chip.Chip
++                    style="@style/Widget.Material3.Chip.Filter"
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
++                    android:text="Central Europe" />
++
++                <com.google.android.material.chip.Chip
++                    style="@style/Widget.Material3.Chip.Filter"
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
++                    android:text="Eastern Europe" />
++
++            </com.google.android.material.chip.ChipGroup>
++
++            <com.google.android.material.divider.MaterialDivider
++                android:id="@+id/dividerFilter"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_marginTop="8dp"
++                app:layout_constraintEnd_toEndOf="parent"
++                app:layout_constraintStart_toStartOf="parent"
++                app:layout_constraintTop_toBottomOf="@id/cgSubregion" />
++
++            <com.google.android.material.button.MaterialButton
++                android:id="@+id/btnApply"
++                style="@style/Widget.Material3.Button"
++                android:layout_width="0dp"
++                android:layout_height="wrap_content"
++                android:layout_marginStart="8dp"
++                android:layout_marginTop="16dp"
++                android:onClick="@{ () -> viewModel.applyFilters() }"
++                android:text="@string/action_apply"
++                app:layout_constraintEnd_toEndOf="parent"
++                app:layout_constraintStart_toEndOf="@id/frameLayout"
++                app:layout_constraintTop_toBottomOf="@id/dividerFilter" />
++
++            <FrameLayout
++                android:id="@+id/frameLayout"
++                android:layout_width="0dp"
++                android:layout_height="wrap_content"
++                android:layout_marginEnd="8dp"
++                android:clipChildren="false"
++                android:clipToPadding="false"
++                app:layout_constraintEnd_toStartOf="@id/btnApply"
++                app:layout_constraintStart_toStartOf="parent"
++                app:layout_constraintTop_toTopOf="@id/btnApply">
++
++                <com.google.android.material.button.MaterialButton
++                    android:id="@+id/btnResetAll"
++                    style="?attr/materialButtonOutlinedStyle"
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:onClick="@{ () -> viewModel.resetFilters() }"
++                    android:text="@string/action_rest_all" />
++
++            </FrameLayout>
++
++        </androidx.constraintlayout.widget.ConstraintLayout>
++
++    </androidx.coordinatorlayout.widget.CoordinatorLayout>
++
++</layout>
+\ No newline at end of file
+Index: app/src/main/java/com/example/modulus/filter/Model.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/filter/Model.java b/app/src/main/java/com/example/modulus/filter/Model.java
+new file mode 100644
+--- /dev/null	(date 1742822197105)
++++ b/app/src/main/java/com/example/modulus/filter/Model.java	(date 1742822197105)
+@@ -0,0 +1,79 @@
++package com.example.modulus.filter;
++
++import java.io.Serializable;
++import java.util.HashSet;
++import java.util.Set;
++
++public class Model implements Serializable {
++    private String searchQuery;
++    private SortType sortType;
++    private Set<Subregion> subregions;
++
++    public Model(String searchQuery, SortType sortType, Set<Subregion> subregions) {
++        this.searchQuery = searchQuery;
++        this.sortType = sortType;
++        this.subregions = subregions != null ? subregions : new HashSet<>();
++    }
++
++    public String getSearchQuery() {
++        return searchQuery;
++    }
++
++    public SortType getSortType() {
++        return sortType;
++    }
++
++    public Set<Subregion> getSubregions() {
++        return subregions;
++    }
++
++    public static class Builder {
++        private String searchQuery;
++        private SortType sortType = SortType.NONE;
++        private Set<Subregion> subregions = new HashSet<>();
++
++        public Builder searchQuery(String searchQuery) {
++            this.searchQuery = searchQuery;
++            return this;
++        }
++
++        public Builder sortType(SortType sortType) {
++            this.sortType = sortType;
++            return this;
++        }
++
++        public Builder subregions(Set<Subregion> subregions) {
++            this.subregions = subregions != null ? subregions : new HashSet<>();
++            return this;
++        }
++
++        public Model build() {
++            return new Model(searchQuery, sortType, subregions);
++        }
++    }
++}
++
++enum SortType {
++    NONE,
++    ALPHABETICAL_ASC,
++    POPULATION_ASC
++}
++
++enum Subregion {
++    NORTHERN_EUROPE("Northern Europe"),
++    WESTERN_EUROPE("Western Europe"),
++    SOUTHERN_EUROPE("Southern Europe"),
++    SOUTHEAST_EUROPE("Southeast Europe"),
++    CENTRAL_EUROPE("Central Europe"),
++    EASTERN_EUROPE("Eastern Europe");
++
++    private final String subregion;
++
++    Subregion(String subregion) {
++        this.subregion = subregion;
++    }
++
++    public String getSubregion() {
++        return subregion;
++    }
++}
+Index: app/src/main/java/com/example/modulus/filter/FilterViewModel.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/filter/FilterViewModel.java b/app/src/main/java/com/example/modulus/filter/FilterViewModel.java
+new file mode 100644
+--- /dev/null	(date 1742822197111)
++++ b/app/src/main/java/com/example/modulus/filter/FilterViewModel.java	(date 1742822197111)
+@@ -0,0 +1,191 @@
++package com.example.modulus.filter;
++
++import android.os.Parcel;
++import android.os.Parcelable;
++
++import androidx.annotation.NonNull;
++import androidx.lifecycle.LiveData;
++import androidx.lifecycle.MutableLiveData;
++import androidx.lifecycle.SavedStateHandle;
++import androidx.lifecycle.ViewModel;
++
++import java.util.HashSet;
++import java.util.Set;
++
++public class FilterViewModel extends ViewModel {
++
++    public static final String KEY_FILTER_DATA = "filter_data";
++
++    public static class FilterData implements Parcelable {
++        private SortType sortType;
++        private Set<Subregion> subregions;
++
++        public FilterData(SortType sortType, Set<Subregion> subregions) {
++            this.sortType = sortType;
++            this.subregions = subregions;
++        }
++
++        protected FilterData(Parcel in) {
++        }
++
++        public static final Creator<FilterData> CREATOR = new Creator<FilterData>() {
++            @Override
++            public FilterData createFromParcel(Parcel in) {
++                return new FilterData(in);
++            }
++
++            @Override
++            public FilterData[] newArray(int size) {
++                return new FilterData[size];
++            }
++        };
++
++        public SortType getSortType() {
++            return sortType;
++        }
++
++        public Set<Subregion> getSubregions() {
++            return subregions;
++        }
++
++        @Override
++        public int describeContents() {
++            return 0;
++        }
++
++        @Override
++        public void writeToParcel(@NonNull Parcel dest, int flags) {
++        }
++    }
++
++    public static class UiState {
++        private SortType sortType;
++        private Set<Subregion> subregions;
++        private boolean clearAllFilters;
++        private boolean applyAllFilters;
++
++        public UiState(SortType sortType, Set<Subregion> subregions, boolean clearAllFilters, boolean applyAllFilters) {
++            this.sortType = sortType;
++            this.subregions = subregions;
++            this.clearAllFilters = clearAllFilters;
++            this.applyAllFilters = applyAllFilters;
++        }
++
++        public int getFilterCount() {
++            int sortCount = (sortType == SortType.NONE) ? 0 : 1;
++            int filterCount = subregions.size();
++            return sortCount + filterCount;
++        }
++
++        public boolean isChipAlphabeticalSortChecked() {
++            return sortType == SortType.ALPHABETICAL_ASC;
++        }
++
++        public boolean isChipByPopulationSortChecked() {
++            return sortType == SortType.POPULATION_ASC;
++        }
++
++        public SortType getSortType() {
++            return sortType;
++        }
++
++        public Set<Subregion> getSubregions() {
++            return subregions;
++        }
++
++        public boolean isClearAllFilters() {
++            return clearAllFilters;
++        }
++
++        public boolean isApplyAllFilters() {
++            return applyAllFilters;
++        }
++    }
++
++    private final MutableLiveData<UiState> _uiState = new MutableLiveData<>();
++    public LiveData<UiState> uiState = _uiState;
++
++    public FilterViewModel(SavedStateHandle savedStateHandle) {
++        FilterData filterData = savedStateHandle.get(KEY_FILTER_DATA);
++        if (filterData != null) {
++            _uiState.setValue(new UiState(
++                    filterData.getSortType(),
++                    filterData.getSubregions(),
++                    false, // clearAllFilters is false initially
++                    false  // applyAllFilters is false initially
++            ));
++        } else {
++            _uiState.setValue(new UiState(
++                    SortType.NONE,
++                    new HashSet<>(),
++                    false,
++                    false
++            ));
++        }
++    }
++
++    public void setSortType(SortType sortType) {
++        UiState currentState = _uiState.getValue();
++        if (currentState != null) {
++            _uiState.setValue(new UiState(
++                    sortType,
++                    currentState.getSubregions(),
++                    currentState.isClearAllFilters(),
++                    currentState.isApplyAllFilters()
++            ));
++        }
++    }
++
++    public void selectSubregion(Subregion subregion) {
++        UiState currentState = _uiState.getValue();
++        if (currentState != null) {
++            Set<Subregion> subregions = new HashSet<>(currentState.getSubregions());
++            subregions.add(subregion);
++            _uiState.setValue(new UiState(
++                    currentState.getSortType(),
++                    subregions,
++                    currentState.isClearAllFilters(),
++                    currentState.isApplyAllFilters()
++            ));
++        }
++    }
++
++    public void deselectSubregion(Subregion subregion) {
++        UiState currentState = _uiState.getValue();
++        if (currentState != null) {
++            Set<Subregion> subregions = new HashSet<>(currentState.getSubregions());
++            subregions.remove(subregion);
++            _uiState.setValue(new UiState(
++                    currentState.getSortType(),
++                    subregions,
++                    currentState.isClearAllFilters(),
++                    currentState.isApplyAllFilters()
++            ));
++        }
++    }
++
++    public void resetFilters() {
++        UiState currentState = _uiState.getValue();
++        if (currentState != null) {
++            _uiState.setValue(new UiState(
++                    SortType.NONE,
++                    new HashSet<>(),
++                    true,  // clearAllFilters is true after reset
++                    currentState.isApplyAllFilters()
++            ));
++        }
++    }
++
++    public void applyFilters() {
++        UiState currentState = _uiState.getValue();
++        if (currentState != null) {
++            _uiState.setValue(new UiState(
++                    currentState.getSortType(),
++                    currentState.getSubregions(),
++                    currentState.isClearAllFilters(),
++                    true  // applyAllFilters is true after applying
++            ));
++        }
++    }
++}
++
