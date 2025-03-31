@@ -1,14 +1,10 @@
 package com.example.modulus;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-
-import androidx.core.widget.ImageViewCompat;
 import androidx.fragment.app.Fragment;
-
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 
@@ -30,9 +25,6 @@ import com.google.android.material.chip.Chip;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
 
 //import android.widget.AdapterView;
 //import android.widget.ArrayAdapter;
@@ -42,10 +34,7 @@ import java.util.Objects;
 public class InsightsFragment extends Fragment{
     static ArrayList<Module> moduleList = new ArrayList<Module>();
     ArrayList<String> selectedFilters = new ArrayList<String>();
-    String currentSearchText = "";
-    ListView list;
-    SearchView search;
-    ImageButton filterButton;
+    String currentSearchText = ""; ListView list; SearchView search; ImageButton filterButton;
     Chip asdChip, esdChip, epdChip, daiChip, istdChip, hassChip, smtChip,
             term1Chip, term2Chip, term3Chip, term4Chip, term5Chip, term6Chip, term7Chip, term8Chip,
     coreChip, coreEChip, electiveChip, fCoreChip, fElectiveChip;
@@ -71,14 +60,6 @@ public class InsightsFragment extends Fragment{
                 Intent showDetail = new Intent(getContext(), ModuleDetailsActivity.class);
                 showDetail.putExtra("id", selectModule.getId());
                 startActivity(showDetail);
-            }
-        });
-        //initWidgets
-        filterButton = view.findViewById(R.id.filterButton);
-        filterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFilterDialog();
             }
         });
 
@@ -110,8 +91,13 @@ public class InsightsFragment extends Fragment{
                 return false;
             }
         });
-//        hideFilter();
-//        hideSort();
+        filterButton = view.findViewById(R.id.filterButton);
+        filterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFilterDialog();
+            }
+        });
         selectedFilters.add("all");
         return view;
     }
