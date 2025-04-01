@@ -24,7 +24,7 @@
         <activity android:name=".MainActivity"
             android:parentActivityName=".ActivityLogIn"/>
 
-        <activity android:name=".ModuleDetailsActivity"
+        <activity android:name=".Insights.ModuleDetailsActivity"
             android:parentActivityName=".MainActivity"></activity>
     </application>
 

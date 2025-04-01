@@ -1,4 +1,4 @@
-package com.example.modulus;
+package com.example.modulus.Insights;
 
 import android.app.Dialog;
 import android.graphics.Color;
@@ -20,7 +20,8 @@ import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.example.modulus.Class.Module;
-import com.example.modulus.Class.ModuleAdaptor;
+import com.example.modulus.Adapter.ModuleAdaptor;
+import com.example.modulus.R;
 import com.google.android.material.chip.Chip;
 
 import java.util.ArrayList;
@@ -34,7 +35,10 @@ import java.util.Arrays;
 public class InsightsFragment extends Fragment{
     static ArrayList<Module> moduleList = new ArrayList<Module>();
     ArrayList<String> selectedFilters = new ArrayList<String>();
-    String currentSearchText = ""; ListView list; SearchView search; ImageButton filterButton;
+    String currentSearchText = "";
+    ListView list;
+    SearchView search;
+    ImageButton filterButton;
     Chip asdChip, esdChip, epdChip, daiChip, istdChip, hassChip, smtChip,
             term1Chip, term2Chip, term3Chip, term4Chip, term5Chip, term6Chip, term7Chip, term8Chip,
     coreChip, coreEChip, electiveChip, fCoreChip, fElectiveChip;
@@ -483,40 +487,6 @@ public class InsightsFragment extends Fragment{
 //    selectedFilters.remove(status);
 //    applyFilter();
 //}
-
-//noob filter
-//public class InsightsFragment extends Fragment implements AdapterView.OnItemSelectedListener{
-//    private String[] filter = {
-//            "ASD", "ESD", "EPD", "CSD", "DAI"
-//    };
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        View view = inflater.inflate(R.layout.fragment_insights, container, false);
-//        Spinner spin = view.findViewById(R.id.spinner);
-//        spin.setOnItemSelectedListener(this);
-//
-//        // Create the instance of ArrayAdapter having the list of courses
-//        ArrayAdapter<String> ad = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_item, filter);
-//
-//        // Set simple layout resource file for each item of spinner
-//        ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//
-//        // Set the ArrayAdapter (ad) data on the Spinner which binds data to spinner
-//        spin.setAdapter(ad);
-//        // Inflate the layout for this fragment
-//        return view;
-//    }
-//
-//    @Override
-//    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//        // Make toast of the name of the course which is selected in the spinner
-//        Toast.makeText(this.getContext(), filter[position], Toast.LENGTH_SHORT).show();
-//    }
-//
-//    @Override
-//    public void onNothingSelected(AdapterView<?> parent) {
-//        // No action needed when no selection is made
-//    }
 
 //sort methods
 //sortButton = view.findViewById(R.id.sortButton);

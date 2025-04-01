@@ -1,4 +1,4 @@
-package com.example.modulus.Class;
+package com.example.modulus.Adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -10,11 +10,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.example.modulus.Class.Module;
 import com.example.modulus.R;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 public class ModuleAdaptor extends ArrayAdapter<Module>{
     public ModuleAdaptor(@NonNull Context context, int resource, @NonNull List<Module> objects) {

@@ -1,13 +1,13 @@
-package com.example.modulus;
+package com.example.modulus.Insights;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.modulus.Class.Module;
+import com.example.modulus.R;
 
 public class ModuleDetailsActivity extends AppCompatActivity{
     Module selectedModule;
