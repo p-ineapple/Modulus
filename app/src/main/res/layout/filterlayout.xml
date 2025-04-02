@@ -51,73 +51,74 @@
         android:id="@+id/pillarFilterLayout">
 
         <com.google.android.material.chip.ChipGroup
+            android:id="@+id/pillarChips"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:selectionRequired="false"
             app:singleSelection="false">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/asdFilter"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/dark_purple"
-                android:text="ASD"
-                android:checkable="true"/>
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/asdFilter"-->
+<!--                style="@style/Widget.MaterialComponents.Chip.Choice"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="@color/dark_purple"-->
+<!--                android:text="ASD"-->
+<!--                android:checkable="true"/>-->
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/esdFilter"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/dark_purple"
-                android:text="ESD"
-                android:checkable="true"/>
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/esdFilter"-->
+<!--                style="@style/Widget.MaterialComponents.Chip.Choice"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="@color/dark_purple"-->
+<!--                android:text="ESD"-->
+<!--                android:checkable="true"/>-->
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/epdFilter"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/dark_purple"
-                android:text="EPD"
-                android:checkable="true"/>
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/epdFilter"-->
+<!--                style="@style/Widget.MaterialComponents.Chip.Choice"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="@color/dark_purple"-->
+<!--                android:text="EPD"-->
+<!--                android:checkable="true"/>-->
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/istdFilter"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/dark_purple"
-                android:text="ISTD"
-                android:checkable="true"/>
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/istdFilter"-->
+<!--                style="@style/Widget.MaterialComponents.Chip.Choice"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="@color/dark_purple"-->
+<!--                android:text="ISTD"-->
+<!--                android:checkable="true"/>-->
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/daiFilter"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/dark_purple"
-                android:text="DAI"
-                android:checkable="true"/>
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/daiFilter"-->
+<!--                style="@style/Widget.MaterialComponents.Chip.Choice"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="@color/dark_purple"-->
+<!--                android:text="DAI"-->
+<!--                android:checkable="true"/>-->
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/hassFilter"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/dark_purple"
-                android:text="HASS"
-                android:checkable="true"/>
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/hassFilter"-->
+<!--                style="@style/Widget.MaterialComponents.Chip.Choice"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="@color/dark_purple"-->
+<!--                android:text="HASS"-->
+<!--                android:checkable="true"/>-->
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/smtFilter"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/dark_purple"
-                android:text="SMT"
-                android:checkable="true"/>
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/smtFilter"-->
+<!--                style="@style/Widget.MaterialComponents.Chip.Choice"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="@color/dark_purple"-->
+<!--                android:text="SMT"-->
+<!--                android:checkable="true"/>-->
 
         </com.google.android.material.chip.ChipGroup>
 
@@ -158,82 +159,83 @@
         android:id="@+id/termFilterLayout">
 
         <com.google.android.material.chip.ChipGroup
+            android:id="@+id/termChips"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:selectionRequired="false"
             app:singleSelection="false">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/term1Filter"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/dark_purple"
-                android:text="Term 1"
-                android:checkable="true"/>
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/term1Filter"-->
+<!--                style="@style/Widget.MaterialComponents.Chip.Choice"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="@color/dark_purple"-->
+<!--                android:text="Term 1"-->
+<!--                android:checkable="true"/>-->
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/term2Filter"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/dark_purple"
-                android:text="Term 2"
-                android:checkable="true"/>
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/term2Filter"-->
+<!--                style="@style/Widget.MaterialComponents.Chip.Choice"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="@color/dark_purple"-->
+<!--                android:text="Term 2"-->
+<!--                android:checkable="true"/>-->
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/term3Filter"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/dark_purple"
-                android:text="Term 3"
-                android:checkable="true"/>
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/term3Filter"-->
+<!--                style="@style/Widget.MaterialComponents.Chip.Choice"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="@color/dark_purple"-->
+<!--                android:text="Term 3"-->
+<!--                android:checkable="true"/>-->
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/term4Filter"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/dark_purple"
-                android:text="Term 4"
-                android:checkable="true"/>
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/term4Filter"-->
+<!--                style="@style/Widget.MaterialComponents.Chip.Choice"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="@color/dark_purple"-->
+<!--                android:text="Term 4"-->
+<!--                android:checkable="true"/>-->
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/term5Filter"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/dark_purple"
-                android:text="Term 5"
-                android:checkable="true"/>
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/term5Filter"-->
+<!--                style="@style/Widget.MaterialComponents.Chip.Choice"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="@color/dark_purple"-->
+<!--                android:text="Term 5"-->
+<!--                android:checkable="true"/>-->
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/term6Filter"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/dark_purple"
-                android:text="Term 6"
-                android:checkable="true"/>
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/term6Filter"-->
+<!--                style="@style/Widget.MaterialComponents.Chip.Choice"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="@color/dark_purple"-->
+<!--                android:text="Term 6"-->
+<!--                android:checkable="true"/>-->
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/term7Filter"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/dark_purple"
-                android:text="Term 7"
-                android:checkable="true"/>
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/term7Filter"-->
+<!--                style="@style/Widget.MaterialComponents.Chip.Choice"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="@color/dark_purple"-->
+<!--                android:text="Term 7"-->
+<!--                android:checkable="true"/>-->
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/term8Filter"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/dark_purple"
-                android:text="Term 8"
-                android:checkable="true"/>
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/term8Filter"-->
+<!--                style="@style/Widget.MaterialComponents.Chip.Choice"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="@color/dark_purple"-->
+<!--                android:text="Term 8"-->
+<!--                android:checkable="true"/>-->
 
         </com.google.android.material.chip.ChipGroup>
 
@@ -274,55 +276,56 @@
         android:id="@+id/courseTypeFilterLayout">
 
         <com.google.android.material.chip.ChipGroup
+            android:id="@+id/courseChips"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:selectionRequired="false"
             app:singleSelection="false">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/coreFilter"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/dark_purple"
-                android:text="Core"
-                android:checkable="true"/>
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/coreFilter"-->
+<!--                style="@style/Widget.MaterialComponents.Chip.Choice"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="@color/dark_purple"-->
+<!--                android:text="Core"-->
+<!--                android:checkable="true"/>-->
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/coreElectiveFilter"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/dark_purple"
-                android:text="Core Elective"
-                android:checkable="true"/>
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/coreElectiveFilter"-->
+<!--                style="@style/Widget.MaterialComponents.Chip.Choice"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="@color/dark_purple"-->
+<!--                android:text="Core Elective"-->
+<!--                android:checkable="true"/>-->
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/electiveFilter"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/dark_purple"
-                android:text="Elective / Technical Elective"
-                android:checkable="true"/>
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/electiveFilter"-->
+<!--                style="@style/Widget.MaterialComponents.Chip.Choice"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="@color/dark_purple"-->
+<!--                android:text="Elective / Technical Elective"-->
+<!--                android:checkable="true"/>-->
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/fCoreFilter"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/dark_purple"
-                android:text="Freshmore Core"
-                android:checkable="true"/>
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/fCoreFilter"-->
+<!--                style="@style/Widget.MaterialComponents.Chip.Choice"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="@color/dark_purple"-->
+<!--                android:text="Freshmore Core"-->
+<!--                android:checkable="true"/>-->
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/fElectiveFilter"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/dark_purple"
-                android:text="Freshmore Elective"
-                android:checkable="true"/>
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/fElectiveFilter"-->
+<!--                style="@style/Widget.MaterialComponents.Chip.Choice"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="@color/dark_purple"-->
+<!--                android:text="Freshmore Elective"-->
+<!--                android:checkable="true"/>-->
 
         </com.google.android.material.chip.ChipGroup>
 

@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.modulus.Adapter.ToDoAdaptor;
 import com.example.modulus.Class.ToDoModel;
 import com.example.modulus.R;
-import com.example.modulus.Utils.DataBaseHelper;
 import com.example.modulus.Utils.OnDialogCloseListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 

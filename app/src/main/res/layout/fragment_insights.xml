@@ -4,49 +4,49 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".Insights.InsightsFragment"
-    tools:ignore="HardcodedText">
+    android:layout_height="wrap_content">
 
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="@color/light_purple">-->
-
-<!--&lt;!&ndash;        <Button&ndash;&gt;-->
-<!--&lt;!&ndash;            android:id="@+id/sortButton"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_width="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:background="@null"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:text="SORT"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:textColor="@color/white"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:textSize="20sp" />&ndash;&gt;-->
-
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:text="Module Browser"-->
-<!--            android:textAllCaps="true"-->
-<!--            android:textSize="20sp"-->
-<!--            android:textStyle="bold"/>-->
-
-<!--    </androidx.appcompat.widget.Toolbar>-->
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/module_cell"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        android:backgroundTint="@color/purple_200"
-        app:cardCornerRadius="24dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".Insights.InsightsFragment"
+        tools:ignore="HardcodedText">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+    <!--    <androidx.appcompat.widget.Toolbar-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:background="@color/light_purple">-->
+
+    <!--&lt;!&ndash;        <Button&ndash;&gt;-->
+    <!--&lt;!&ndash;            android:id="@+id/sortButton"&ndash;&gt;-->
+    <!--&lt;!&ndash;            android:layout_width="wrap_content"&ndash;&gt;-->
+    <!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
+    <!--&lt;!&ndash;            android:background="@null"&ndash;&gt;-->
+    <!--&lt;!&ndash;            android:text="SORT"&ndash;&gt;-->
+    <!--&lt;!&ndash;            android:textColor="@color/white"&ndash;&gt;-->
+    <!--&lt;!&ndash;            android:textSize="20sp" />&ndash;&gt;-->
+
+    <!--        <TextView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_gravity="center"-->
+    <!--            android:text="Module Browser"-->
+    <!--            android:textAllCaps="true"-->
+    <!--            android:textSize="20sp"-->
+    <!--            android:textStyle="bold"/>-->
+
+    <!--    </androidx.appcompat.widget.Toolbar>-->
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/searchBar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:backgroundTint="@color/purple_200"
+            app:cardCornerRadius="24dp">
 
             <SearchView
                 android:layout_width="match_parent"
@@ -54,77 +54,83 @@
                 android:id="@+id/modulesListSearchView"
                 android:iconifiedByDefault="false"
                 android:background="@color/purple_200"
-                android:queryHint="Search..."
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:queryHint="Search..."/>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/belowSearchBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:backgroundTint="@android:color/transparent"
+            app:cardCornerRadius="24dp">
 
             <ImageButton
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginVertical="4dp"
+                android:layout_marginEnd="8dp"
                 android:id="@+id/filterButton"
-                android:background="@drawable/list"
-                android:layout_marginEnd="10dp"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
-
+                android:background="@drawable/filter_icon"
+                android:backgroundTint="@color/dark_purple"
+                android:layout_gravity="end">
             </ImageButton>
+        </androidx.cardview.widget.CardView>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:orientation="horizontal"-->
+    <!--        android:id="@+id/sortTabsLayout2">-->
 
-    </androidx.cardview.widget.CardView>
+    <!--        <Button-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:text="All"-->
+    <!--            android:id="@+id/allFilter"-->
+    <!--            android:textColor="@color/light_purple"/>-->
 
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="horizontal"-->
-<!--        android:id="@+id/sortTabsLayout2">-->
+    <!--        <Button-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:text="ID ASC"-->
+    <!--            android:id="@+id/idAsc"/>-->
 
-<!--        <Button-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_weight="1"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:text="All"-->
-<!--            android:id="@+id/allFilter"-->
-<!--            android:textColor="@color/light_purple"/>-->
+    <!--        <Button-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:text="ID DESC"-->
+    <!--            android:id="@+id/idDesc"/>-->
 
-<!--        <Button-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_weight="1"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:text="ID ASC"-->
-<!--            android:id="@+id/idAsc"/>-->
+    <!--        <Button-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:text="NAME ASC"-->
+    <!--            android:id="@+id/nameAsc"/>-->
 
-<!--        <Button-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_weight="1"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:text="ID DESC"-->
-<!--            android:id="@+id/idDesc"/>-->
+    <!--        <Button-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:text="NAME DESC"-->
+    <!--            android:id="@+id/nameDesc"/>-->
 
-<!--        <Button-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_weight="1"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:text="NAME ASC"-->
-<!--            android:id="@+id/nameAsc"/>-->
+    <!--    </LinearLayout>-->
 
-<!--        <Button-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_weight="1"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:text="NAME DESC"-->
-<!--            android:id="@+id/nameDesc"/>-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            android:layout_marginHorizontal="15dp">
 
-<!--    </LinearLayout>-->
+        </androidx.recyclerview.widget.RecyclerView>
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/modulesListView"
-        android:layout_marginVertical="10dp"
-        android:layout_marginHorizontal="20dp"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="16dp"/>
-
+    </LinearLayout>
 </LinearLayout>
