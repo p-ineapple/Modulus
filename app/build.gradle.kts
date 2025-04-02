@@ -36,9 +36,15 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
-    implementation(libs.android.recyclerview.swipedecorator)
     implementation(libs.constraintlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation("com.github.khacpv:Calendar-Day-View:1.0.5") {
+        exclude(group = "com.android.support")
+    }
+    implementation(libs.android.recyclerview.swipedecorator)
+
+
 }
+
