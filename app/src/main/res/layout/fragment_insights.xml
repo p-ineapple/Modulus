@@ -13,31 +13,6 @@
         tools:context=".Insights.InsightsFragment"
         tools:ignore="HardcodedText">
 
-    <!--    <androidx.appcompat.widget.Toolbar-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:background="@color/light_purple">-->
-
-    <!--&lt;!&ndash;        <Button&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:id="@+id/sortButton"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:layout_width="wrap_content"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:background="@null"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:text="SORT"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:textColor="@color/white"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:textSize="20sp" />&ndash;&gt;-->
-
-    <!--        <TextView-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_gravity="center"-->
-    <!--            android:text="Module Browser"-->
-    <!--            android:textAllCaps="true"-->
-    <!--            android:textSize="20sp"-->
-    <!--            android:textStyle="bold"/>-->
-
-    <!--    </androidx.appcompat.widget.Toolbar>-->
-
         <androidx.cardview.widget.CardView
             android:id="@+id/searchBar"
             android:layout_width="match_parent"

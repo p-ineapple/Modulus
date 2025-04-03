@@ -24,300 +24,311 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"/>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/planner1"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/plannerRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:orientation="horizontal"
-        android:backgroundTint="@color/purple_200"
-        app:cardCornerRadius="24dp">
+        android:scrollbars="vertical"
+        android:layout_marginHorizontal="15dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingVertical="4dp"
-            android:textAlignment="center"
-            android:textStyle="bold"
-            android:textSize="16dp"
-            android:text="Term 1">
-        </TextView>
+    </androidx.recyclerview.widget.RecyclerView>
 
-    </androidx.cardview.widget.CardView>
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/plannerList1"
-        android:layout_marginVertical="4dp"
-        android:layout_marginHorizontal="24dp"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="4dp"/>
 
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/divider2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"/>
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:id="@+id/planner1"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginHorizontal="16dp"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:backgroundTint="@color/purple_200"-->
+<!--        app:cardCornerRadius="24dp">-->
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/planner2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:orientation="horizontal"
-        android:backgroundTint="@color/purple_200"
-        app:cardCornerRadius="24dp">
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:paddingVertical="4dp"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textSize="16dp"-->
+<!--            android:text="Term 1">-->
+<!--        </TextView>-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingVertical="4dp"
-            android:textAlignment="center"
-            android:textStyle="bold"
-            android:textSize="16dp"
-            android:text="Term 2">
-        </TextView>
+<!--    </androidx.cardview.widget.CardView>-->
 
-    </androidx.cardview.widget.CardView>
+<!--    <ListView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:id="@+id/plannerList1"-->
+<!--        android:layout_marginVertical="4dp"-->
+<!--        android:layout_marginHorizontal="24dp"-->
+<!--        android:divider="@android:color/transparent"-->
+<!--        android:dividerHeight="4dp"/>-->
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/plannerList2"
-        android:layout_marginVertical="4dp"
-        android:layout_marginHorizontal="24dp"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="4dp"/>
+<!--    <com.google.android.material.divider.MaterialDivider-->
+<!--        android:id="@+id/divider2"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:layout_marginBottom="8dp"/>-->
 
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/divider3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"/>
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:id="@+id/planner2"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginHorizontal="16dp"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:backgroundTint="@color/purple_200"-->
+<!--        app:cardCornerRadius="24dp">-->
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/planner3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:orientation="horizontal"
-        android:backgroundTint="@color/purple_200"
-        app:cardCornerRadius="24dp">
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:paddingVertical="4dp"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textSize="16dp"-->
+<!--            android:text="Term 2">-->
+<!--        </TextView>-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingVertical="4dp"
-            android:textAlignment="center"
-            android:textStyle="bold"
-            android:textSize="16dp"
-            android:text="Term 3">
-        </TextView>
+<!--    </androidx.cardview.widget.CardView>-->
 
-    </androidx.cardview.widget.CardView>
+<!--    <ListView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:id="@+id/plannerList2"-->
+<!--        android:layout_marginVertical="4dp"-->
+<!--        android:layout_marginHorizontal="24dp"-->
+<!--        android:divider="@android:color/transparent"-->
+<!--        android:dividerHeight="4dp"/>-->
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/plannerList3"
-        android:layout_marginVertical="4dp"
-        android:layout_marginHorizontal="24dp"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="4dp"/>
+<!--    <com.google.android.material.divider.MaterialDivider-->
+<!--        android:id="@+id/divider3"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:layout_marginBottom="8dp"/>-->
 
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/divider4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"/>
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:id="@+id/planner3"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginHorizontal="16dp"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:backgroundTint="@color/purple_200"-->
+<!--        app:cardCornerRadius="24dp">-->
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/planner4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:orientation="horizontal"
-        android:backgroundTint="@color/purple_200"
-        app:cardCornerRadius="24dp">
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:paddingVertical="4dp"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textSize="16dp"-->
+<!--            android:text="Term 3">-->
+<!--        </TextView>-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingVertical="4dp"
-            android:textAlignment="center"
-            android:textStyle="bold"
-            android:textSize="16dp"
-            android:text="Term 4">
-        </TextView>
+<!--    </androidx.cardview.widget.CardView>-->
 
-    </androidx.cardview.widget.CardView>
+<!--    <ListView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:id="@+id/plannerList3"-->
+<!--        android:layout_marginVertical="4dp"-->
+<!--        android:layout_marginHorizontal="24dp"-->
+<!--        android:divider="@android:color/transparent"-->
+<!--        android:dividerHeight="4dp"/>-->
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/plannerList4"
-        android:layout_marginVertical="4dp"
-        android:layout_marginHorizontal="24dp"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="4dp"/>
+<!--    <com.google.android.material.divider.MaterialDivider-->
+<!--        android:id="@+id/divider4"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:layout_marginBottom="8dp"/>-->
 
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/divider5"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"/>
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:id="@+id/planner4"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginHorizontal="16dp"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:backgroundTint="@color/purple_200"-->
+<!--        app:cardCornerRadius="24dp">-->
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/planner5"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:orientation="horizontal"
-        android:backgroundTint="@color/purple_200"
-        app:cardCornerRadius="24dp">
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:paddingVertical="4dp"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textSize="16dp"-->
+<!--            android:text="Term 4">-->
+<!--        </TextView>-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingVertical="4dp"
-            android:textAlignment="center"
-            android:textStyle="bold"
-            android:textSize="16dp"
-            android:text="Term 5">
-        </TextView>
+<!--    </androidx.cardview.widget.CardView>-->
 
-    </androidx.cardview.widget.CardView>
+<!--    <ListView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:id="@+id/plannerList4"-->
+<!--        android:layout_marginVertical="4dp"-->
+<!--        android:layout_marginHorizontal="24dp"-->
+<!--        android:divider="@android:color/transparent"-->
+<!--        android:dividerHeight="4dp"/>-->
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/plannerList5"
-        android:layout_marginVertical="4dp"
-        android:layout_marginHorizontal="24dp"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="4dp"/>
+<!--    <com.google.android.material.divider.MaterialDivider-->
+<!--        android:id="@+id/divider5"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:layout_marginBottom="8dp"/>-->
 
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/divider6"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"/>
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:id="@+id/planner5"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginHorizontal="16dp"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:backgroundTint="@color/purple_200"-->
+<!--        app:cardCornerRadius="24dp">-->
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/planner6"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:orientation="horizontal"
-        android:backgroundTint="@color/purple_200"
-        app:cardCornerRadius="24dp">
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:paddingVertical="4dp"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textSize="16dp"-->
+<!--            android:text="Term 5">-->
+<!--        </TextView>-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingVertical="4dp"
-            android:textAlignment="center"
-            android:textStyle="bold"
-            android:textSize="16dp"
-            android:text="Term 6">
-        </TextView>
+<!--    </androidx.cardview.widget.CardView>-->
 
-    </androidx.cardview.widget.CardView>
+<!--    <ListView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:id="@+id/plannerList5"-->
+<!--        android:layout_marginVertical="4dp"-->
+<!--        android:layout_marginHorizontal="24dp"-->
+<!--        android:divider="@android:color/transparent"-->
+<!--        android:dividerHeight="4dp"/>-->
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/plannerList6"
-        android:layout_marginVertical="4dp"
-        android:layout_marginHorizontal="24dp"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="4dp"/>
+<!--    <com.google.android.material.divider.MaterialDivider-->
+<!--        android:id="@+id/divider6"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:layout_marginBottom="8dp"/>-->
 
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/divider7"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"/>
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:id="@+id/planner6"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginHorizontal="16dp"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:backgroundTint="@color/purple_200"-->
+<!--        app:cardCornerRadius="24dp">-->
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/planner7"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:orientation="horizontal"
-        android:backgroundTint="@color/purple_200"
-        app:cardCornerRadius="24dp">
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:paddingVertical="4dp"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textSize="16dp"-->
+<!--            android:text="Term 6">-->
+<!--        </TextView>-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingVertical="4dp"
-            android:textAlignment="center"
-            android:textStyle="bold"
-            android:textSize="16dp"
-            android:text="Term 7">
-        </TextView>
+<!--    </androidx.cardview.widget.CardView>-->
 
-    </androidx.cardview.widget.CardView>
+<!--    <ListView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:id="@+id/plannerList6"-->
+<!--        android:layout_marginVertical="4dp"-->
+<!--        android:layout_marginHorizontal="24dp"-->
+<!--        android:divider="@android:color/transparent"-->
+<!--        android:dividerHeight="4dp"/>-->
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/plannerList7"
-        android:layout_marginVertical="4dp"
-        android:layout_marginHorizontal="24dp"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="4dp"/>
+<!--    <com.google.android.material.divider.MaterialDivider-->
+<!--        android:id="@+id/divider7"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:layout_marginBottom="8dp"/>-->
 
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/divider8"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"/>
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:id="@+id/planner7"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginHorizontal="16dp"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:backgroundTint="@color/purple_200"-->
+<!--        app:cardCornerRadius="24dp">-->
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/planner8"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:orientation="horizontal"
-        android:backgroundTint="@color/purple_200"
-        app:cardCornerRadius="24dp">
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:paddingVertical="4dp"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textSize="16dp"-->
+<!--            android:text="Term 7">-->
+<!--        </TextView>-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingVertical="4dp"
-            android:textAlignment="center"
-            android:textStyle="bold"
-            android:textSize="16dp"
-            android:text="Term 8">
-        </TextView>
+<!--    </androidx.cardview.widget.CardView>-->
 
-    </androidx.cardview.widget.CardView>
+<!--    <ListView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:id="@+id/plannerList7"-->
+<!--        android:layout_marginVertical="4dp"-->
+<!--        android:layout_marginHorizontal="24dp"-->
+<!--        android:divider="@android:color/transparent"-->
+<!--        android:dividerHeight="4dp"/>-->
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/plannerList8"
-        android:layout_marginVertical="4dp"
-        android:layout_marginHorizontal="24dp"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="4dp"/>
+<!--    <com.google.android.material.divider.MaterialDivider-->
+<!--        android:id="@+id/divider8"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:layout_marginBottom="8dp"/>-->
 
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/divider9"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"/>
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:id="@+id/planner8"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginHorizontal="16dp"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:backgroundTint="@color/purple_200"-->
+<!--        app:cardCornerRadius="24dp">-->
+
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:paddingVertical="4dp"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textSize="16dp"-->
+<!--            android:text="Term 8">-->
+<!--        </TextView>-->
+
+<!--    </androidx.cardview.widget.CardView>-->
+
+<!--    <ListView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:id="@+id/plannerList8"-->
+<!--        android:layout_marginVertical="4dp"-->
+<!--        android:layout_marginHorizontal="24dp"-->
+<!--        android:divider="@android:color/transparent"-->
+<!--        android:dividerHeight="4dp"/>-->
+
+<!--    <com.google.android.material.divider.MaterialDivider-->
+<!--        android:id="@+id/divider9"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:layout_marginBottom="8dp"/>-->
 
 </LinearLayout>

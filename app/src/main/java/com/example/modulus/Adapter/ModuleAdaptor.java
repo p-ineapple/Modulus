@@ -32,9 +32,9 @@ public class ModuleAdaptor extends RecyclerView.Adapter<ModuleAdaptor.moduleCell
         TextView moduleTags;
         public moduleCellViewHolder(View itemView){
             super(itemView);
-            moduleName = (TextView) itemView.findViewById(R.id.moduleName);
-            moduleTermProf = (TextView) itemView.findViewById(R.id.moduleTermProf);
-            moduleTags = (TextView) itemView.findViewById(R.id.moduleTags);
+            moduleName = itemView.findViewById(R.id.moduleName);
+            moduleTermProf = itemView.findViewById(R.id.moduleTermProf);
+            moduleTags = itemView.findViewById(R.id.moduleTags);
         }
 
         public void bind(Module item, final OnItemClickListener listener) {
@@ -60,14 +60,6 @@ public class ModuleAdaptor extends RecyclerView.Adapter<ModuleAdaptor.moduleCell
         holder.moduleTermProf.setText("Term(s): " + String.join(", ", module.getTerm())
                 + " | " + String.join(", ", module.getProf()));
         holder.moduleTags.setText(String.join(", ", module.getTags()));
-//        for(String tag : module.getTags()) {
-//            Chip chip = new Chip(holder.itemView.getContext());
-//            chip.setText(tag);
-//            chip.setEnsureMinTouchTargetSize(false);
-//            chip.setTextStartPadding(0);
-//            chip.setTextEndPadding(0);
-//            holder.moduleTags.addView(chip);
-//        }
         holder.bind(module, listener);
     }
 

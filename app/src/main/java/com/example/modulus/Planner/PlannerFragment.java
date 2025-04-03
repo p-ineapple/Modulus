@@ -13,7 +13,7 @@ import android.widget.ListView;
 
 import com.example.modulus.Class.Module;
 import com.example.modulus.Class.Planner;
-import com.example.modulus.Adapter.PlannerAdaptor;
+//import com.example.modulus.Adapter.PlannerAdaptor;
 import com.example.modulus.Insights.ModuleDetailsActivity;
 import com.example.modulus.R;
 
@@ -28,26 +28,26 @@ public class PlannerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_planner, container, false);
-        list1 = view.findViewById(R.id.plannerList1);
-        Module hass1 = new Module("02.003", "Social Science: Understanding Behaviour, Culture & Society");
-        Module mod1 = new Module("10.013", "Modelling and Analysis");
-        Module mod2 = new Module("10.014", "Computational Thinking for Design");
-        Module mod3 = new Module("10.015", "Physical World");
-        ArrayList<Module> term1mods = new ArrayList<>();
-        term1mods.add(hass1); term1mods.add(mod1); term1mods.add(mod2); term1mods.add(mod3);
-        term1 = new Planner("1");
-        term1.setModules(term1mods);
-        PlannerAdaptor adaptor = new PlannerAdaptor(getContext(), 0, term1.getModules());
-        list1.setAdapter(adaptor);
-        list1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Module selectModule = (Module) (list1.getItemAtPosition(position));
-                Intent showDetail = new Intent(getContext(), ModuleDetailsActivity.class);
-                showDetail.putExtra("id", selectModule.getId());
-                startActivity(showDetail);
-            }
-        });
+//        list1 = view.findViewById(R.id.plannerList1);
+//        Module hass1 = new Module("02.003", "Social Science: Understanding Behaviour, Culture & Society");
+//        Module mod1 = new Module("10.013", "Modelling and Analysis");
+//        Module mod2 = new Module("10.014", "Computational Thinking for Design");
+//        Module mod3 = new Module("10.015", "Physical World");
+//        ArrayList<Module> term1mods = new ArrayList<>();
+//        term1mods.add(hass1); term1mods.add(mod1); term1mods.add(mod2); term1mods.add(mod3);
+//        term1 = new Planner("1");
+//        term1.setModules(term1mods);
+//        PlannerAdaptor adaptor = new PlannerAdaptor(getContext(), 0, term1.getModules());
+//        list1.setAdapter(adaptor);
+//        list1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+//                Module selectModule = (Module) (list1.getItemAtPosition(position));
+//                Intent showDetail = new Intent(getContext(), ModuleDetailsActivity.class);
+//                showDetail.putExtra("id", selectModule.getId());
+//                startActivity(showDetail);
+//            }
+//        });
         return view;
     }
 }
