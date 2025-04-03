@@ -28,6 +28,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.modulus.Calendar.CalendarFragment;
+import com.example.modulus.Home.AddNewTask;
 import com.example.modulus.Home.HomeFragment;
 import com.example.modulus.Insights.InsightsFragment;
 import com.example.modulus.Planner.PlannerFragment;
@@ -38,7 +39,6 @@ import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    FloatingActionButton fab;
     DrawerLayout drawerLayout;
     BottomNavigationView bottomNavigationView;
     NavigationView navigationView;
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        fab = findViewById(R.id.fab);
+        bottomNavigationView.setBackground(null);
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -71,13 +71,6 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnItemSelectedListener(navListener);
         Fragment selectedFragment = new HomeFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,selectedFragment).commit();
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showBottomDialog();
-            }
-        });
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             // Called when an item in the NavigationView is selected.
@@ -128,33 +121,7 @@ public class MainActivity extends AppCompatActivity {
         });*/
     }
     //outside onCreate
-    /*
-    private BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Fragment selectedFragment = null;
-            switch (item.getItemId()) {
-                case R.id.home:
-                    selectedFragment = new HomeFragment();
-                    break;
 
-                case R.id.calendar:
-                    selectedFragment = new CalendarFragment();
-                    break;
-
-                case R.id.planner:
-                    selectedFragment = new PlannerFragment();
-                    break;
-                case R.id.insights:
-                    selectedFragment = new InsightsFragment();
-                    break;
-            }
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,selectedFragment).commit();
-            return true;
-        }
-    };
-
-    */
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
