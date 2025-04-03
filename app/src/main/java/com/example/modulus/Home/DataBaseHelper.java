@@ -1,4 +1,4 @@
-package com.example.modulus.Utils;
+package com.example.modulus.Home;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
@@ -7,9 +7,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.example.modulus.Class.ToDoModel;
 

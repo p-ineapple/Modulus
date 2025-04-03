@@ -11,6 +11,8 @@ public class Module {
     private List<String> term;
     private List<String> prerequisites;
     private String description;
+    public Module(){
+    }
     public Module(String id, String name) {
         this.id = id;
         this.name = name;

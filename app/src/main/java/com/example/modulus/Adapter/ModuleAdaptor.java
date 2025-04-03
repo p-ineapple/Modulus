@@ -1,51 +1,71 @@
 package com.example.modulus.Adapter;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.modulus.Class.Module;
 import com.example.modulus.R;
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
 
-import java.util.List;
-public class ModuleAdaptor extends ArrayAdapter<Module>{
-    public ModuleAdaptor(@NonNull Context context, int resource, @NonNull List<Module> objects) {
-        super(context, resource, objects);
+import java.util.ArrayList;
+
+public class ModuleAdaptor extends RecyclerView.Adapter<ModuleAdaptor.moduleCellViewHolder> {
+    public interface OnItemClickListener {
+        void onItemClick(Module module);
     }
 
-    @SuppressLint("ResourceAsColor")
+    ArrayList<Module> moduleList;
+    OnItemClickListener listener;
+    public ModuleAdaptor(ArrayList<Module> moduleList, OnItemClickListener listener) {
+        this.moduleList = moduleList;
+        this.listener = listener;
+    }
+
+    static class moduleCellViewHolder extends RecyclerView.ViewHolder{
+        TextView moduleName;
+        TextView moduleTermProf;
+        TextView moduleTags;
+        public moduleCellViewHolder(View itemView){
+            super(itemView);
+            moduleName = itemView.findViewById(R.id.moduleName);
+            moduleTermProf = itemView.findViewById(R.id.moduleTermProf);
+            moduleTags = itemView.findViewById(R.id.moduleTags);
+        }
+
+        public void bind(Module item, final OnItemClickListener listener) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    listener.onItemClick(item);
+                }
+            });
+        }
+    }
+
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        Module module = getItem(position);
-
-        if(convertView == null)
-        {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.module_cell, parent, false);
-        }
-        TextView moduleName = (TextView) convertView.findViewById(R.id.moduleName);
-        moduleName.setText(module.getId() + " - " + module.getName());
-
-        TextView moduleTermProf = (TextView) convertView.findViewById(R.id.moduleTermProf);
-        moduleTermProf.setText("Term(s): " + String.join(", ", module.getTerm())
-                + " | " + String.join(", ", module.getProf()));
-
-        ChipGroup chipGroup = (ChipGroup) convertView.findViewById(R.id.moduleTags);
-        for(String tag : module.getTags()) {
-            Chip chip = new Chip(parent.getContext());
-            chip.setText(tag);
-            chip.setEnsureMinTouchTargetSize(false);
-            chip.setTextStartPadding(0);
-            chip.setTextEndPadding(0);
-            chipGroup.addView(chip);
-        }
-        return convertView;
+    public moduleCellViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+        View view =LayoutInflater.from(parent.getContext()).inflate(R.layout.module_cell, parent, false);
+        return new moduleCellViewHolder(view);
     }
+
+    @Override
+    public void onBindViewHolder(@NonNull moduleCellViewHolder holder, int position) {
+        Module module = moduleList.get(position);
+        holder.moduleName.setText(module.getId() + " - " + module.getName());
+        holder.moduleTermProf.setText("Term(s): " + String.join(", ", module.getTerm())
+                + " | " + String.join(", ", module.getProf()));
+        holder.moduleTags.setText(String.join(", ", module.getTags()));
+        holder.bind(module, listener);
+    }
+
+    @Override
+    public int getItemCount() {
+        return moduleList.size();
+    }
+
 }

@@ -137,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
         if (itemId == R.id.home) {
             replaceFragment(new HomeFragment());
         } else if (itemId == R.id.calendar) {
-            Log.d("calallsdkjn", "butooooon");
             replaceFragment(new CalendarFragment());
         } else if (itemId == R.id.planner) {
             replaceFragment(new PlannerFragment());
