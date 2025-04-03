@@ -17,7 +17,7 @@ import java.util.List;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "TODO_DATABASE";
+    private static final String DATABASE_NAME = "MODULUS";
     private static final String TABLE_NAME = "TODO_TABLE";
     private static final String COL_1 = "ID";
     private static final String COL_2 = "TASK";

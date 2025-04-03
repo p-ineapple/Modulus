@@ -77,9 +77,9 @@ public class Event implements IEvent {
     }
 
     public boolean isOnDate(Calendar date) {
-        return eventDate.get(Calendar.YEAR) == date.get(Calendar.YEAR) &&
-                eventDate.get(Calendar.MONTH) == date.get(Calendar.MONTH) &&
-                eventDate.get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH);
+        return this.eventDate.get(Calendar.YEAR) == date.get(Calendar.YEAR) &&
+                this.eventDate.get(Calendar.MONTH) == date.get(Calendar.MONTH) &&
+                this.eventDate.get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH);
     }
 
     //Constructor
