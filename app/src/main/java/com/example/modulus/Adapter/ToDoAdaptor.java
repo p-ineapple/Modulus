@@ -16,7 +16,6 @@ import com.example.modulus.Class.ToDoModel;
 import com.example.modulus.Home.HomeFragment;
 import com.example.modulus.Home.AddNewTask;
 import com.example.modulus.R;
-import com.example.modulus.Utils.DataBaseHelper;
 
 import java.util.List;
 public class ToDoAdaptor extends RecyclerView.Adapter<ToDoAdaptor.MyViewHolder> {
