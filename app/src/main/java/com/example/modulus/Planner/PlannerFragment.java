@@ -36,6 +36,7 @@ public class PlannerFragment extends Fragment {
     static final String KEY_DATA_TERMS = "SHARED_PREF_DATA_TERMS";
     static final String KEY_DATA_MODS = "SHARED_PREF_DATA_MODS";
     static final String PREF_FILE = "mainsharedpref";
+    private final String TAG = "Planner";
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -54,6 +55,7 @@ public class PlannerFragment extends Fragment {
 
         mPreferences = this.getActivity().getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
         if(mPreferences == null){
+            Log.d(TAG, "New Account");
             myDB = new DataBaseHelperInsights(getContext());
             plannerList = myDB.getPlanner();
             System.out.println(plannerList);
@@ -100,14 +102,14 @@ public class PlannerFragment extends Fragment {
     public void onResume(){
         super.onResume();
         Gson gson = new Gson();
-        String jsonTerms = mPreferences.getString(KEY_DATA_TERMS, "");
-        String jsonMods = mPreferences.getString(KEY_DATA_MODS, "");
-        plannerList = new ArrayList<>();
-        ArrayList<String> terms = gson.fromJson(jsonTerms, ArrayList.class);
-        ArrayList<String> mods = gson.fromJson(jsonMods, ArrayList.class);
-        System.out.println(terms);
-        System.out.println(mods);
-        if(terms != null && mods != null){
+        if(mPreferences != null){
+            String jsonTerms = mPreferences.getString(KEY_DATA_TERMS, "");
+            String jsonMods = mPreferences.getString(KEY_DATA_MODS, "");
+            plannerList = new ArrayList<>();
+            ArrayList<String> terms = gson.fromJson(jsonTerms, ArrayList.class);
+            ArrayList<String> mods = gson.fromJson(jsonMods, ArrayList.class);
+            System.out.println(terms);
+            System.out.println(mods);
             int modsPointer = 0;
             for (int i = 0; i< terms.size(); i++) {
                 Planner planner = new Planner(terms.get(i));
