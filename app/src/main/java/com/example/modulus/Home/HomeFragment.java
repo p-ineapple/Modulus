@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import android.content.DialogInterface;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -30,9 +31,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class HomeFragment extends Fragment implements OnDialogCloseListener {
-    RecyclerView recyclerView;
+    RecyclerView recyclerView,dateitemRecycler;
     FloatingActionButton addButton;
     DataBaseHelper myDB;
     Button testButton;
@@ -51,6 +53,22 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
         });
 
         recyclerView = view.findViewById(R.id.recyclerView);
+
+        dateitemRecycler = view.findViewById(R.id.dateitemRecycler);
+        //LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
+        ScaleCenterItemManager layoutManager = new ScaleCenterItemManager(this.getContext(),LinearLayoutManager.HORIZONTAL,false);
+        dateitemRecycler.setLayoutManager(layoutManager);
+        generateData();
+        /*
+        mAdapter.setOnItemClickListener(new ExampleAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                String title = exampleList.get(position).getText1();
+
+            }
+        });*/
+
+
         addButton = view.findViewById(R.id.addButton); //ToDo: edit these
         myDB = new DataBaseHelper(this.getContext());
         mList = new ArrayList<>();
@@ -60,9 +78,10 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setAdapter(adaptor);
 
-        mList = myDB.getAllTasks();
+        mList = myDB.getDateTask("16-4-2025");
         Collections.reverse(mList);
         adaptor.setTasks(mList);
+        /*
         testButton = view.findViewById(R.id.testbutton);
         testButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,11 +93,12 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
 
                 System.out.println(dateString);
                 recyclerView.setAdapter(adaptor);
-                mList = myDB.getDateTask("16-4-2025");
+                mList = myDB.getAllTasks();
+                //mList = myDB.getDateTask("16-4-2025");
                 Collections.reverse(mList);
                 adaptor.setTasks(mList);
             }
-        });
+        });*/
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,6 +112,39 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
         itemTouchHelper.attachToRecyclerView(recyclerView);
         // Inflate the layout for this fragment
         return view;
+    }
+
+    private void generateData() {
+        List<LocalDate> dateList = new ArrayList<>();
+        LocalDate today = LocalDate.now();
+        int currentYear = today.getYear();
+        int currentMonth = today.getMonthValue();
+        LocalDate firstDayOfMonth = LocalDate.of(currentYear, currentMonth, 1);
+        int daysInMonth = firstDayOfMonth.lengthOfMonth();
+
+        // Add all dates of the current month
+        for (int i = 1; i <= daysInMonth; i++) {
+            dateList.add(LocalDate.of(currentYear, currentMonth, i));
+        }
+
+        DateItemAdapter adapter = new DateItemAdapter(dateList, new DateItemAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(LocalDate date) {
+                // Handle the click event (same logic as testButton)
+                System.out.println("Selected date: " + date.toString());
+
+                recyclerView.setAdapter(adaptor);
+                mList = myDB.getDateTask(date.format(DateTimeFormatter.ofPattern("d-M-yyyy"))); // Adjust format if needed
+                Collections.reverse(mList);
+                adaptor.setTasks(mList);
+            }
+        });
+
+        dateitemRecycler.setAdapter(adapter);
+
+        // Scroll to current date when opening
+        int todayPosition = today.getDayOfMonth() - 1;
+        dateitemRecycler.scrollToPosition(todayPosition);
     }
 
     @Override
