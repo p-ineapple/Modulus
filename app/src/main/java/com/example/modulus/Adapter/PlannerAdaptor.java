@@ -1,37 +1,90 @@
 package com.example.modulus.Adapter;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.modulus.Class.Module;
+import com.example.modulus.Class.Planner;
+import com.example.modulus.Insights.ModuleDetailsActivity;
 import com.example.modulus.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class PlannerAdaptor extends ArrayAdapter<Module> {
-    public PlannerAdaptor(@NonNull Context context, int resource, @NonNull List<Module> objects) {
-        super(context, resource, objects);
+public class PlannerAdaptor extends RecyclerView.Adapter<PlannerAdaptor.plannerViewHolder> {
+    List<Planner> plannerList;
+    List<Module> moduleList;
+    public PlannerAdaptor(List<Planner> plannerList) {
+        this.plannerList = plannerList;
     }
 
-    @SuppressLint("ResourceAsColor")
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        Module module = getItem(position);
+    public plannerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.planner_header, parent, false);
+        return new plannerViewHolder(view);
+    }
 
-        if(convertView == null)
-        {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.planner_cell, parent, false);
+    @Override
+    public void onBindViewHolder(@NonNull plannerViewHolder holder, int position) {
+        Planner planner = plannerList.get(position);
+        moduleList = planner.getModules();
+        holder.term.setText(planner.getTerm());
+
+        NestedModuleAdapter adapter = new NestedModuleAdapter(moduleList);
+        holder.nestedRecyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
+        holder.nestedRecyclerView.setAdapter(adapter);
+        holder.layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Click", "CLICKKKKK");
+                planner.setExpandable(!planner.isExpandable());
+                if (planner.isExpandable()){
+                    holder.arrow.setImageResource(R.drawable.arrow_up);
+                    holder.expandableLayout.setVisibility(View.VISIBLE);
+
+                }else{
+                    holder.arrow.setImageResource(R.drawable.arrow_down);
+                    holder.expandableLayout.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    @Override
+    public int getItemCount() {
+        return plannerList.size();
+    }
+
+    static class plannerViewHolder extends RecyclerView.ViewHolder {
+        TextView term;
+        ImageView arrow;
+        LinearLayout layout;
+        RecyclerView nestedRecyclerView;
+        LinearLayout expandableLayout;
+
+        public plannerViewHolder(View itemView) {
+            super(itemView);
+            term = itemView.findViewById(R.id.term);
+            arrow = itemView.findViewById(R.id.arrow);
+            layout = itemView.findViewById(R.id.plannerTerm);
+            nestedRecyclerView = itemView.findViewById(R.id.plannerNestedRecyclerView);
+            expandableLayout = itemView.findViewById(R.id.expandableLayout);
         }
-        TextView moduleName = (TextView) convertView.findViewById(R.id.plannerName);
-        moduleName.setText(module.getId() + " - " + module.getName());
-
-        return convertView;
     }
 }

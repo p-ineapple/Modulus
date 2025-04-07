@@ -11,13 +11,19 @@ public class Module {
     private List<String> term;
     private List<String> prerequisites;
     private String description;
+    public Module(){
+    }
     public Module(String id, String name) {
         this.id = id;
         this.name = name;
     }
 
     public String getId() {
-        return id;
+        if(id != ""){
+            return id;
+        }else{
+            return "";
+        }
     }
     public void setId(String id) {
         this.id = id;
@@ -62,6 +68,18 @@ public class Module {
     }
     public void setDescription(String description) {
         this.description = description;
+    }
+    @Override
+    public String toString(){
+        return getId() + " - " + getName();
+    }
+    public static Module getModuleFromString(String s){
+        if(s.contains(" | ")){
+            String[] module = s.split(" | ");
+            return new Module(module[0], module[1]);
+        }else{
+            return null;
+        }
     }
 
     public static Comparator<Module> idAscending = new Comparator<Module>() {

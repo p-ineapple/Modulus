@@ -5,6 +5,10 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,60 +16,59 @@ import android.view.ViewGroup;
 
 import android.content.Intent;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.SearchView;
 
+import com.example.modulus.Class.FilterChip;
 import com.example.modulus.Class.Module;
 import com.example.modulus.Adapter.ModuleAdaptor;
 import com.example.modulus.R;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipDrawable;
+import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 
-//import android.widget.AdapterView;
-//import android.widget.ArrayAdapter;
-//import android.widget.Spinner;
-//import android.widget.Toast;
-
-public class InsightsFragment extends Fragment{
-    static ArrayList<Module> moduleList = new ArrayList<Module>();
+public class InsightsFragment extends Fragment {
+    public static ArrayList<Module> moduleList;
     ArrayList<String> selectedFilters = new ArrayList<String>();
-    String currentSearchText = "";
-    ListView list;
     SearchView search;
+    String currentSearchText = "";
+    DataBaseHelperInsights myDB;
+    RecyclerView list;
+    ModuleAdaptor.OnItemClickListener listener;
     ImageButton filterButton;
-    Chip asdChip, esdChip, epdChip, daiChip, istdChip, hassChip, smtChip,
-            term1Chip, term2Chip, term3Chip, term4Chip, term5Chip, term6Chip, term7Chip, term8Chip,
-    coreChip, coreEChip, electiveChip, fCoreChip, fElectiveChip;
-    boolean asdChipCheck, esdChipCheck, epdChipCheck, daiChipCheck, istdChipCheck, hassChipCheck, smtChipCheck,
-            term1ChipCheck, term2ChipCheck, term3ChipCheck, term4ChipCheck, term5ChipCheck, term6ChipCheck, term7ChipCheck, term8ChipCheck,
-    coreChipCheck, coreEChipCheck, electiveChipCheck, fCoreChipCheck, fElectiveChipCheck;
+    ArrayList<FilterChip> filterChips = new ArrayList<FilterChip>();
+    final String TAG = "Browser";
+
 //    boolean sortHidden = true; boolean filterHidden = true; LinearLayout sortView; Button sortButton;
 //    Button allButton, idAscButton, idDescButton, nameAscButton, nameDescButton;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_insights, container, false);
+        View view = inflater.inflate(R.layout.fragment_insights, container, false);
         //set up modules list
-        if(moduleList.isEmpty()){
+        if (moduleList == null) {
+            Log.d(TAG, "Setting up modules");
             setupData();
         }
-        list = view.findViewById(R.id.modulesListView);
-        ModuleAdaptor adapter = new ModuleAdaptor(getContext(), 0, moduleList);
-        list.setAdapter(adapter);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        Log.d(TAG, "Database set up");
+        list = view.findViewById(R.id.recyclerView);
+        listener = new ModuleAdaptor.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Module selectModule = (Module) (list.getItemAtPosition(position));
+            public void onItemClick(Module module) {
                 Intent showDetail = new Intent(getContext(), ModuleDetailsActivity.class);
-                showDetail.putExtra("id", selectModule.getId());
+                showDetail.putExtra("id", module.getId());
                 startActivity(showDetail);
             }
-        });
+        };
+        ModuleAdaptor adapter = new ModuleAdaptor(moduleList, listener);
+        list.setAdapter(adapter);
+        list.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
         //searchWidget
         search = view.findViewById(R.id.modulesListSearchView);
@@ -74,16 +77,17 @@ public class InsightsFragment extends Fragment{
             public boolean onQueryTextSubmit(String s) {
                 return false;
             }
+
             @Override
             public boolean onQueryTextChange(String s) {
                 currentSearchText = s;
                 ArrayList<Module> filteredModules = new ArrayList<Module>();
-                for(Module module: moduleList) {
-                    if(module.getName().toLowerCase().contains(s.toLowerCase()) || module.getId().contains(s)) {
-                        if(selectedFilters.size() == 1) {
+                for (Module module : moduleList) {
+                    if (module.getName().toLowerCase().contains(s.toLowerCase()) || module.getId().contains(s)) {
+                        if (selectedFilters.size() == 1) {
                             filteredModules.add(module);
                         } else {
-                            for(String filter: selectedFilters) {
+                            for (String filter : selectedFilters) {
                                 if (module.getName().toLowerCase().contains(filter) || module.getId().contains(s)) {
                                     filteredModules.add(module);
                                 }
@@ -91,7 +95,7 @@ public class InsightsFragment extends Fragment{
                         }
                     }
                 }
-                list.setAdapter(new ModuleAdaptor(getContext(), 0, filteredModules));
+                list.setAdapter(new ModuleAdaptor(filteredModules, listener));
                 return false;
             }
         });
@@ -105,54 +109,64 @@ public class InsightsFragment extends Fragment{
         selectedFilters.add("all");
         return view;
     }
-    private void setupData() {
-        Module HASS = new Module("0", "HASS Test");
-        HASS.setTags(Arrays.asList("HASS", "Elective / Technical Elective"));
-        HASS.setProf(Arrays.asList("HASS Prof"));
-        HASS.setTerm(Arrays.asList("4", "6", "8"));
-        HASS.setPrerequisites(Arrays.asList("NIL"));
-        moduleList.add(HASS);
 
-        Module DAI = new Module("1", "DAI Test");
-        DAI.setTags(Arrays.asList("DAI", "Core"));
-        DAI.setProf(Arrays.asList("DAI Prof"));
-        DAI.setTerm(Arrays.asList("7"));
-        DAI.setPrerequisites(Arrays.asList("NIL"));
-        moduleList.add(DAI);
+    private void setupData() {
+        myDB = new DataBaseHelperInsights(getContext());
+        moduleList = myDB.getAllModules();
     }
+
     private void addFilter(String status) {
-        if(status != null && !selectedFilters.contains(status))
+        if (status != null && !selectedFilters.contains(status)) {
             selectedFilters.add(status);
+        }
     }
-//    private void removeFilter(String status) {
-//        selectedFilters.remove(status);
-//        applyFilter();
-//    }
+
+    private void removeFilter(String status) {
+        selectedFilters.remove(status);
+    }
+
     private void applyFilter() {
         ArrayList<Module> filteredModules = new ArrayList<Module>();
-        for(Module module : moduleList) {
-            for(String filter: selectedFilters) {
-                if(module.getTags().contains(filter) || module.getTerm().contains(filter)) {
-                    filteredModules.add(module);
-                    }
-                }
-            }
-        list.setAdapter(new ModuleAdaptor(getContext(), 0, filteredModules));
-    }
-
-    private void checkForFilter() {
-        if(selectedFilters.size()==1) {
-            if(currentSearchText.isEmpty()) {
-                list.setAdapter(new ModuleAdaptor(getContext(), 0, moduleList));
-            }
-            else {
-                ArrayList<Module> filteredModules = new ArrayList<Module>();
-                for(Module module: moduleList) {
-                    if(module.getName().toLowerCase().contains(currentSearchText.toLowerCase())) {
+        List<String> filters = selectedFilters.subList(1,selectedFilters.size());
+        List<String> pillars = Arrays.asList(("ASD,ESD,EPD,DAI,ISTD,HASS,SMT").split(","));
+        List<String> terms = Arrays.asList(("Term 1,Term 2,Term 3,Term 4,Term 5,Term 6,Term 7,Term 8").split(","));
+        List<String> courses = Arrays.asList(("Core,Core Elective,Elective / Technical Elective,Freshmore Core,Freshmore Elective").split(","));
+        if(new HashSet<>(pillars).containsAll(filters) || new HashSet<>(terms).containsAll(filters)
+                || new HashSet<>(courses).containsAll(filters)){
+            for (Module module : moduleList) {
+                for (String filter : selectedFilters) {
+                    if (module.getTags().contains(filter) || module.getTerm().contains(filter.substring(filter.length() - 1))) {
                         filteredModules.add(module);
                     }
                 }
-                list.setAdapter(new ModuleAdaptor(getContext(), 0, filteredModules));
+            }
+        }else{
+            for (Module module : moduleList) {
+                List<String> moduleTagsTerm = new ArrayList<String>();
+                moduleTagsTerm.addAll(module.getTags());
+                for(String term: module.getTerm()){
+                    moduleTagsTerm.add("Term " + term);
+                }
+                if(new HashSet<>(moduleTagsTerm).containsAll(filters)){
+                    filteredModules.add(module);
+                }
+            }
+        }
+        list.setAdapter(new ModuleAdaptor(filteredModules, listener));
+    }
+
+    private void checkForFilter() {
+        if (selectedFilters.size() == 1) {
+            if (currentSearchText.isEmpty()) {
+                list.setAdapter(new ModuleAdaptor(moduleList, listener));
+            } else {
+                ArrayList<Module> filteredModules = new ArrayList<Module>();
+                for (Module module : moduleList) {
+                    if (module.getName().toLowerCase().contains(currentSearchText.toLowerCase())) {
+                        filteredModules.add(module);
+                    }
+                }
+                list.setAdapter(new ModuleAdaptor(filteredModules, listener));
             }
         } else {
             applyFilter();
@@ -164,284 +178,33 @@ public class InsightsFragment extends Fragment{
         filterDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         filterDialog.setContentView(R.layout.filterlayout);
 
-        ImageView closeButton = filterDialog.findViewById(R.id.closeButton);
-        closeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                filterDialog.dismiss();
-            }
-        });
-
-        ArrayList<Chip> chipArrayList = new ArrayList<Chip>();
-
-        asdChip = filterDialog.findViewById(R.id.asdFilter); chipArrayList.add(asdChip); asdChip.setChecked(asdChipCheck);
-        asdChip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (asdChip.isChecked()) {
-                    asdChipCheck = true;
-                    addFilter("ASD");
-                } else {
-                    asdChipCheck = false;
-                    selectedFilters.remove("ASD");
+        setUpChips(filterDialog);
+        for (FilterChip chipItem : filterChips) {
+            Chip chip = chipItem.getChip();
+            chip.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("click", "click");
+                    if (chip.isChecked()) {
+                        chipItem.setChipCheck(true);
+                        addFilter(chipItem.getName());
+                    } else {
+                        chipItem.setChipCheck(false);
+                        removeFilter(chipItem.getName());
+                    }
                 }
-            }
-        });
-        istdChip = filterDialog.findViewById(R.id.istdFilter); chipArrayList.add(istdChip); istdChip.setChecked(istdChipCheck);
-        istdChip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (istdChip.isChecked()) {
-                    istdChipCheck = true;
-                    addFilter("ISTD");
-                } else {
-                    istdChipCheck = false;
-                    selectedFilters.remove("ISTD");
-                }
-            }
-        });
-        esdChip = filterDialog.findViewById(R.id.esdFilter); chipArrayList.add(esdChip); esdChip.setChecked(esdChipCheck);
-        esdChip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (esdChip.isChecked()) {
-                    esdChipCheck = true;
-                    addFilter("ESD");
-                } else {
-                    esdChipCheck = false;
-                    selectedFilters.remove("ESD");
-                }
-            }
-        });
-        epdChip = filterDialog.findViewById(R.id.epdFilter); chipArrayList.add(epdChip); epdChip.setChecked(epdChipCheck);
-        epdChip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (epdChip.isChecked()) {
-                    epdChipCheck = true;
-                    addFilter("EPD");
-                } else {
-                    epdChipCheck = false;
-                    selectedFilters.remove("EPD");
-                }
-            }
-        });
-        daiChip = filterDialog.findViewById(R.id.daiFilter); chipArrayList.add(daiChip); daiChip.setChecked(daiChipCheck);
-        daiChip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (daiChip.isChecked()) {
-                    daiChipCheck = true;
-                    addFilter("DAI");
-                } else {
-                    daiChipCheck = false;
-                    selectedFilters.remove("DAI");
-                }
-            }
-        });
-        hassChip = filterDialog.findViewById(R.id.hassFilter); chipArrayList.add(hassChip); hassChip.setChecked(hassChipCheck);
-        hassChip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (hassChip.isChecked()) {
-                    hassChipCheck = true;
-                    addFilter("HASS");
-                } else {
-                    hassChipCheck = false;
-                    selectedFilters.remove("HASS");
-                }
-            }
-        });
-        smtChip = filterDialog.findViewById(R.id.smtFilter); chipArrayList.add(smtChip); smtChip.setChecked(smtChipCheck);
-        smtChip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (smtChip.isChecked()) {
-                    smtChipCheck = true;
-                    addFilter("SMT");
-                } else {
-                    smtChipCheck = false;
-                    selectedFilters.remove("SMT");
-                }
-            }
-        });
-
-        term1Chip = filterDialog.findViewById(R.id.term1Filter); chipArrayList.add(term1Chip); term1Chip.setChecked(term1ChipCheck);
-        term1Chip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (term1Chip.isChecked()) {
-                    term1ChipCheck = true;
-                    addFilter("1");
-                } else {
-                    term3ChipCheck = false;
-                    selectedFilters.remove("1");
-                }
-            }
-        });
-        term2Chip = filterDialog.findViewById(R.id.term2Filter); chipArrayList.add(term2Chip); term2Chip.setChecked(term2ChipCheck);
-        term2Chip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (term2Chip.isChecked()) {
-                    term2ChipCheck = true;
-                    addFilter("2");
-                } else {
-                    term2ChipCheck = false;
-                    selectedFilters.remove("2");
-                }
-            }
-        });
-        term3Chip = filterDialog.findViewById(R.id.term3Filter); chipArrayList.add(term3Chip); term3Chip.setChecked(term3ChipCheck);
-        term3Chip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (term3Chip.isChecked()) {
-                    term3ChipCheck = true;
-                    addFilter("3");
-                } else {
-                    term3ChipCheck = false;
-                    selectedFilters.remove("3");
-                }
-            }
-        });
-        term4Chip = filterDialog.findViewById(R.id.term4Filter); chipArrayList.add(term4Chip); term4Chip.setChecked(term4ChipCheck);
-        term4Chip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (term4Chip.isChecked()) {
-                    term4ChipCheck = true;
-                    addFilter("4");
-                } else {
-                    term4ChipCheck = false;
-                    selectedFilters.remove("4");
-                }
-            }
-        });
-        term5Chip = filterDialog.findViewById(R.id.term5Filter); chipArrayList.add(term5Chip); term5Chip.setChecked(term5ChipCheck);
-        term5Chip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (term5Chip.isChecked()) {
-                    term5ChipCheck = true;
-                    addFilter("5");
-                } else {
-                    term5ChipCheck = false;
-                    selectedFilters.remove("5");
-                }
-            }
-        });
-        term6Chip = filterDialog.findViewById(R.id.term6Filter); chipArrayList.add(term6Chip); term6Chip.setChecked(term6ChipCheck);
-        term6Chip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (term6Chip.isChecked()) {
-                    term6ChipCheck = true;
-                    addFilter("6");
-                } else {
-                    term6ChipCheck = false;
-                    selectedFilters.remove("6");
-                }
-            }
-        });
-        term7Chip = filterDialog.findViewById(R.id.term7Filter); chipArrayList.add(term7Chip); term7Chip.setChecked(term6ChipCheck);
-        term7Chip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (term7Chip.isChecked()) {
-                    term7ChipCheck = true;
-                    addFilter("7");
-                } else {
-                    term7ChipCheck = false;
-                    selectedFilters.remove("7");
-                }
-            }
-        });
-        term8Chip = filterDialog.findViewById(R.id.term8Filter); chipArrayList.add(term8Chip); term8Chip.setChecked(term8ChipCheck);
-        term8Chip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (smtChip.isChecked()) {
-                    term8ChipCheck = true;
-                    addFilter("8");
-                } else {
-                    term8ChipCheck = false;
-                    selectedFilters.remove("8");
-                }
-            }
-        });
-
-        coreChip = filterDialog.findViewById(R.id.coreFilter); chipArrayList.add(coreChip); coreChip.setChecked(coreChipCheck);
-        coreChip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (coreChip.isChecked()) {
-                    coreChipCheck = true;
-                    addFilter("Core");
-                } else {
-                    coreChipCheck = false;
-                    selectedFilters.remove("Core");
-                }
-            }
-        });
-        coreEChip = filterDialog.findViewById(R.id.coreElectiveFilter); chipArrayList.add(coreEChip); coreEChip.setChecked(coreEChipCheck);
-        coreEChip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (coreEChip.isChecked()) {
-                    coreEChipCheck = true;
-                    addFilter("Core Elective");
-                } else {
-                    coreEChipCheck = false;
-                    selectedFilters.remove("Core Elective");
-                }
-            }
-        });
-        electiveChip = filterDialog.findViewById(R.id.electiveFilter); chipArrayList.add(electiveChip); electiveChip.setChecked(electiveChipCheck);
-        electiveChip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (electiveChip.isChecked()) {
-                    electiveChipCheck = true;
-                    addFilter("Elective / Technical Elective");
-                } else {
-                    electiveChipCheck = false;
-                    selectedFilters.remove("Elective / Technical Elective");
-                }
-            }
-        });
-        fCoreChip = filterDialog.findViewById(R.id.fCoreFilter); chipArrayList.add(fCoreChip); fCoreChip.setChecked(fCoreChipCheck);
-        fCoreChip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (fCoreChip.isChecked()) {
-                    fCoreChipCheck = true;
-                    addFilter("Freshmore Core");
-                } else {
-                    fCoreChipCheck = false;
-                    selectedFilters.remove("Freshmore Core");
-                }
-            }
-        });
-        fElectiveChip = filterDialog.findViewById(R.id.fElectiveFilter); chipArrayList.add(fElectiveChip); fElectiveChip.setChecked(fElectiveChipCheck);
-        fElectiveChip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (fElectiveChip.isChecked()) {
-                    fElectiveChipCheck = true;
-                    addFilter("Freshmore Elective");
-                } else {
-                    fElectiveChipCheck = false;
-                    selectedFilters.remove("Freshmore Elective");
-                }
-            }
-        });
+            });
+        }
 
         Button applyButton = filterDialog.findViewById(R.id.applyButton);
         applyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                SharedPreferences.Editor editor = mPreferences.edit();
+//                editor.putString(filterChecks, storeFilterCheck(filterChips));
+//                editor.apply();
                 checkForFilter();
+                filterDialog.dismiss();
             }
         });
 
@@ -451,42 +214,57 @@ public class InsightsFragment extends Fragment{
             public void onClick(View v) {
                 selectedFilters.clear();
                 selectedFilters.add("all");
-                for(Chip chip: chipArrayList){
-                    chip.setChecked(false);
+                for (FilterChip chip : filterChips) {
+                    chip.setChipCheck(false);
+                    chip.getChip().setChecked(false);
                 }
             }
         });
 
-        filterDialog.show();
-        filterDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        filterDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        //filterDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        filterDialog.getWindow().setGravity(Gravity.BOTTOM);
+        ImageView closeButton = filterDialog.findViewById(R.id.closeButton);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterDialog.dismiss();
+            }
+        });
 
+        filterDialog.show();
+        filterDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        filterDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        filterDialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
+    public void setUpChips(Dialog filterDialog) {
+        List<String> filterChipNames = Arrays.asList(("ASD,ESD,EPD,DAI,ISTD,HASS,SMT," +
+                "Term 1,Term 2,Term 3,Term 4,Term 5,Term 6,Term 7,Term 8," +
+                "Core,Core Elective,Elective / Technical Elective,Freshmore Core,Freshmore Elective").split(","));
+        ChipGroup pillarChips = filterDialog.findViewById(R.id.pillarChips);
+        ChipGroup termChips = filterDialog.findViewById(R.id.termChips);
+        ChipGroup courseChips = filterDialog.findViewById(R.id.courseChips);
+        if (filterChips.isEmpty()) {
+            for (int i = 0; i < filterChipNames.size(); i++) {
+                FilterChip filterChip = new FilterChip(filterChipNames.get(i), false);
+                filterChips.add(filterChip);
+            }
+        }
+        for (int i = 0; i < filterChipNames.size(); i++) {
+            Chip chip = new Chip(this.getContext());
+            chip.setChipDrawable(ChipDrawable.createFromAttributes(this.getContext(), null, 0, com.google.android.material.R.style.Widget_MaterialComponents_Chip_Choice));
+            chip.setText(filterChipNames.get(i));
+            chip.setCheckable(true);
+            chip.setChecked(filterChips.get(i).isChipCheck());
+            if (i < 7) {
+                pillarChips.addView(chip);
+            } else if (i < 15) {
+                termChips.addView(chip);
+            } else {
+                courseChips.addView(chip);
+            }
+            filterChips.get(i).setChip(chip);
+        }
     }
 }
-
-//original onClick for filter buttons
-//@Override
-//public void onClick(View v) {
-//    if (hassChip.isChecked()) {
-//        filterList("HASS");
-//    } else {
-//        removeFilterList("HASS");
-//        checkForFilter();
-//    }
-//}
-
-//original filter methods
-//private void filterList(String status) {
-//    if(status != null && !selectedFilters.contains(status))
-//        selectedFilters.add(status);
-//    applyFilter();
-//}
-//private void removeFilterList(String status) {
-//    selectedFilters.remove(status);
-//    applyFilter();
-//}
 
 //sort methods
 //sortButton = view.findViewById(R.id.sortButton);
@@ -550,12 +328,3 @@ public class InsightsFragment extends Fragment{
 //        checkForFilter();
 //    }
 //});
-//
-//private void hideSort() {
-//    sortView.setVisibility(View.GONE);
-//    sortButton.setText("SORT");
-//}
-//private void showSort() {
-//    sortView.setVisibility(View.VISIBLE);
-//    sortButton.setText("HIDE");
-//}

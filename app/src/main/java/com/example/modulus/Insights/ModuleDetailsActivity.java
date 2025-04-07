@@ -27,15 +27,15 @@ public class ModuleDetailsActivity extends AppCompatActivity{
     }
 
     private Module getParsedModule(String parsedID) {
-        for (Module shape: InsightsFragment.moduleList) {
-            if(shape.getId().equals(parsedID))
-                return shape;
+        for (Module module : InsightsFragment.moduleList) {
+            if(module.getId().equals(parsedID))
+                return module;
         }
         return null;
     }
 
     private void setValues() {
-        TextView tv = (TextView) findViewById(R.id.shapeName);
-        tv.setText(selectedModule.getId() + " - " + selectedModule.getName());
+        TextView tv = (TextView) findViewById(R.id.moduleDetailsIDName);
+        tv.setText(selectedModule.toString());
     }
 }
