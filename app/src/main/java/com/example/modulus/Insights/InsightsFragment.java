@@ -21,12 +21,11 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.SearchView;
 
 import com.example.modulus.Class.FilterChip;
 import com.example.modulus.Class.Module;
-import com.example.modulus.Adapter.ModuleAdaptor;
+import com.example.modulus.Adapter.ModuleAdapter;
 import com.example.modulus.R;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
@@ -35,7 +34,6 @@ import com.google.android.material.chip.ChipGroup;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 
@@ -46,7 +44,7 @@ public class InsightsFragment extends Fragment {
     String currentSearchText = "";
     DataBaseHelperInsights myDB;
     RecyclerView list;
-    ModuleAdaptor.OnItemClickListener listener;
+    ModuleAdapter.OnItemClickListener listener;
     ImageButton filterButton;
     ImageButton sortButton;
     ConstraintLayout sortTab;
@@ -65,7 +63,7 @@ public class InsightsFragment extends Fragment {
         }
         Log.d(TAG, "Database set up");
         list = view.findViewById(R.id.recyclerView);
-        listener = new ModuleAdaptor.OnItemClickListener() {
+        listener = new ModuleAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Module module) {
                 Intent showDetail = new Intent(getContext(), ModuleDetailsActivity.class);
@@ -73,7 +71,7 @@ public class InsightsFragment extends Fragment {
                 startActivity(showDetail);
             }
         };
-        ModuleAdaptor adapter = new ModuleAdaptor(moduleList, listener);
+        ModuleAdapter adapter = new ModuleAdapter(moduleList, listener);
         list.setAdapter(adapter);
         list.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
@@ -102,7 +100,7 @@ public class InsightsFragment extends Fragment {
                         }
                     }
                 }
-                list.setAdapter(new ModuleAdaptor(filteredModules, listener));
+                list.setAdapter(new ModuleAdapter(filteredModules, listener));
                 return false;
             }
         });
@@ -128,7 +126,7 @@ public class InsightsFragment extends Fragment {
                 }
             }
         });
-
+//        sortChips(view);
         return view;
     }
 
@@ -173,13 +171,13 @@ public class InsightsFragment extends Fragment {
                 }
             }
         }
-        list.setAdapter(new ModuleAdaptor(filteredModules, listener));
+        list.setAdapter(new ModuleAdapter(filteredModules, listener));
     }
 
     private void checkForFilter() {
         if (selectedFilters.size() == 1) {
             if (currentSearchText.isEmpty()) {
-                list.setAdapter(new ModuleAdaptor(moduleList, listener));
+                list.setAdapter(new ModuleAdapter(moduleList, listener));
             } else {
                 ArrayList<Module> filteredModules = new ArrayList<Module>();
                 for (Module module : moduleList) {
@@ -187,7 +185,7 @@ public class InsightsFragment extends Fragment {
                         filteredModules.add(module);
                     }
                 }
-                list.setAdapter(new ModuleAdaptor(filteredModules, listener));
+                list.setAdapter(new ModuleAdapter(filteredModules, listener));
             }
         } else {
             applyFilter();
@@ -284,13 +282,23 @@ public class InsightsFragment extends Fragment {
         Collections.sort(moduleList,Module.idAscending);
     }
 
-    public void setUpSortChips(View view){
-        Chip idChip = view.findViewById(R.id.id);
-        Chip nameChip = view.findViewById(R.id.name);
-        Chip ascChip = view.findViewById(R.id.ascending);
-        Chip descChip = view.findViewById(R.id.descending);
-
-    }
+//    public void sortChips(View view){
+//        Chip idChip = view.findViewById(R.id.id);
+//        Chip nameChip = view.findViewById(R.id.name);
+//        Chip ascChip = view.findViewById(R.id.ascending);
+//        Chip descChip = view.findViewById(R.id.descending);
+//        if(idChip.isChecked() && ascChip.isChecked()){
+//            MergeSort.mergeSortID(moduleList, moduleList.size());
+//        }else if(idChip.isChecked() && descChip.isChecked()){
+//            MergeSort.mergeSortID(moduleList, moduleList.size());
+//            Collections.reverse(moduleList);
+//        }else if(nameChip.isChecked() && ascChip.isChecked()){
+//            MergeSort.mergeSortName(moduleList, moduleList.size());
+//        }else if(nameChip.isChecked() && descChip.isChecked()){
+//            MergeSort.mergeSortName(moduleList, moduleList.size());
+//            Collections.reverse(moduleList);
+//        }
+//    }
 }
 //});
 //

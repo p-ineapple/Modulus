@@ -3,7 +3,6 @@ package com.example.modulus.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,13 +13,13 @@ import com.example.modulus.R;
 
 import java.util.ArrayList;
 
-public class ModuleAdaptor extends RecyclerView.Adapter<ModuleAdaptor.moduleCellViewHolder> {
+public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.moduleCellViewHolder> {
     public interface OnItemClickListener {
         void onItemClick(Module module);
     }
     ArrayList<Module> moduleList;
     OnItemClickListener listener;
-    public ModuleAdaptor(ArrayList<Module> moduleList, OnItemClickListener listener) {
+    public ModuleAdapter(ArrayList<Module> moduleList, OnItemClickListener listener) {
         this.moduleList = moduleList;
         this.listener = listener;
     }

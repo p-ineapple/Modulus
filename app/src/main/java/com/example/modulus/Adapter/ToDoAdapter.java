@@ -19,12 +19,12 @@ import com.example.modulus.R;
 import com.example.modulus.Home.DataBaseHelper;
 
 import java.util.List;
-public class ToDoAdaptor extends RecyclerView.Adapter<ToDoAdaptor.MyViewHolder> {
+public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.MyViewHolder> {
     private List<ToDoModel> mList;
     private HomeFragment home;
     private DataBaseHelper myDB;
 
-    public ToDoAdaptor(DataBaseHelper myDB, HomeFragment home){
+    public ToDoAdapter(DataBaseHelper myDB, HomeFragment home){
         this.home = home;
         this.myDB = myDB;
     }

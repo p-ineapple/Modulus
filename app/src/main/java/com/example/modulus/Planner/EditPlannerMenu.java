@@ -69,7 +69,7 @@ public class EditPlannerMenu extends AppCompatActivity {
                 }
                 count += isChecked ? 1 : -1;
                 int term = selectedPlanner.getTermInt();
-                boolean checkCount = false;
+                boolean checkCount;
                 if(term == 7 || term == 8){
                     checkCount = (count > 3);
                 }else{

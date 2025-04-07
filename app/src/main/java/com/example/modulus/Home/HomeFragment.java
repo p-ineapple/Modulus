@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.modulus.Adapter.ToDoAdaptor;
+import com.example.modulus.Adapter.ToDoAdapter;
 import com.example.modulus.Class.ToDoModel;
 import com.example.modulus.R;
 import com.example.modulus.Utils.OnDialogCloseListener;
@@ -36,7 +36,7 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
     FloatingActionButton addButton;
     DataBaseHelper myDB;
     private List<ToDoModel> mList;
-    private ToDoAdaptor adaptor;
+    private ToDoAdapter adaptor;
     private final String TAG_ = "Home";
     @SuppressLint("MissingInflatedId")
     @Override
@@ -66,7 +66,7 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
         addButton = view.findViewById(R.id.addButton); //ToDo: edit these
         myDB = new DataBaseHelper(this.getContext());
         mList = new ArrayList<>();
-        adaptor = new ToDoAdaptor(myDB, this);
+        adaptor = new ToDoAdapter(myDB, this);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
@@ -86,11 +86,11 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
                 String dateString = date.format(formatter);
 
                 System.out.println(dateString);
-                recyclerView.setAdapter(adaptor);
+                recyclerView.setAdapter(adapter);
                 mList = myDB.getAllTasks();
                 //mList = myDB.getDateTask("16-4-2025");
                 Collections.reverse(mList);
-                adaptor.setTasks(mList);
+                adapter.setTasks(mList);
             }
         });*/
 

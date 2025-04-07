@@ -1,35 +1,27 @@
 package com.example.modulus.Adapter;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.modulus.Class.Module;
 import com.example.modulus.Class.Planner;
-import com.example.modulus.Insights.ModuleDetailsActivity;
 import com.example.modulus.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class PlannerAdaptor extends RecyclerView.Adapter<PlannerAdaptor.plannerViewHolder> {
+public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.plannerViewHolder> {
     List<Planner> plannerList;
     List<Module> moduleList;
-    public PlannerAdaptor(List<Planner> plannerList) {
+    public PlannerAdapter(List<Planner> plannerList) {
         this.plannerList = plannerList;
     }
 

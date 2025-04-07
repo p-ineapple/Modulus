@@ -10,16 +10,16 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.modulus.Adapter.ToDoAdaptor;
+import com.example.modulus.Adapter.ToDoAdapter;
 import com.example.modulus.R;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class RecyclerViewTouchHelper extends ItemTouchHelper.SimpleCallback {
-    ToDoAdaptor adaptor;
-    public RecyclerViewTouchHelper(ToDoAdaptor adaptor) {
+    ToDoAdapter adapter;
+    public RecyclerViewTouchHelper(ToDoAdapter adapter) {
         super(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
-        this.adaptor = adaptor;
+        this.adapter = adapter;
     }
 
     @Override
@@ -31,19 +31,19 @@ public class RecyclerViewTouchHelper extends ItemTouchHelper.SimpleCallback {
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
         final int position = viewHolder.getAdapterPosition();
         if(direction == ItemTouchHelper.RIGHT){
-            AlertDialog.Builder builder = new AlertDialog.Builder(adaptor.getContext());
+            AlertDialog.Builder builder = new AlertDialog.Builder(adapter.getContext());
             builder.setTitle("Delete Task");
             builder.setMessage("noooooooooooo:(((((");
             builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    adaptor.deleteTask(position);
+                    adapter.deleteTask(position);
                 }
             });
             builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    adaptor.notifyItemChanged(position);
+                    adapter.notifyItemChanged(position);
                 }
             });
             AlertDialog dialog = builder.create();
@@ -51,7 +51,7 @@ public class RecyclerViewTouchHelper extends ItemTouchHelper.SimpleCallback {
 
         }else{
             Log.d("edit here", String.valueOf(position));
-            adaptor.editItems(position);
+            adapter.editItems(position);
         }
 
     }
@@ -59,9 +59,9 @@ public class RecyclerViewTouchHelper extends ItemTouchHelper.SimpleCallback {
     @Override
     public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
         new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-                .addSwipeRightBackgroundColor(ContextCompat.getColor(adaptor.getContext(), R.color.red))
+                .addSwipeRightBackgroundColor(ContextCompat.getColor(adapter.getContext(), R.color.red))
                 .addSwipeRightActionIcon(R.drawable.delete)
-                .addSwipeLeftBackgroundColor(ContextCompat.getColor(adaptor.getContext(),R.color.green))
+                .addSwipeLeftBackgroundColor(ContextCompat.getColor(adapter.getContext(),R.color.green))
                 .addSwipeLeftActionIcon(R.drawable.edit)
                 .create()
                 .decorate();

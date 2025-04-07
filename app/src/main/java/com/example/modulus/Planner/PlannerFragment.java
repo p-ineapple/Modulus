@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.example.modulus.Adapter.PlannerAdaptor;
+import com.example.modulus.Adapter.PlannerAdapter;
 import com.example.modulus.Class.Module;
 import com.example.modulus.Class.Planner;
 import com.example.modulus.Insights.DataBaseHelperInsights;
@@ -28,7 +28,7 @@ import java.util.List;
 
 public class PlannerFragment extends Fragment {
     public static List<Planner> plannerList;
-    PlannerAdaptor adapter;
+    PlannerAdapter adapter;
     RecyclerView recyclerView;
     DataBaseHelperInsights myDB;
     ImageView editButton;
@@ -65,7 +65,7 @@ public class PlannerFragment extends Fragment {
             myDB = new DataBaseHelperInsights(getContext());
             InsightsFragment.moduleList = myDB.getAllModules();
         }
-        adapter = new PlannerAdaptor(plannerList);
+        adapter = new PlannerAdapter(plannerList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setAdapter(adapter);
         return view;
