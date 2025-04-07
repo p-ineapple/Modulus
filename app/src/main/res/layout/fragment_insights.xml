@@ -42,6 +42,24 @@
             android:backgroundTint="@android:color/transparent"
             app:cardCornerRadius="24dp">
 
+            <com.google.android.material.chip.ChipGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/filteredChips">
+
+            </com.google.android.material.chip.ChipGroup>
+
+            <ImageButton
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginVertical="4dp"
+                android:layout_marginEnd="38dp"
+                android:id="@+id/sortButton"
+                android:background="@drawable/sort"
+                android:backgroundTint="@color/dark_purple"
+                android:layout_gravity="end">
+            </ImageButton>
+
             <ImageButton
                 android:layout_width="28dp"
                 android:layout_height="28dp"
@@ -54,49 +72,70 @@
             </ImageButton>
         </androidx.cardview.widget.CardView>
 
-    <!--    <LinearLayout-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:orientation="horizontal"-->
-    <!--        android:id="@+id/sortTabsLayout2">-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/sortTab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="10dp">
 
-    <!--        <Button-->
-    <!--            android:layout_width="0dp"-->
-    <!--            android:layout_weight="1"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:text="All"-->
-    <!--            android:id="@+id/allFilter"-->
-    <!--            android:textColor="@color/light_purple"/>-->
+            <com.google.android.material.chip.ChipGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                app:singleSelection="true"
+                app:selectionRequired="true"
+                app:layout_constraintStart_toStartOf="@id/sortTab"
+                app:layout_constraintTop_toTopOf="@id/sortTab">
 
-    <!--        <Button-->
-    <!--            android:layout_width="0dp"-->
-    <!--            android:layout_weight="1"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:text="ID ASC"-->
-    <!--            android:id="@+id/idAsc"/>-->
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:id="@+id/id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ID"
+                    android:checkable="true"
+                    android:checked="true"/>
 
-    <!--        <Button-->
-    <!--            android:layout_width="0dp"-->
-    <!--            android:layout_weight="1"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:text="ID DESC"-->
-    <!--            android:id="@+id/idDesc"/>-->
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Name"
+                    android:checkable="true"/>
 
-    <!--        <Button-->
-    <!--            android:layout_width="0dp"-->
-    <!--            android:layout_weight="1"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:text="NAME ASC"-->
-    <!--            android:id="@+id/nameAsc"/>-->
+            </com.google.android.material.chip.ChipGroup>
 
-    <!--        <Button-->
-    <!--            android:layout_width="0dp"-->
-    <!--            android:layout_weight="1"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:text="NAME DESC"-->
-    <!--            android:id="@+id/nameDesc"/>-->
+            <com.google.android.material.chip.ChipGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                app:singleSelection="true"
+                app:selectionRequired="true"
+                app:layout_constraintEnd_toEndOf="@id/sortTab"
+                app:layout_constraintTop_toTopOf="@id/sortTab">
 
-    <!--    </LinearLayout>-->
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:id="@+id/ascending"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ascending"
+                    android:checkable="true"
+                    android:checked="true"/>
+
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:id="@+id/descending"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Descending"
+                    android:checkable="true"/>
+
+            </com.google.android.material.chip.ChipGroup>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"

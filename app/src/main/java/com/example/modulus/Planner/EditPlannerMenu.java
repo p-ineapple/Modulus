@@ -3,19 +3,12 @@ package com.example.modulus.Planner;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,7 +18,6 @@ import com.example.modulus.Insights.InsightsFragment;
 import com.example.modulus.R;
 import com.google.android.material.card.MaterialCardView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,9 +68,17 @@ public class EditPlannerMenu extends AppCompatActivity {
                     selectedModulesIndex.remove(String.valueOf(which));
                 }
                 count += isChecked ? 1 : -1;
-                if (count > 4) {
+                int term = selectedPlanner.getTermInt();
+                boolean checkCount = false;
+                if(term == 7 || term == 8){
+                    checkCount = (count > 3);
+                }else{
+                    checkCount = (count > 4);
+                }
+                if(checkCount) {
                     Toast.makeText(EditPlannerMenu.this, "Limit Reached!.", Toast.LENGTH_SHORT).show();
                     selectedModules[which] = false;
+                    selectedModulesIndex.remove(String.valueOf(which));
                     count--;
                     ((AlertDialog) dialog).getListView().setItemChecked(which, false);
                 }

@@ -18,7 +18,6 @@ import android.widget.ImageView;
 import com.example.modulus.Adapter.PlannerAdaptor;
 import com.example.modulus.Class.Module;
 import com.example.modulus.Class.Planner;
-//import com.example.modulus.Adapter.PlannerAdaptor;
 import com.example.modulus.Insights.DataBaseHelperInsights;
 import com.example.modulus.Insights.InsightsFragment;
 import com.example.modulus.R;
@@ -26,7 +25,6 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class PlannerFragment extends Fragment {
     public static List<Planner> plannerList;
@@ -104,34 +102,36 @@ public class PlannerFragment extends Fragment {
         Gson gson = new Gson();
         String jsonTerms = mPreferences.getString(KEY_DATA_TERMS, "");
         String jsonMods = mPreferences.getString(KEY_DATA_MODS, "");
-
         plannerList = new ArrayList<>();
         ArrayList<String> terms = gson.fromJson(jsonTerms, ArrayList.class);
         ArrayList<String> mods = gson.fromJson(jsonMods, ArrayList.class);
         System.out.println(terms);
         System.out.println(mods);
-        int modsPointer = 0;
-        for (int i = 0; i< terms.size(); i++) {
-            Planner planner = new Planner(terms.get(i));
-            List<Module> plannerModules = new ArrayList<Module>();
-            for(int j = modsPointer; j < mods.size(); j++){
-                if(mods.get(j).toString().equals("?")){
-                    planner.setModules(plannerModules);
-                    plannerList.add(planner);
-                    modsPointer++;
-                    break;
-                }else if(mods.get(j).toString().equals("NIL")){
-                    plannerList.add(planner);
-                    modsPointer++;
-                    break;
-                }else {
-                    if (mods.get(j).contains("Capstone")) {
-                        plannerModules.add(new Module("", "Capstone"));
-                    } else {
-                        String[] module = mods.get(j).split(" - ");
-                        plannerModules.add(new Module(module[0], module[1]));
+        if(terms != null && mods != null){
+            int modsPointer = 0;
+            for (int i = 0; i< terms.size(); i++) {
+                Planner planner = new Planner(terms.get(i));
+                List<Module> plannerModules = new ArrayList<Module>();
+                for(int j = modsPointer; j < mods.size(); j++){
+                    if(mods.get(j).toString().equals("?")){
+                        planner.setModules(plannerModules);
+                        plannerList.add(planner);
+                        modsPointer++;
+                        break;
+                    }else if(mods.get(j).toString().equals("NIL")){
+                        plannerList.add(planner);
+                        modsPointer++;
+                        break;
+                    }else {
+                        plannerModules.add(Module.getModuleFromString(mods.get(j)));
+//                    if (mods.get(j).contains("Capstone")) {
+//                        plannerModules.add(new Module("", "Capstone"));
+//                    } else {
+//                        String[] module = mods.get(j).split(" - ");
+//                        plannerModules.add(new Module(module[0], module[1]));
+//                    }
+                        modsPointer++;
                     }
-                    modsPointer++;
                 }
             }
         }

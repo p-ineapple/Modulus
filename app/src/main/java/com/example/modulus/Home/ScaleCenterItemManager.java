@@ -7,14 +7,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ScaleCenterItemManager extends LinearLayoutManager {
-    public ScaleCenterItemManager(Context context) {
-        super(context);
-    }
-
     public ScaleCenterItemManager(Context context, int orientation, boolean reverseLayout) {
         super(context, orientation, reverseLayout);
     }
-
 
     @Override
     public boolean checkLayoutParams(RecyclerView.LayoutParams lp) {
@@ -51,9 +46,5 @@ public class ScaleCenterItemManager extends LinearLayoutManager {
             child.setScaleY(scale);
         }
     }
-
-
-
-
 }
 

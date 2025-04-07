@@ -13,7 +13,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:id="@+id/dateitemRecycler" />
+        android:id="@+id/dateItemRecycler" />
 
 
     <!--TextView
@@ -33,7 +33,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/dateitemRecycler">
+        android:layout_below="@id/dateItemRecycler">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"

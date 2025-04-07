@@ -43,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     NavigationView navigationView;
     ActionBarDrawerToggle toggle;
-
+    Toolbar toolbar;
+    private final String TAG = "MAIN";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,14 +55,13 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setBackground(null);
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toggle = new ActionBarDrawerToggle(this, drawerLayout,toolbar, R.string.open_nav, R.string.close_nav);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
         //bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
-
         /*if(savedInstanceState == null){
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, new HomeFragment()).commit();
             navigationView.setCheckedItem(nav_home);
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 if (item.getItemId() == R.id.nav_logout) {
                     // Show a Toast message for the Logout item
                     Toast.makeText(MainActivity.this, "You are Logged Out", Toast.LENGTH_SHORT).show();
-                    Log.d("Logout", "LOGOUTTTTT");
+                    Log.d(TAG, "Logging out");
                     Intent intent = new Intent(MainActivity.this, ActivityLogIn.class);
                     startActivity(intent);
                 }
@@ -120,9 +120,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });*/
     }
+
     //outside onCreate
-
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (toggle.onOptionsItemSelected(item)) {
@@ -132,18 +131,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private NavigationBarView.OnItemSelectedListener navListener = item -> {
-        // By using switch we can easily get the selected fragment by using there id.
         int itemId = item.getItemId();
         if (itemId == R.id.home) {
+            Log.d(TAG, "Opening Home fragment");
             replaceFragment(new HomeFragment());
         } else if (itemId == R.id.calendar) {
+            Log.d(TAG, "Opening Calendar fragment");
             replaceFragment(new CalendarFragment());
         } else if (itemId == R.id.planner) {
+            Log.d(TAG, "Opening Planner fragment");
             replaceFragment(new PlannerFragment());
         } else if (itemId == R.id.insights) {
+            Log.d(TAG, "Opening Insights fragment");
             replaceFragment(new InsightsFragment());
         }
-
         return true;
     };
     private void replaceFragment(Fragment fragment) {
@@ -153,49 +154,39 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    private void showBottomDialog() {
-
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.bottomsheetlayout);
-
-        LinearLayout eventLayout = dialog.findViewById(R.id.layoutEvent);
-        LinearLayout taskLayout = dialog.findViewById(R.id.layoutTask);
-        ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
-
-        eventLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                dialog.dismiss();
-                Toast.makeText(MainActivity.this,"Upload event lmao",Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-        taskLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                dialog.dismiss();
-                Toast.makeText(MainActivity.this,"task task atsdk aajfkwbjkav",Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        //dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        dialog.getWindow().setGravity(Gravity.BOTTOM);
-
-    }
+//    private void showBottomDialog() {
+//        final Dialog dialog = new Dialog(this);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.setContentView(R.layout.bottomsheetlayout);
+//        LinearLayout eventLayout = dialog.findViewById(R.id.layoutEvent);
+//        LinearLayout taskLayout = dialog.findViewById(R.id.layoutTask);
+//        ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
+//        eventLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//                Toast.makeText(MainActivity.this,"Upload event lmao",Toast.LENGTH_SHORT).show();
+//
+//            }
+//        });
+//        taskLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//                Toast.makeText(MainActivity.this,"task task atsdk aajfkwbjkav",Toast.LENGTH_SHORT).show();
+//
+//            }
+//        });
+//        cancelButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dialog.dismiss();
+//            }
+//        });
+//        dialog.show();
+//        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        //dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+//        dialog.getWindow().setGravity(Gravity.BOTTOM);
+//    }
 }

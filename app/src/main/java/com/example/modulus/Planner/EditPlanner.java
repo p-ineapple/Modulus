@@ -26,7 +26,6 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class EditPlanner extends AppCompatActivity {
     List<Planner> editPlannerList = PlannerFragment.plannerList;
@@ -70,7 +69,11 @@ public class EditPlanner extends AppCompatActivity {
                             }
                         }
                         for(Planner planner: editPlannerList){
-                            if(Objects.equals(planner.getTerm(), term)){
+                            String t = planner.getTerm();
+                            if(t.equals(term)){
+                                if(t.contains("7") || t.contains("8")){
+                                    newPlannerModules.add(new Module("", "Capstone"));
+                                }
                                 planner.setModules(newPlannerModules);
                                 break;
                             }

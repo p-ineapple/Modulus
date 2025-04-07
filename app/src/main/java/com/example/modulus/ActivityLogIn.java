@@ -18,7 +18,7 @@ public class ActivityLogIn extends AppCompatActivity {
     TextView register;
     EditText email, password;
     RelativeLayout rl_login_button;
-
+    private final String TAG = "LOGIN";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +36,7 @@ public class ActivityLogIn extends AppCompatActivity {
         rl_login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("1", "login");
+                Log.d(TAG, "login");
                 Intent intent = new Intent(ActivityLogIn.this, MainActivity.class);
                 startActivity(intent);
             }

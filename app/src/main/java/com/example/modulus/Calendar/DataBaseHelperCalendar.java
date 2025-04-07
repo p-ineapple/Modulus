@@ -5,27 +5,32 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.content.ContentValues;
 
 import com.example.modulus.R;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Arrays;
 import java.util.List;
 
 public class DataBaseHelperCalendar extends SQLiteOpenHelper {
-    private static final String dbName = "MODULUS.db";
-    private static final String TABLE_NAME = "calendarEvents";
-
+    private static final String dbName = "sutdModules.db";
+    private static final String TABLE_NAME = "timetable";
+    private static String dbPath = "/data/data/com.example.modulus/databases/";
     SQLiteDatabase db;
+    private final Context mContext;
     private static final String COL_COLOR_ID = "colorId";
     private static final String COL_ID = "_id";
-
-        private static final String COL_START_YEAR = "startTime_YEAR";
+    private static final String COL_START_YEAR = "startTime_YEAR";
     private static final String COL_START_MONTH = "startTime_MONTH";
     private static final String COL_START_DAY = "startTime_DAY_OF_MONTH";
     private static final String COL_START_HOUR = "startTime_HOUR_OF_DAY";
@@ -39,8 +44,9 @@ public class DataBaseHelperCalendar extends SQLiteOpenHelper {
     private static final String COL_LOCATION = "location";
 
 
-    public DataBaseHelperCalendar(Context Context) {
-        super(Context, dbName, null, 1);
+    public DataBaseHelperCalendar(Context context) {
+        super(context, dbName, null, 1);
+        this.mContext = context;
     }
 
     @Override
@@ -65,6 +71,56 @@ public class DataBaseHelperCalendar extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_NAME);
         onCreate(db);
     }
+
+    private boolean checkDatabase() {
+        try {
+            final String mPath = dbPath + dbName;
+            Log.d("check", "check");
+            final File file = new File(mPath);
+            return file.exists();
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private void copyDatabase() throws IOException {
+        try {
+            InputStream mInputStream = mContext.getAssets().open(dbName);
+            Log.d("DB", "Copying Database");
+            String outFileName = dbPath + dbName;
+            OutputStream mOutputStream = new FileOutputStream(outFileName);
+
+            byte[] buffer = new byte[2048];
+            int length;
+            while ((length = mInputStream.read(buffer)) > 0) {
+                mOutputStream.write(buffer, 0, length);
+            }
+            mOutputStream.flush();
+            mOutputStream.close();
+            mInputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void createDatabase() throws IOException {
+        boolean mDatabaseExists = checkDatabase();
+        Log.d("create", "create");
+        if (mDatabaseExists) {
+            this.getReadableDatabase();
+            this.close();
+            try {
+                copyDatabase();
+            } catch (IOException mIOException) {
+                mIOException.printStackTrace();
+                throw new Error("Error copying Database");
+            } finally {
+                this.close();
+            }
+        }
+    }
+
 
 //    public void insertTask(ToDoModel model){
 //        SQLiteDatabase db = this.getWritableDatabase();
@@ -110,9 +166,14 @@ public class DataBaseHelperCalendar extends SQLiteOpenHelper {
 //    }
     @SuppressLint("Range")
     public List<Event> getAllEvents(){
+        try {
+            createDatabase();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = null;
-       List<Event> events = new ArrayList<>();
+        List<Event> events = new ArrayList<>();
 
         db.beginTransaction();
         try{
@@ -169,7 +230,10 @@ public class DataBaseHelperCalendar extends SQLiteOpenHelper {
 
     @Override
     public synchronized void close(){
-
+        if (db != null) {
+            db.close();
+        }
+        SQLiteDatabase.releaseMemory();
         super.close();
 
     }

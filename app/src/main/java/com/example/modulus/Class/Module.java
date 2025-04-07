@@ -19,10 +19,10 @@ public class Module {
     }
 
     public String getId() {
-        if(id != ""){
-            return id;
-        }else{
+        if(id == null){
             return "";
+        }else{
+            return id;
         }
     }
     public void setId(String id) {
@@ -38,21 +38,33 @@ public class Module {
     }
 
     public List<String> getProf() {
-        return prof;
+        if(prof == null) {
+            return null;
+        }else{
+            return prof;
+        }
     }
 
     public void setProf(List<String> prof) {
         this.prof = prof;
     }
     public List<String> getTags() {
-        return tags;
+        if(tags == null) {
+            return null;
+        }else{
+            return tags;
+        }
     }
     public void setTags(List<String> tags) {
         this.tags = tags;
     }
 
     public List<String> getTerm() {
-        return term;
+        if(term == null) {
+            return null;
+        }else{
+            return term;
+        }
     }
     public void setTerm(List<String> term) {
         this.term = term;
@@ -74,9 +86,11 @@ public class Module {
         return getId() + " - " + getName();
     }
     public static Module getModuleFromString(String s){
-        if(s.contains(" | ")){
-            String[] module = s.split(" | ");
+        if(s.contains(" - ")){
+            String[] module = s.split(" - ");
             return new Module(module[0], module[1]);
+        }else if(s.contains("Capstone")){
+            return new Module("", "Capstone");
         }else{
             return null;
         }

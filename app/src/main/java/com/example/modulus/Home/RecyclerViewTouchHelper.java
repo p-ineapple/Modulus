@@ -15,7 +15,6 @@ import com.example.modulus.R;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
-
 public class RecyclerViewTouchHelper extends ItemTouchHelper.SimpleCallback {
     ToDoAdaptor adaptor;
     public RecyclerViewTouchHelper(ToDoAdaptor adaptor) {

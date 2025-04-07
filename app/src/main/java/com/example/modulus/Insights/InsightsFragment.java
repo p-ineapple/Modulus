@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +21,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 
 import com.example.modulus.Class.FilterChip;
@@ -31,6 +34,8 @@ import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 
@@ -43,6 +48,8 @@ public class InsightsFragment extends Fragment {
     RecyclerView list;
     ModuleAdaptor.OnItemClickListener listener;
     ImageButton filterButton;
+    ImageButton sortButton;
+    ConstraintLayout sortTab;
     ArrayList<FilterChip> filterChips = new ArrayList<FilterChip>();
     final String TAG = "Browser";
 
@@ -107,6 +114,21 @@ public class InsightsFragment extends Fragment {
             }
         });
         selectedFilters.add("all");
+
+        sortTab = view.findViewById(R.id.sortTab);
+        sortTab.setVisibility(View.VISIBLE);
+        sortButton = view.findViewById(R.id.sortButton);
+        sortButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(sortTab.getVisibility() == View.VISIBLE){
+                    sortTab.setVisibility(View.GONE);
+                }else{
+                    sortTab.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
         return view;
     }
 
@@ -142,8 +164,7 @@ public class InsightsFragment extends Fragment {
             }
         }else{
             for (Module module : moduleList) {
-                List<String> moduleTagsTerm = new ArrayList<String>();
-                moduleTagsTerm.addAll(module.getTags());
+                List<String> moduleTagsTerm = new ArrayList<String>(module.getTags());
                 for(String term: module.getTerm()){
                     moduleTagsTerm.add("Term " + term);
                 }
@@ -200,9 +221,6 @@ public class InsightsFragment extends Fragment {
         applyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                SharedPreferences.Editor editor = mPreferences.edit();
-//                editor.putString(filterChecks, storeFilterCheck(filterChips));
-//                editor.apply();
                 checkForFilter();
                 filterDialog.dismiss();
             }
@@ -263,35 +281,17 @@ public class InsightsFragment extends Fragment {
             }
             filterChips.get(i).setChip(chip);
         }
+        Collections.sort(moduleList,Module.idAscending);
+    }
+
+    public void setUpSortChips(View view){
+        Chip idChip = view.findViewById(R.id.id);
+        Chip nameChip = view.findViewById(R.id.name);
+        Chip ascChip = view.findViewById(R.id.ascending);
+        Chip descChip = view.findViewById(R.id.descending);
+
     }
 }
-
-//sort methods
-//sortButton = view.findViewById(R.id.sortButton);
-//        sortButton.setOnClickListener(new View.OnClickListener() {
-//    @Override
-//    public void onClick(View v) {
-//        if(sortHidden) {
-//            sortHidden = false;
-//            showSort();
-//        } else {
-//            sortHidden = true;
-//            hideSort();
-//        }
-//    }
-//});
-//
-//sortView = view.findViewById(R.id.sortTabsLayout2);
-//
-//allButton = view.findViewById(R.id.allFilter);
-//        allButton.setOnClickListener(new View.OnClickListener() {
-//    @Override
-//    public void onClick(View v) {
-//        selectedFilters.clear();
-//        selectedFilters.add("all");
-//
-//        list.setAdapter(new ModuleAdaptor(getContext(), 0, moduleList));
-//    }
 //});
 //
 //idAscButton = view.findViewById(R.id.idAsc);

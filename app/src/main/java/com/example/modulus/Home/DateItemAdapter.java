@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Locale;
 
 public class DateItemAdapter extends RecyclerView.Adapter<DateItemAdapter.MyViewHolder> {
-
     private List<LocalDate> dateList;
     private OnItemClickListener listener;
 
