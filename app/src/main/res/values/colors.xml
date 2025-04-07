@@ -15,4 +15,10 @@
     <color name="white">#FFFFFFFF</color>
     <color name="green">#4BCC96</color>
     <color name="red">#E44A4A</color>
+    <color name="calendar_green">#33B679</color>
+    <color name="calendar_red">#D50000</color>
+    <color name="calendar_yellow">#F6BF26</color>
+    <color name="calendar_purple">#8E24AA</color>
+    <color name="calendar_blue">#039BE5</color>
 </resources>
+
