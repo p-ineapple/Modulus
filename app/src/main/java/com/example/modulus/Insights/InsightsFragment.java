@@ -35,7 +35,7 @@ import java.util.HashSet;
 import java.util.List;
 
 public class InsightsFragment extends Fragment {
-    static ArrayList<Module> moduleList = new ArrayList<Module>();
+    public static ArrayList<Module> moduleList;
     ArrayList<String> selectedFilters = new ArrayList<String>();
     SearchView search;
     String currentSearchText = "";
@@ -52,7 +52,7 @@ public class InsightsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_insights, container, false);
         //set up modules list
-        if (moduleList.isEmpty()) {
+        if (moduleList == null) {
             Log.d(TAG, "Setting up modules");
             setupData();
         }

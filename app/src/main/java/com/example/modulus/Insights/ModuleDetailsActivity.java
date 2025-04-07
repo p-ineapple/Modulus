@@ -36,6 +36,6 @@ public class ModuleDetailsActivity extends AppCompatActivity{
 
     private void setValues() {
         TextView tv = (TextView) findViewById(R.id.moduleDetailsIDName);
-        tv.setText(selectedModule.getId() + " - " + selectedModule.getName());
+        tv.setText(selectedModule.toString());
     }
 }

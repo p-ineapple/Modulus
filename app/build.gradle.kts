@@ -39,6 +39,7 @@ dependencies {
     implementation(libs.android.recyclerview.swipedecorator)
     implementation(libs.constraintlayout)
     implementation(libs.compose.theme.adapter)
+    implementation(libs.gson)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

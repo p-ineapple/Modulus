@@ -25,7 +25,16 @@
             android:parentActivityName=".ActivityLogIn"/>
 
         <activity android:name=".Insights.ModuleDetailsActivity"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity">
+        </activity>
+
+        <activity android:name=".Planner.EditPlanner"
+            android:parentActivityName=".MainActivity">
+        </activity>
+
+        <activity android:name=".Planner.EditPlannerMenu"
+            android:parentActivityName=".Planner.EditPlanner">
+        </activity>
     </application>
 
 </manifest>

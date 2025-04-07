@@ -18,12 +18,33 @@ public class ModuleAdaptor extends RecyclerView.Adapter<ModuleAdaptor.moduleCell
     public interface OnItemClickListener {
         void onItemClick(Module module);
     }
-
     ArrayList<Module> moduleList;
     OnItemClickListener listener;
     public ModuleAdaptor(ArrayList<Module> moduleList, OnItemClickListener listener) {
         this.moduleList = moduleList;
         this.listener = listener;
+    }
+
+    @NonNull
+    @Override
+    public moduleCellViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.module_cell, parent, false);
+        return new moduleCellViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull moduleCellViewHolder holder, int position) {
+        Module module = moduleList.get(position);
+        holder.moduleName.setText(module.toString());
+        holder.moduleTermProf.setText("Term(s): " + String.join(", ", module.getTerm())
+                + " | " + String.join(", ", module.getProf()));
+        holder.moduleTags.setText(String.join(", ", module.getTags()));
+        holder.bind(module, listener);
+    }
+
+    @Override
+    public int getItemCount() {
+        return moduleList.size();
     }
 
     static class moduleCellViewHolder extends RecyclerView.ViewHolder{
@@ -45,27 +66,4 @@ public class ModuleAdaptor extends RecyclerView.Adapter<ModuleAdaptor.moduleCell
             });
         }
     }
-
-    @NonNull
-    @Override
-    public moduleCellViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-        View view =LayoutInflater.from(parent.getContext()).inflate(R.layout.module_cell, parent, false);
-        return new moduleCellViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull moduleCellViewHolder holder, int position) {
-        Module module = moduleList.get(position);
-        holder.moduleName.setText(module.getId() + " - " + module.getName());
-        holder.moduleTermProf.setText("Term(s): " + String.join(", ", module.getTerm())
-                + " | " + String.join(", ", module.getProf()));
-        holder.moduleTags.setText(String.join(", ", module.getTags()));
-        holder.bind(module, listener);
-    }
-
-    @Override
-    public int getItemCount() {
-        return moduleList.size();
-    }
-
 }
