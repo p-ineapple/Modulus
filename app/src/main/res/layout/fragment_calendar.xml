@@ -55,10 +55,10 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:paddingLeft="10dp"
-            app:textHourSize="12sp"
+            app:textHourSize="20sp"
             app:dayHeight="@dimen/dayHeight"
             app:startHour="0"
-            app:endHour="23"/>
+            app:endHour="23" />
 
     </ScrollView>
 </LinearLayout>

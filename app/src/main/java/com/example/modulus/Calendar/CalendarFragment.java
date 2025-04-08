@@ -4,11 +4,6 @@ import static com.example.modulus.R.id.dayView;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,13 +12,20 @@ import android.widget.CalendarView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import com.example.modulus.R;
 import com.framgia.library.calendardayview.CalendarDayView;
+import com.framgia.library.calendardayview.DayView;
 import com.framgia.library.calendardayview.data.IEvent;
+import com.framgia.library.calendardayview.decoration.CdvDecorationDefault;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+
 
 
 
@@ -46,10 +48,9 @@ public class CalendarFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_calendar, container, false);
 
-        allEvents = new ArrayList<>();
 
         //set up modules list
-        if (allEvents.isEmpty()) {
+        if (allEvents == null || allEvents.isEmpty() )  {
             Log.d(TAG, "Setting up modules");
             setupData();
         }
@@ -61,7 +62,20 @@ public class CalendarFragment extends Fragment {
         addEventButton = view.findViewById(R.id.addEventButton);
         selectedDateText = view.findViewById(R.id.selectedDateText);
 
-//        initialiseAllEvents();
+        //Override library time format for nicer readability
+        hourlyDayView.setDecorator(new CdvDecorationDefault(getContext()) {
+            @Override
+            public DayView getDayView(int hour) {
+                DayView dayView = new DayView(getContext());
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.HOUR_OF_DAY, hour);
+                calendar.set(Calendar.MINUTE, 0);
+                SimpleDateFormat sdf = new SimpleDateFormat("h a");
+                dayView.setText(sdf.format(calendar.getTime()).toUpperCase());
+                return dayView;
+            }
+        });
+
 
         //Default event shown to be today's date
         Calendar today = Calendar.getInstance();
@@ -123,54 +137,7 @@ public class CalendarFragment extends Fragment {
 
     }
 
-//    private void initialiseAllEvents() {
-//        allEvents = new ArrayList<>();
-//
-//
-//
-//
-//        Calendar april3 = Calendar.getInstance();
-//        april3.set(2025,Calendar.APRIL,3);
-//
-//        //HASS Lesson I hate it why is it 830
-//        int HASScolour = ContextCompat.getColor(requireContext(), R.color.calendar_green);
-//        Calendar HASSstart = (Calendar) april3.clone();
-//        HASSstart.set(Calendar.HOUR_OF_DAY,8);
-//        HASSstart.set(Calendar.MINUTE,30);
-//        Calendar HASSend = (Calendar) april3.clone();
-//        HASSend.set(Calendar.HOUR_OF_DAY,11);
-//        HASSend.set(Calendar.MINUTE,30);
-//        Event HASS = new Event(1,april3,HASSstart,HASSend,"02.147TS Interventions in Design, Technology and Society","1.308",HASScolour);
-//        allEvents.add(HASS);
-//
-//        //ALG Lesson I hate it why is it 830
-//        int ALGcolour = ContextCompat.getColor(requireContext(), R.color.calendar_red);
-//        Calendar ALGstart = (Calendar) april3.clone();
-//        ALGstart.set(Calendar.HOUR_OF_DAY,11);
-//        ALGstart.set(Calendar.MINUTE,30);
-//        Calendar ALGend = (Calendar) april3.clone();
-//        ALGend.set(Calendar.HOUR_OF_DAY,16);
-//        ALGend.set(Calendar.MINUTE,30);
-//        Event ALG = new Event(2,april3, ALGstart,ALGend,"50.004 Algorithms","1.308",ALGcolour);
-//        allEvents.add(ALG);
-//
-//
-//        Calendar april5 = Calendar.getInstance();
-//        april5.set(2025,Calendar.APRIL,5);
-//
-//        //HASS Lesson I hate it why is it 830
-//
-//        Event HASS3 = new Event(4,april5,HASSstart,HASSend,"02.147TS Interventions in Design, Technology and Society","1.308",HASScolour);
-//        allEvents.add(HASS3);
-//
-//        //HASS Lesson I hate it why is it 830
-//
-//        Event ALG2 = new Event(4,april5, ALGstart,ALGend,"50.004 Algorithms","1.308",ALGcolour);
-//        allEvents.add(ALG2);
-//
-//
-//
-//    }
+
 
 
 }
