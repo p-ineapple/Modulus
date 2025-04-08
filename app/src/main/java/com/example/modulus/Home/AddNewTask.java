@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,7 +28,8 @@ import java.util.Calendar;
 
 public class AddNewTask extends BottomSheetDialogFragment {
     public static final String TAG = "AddNewTask";
-    private EditText mEditText, setDueDate;
+    private EditText mEditText;
+    private TextView setDueDate;
     private Button mSaveButton;
     private DataBaseHelper myDB;
     private DatePickerDialog datePickerDialog;
@@ -48,9 +50,9 @@ public class AddNewTask extends BottomSheetDialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mEditText = view.findViewById(R.id.editText);
+        mEditText = view.findViewById(R.id.addTaskText);
         mSaveButton = view.findViewById(R.id.saveButton);
-        setDueDate = view.findViewById(R.id.setDueDate);
+        setDueDate = view.findViewById(R.id.addDateText);
         final Calendar calendar = Calendar.getInstance();
         final int year = calendar.get(Calendar.YEAR);
         final int month = calendar.get(Calendar.MONTH);
