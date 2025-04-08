@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -32,9 +33,8 @@ public class EditPlanner extends AppCompatActivity {
     ImageView backButton;
     Button confirmButton;
     RecyclerView editRecyclerView;
-    EditPlannerAdapter termButtonsAdapter;
-    EditPlannerAdapter.OnItemClickListener listener;
     SharedPreferences mPreferences;
+    private final String TAG = "Edit Planner";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +55,7 @@ public class EditPlanner extends AppCompatActivity {
                     public void onActivityResult(ActivityResult result) {
                         // Result from DataEntryActivity is obtained
                         // Get the data and insert it into datasource
+                        Log.d("TAG", "Back to Edit");
                         Bundle b = result.getData().getExtras();
                         String newModules = b.getString(EditPlannerMenu.KEY_NAME);
                         String term = b.getString(EditPlannerMenu.KEY_PATH);
@@ -82,11 +83,12 @@ public class EditPlanner extends AppCompatActivity {
                             System.out.println(planner.getModules().toString());
                         }
                         System.out.println(newPlannerModules.toString());
+                        Log.d(TAG, "Planners Updated");
                     }
                 }
 
         );
-        listener = new EditPlannerAdapter.OnItemClickListener() {
+        EditPlannerAdapter.OnItemClickListener listener = new EditPlannerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Planner planner) {
                 Intent intent = new Intent(EditPlanner.this, EditPlannerMenu.class);
@@ -94,7 +96,7 @@ public class EditPlanner extends AppCompatActivity {
                 launcher.launch(intent);
             }
         };
-        termButtonsAdapter = new EditPlannerAdapter(PlannerFragment.plannerList, listener);
+        EditPlannerAdapter termButtonsAdapter = new EditPlannerAdapter(PlannerFragment.plannerList, listener);
         editRecyclerView = findViewById(R.id.editRecyclerView);
         editRecyclerView.setAdapter(termButtonsAdapter);
         editRecyclerView.setLayoutManager(new GridLayoutManager(EditPlanner.this, 2));

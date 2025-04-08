@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -29,7 +30,6 @@ public class EditPlannerMenu extends AppCompatActivity {
     boolean[] selectedModules;
     ArrayList<String> selectedModulesIndex = new ArrayList<>();
     String[] filteredModulesList;
-//    List<Module> actualFilteredModulesList;
     Button confirmButton;
     final static String KEY_NAME = "Modules";
     final static String KEY_PATH = "Term";
@@ -130,10 +130,10 @@ public class EditPlannerMenu extends AppCompatActivity {
     private void getSelectedPlanner() {
         Intent previousIntent = getIntent();
         String parsedStringID = previousIntent.getStringExtra("id");
-        selectedPlanner = getParsedModule(parsedStringID);
+        selectedPlanner = getParsedPlanner(parsedStringID);
     }
 
-    private Planner getParsedModule(String parsedID) {
+    private Planner getParsedPlanner(String parsedID) {
         for (Planner planner : PlannerFragment.plannerList) {
             if(planner.getTerm().equals(parsedID))
                 return planner;
@@ -144,11 +144,9 @@ public class EditPlannerMenu extends AppCompatActivity {
     private void setValues() {
         TextView tv = findViewById(R.id.term);
         tv.setText(selectedPlanner.getTerm());
-//        actualFilteredModulesList = new ArrayList<Module>();
         List<String> stringFilteredModulesList = new ArrayList<String>();
         for(Module module: InsightsFragment.moduleList){
             if( module.getTerm().contains(String.valueOf(selectedPlanner.getTermInt())) ){
-//                actualFilteredModulesList.add(module);
                 stringFilteredModulesList.add(module.toString());
             }
         }

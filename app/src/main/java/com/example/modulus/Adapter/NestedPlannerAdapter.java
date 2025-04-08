@@ -4,22 +4,19 @@ import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.modulus.Class.Module;
 import com.example.modulus.R;
 
 import java.util.List;
-import java.util.Objects;
 
-public class NestedModuleAdapter extends RecyclerView.Adapter<NestedModuleAdapter.NestedModuleViewHolder> {
+public class NestedPlannerAdapter extends RecyclerView.Adapter<NestedPlannerAdapter.NestedModuleViewHolder> {
     private List<Module> moduleList;
 
-    public NestedModuleAdapter(List<Module> moduleList){
+    public NestedPlannerAdapter(List<Module> moduleList){
         this.moduleList = moduleList;
     }
     @Override
