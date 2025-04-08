@@ -5,12 +5,12 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.content.DialogInterface;
+import android.widget.Button;
 
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.modulus.Adapter.DateItemAdapter;
 import com.example.modulus.Adapter.ToDoAdapter;
 import com.example.modulus.Class.ToDoModel;
 import com.example.modulus.R;
@@ -35,9 +36,10 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
     RecyclerView recyclerView, dateItemRecycler;
     FloatingActionButton addButton;
     DataBaseHelper myDB;
+    Button testButton;
     private List<ToDoModel> mList;
     private ToDoAdapter adaptor;
-    private final String TAG_ = "Home";
+
     @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,18 +52,21 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
         });
 
         recyclerView = view.findViewById(R.id.recyclerView);
+
         dateItemRecycler = view.findViewById(R.id.dateItemRecycler);
         //LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         ScaleCenterItemManager layoutManager = new ScaleCenterItemManager(this.getContext(),LinearLayoutManager.HORIZONTAL,false);
         dateItemRecycler.setLayoutManager(layoutManager);
         generateData();
-        /*mAdapter.setOnItemClickListener(new ExampleAdapter.OnItemClickListener() {
+        /*
+        mAdapter.setOnItemClickListener(new ExampleAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 String title = exampleList.get(position).getText1();
 
             }
         });*/
+
 
         addButton = view.findViewById(R.id.addButton); //ToDo: edit these
         myDB = new DataBaseHelper(this.getContext());
@@ -86,11 +91,11 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
                 String dateString = date.format(formatter);
 
                 System.out.println(dateString);
-                recyclerView.setAdapter(adapter);
+                recyclerView.setAdapter(adaptor);
                 mList = myDB.getAllTasks();
                 //mList = myDB.getDateTask("16-4-2025");
                 Collections.reverse(mList);
-                adapter.setTasks(mList);
+                adaptor.setTasks(mList);
             }
         });*/
 
@@ -98,13 +103,13 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
             @Override
             public void onClick(View v) {
                 AddNewTask.newInstance().show(getParentFragmentManager(), AddNewTask.TAG);
+
             }
         });
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new RecyclerViewTouchHelper(adaptor)); // for delete and edit
         itemTouchHelper.attachToRecyclerView(recyclerView);
         // Inflate the layout for this fragment
-        Log.d(TAG_, "Home fragment inflated");
         return view;
     }
 
@@ -147,5 +152,6 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
         Collections.reverse(mList);
         adaptor.setTasks(mList);
         adaptor.notifyDataSetChanged();
+
     }
 }
