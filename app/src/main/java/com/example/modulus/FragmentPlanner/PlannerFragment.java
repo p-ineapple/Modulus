@@ -110,27 +110,29 @@ public class PlannerFragment extends Fragment {
             ArrayList<String> mods = gson.fromJson(jsonMods, ArrayList.class);
             System.out.println(terms);
             System.out.println(mods);
-            int modsPointer = 0;
-            for (int i = 0; i< terms.size(); i++) {
-                PlannerModel planner = new PlannerModel(terms.get(i));
-                List<ModuleModel> plannerModules = new ArrayList<ModuleModel>();
-                for(int j = modsPointer; j < mods.size(); j++){
-                    if(mods.get(j).equals("?")){
-                        planner.setModules(plannerModules);
-                        plannerList.add(planner);
-                        modsPointer++;
-                        break;
-                    }else if(mods.get(j).equals("NIL")){
-                        plannerList.add(planner);
-                        modsPointer++;
-                        break;
-                    }else {
-                        plannerModules.add(ModuleModel.getModuleFromString(mods.get(j)));
-                        modsPointer++;
+            if(terms != null && mods != null){
+                int modsPointer = 0;
+                for (int i = 0; i< terms.size(); i++) {
+                    PlannerModel planner = new PlannerModel(terms.get(i));
+                    List<ModuleModel> plannerModules = new ArrayList<ModuleModel>();
+                    for(int j = modsPointer; j < mods.size(); j++){
+                        if(mods.get(j).equals("?")){
+                            planner.setModules(plannerModules);
+                            plannerList.add(planner);
+                            modsPointer++;
+                            break;
+                        }else if(mods.get(j).equals("NIL")){
+                            plannerList.add(planner);
+                            modsPointer++;
+                            break;
+                        }else {
+                            plannerModules.add(ModuleModel.getModuleFromString(mods.get(j)));
+                            modsPointer++;
+                        }
                     }
                 }
+                Log.d(TAG, "Updated");
             }
-            Log.d(TAG, "Updated");
         }
     }
 }
