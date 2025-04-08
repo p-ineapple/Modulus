@@ -1,14 +1,14 @@
-package com.example.modulus.Class;
+package com.example.modulus.Model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Planner {
+public class PlannerModel {
     private String term;
     private int termInt;
-    private List<Module> modules = new ArrayList<Module>();
+    private List<ModuleModel> modules = new ArrayList<ModuleModel>();
     boolean expandable;
-    public Planner(String term){
+    public PlannerModel(String term){
         this.term = term;
         this.expandable = true;
         this.termInt = Integer.parseInt(term.substring(term.length()-1));
@@ -24,11 +24,11 @@ public class Planner {
         this.termInt = termInt;
     }
 
-    public List<Module> getModules() {
+    public List<ModuleModel> getModules() {
         return modules;
     }
 
-    public void setModules(List<Module> modules) {
+    public void setModules(List<ModuleModel> modules) {
         this.modules = modules;
     }
     public boolean isExpandable() {

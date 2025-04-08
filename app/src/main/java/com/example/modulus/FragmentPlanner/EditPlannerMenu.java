@@ -1,10 +1,9 @@
-package com.example.modulus.Planner;
+package com.example.modulus.FragmentPlanner;
 
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -13,9 +12,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.modulus.Class.Module;
-import com.example.modulus.Class.Planner;
-import com.example.modulus.Insights.InsightsFragment;
+import com.example.modulus.Model.ModuleModel;
+import com.example.modulus.Model.PlannerModel;
+import com.example.modulus.FragmentInsights.InsightsFragment;
 import com.example.modulus.R;
 import com.google.android.material.card.MaterialCardView;
 
@@ -24,7 +23,7 @@ import java.util.List;
 
 
 public class EditPlannerMenu extends AppCompatActivity {
-    Planner selectedPlanner;
+    PlannerModel selectedPlanner;
     MaterialCardView selectCard;
     TextView tvModules;
     boolean[] selectedModules;
@@ -133,8 +132,8 @@ public class EditPlannerMenu extends AppCompatActivity {
         selectedPlanner = getParsedPlanner(parsedStringID);
     }
 
-    private Planner getParsedPlanner(String parsedID) {
-        for (Planner planner : PlannerFragment.plannerList) {
+    private PlannerModel getParsedPlanner(String parsedID) {
+        for (PlannerModel planner : PlannerFragment.plannerList) {
             if(planner.getTerm().equals(parsedID))
                 return planner;
         }
@@ -145,7 +144,7 @@ public class EditPlannerMenu extends AppCompatActivity {
         TextView tv = findViewById(R.id.term);
         tv.setText(selectedPlanner.getTerm());
         List<String> stringFilteredModulesList = new ArrayList<String>();
-        for(Module module: InsightsFragment.moduleList){
+        for(ModuleModel module: InsightsFragment.moduleList){
             if( module.getTerm().contains(String.valueOf(selectedPlanner.getTermInt())) ){
                 stringFilteredModulesList.add(module.toString());
             }

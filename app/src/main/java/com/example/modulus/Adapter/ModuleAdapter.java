@@ -8,18 +8,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.modulus.Class.Module;
+import com.example.modulus.Model.ModuleModel;
 import com.example.modulus.R;
 
 import java.util.ArrayList;
 
 public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.moduleCellViewHolder> {
     public interface OnItemClickListener {
-        void onItemClick(Module module);
+        void onItemClick(ModuleModel module);
     }
-    ArrayList<Module> moduleList;
+    ArrayList<ModuleModel> moduleList;
     OnItemClickListener listener;
-    public ModuleAdapter(ArrayList<Module> moduleList, OnItemClickListener listener) {
+    public ModuleAdapter(ArrayList<ModuleModel> moduleList, OnItemClickListener listener) {
         this.moduleList = moduleList;
         this.listener = listener;
     }
@@ -33,7 +33,7 @@ public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.moduleCell
 
     @Override
     public void onBindViewHolder(@NonNull moduleCellViewHolder holder, int position) {
-        Module module = moduleList.get(position);
+        ModuleModel module = moduleList.get(position);
         holder.moduleName.setText(module.toString());
         holder.moduleTermProf.setText("Term(s): " + String.join(", ", module.getTerm())
                 + " | " + String.join(", ", module.getProf()));
@@ -57,7 +57,7 @@ public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.moduleCell
             moduleTags = itemView.findViewById(R.id.moduleTags);
         }
 
-        public void bind(Module item, final OnItemClickListener listener) {
+        public void bind(ModuleModel item, final OnItemClickListener listener) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     listener.onItemClick(item);

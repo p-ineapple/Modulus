@@ -1,6 +1,4 @@
-package com.example.modulus.Class;
-
-import java.time.LocalDate;
+package com.example.modulus.Model;
 
 public class ToDoModel {
     private String task,date;

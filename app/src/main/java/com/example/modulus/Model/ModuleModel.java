@@ -1,9 +1,9 @@
-package com.example.modulus.Class;
+package com.example.modulus.Model;
 
 import java.util.Comparator;
 import java.util.List;
 
-public class Module {
+public class ModuleModel {
     private String id;
     private String name;
     private List<String> prof;
@@ -11,9 +11,9 @@ public class Module {
     private List<String> term;
     private List<String> prerequisites;
     private String description;
-    public Module(){
+    public ModuleModel(){
     }
-    public Module(String id, String name) {
+    public ModuleModel(String id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -85,20 +85,20 @@ public class Module {
     public String toString(){
         return getId() + " - " + getName();
     }
-    public static Module getModuleFromString(String s){
+    public static ModuleModel getModuleFromString(String s){
         if(s.contains(" - ")){
             String[] module = s.split(" - ");
-            return new Module(module[0], module[1]);
+            return new ModuleModel(module[0], module[1]);
         }else if(s.contains("Capstone")){
-            return new Module("", "Capstone");
+            return new ModuleModel("", "Capstone");
         }else{
             return null;
         }
     }
 
-    public static Comparator<Module> idAscending = new Comparator<Module>() {
+    public static Comparator<ModuleModel> idAscending = new Comparator<ModuleModel>() {
         @Override
-        public int compare(Module mod1, Module mod2) {
+        public int compare(ModuleModel mod1, ModuleModel mod2) {
             String id1 = mod1.getId();
             String id2 = mod2.getId();
 
@@ -106,9 +106,9 @@ public class Module {
         }
     };
 
-    public static Comparator<Module> nameAscending = new Comparator<Module>() {
+    public static Comparator<ModuleModel> nameAscending = new Comparator<ModuleModel>() {
         @Override
-        public int compare(Module mod1, Module mod2){
+        public int compare(ModuleModel mod1, ModuleModel mod2){
             String name1 = mod1.getName();
             String name2 = mod2.getName();
             name1 = name1.toLowerCase();

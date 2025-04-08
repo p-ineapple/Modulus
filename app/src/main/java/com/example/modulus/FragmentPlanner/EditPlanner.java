@@ -1,4 +1,4 @@
-package com.example.modulus.Planner;
+package com.example.modulus.FragmentPlanner;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,9 +19,9 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.modulus.Adapter.EditPlannerAdapter;
-import com.example.modulus.Class.Module;
-import com.example.modulus.Class.Planner;
-import com.example.modulus.Insights.InsightsFragment;
+import com.example.modulus.Model.ModuleModel;
+import com.example.modulus.Model.PlannerModel;
+import com.example.modulus.FragmentInsights.InsightsFragment;
 import com.example.modulus.R;
 import com.google.gson.Gson;
 
@@ -29,12 +29,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EditPlanner extends AppCompatActivity {
-    List<Planner> editPlannerList = PlannerFragment.plannerList;
+    List<PlannerModel> editPlannerList = PlannerFragment.plannerList;
     ImageView backButton;
     Button confirmButton;
     RecyclerView editRecyclerView;
     SharedPreferences mPreferences;
-    private final String TAG = "Edit Planner";
+    private final String TAG = "Edit PlannerModel";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,25 +61,25 @@ public class EditPlanner extends AppCompatActivity {
                         String term = b.getString(EditPlannerMenu.KEY_PATH);
                         System.out.println(term);
                         String[] updatedModules = newModules.split("\n");
-                        List<Module> newPlannerModules = new ArrayList<Module>();
+                        List<ModuleModel> newPlannerModules = new ArrayList<ModuleModel>();
                         for(String moduleString: updatedModules){
-                            for(Module module: InsightsFragment.moduleList){
+                            for(ModuleModel module: InsightsFragment.moduleList){
                                 if(moduleString.contains(module.getId())){
                                     newPlannerModules.add(module);
                                 }
                             }
                         }
-                        for(Planner planner: editPlannerList){
+                        for(PlannerModel planner: editPlannerList){
                             String t = planner.getTerm();
                             if(t.equals(term)){
                                 if(t.contains("7") || t.contains("8")){
-                                    newPlannerModules.add(new Module("", "Capstone"));
+                                    newPlannerModules.add(new ModuleModel("", "Capstone"));
                                 }
                                 planner.setModules(newPlannerModules);
                                 break;
                             }
                         }
-                        for(Planner planner: editPlannerList) {
+                        for(PlannerModel planner: editPlannerList) {
                             System.out.println(planner.getModules().toString());
                         }
                         System.out.println(newPlannerModules.toString());
@@ -90,7 +90,7 @@ public class EditPlanner extends AppCompatActivity {
         );
         EditPlannerAdapter.OnItemClickListener listener = new EditPlannerAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(Planner planner) {
+            public void onItemClick(PlannerModel planner) {
                 Intent intent = new Intent(EditPlanner.this, EditPlannerMenu.class);
                 intent.putExtra("id", planner.getTerm());
                 launcher.launch(intent);
@@ -110,10 +110,10 @@ public class EditPlanner extends AppCompatActivity {
                 Gson gson = new Gson();
                 ArrayList<String> terms = new ArrayList<>();
                 ArrayList<String> plannerModules = new ArrayList<>();
-                for (Planner planner: editPlannerList) {
+                for (PlannerModel planner: editPlannerList) {
                     terms.add(planner.getTerm());
                     if (planner.getModules() != null){
-                        for(Module module: planner.getModules()){
+                        for(ModuleModel module: planner.getModules()){
                             plannerModules.add(module.toString());
                         }
                         plannerModules.add("?");

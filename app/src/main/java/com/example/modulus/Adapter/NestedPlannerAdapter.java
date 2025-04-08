@@ -8,15 +8,15 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.modulus.Class.Module;
+import com.example.modulus.Model.ModuleModel;
 import com.example.modulus.R;
 
 import java.util.List;
 
 public class NestedPlannerAdapter extends RecyclerView.Adapter<NestedPlannerAdapter.NestedModuleViewHolder> {
-    private List<Module> moduleList;
+    private List<ModuleModel> moduleList;
 
-    public NestedPlannerAdapter(List<Module> moduleList){
+    public NestedPlannerAdapter(List<ModuleModel> moduleList){
         this.moduleList = moduleList;
     }
     @Override
@@ -29,7 +29,7 @@ public class NestedPlannerAdapter extends RecyclerView.Adapter<NestedPlannerAdap
     @Override
     public void onBindViewHolder(NestedModuleViewHolder holder, int position) {
         if(moduleList.get(position) != null){
-            Module module = moduleList.get(position);
+            ModuleModel module = moduleList.get(position);
             if (module.getName() == "Capstone"){
                 holder.plannerModule.setText("Capstone");
             } else{

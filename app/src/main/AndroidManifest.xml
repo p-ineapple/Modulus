@@ -24,16 +24,16 @@
         <activity android:name=".MainActivity"
             android:parentActivityName=".ActivityLogIn"/>
 
-        <activity android:name=".Insights.ModuleDetailsActivity"
+        <activity android:name=".FragmentInsights.ModuleDetailsActivity"
             android:parentActivityName=".MainActivity">
         </activity>
 
-        <activity android:name=".Planner.EditPlanner"
+        <activity android:name=".FragmentPlanner.EditPlanner"
             android:parentActivityName=".MainActivity">
         </activity>
 
-        <activity android:name=".Planner.EditPlannerMenu"
-            android:parentActivityName=".Planner.EditPlanner">
+        <activity android:name=".FragmentPlanner.EditPlannerMenu"
+            android:parentActivityName=".FragmentPlanner.EditPlanner">
         </activity>
     </application>
 

@@ -1,4 +1,4 @@
-package com.example.modulus.Insights;
+package com.example.modulus.FragmentInsights;
 
 import android.app.Dialog;
 import android.graphics.Color;
@@ -23,8 +23,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SearchView;
 
-import com.example.modulus.Class.FilterChip;
-import com.example.modulus.Class.Module;
+import com.example.modulus.Model.FilterChipModel;
+import com.example.modulus.Model.ModuleModel;
 import com.example.modulus.Adapter.ModuleAdapter;
 import com.example.modulus.R;
 import com.google.android.material.chip.Chip;
@@ -37,7 +37,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class InsightsFragment extends Fragment {
-    public static ArrayList<Module> moduleList;
+    public static ArrayList<ModuleModel> moduleList;
     ArrayList<String> selectedFilters = new ArrayList<String>();
     SearchView search;
     String currentSearchText = "";
@@ -46,7 +46,7 @@ public class InsightsFragment extends Fragment {
     ImageButton filterButton;
     ImageButton sortButton;
     ConstraintLayout sortTab;
-    ArrayList<FilterChip> filterChips = new ArrayList<FilterChip>();
+    ArrayList<FilterChipModel> filterChips = new ArrayList<FilterChipModel>();
     final String TAG = "Browser";
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,7 +60,7 @@ public class InsightsFragment extends Fragment {
         modulesRecyclerView = view.findViewById(R.id.recyclerView);
         listener = new ModuleAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(Module module) {
+            public void onItemClick(ModuleModel module) {
                 Intent showDetail = new Intent(getContext(), ModuleDetailsActivity.class);
                 showDetail.putExtra("id", module.getId());
                 startActivity(showDetail);
@@ -80,8 +80,8 @@ public class InsightsFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String s) {
                 currentSearchText = s;
-                List<Module> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
-                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<Module>) filteredModules, listener));
+                List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
+                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));
                 return false;
             }
         });
@@ -113,53 +113,53 @@ public class InsightsFragment extends Fragment {
         id.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<Module> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
+                List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
                 if (id.isChecked() && asc.isChecked()) {
-                    filteredModules.sort(Module.idAscending);
+                    filteredModules.sort(ModuleModel.idAscending);
                 } else if (id.isChecked() && des.isChecked()) {
-                    filteredModules.sort(Module.idAscending);
+                    filteredModules.sort(ModuleModel.idAscending);
                     Collections.reverse(filteredModules);
                 }
-                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<Module>) filteredModules, listener));
+                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));
             }
         });
         name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<Module> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
+                List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
                 if (name.isChecked() && asc.isChecked()) {
-                    filteredModules.sort(Module.nameAscending);
+                    filteredModules.sort(ModuleModel.nameAscending);
                 } else if (name.isChecked() && des.isChecked()) {
-                    filteredModules.sort(Module.nameAscending);
+                    filteredModules.sort(ModuleModel.nameAscending);
                     Collections.reverse(filteredModules);
                 }
-                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<Module>) filteredModules, listener));
+                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));
             }
         });
         asc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<Module> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
+                List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
                 if (id.isChecked() && asc.isChecked()) {
-                    filteredModules.sort(Module.idAscending);
+                    filteredModules.sort(ModuleModel.idAscending);
                 } else if (name.isChecked() && asc.isChecked()) {
-                    filteredModules.sort(Module.nameAscending);
+                    filteredModules.sort(ModuleModel.nameAscending);
                 }
-                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<Module>) filteredModules, listener));
+                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));
             }
         });
         des.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<Module> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
+                List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
                 if (id.isChecked() && des.isChecked()) {
-                    filteredModules.sort(Module.idAscending);
+                    filteredModules.sort(ModuleModel.idAscending);
                     Collections.reverse(filteredModules);
                 } else if (name.isChecked() && des.isChecked()) {
-                    filteredModules.sort(Module.nameAscending);
+                    filteredModules.sort(ModuleModel.nameAscending);
                     Collections.reverse(filteredModules);
                 }
-                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<Module>) filteredModules, listener));
+                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));
             }
         });
         return view;
@@ -171,7 +171,7 @@ public class InsightsFragment extends Fragment {
         filterDialog.setContentView(R.layout.filterlayout);
 
         setUpFilterChips(filterDialog);
-        for (FilterChip chipItem : filterChips) {
+        for (FilterChipModel chipItem : filterChips) {
             Chip chip = chipItem.getChip();
             chip.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -192,8 +192,8 @@ public class InsightsFragment extends Fragment {
         applyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<Module> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
-                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<Module>) filteredModules, listener));
+                List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
+                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));
                 filterDialog.dismiss();
             }
         });
@@ -203,7 +203,7 @@ public class InsightsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 selectedFilters.clear();
-                for (FilterChip chip : filterChips) {
+                for (FilterChipModel chip : filterChips) {
                     chip.setChipCheck(false);
                     chip.getChip().setChecked(false);
                 }
@@ -236,7 +236,7 @@ public class InsightsFragment extends Fragment {
         ChipGroup courseChips = filterDialog.findViewById(R.id.courseChips);
         if (filterChips.isEmpty()) {
             for (int i = 0; i < filterChipNames.size(); i++) {
-                FilterChip filterChip = new FilterChip(filterChipNames.get(i), false);
+                FilterChipModel filterChip = new FilterChipModel(filterChipNames.get(i), false);
                 filterChips.add(filterChip);
             }
         }
@@ -255,7 +255,7 @@ public class InsightsFragment extends Fragment {
             }
             filterChips.get(i).setChip(chip);
         }
-        moduleList.sort(Module.idAscending);
+        moduleList.sort(ModuleModel.idAscending);
     }
 }
 

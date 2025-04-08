@@ -1,4 +1,4 @@
-package com.example.modulus.Home;
+package com.example.modulus.FragmentHome;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.modulus.Adapter.DateItemAdapter;
 import com.example.modulus.Adapter.ToDoAdapter;
-import com.example.modulus.Class.ToDoModel;
+import com.example.modulus.Model.ToDoModel;
 import com.example.modulus.R;
 import com.example.modulus.Utils.OnDialogCloseListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;

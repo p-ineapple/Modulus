@@ -1,4 +1,4 @@
-package com.example.modulus.Insights;
+package com.example.modulus.FragmentInsights;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,11 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.example.modulus.Class.Module;
+import com.example.modulus.Model.ModuleModel;
 import com.example.modulus.R;
 
 public class ModuleDetailsActivity extends AppCompatActivity{
-    Module selectedModule;
+    ModuleModel selectedModule;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +26,8 @@ public class ModuleDetailsActivity extends AppCompatActivity{
         selectedModule = getParsedModule(parsedStringID);
     }
 
-    private Module getParsedModule(String parsedID) {
-        for (Module module : InsightsFragment.moduleList) {
+    private ModuleModel getParsedModule(String parsedID) {
+        for (ModuleModel module : InsightsFragment.moduleList) {
             if(module.getId().equals(parsedID))
                 return module;
         }

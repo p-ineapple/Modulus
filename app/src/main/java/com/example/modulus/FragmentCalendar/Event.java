@@ -1,4 +1,4 @@
-package com.example.modulus.Calendar;
+package com.example.modulus.FragmentCalendar;
 
 import com.framgia.library.calendardayview.data.IEvent;
 

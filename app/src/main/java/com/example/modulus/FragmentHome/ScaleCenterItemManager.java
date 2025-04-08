@@ -1,4 +1,4 @@
-package com.example.modulus.Home;
+package com.example.modulus.FragmentHome;
 
 import android.content.Context;
 import android.view.View;

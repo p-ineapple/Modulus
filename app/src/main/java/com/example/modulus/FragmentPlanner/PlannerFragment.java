@@ -1,4 +1,4 @@
-package com.example.modulus.Planner;
+package com.example.modulus.FragmentPlanner;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,10 +16,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.modulus.Adapter.PlannerAdapter;
-import com.example.modulus.Class.Module;
-import com.example.modulus.Class.Planner;
-import com.example.modulus.Insights.DataBaseHelperInsights;
-import com.example.modulus.Insights.InsightsFragment;
+import com.example.modulus.Model.ModuleModel;
+import com.example.modulus.Model.PlannerModel;
+import com.example.modulus.FragmentInsights.DataBaseHelperInsights;
+import com.example.modulus.FragmentInsights.InsightsFragment;
 import com.example.modulus.R;
 import com.google.gson.Gson;
 
@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlannerFragment extends Fragment {
-    public static List<Planner> plannerList;
+    public static List<PlannerModel> plannerList;
     RecyclerView recyclerView;
     DataBaseHelperInsights myDB;
     ImageView editButton;
@@ -35,7 +35,7 @@ public class PlannerFragment extends Fragment {
     static final String KEY_DATA_TERMS = "SHARED_PREF_DATA_TERMS";
     static final String KEY_DATA_MODS = "SHARED_PREF_DATA_MODS";
     static final String PREF_FILE = "mainsharedpref";
-    private final String TAG = "Planner";
+    private final String TAG = "PlannerModel";
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_planner, container, false);
@@ -79,10 +79,10 @@ public class PlannerFragment extends Fragment {
 //        Gson gson = new Gson();
 //        ArrayList<String> terms = new ArrayList<>();
 //        ArrayList<String> plannerModules = new ArrayList<>();
-//        for (Planner planner: plannerList) {
+//        for (PlannerModel planner: plannerList) {
 //            terms.add(planner.getTerm());
 //            if (planner.getModules() != null){
-//                for(Module module: planner.getModules()){
+//                for(ModuleModel module: planner.getModules()){
 //                    plannerModules.add(module.toString());
 //                }
 //                plannerModules.add("?");
@@ -112,8 +112,8 @@ public class PlannerFragment extends Fragment {
             System.out.println(mods);
             int modsPointer = 0;
             for (int i = 0; i< terms.size(); i++) {
-                Planner planner = new Planner(terms.get(i));
-                List<Module> plannerModules = new ArrayList<Module>();
+                PlannerModel planner = new PlannerModel(terms.get(i));
+                List<ModuleModel> plannerModules = new ArrayList<ModuleModel>();
                 for(int j = modsPointer; j < mods.size(); j++){
                     if(mods.get(j).equals("?")){
                         planner.setModules(plannerModules);
@@ -125,7 +125,7 @@ public class PlannerFragment extends Fragment {
                         modsPointer++;
                         break;
                     }else {
-                        plannerModules.add(Module.getModuleFromString(mods.get(j)));
+                        plannerModules.add(ModuleModel.getModuleFromString(mods.get(j)));
                         modsPointer++;
                     }
                 }

@@ -1,4 +1,4 @@
-package com.example.modulus.Home;
+package com.example.modulus.FragmentHome;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;

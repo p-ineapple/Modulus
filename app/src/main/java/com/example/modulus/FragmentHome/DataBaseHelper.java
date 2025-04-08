@@ -1,4 +1,4 @@
-package com.example.modulus.Home;
+package com.example.modulus.FragmentHome;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.example.modulus.Class.ToDoModel;
+import com.example.modulus.Model.ToDoModel;
 
 import java.util.ArrayList;
 import java.util.List;

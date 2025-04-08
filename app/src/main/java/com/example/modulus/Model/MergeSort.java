@@ -1,13 +1,13 @@
-package com.example.modulus.Class;
+package com.example.modulus.Model;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 public class MergeSort {
-    public static Comparator<Module> idCompare = new Comparator<Module>() {
+    public static Comparator<ModuleModel> idCompare = new Comparator<ModuleModel>() {
         @Override
-        public int compare(Module mod1, Module mod2) {
+        public int compare(ModuleModel mod1, ModuleModel mod2) {
             String id1 = mod1.getId();
             String id2 = mod2.getId();
 
@@ -19,9 +19,9 @@ public class MergeSort {
             return false;
         }
     };
-    public static Comparator<Module> nameCompare = new Comparator<Module>() {
+    public static Comparator<ModuleModel> nameCompare = new Comparator<ModuleModel>() {
         @Override
-        public int compare(Module mod1, Module mod2) {
+        public int compare(ModuleModel mod1, ModuleModel mod2) {
             String name1 = mod1.getName();
             String name2 = mod2.getName();
             name1 = name1.toLowerCase();
@@ -35,13 +35,13 @@ public class MergeSort {
         }
     };
 
-    public static void mergeSortID(List<Module> a, int n) {
+    public static void mergeSortID(List<ModuleModel> a, int n) {
         if (n < 2) {
             return;
         }
         int mid = n / 2;
-        List<Module> l = new ArrayList<Module>(mid);
-        List<Module> r = new ArrayList<Module>(n - mid);
+        List<ModuleModel> l = new ArrayList<ModuleModel>(mid);
+        List<ModuleModel> r = new ArrayList<ModuleModel>(n - mid);
 
         for (int i = 0; i < mid; i++) {
             l.set(i, a.get(i));
@@ -54,7 +54,7 @@ public class MergeSort {
 
         mergeID(a, l, r, mid, n - mid);
     }
-    public static void mergeID(List<Module> a, List<Module> l, List<Module> r, int left, int right) {
+    public static void mergeID(List<ModuleModel> a, List<ModuleModel> l, List<ModuleModel> r, int left, int right) {
 
         int i = 0, j = 0, k = 0;
         while (i < left && j < right) {
@@ -73,13 +73,13 @@ public class MergeSort {
         }
     }
 
-    public static void mergeSortName(List<Module> a, int n) {
+    public static void mergeSortName(List<ModuleModel> a, int n) {
         if (n < 2) {
             return;
         }
         int mid = n / 2;
-        List<Module> l = new ArrayList<Module>(mid);
-        List<Module> r = new ArrayList<Module>(n - mid);
+        List<ModuleModel> l = new ArrayList<ModuleModel>(mid);
+        List<ModuleModel> r = new ArrayList<ModuleModel>(n - mid);
 
         for (int i = 0; i < mid; i++) {
             l.set(i, a.get(i));
@@ -92,7 +92,7 @@ public class MergeSort {
 
         mergeName(a, l, r, mid, n - mid);
     }
-    public static void mergeName(List<Module> a, List<Module> l, List<Module> r, int left, int right) {
+    public static void mergeName(List<ModuleModel> a, List<ModuleModel> l, List<ModuleModel> r, int left, int right) {
 
         int i = 0, j = 0, k = 0;
         while (i < left && j < right) {

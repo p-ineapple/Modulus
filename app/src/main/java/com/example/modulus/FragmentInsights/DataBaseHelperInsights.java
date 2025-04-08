@@ -1,6 +1,5 @@
-package com.example.modulus.Insights;
+package com.example.modulus.FragmentInsights;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -8,9 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
-import com.example.modulus.Class.Module;
-import com.example.modulus.Class.Planner;
-import com.example.modulus.Class.ToDoModel;
+import com.example.modulus.Model.ModuleModel;
+import com.example.modulus.Model.PlannerModel;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -106,13 +104,13 @@ public class DataBaseHelperInsights extends SQLiteOpenHelper {
         super.close();
     }
 
-    public ArrayList<Module> getAllModules() {
+    public ArrayList<ModuleModel> getAllModules() {
         try {
             createDatabase();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ArrayList<Module> result = new ArrayList<>();
+        ArrayList<ModuleModel> result = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor c = db.query(tableName, null, null, null, null, null, null);
@@ -120,7 +118,7 @@ public class DataBaseHelperInsights extends SQLiteOpenHelper {
         while (c.moveToNext()) {
             String id = c.getString(2);
             String name = c.getString(3);
-            Module module = new Module(id, name);
+            ModuleModel module = new ModuleModel(id, name);
             module.setTags(Arrays.asList(c.getString(0).split(",")));
             module.setTerm(Arrays.asList(c.getString(1).split(",")));
             module.setProf(Arrays.asList(c.getString(4).split(",")));
@@ -133,36 +131,36 @@ public class DataBaseHelperInsights extends SQLiteOpenHelper {
         return result;
     }
 
-    public ArrayList<Planner> getPlanner() {
+    public ArrayList<PlannerModel> getPlanner() {
         try {
             createDatabase();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ArrayList<Module> moduleList = this.getAllModules();
-        ArrayList<Planner> result = new ArrayList<Planner>();
+        ArrayList<ModuleModel> moduleList = this.getAllModules();
+        ArrayList<PlannerModel> result = new ArrayList<PlannerModel>();
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor c = db.query(plannerTable, null, null, null, null, null, null);
 
         for (int i = 1; i <= 8; i++) {
-            Planner planner = new Planner("Term " + i);
+            PlannerModel planner = new PlannerModel("Term " + i);
             result.add(planner);
         }
         while (c.moveToNext()) {
             int index = c.getInt(1);
             String name = c.getString(3);
             if (Objects.equals(name, "Capstone")) {
-                Module module = new Module(" ", "Capstone");
-                Planner cPlanner = result.get(index - 1);
-                ArrayList<Module> newMods = (ArrayList<Module>) cPlanner.getModules();
+                ModuleModel module = new ModuleModel(" ", "Capstone");
+                PlannerModel cPlanner = result.get(index - 1);
+                ArrayList<ModuleModel> newMods = (ArrayList<ModuleModel>) cPlanner.getModules();
                 newMods.add(module);
                 cPlanner.setModules(newMods);
                 result.set(index - 1, cPlanner);
             } else if (name != null) {
-                Module module = moduleList.stream().filter(m -> name.equals(m.getName())).findFirst().orElse(null);
-                Planner cPlanner = result.get(index - 1);
-                ArrayList<Module> newMods = (ArrayList<Module>) cPlanner.getModules();
+                ModuleModel module = moduleList.stream().filter(m -> name.equals(m.getName())).findFirst().orElse(null);
+                PlannerModel cPlanner = result.get(index - 1);
+                ArrayList<ModuleModel> newMods = (ArrayList<ModuleModel>) cPlanner.getModules();
                 newMods.add(module);
                 cPlanner.setModules(newMods);
                 result.set(index - 1, cPlanner);

@@ -1,4 +1,4 @@
-package com.example.modulus.Calendar;
+package com.example.modulus.FragmentCalendar;
 
 
 import android.annotation.SuppressLint;
@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.content.ContentValues;
 
 import com.example.modulus.R;
 
@@ -19,7 +18,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Arrays;
 import java.util.List;
 
 public class DataBaseHelperCalendar extends SQLiteOpenHelper {

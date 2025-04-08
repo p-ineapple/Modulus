@@ -1,4 +1,4 @@
-package com.example.modulus.Home;
+package com.example.modulus.FragmentHome;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -19,7 +19,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.modulus.Class.ToDoModel;
+import com.example.modulus.Model.ToDoModel;
 import com.example.modulus.R;
 import com.example.modulus.Utils.OnDialogCloseListener;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;

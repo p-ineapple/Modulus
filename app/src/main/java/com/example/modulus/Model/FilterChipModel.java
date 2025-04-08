@@ -1,14 +1,14 @@
-package com.example.modulus.Class;
+package com.example.modulus.Model;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.material.chip.Chip;
 
-public class FilterChip {
+public class FilterChipModel {
     String name;
     Chip chip;
     boolean chipCheck;
-    public FilterChip(String name, boolean chipCheck){
+    public FilterChipModel(String name, boolean chipCheck){
         this.name = name;
         this.chipCheck = chipCheck;
     }
