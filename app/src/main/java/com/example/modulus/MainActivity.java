@@ -2,19 +2,10 @@ package com.example.modulus;
 
 import static com.example.modulus.R.id.nav_home;
 
-import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 
@@ -27,13 +18,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.modulus.Calendar.CalendarFragment;
-import com.example.modulus.Home.AddNewTask;
-import com.example.modulus.Home.HomeFragment;
-import com.example.modulus.Insights.InsightsFragment;
-import com.example.modulus.Planner.PlannerFragment;
+import com.example.modulus.FragmentCalendar.CalendarFragment;
+import com.example.modulus.FragmentHome.HomeFragment;
+import com.example.modulus.FragmentInsights.InsightsFragment;
+import com.example.modulus.FragmentPlanner.PlannerFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 
@@ -139,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "Opening Calendar fragment");
             replaceFragment(new CalendarFragment());
         } else if (itemId == R.id.planner) {
-            Log.d(TAG, "Opening Planner fragment");
+            Log.d(TAG, "Opening PlannerModel fragment");
             replaceFragment(new PlannerFragment());
         } else if (itemId == R.id.insights) {
             Log.d(TAG, "Opening Insights fragment");

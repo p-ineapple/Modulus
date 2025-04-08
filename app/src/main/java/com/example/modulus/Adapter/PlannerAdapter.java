@@ -12,16 +12,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.modulus.Class.Module;
-import com.example.modulus.Class.Planner;
+import com.example.modulus.Model.ModuleModel;
+import com.example.modulus.Model.PlannerModel;
 import com.example.modulus.R;
 
 import java.util.List;
 
 public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.plannerViewHolder> {
-    List<Planner> plannerList;
-    List<Module> moduleList;
-    public PlannerAdapter(List<Planner> plannerList) {
+    List<PlannerModel> plannerList;
+    List<ModuleModel> moduleList;
+    public PlannerAdapter(List<PlannerModel> plannerList) {
         this.plannerList = plannerList;
     }
 
@@ -34,11 +34,11 @@ public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.plannerV
 
     @Override
     public void onBindViewHolder(@NonNull plannerViewHolder holder, int position) {
-        Planner planner = plannerList.get(position);
+        PlannerModel planner = plannerList.get(position);
         moduleList = planner.getModules();
         holder.term.setText(planner.getTerm());
 
-        NestedModuleAdapter adapter = new NestedModuleAdapter(moduleList);
+        NestedPlannerAdapter adapter = new NestedPlannerAdapter(moduleList);
         holder.nestedRecyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
         holder.nestedRecyclerView.setAdapter(adapter);
         holder.layout.setOnClickListener(new View.OnClickListener() {

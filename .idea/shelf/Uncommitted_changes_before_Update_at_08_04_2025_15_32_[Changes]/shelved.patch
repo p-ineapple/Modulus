@@ -1,0 +1,50 @@
+Index: app/src/main/java/com/example/modulus/Home/DateItemAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/Home/DateItemAdapter.java b/app/src/main/java/com/example/modulus/Adapter/DateItemAdapter.java
+rename from app/src/main/java/com/example/modulus/Home/DateItemAdapter.java
+rename to app/src/main/java/com/example/modulus/Adapter/DateItemAdapter.java
+--- a/app/src/main/java/com/example/modulus/Home/DateItemAdapter.java	(revision 7fb78f8f099ec082f6b95d78fc45bdf70dd715f8)
++++ b/app/src/main/java/com/example/modulus/Adapter/DateItemAdapter.java	(date 1744030642624)
+@@ -1,4 +1,4 @@
+-package com.example.modulus.Home;
++package com.example.modulus.Adapter;
+ 
+ import android.view.LayoutInflater;
+ import android.view.View;
+Index: app/src/main/java/com/example/modulus/Home/HomeFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.Home;\r\n\r\nimport android.annotation.SuppressLint;\r\nimport android.os.Bundle;\r\n\r\nimport androidx.fragment.app.Fragment;\r\n\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\n\r\nimport android.content.DialogInterface;\r\nimport android.widget.Button;\r\nimport android.widget.LinearLayout;\r\n\r\nimport androidx.core.graphics.Insets;\r\nimport androidx.core.view.ViewCompat;\r\nimport androidx.core.view.WindowInsetsCompat;\r\nimport androidx.recyclerview.widget.ItemTouchHelper;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.example.modulus.Adapter.ToDoAdaptor;\r\nimport com.example.modulus.Class.ToDoModel;\r\nimport com.example.modulus.R;\r\nimport com.example.modulus.Utils.OnDialogCloseListener;\r\nimport com.google.android.material.floatingactionbutton.FloatingActionButton;\r\n\r\nimport java.time.LocalDate;\r\nimport java.time.format.DateTimeFormatter;\r\nimport java.util.ArrayList;\r\nimport java.util.Collections;\r\nimport java.util.List;\r\nimport java.util.Random;\r\n\r\npublic class HomeFragment extends Fragment implements OnDialogCloseListener {\r\n    RecyclerView recyclerView,dateitemRecycler;\r\n    FloatingActionButton addButton;\r\n    DataBaseHelper myDB;\r\n    Button testButton;\r\n    private List<ToDoModel> mList;\r\n    private ToDoAdaptor adaptor;\r\n\r\n    @SuppressLint(\"MissingInflatedId\")\r\n    @Override\r\n    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        View view = inflater.inflate(R.layout.fragment_home, container, false);\r\n        ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.homeMain), (v, insets) -> {\r\n            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());\r\n            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);\r\n            return insets;\r\n        });\r\n\r\n        recyclerView = view.findViewById(R.id.recyclerView);\r\n\r\n        dateitemRecycler = view.findViewById(R.id.dateitemRecycler);\r\n        //LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());\r\n        ScaleCenterItemManager layoutManager = new ScaleCenterItemManager(this.getContext(),LinearLayoutManager.HORIZONTAL,false);\r\n        dateitemRecycler.setLayoutManager(layoutManager);\r\n        generateData();\r\n        /*\r\n        mAdapter.setOnItemClickListener(new ExampleAdapter.OnItemClickListener() {\r\n            @Override\r\n            public void onItemClick(int position) {\r\n                String title = exampleList.get(position).getText1();\r\n\r\n            }\r\n        });*/\r\n\r\n\r\n        addButton = view.findViewById(R.id.addButton); //ToDo: edit these\r\n        myDB = new DataBaseHelper(this.getContext());\r\n        mList = new ArrayList<>();\r\n        adaptor = new ToDoAdaptor(myDB, this);\r\n\r\n        recyclerView.setHasFixedSize(true);\r\n        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));\r\n        recyclerView.setAdapter(adaptor);\r\n\r\n        mList = myDB.getDateTask(\"16-4-2025\");\r\n        Collections.reverse(mList);\r\n        adaptor.setTasks(mList);\r\n        /*\r\n        testButton = view.findViewById(R.id.testbutton);\r\n        testButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n\r\n                LocalDate date = LocalDate.now();\r\n                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(\"yyyy-MM-dd\"); // Change format as needed\r\n                String dateString = date.format(formatter);\r\n\r\n                System.out.println(dateString);\r\n                recyclerView.setAdapter(adaptor);\r\n                mList = myDB.getAllTasks();\r\n                //mList = myDB.getDateTask(\"16-4-2025\");\r\n                Collections.reverse(mList);\r\n                adaptor.setTasks(mList);\r\n            }\r\n        });*/\r\n\r\n        addButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                AddNewTask.newInstance().show(getParentFragmentManager(), AddNewTask.TAG);\r\n\r\n            }\r\n        });\r\n\r\n        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new RecyclerViewTouchHelper(adaptor)); // for delete and edit\r\n        itemTouchHelper.attachToRecyclerView(recyclerView);\r\n        // Inflate the layout for this fragment\r\n        return view;\r\n    }\r\n\r\n    private void generateData() {\r\n        List<LocalDate> dateList = new ArrayList<>();\r\n        LocalDate today = LocalDate.now();\r\n        int currentYear = today.getYear();\r\n        int currentMonth = today.getMonthValue();\r\n        LocalDate firstDayOfMonth = LocalDate.of(currentYear, currentMonth, 1);\r\n        int daysInMonth = firstDayOfMonth.lengthOfMonth();\r\n\r\n        // Add all dates of the current month\r\n        for (int i = 1; i <= daysInMonth; i++) {\r\n            dateList.add(LocalDate.of(currentYear, currentMonth, i));\r\n        }\r\n\r\n        DateItemAdapter adapter = new DateItemAdapter(dateList, new DateItemAdapter.OnItemClickListener() {\r\n            @Override\r\n            public void onItemClick(LocalDate date) {\r\n                // Handle the click event (same logic as testButton)\r\n                System.out.println(\"Selected date: \" + date.toString());\r\n\r\n                recyclerView.setAdapter(adaptor);\r\n                mList = myDB.getDateTask(date.format(DateTimeFormatter.ofPattern(\"d-M-yyyy\"))); // Adjust format if needed\r\n                Collections.reverse(mList);\r\n                adaptor.setTasks(mList);\r\n            }\r\n        });\r\n\r\n        dateitemRecycler.setAdapter(adapter);\r\n\r\n        // Scroll to current date when opening\r\n        int todayPosition = today.getDayOfMonth() - 1;\r\n        dateitemRecycler.scrollToPosition(todayPosition);\r\n    }\r\n\r\n    @Override\r\n    public void onDialogClose(DialogInterface dialogInterface) {\r\n        mList = myDB.getAllTasks();\r\n        Collections.reverse(mList);\r\n        adaptor.setTasks(mList);\r\n        adaptor.notifyDataSetChanged();\r\n\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/Home/HomeFragment.java b/app/src/main/java/com/example/modulus/Home/HomeFragment.java
+--- a/app/src/main/java/com/example/modulus/Home/HomeFragment.java	(revision 7fb78f8f099ec082f6b95d78fc45bdf70dd715f8)
++++ b/app/src/main/java/com/example/modulus/Home/HomeFragment.java	(date 1744030642650)
+@@ -11,7 +11,6 @@
+ 
+ import android.content.DialogInterface;
+ import android.widget.Button;
+-import android.widget.LinearLayout;
+ 
+ import androidx.core.graphics.Insets;
+ import androidx.core.view.ViewCompat;
+@@ -20,6 +19,7 @@
+ import androidx.recyclerview.widget.LinearLayoutManager;
+ import androidx.recyclerview.widget.RecyclerView;
+ 
++import com.example.modulus.Adapter.DateItemAdapter;
+ import com.example.modulus.Adapter.ToDoAdaptor;
+ import com.example.modulus.Class.ToDoModel;
+ import com.example.modulus.R;
+@@ -31,7 +31,6 @@
+ import java.util.ArrayList;
+ import java.util.Collections;
+ import java.util.List;
+-import java.util.Random;
+ 
+ public class HomeFragment extends Fragment implements OnDialogCloseListener {
+     RecyclerView recyclerView,dateitemRecycler;

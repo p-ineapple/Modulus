@@ -1,38 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <EditText
-        android:layout_marginTop="10dp"
-        android:id="@+id/editText"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingHorizontal="30dp"
+    android:paddingTop="10dp">
+    <TextView
+        android:id="@+id/addTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter your task here"
-        android:textSize="20sp"
-        android:paddingStart="7dp"
-        android:paddingEnd="7dp" />
+        android:text="Add Task"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        android:textStyle="bold"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/addTaskLayout"
+        android:layout_below="@id/addTitle">
+        <ImageView
+            android:id="@+id/addTaskIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/add_task"
+            android:layout_centerVertical="true"
+            />
+        <EditText
+            android:id="@+id/addTaskText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter task"
+            android:textSize="20sp"
+            android:layout_toRightOf="@id/addTaskIcon"/>
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/addCatLayout"
+        android:layout_below="@id/addTaskLayout">
+        <ImageView
+            android:id="@+id/addCatIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/add_category"
+            android:layout_centerVertical="true"/>
+        <EditText
+            android:id="@+id/addCatText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter category"
+            android:textSize="20sp"
+            android:layout_toRightOf="@id/addCatIcon"/>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/addDateLayout"
+        android:layout_below="@id/addCatLayout"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
+        <ImageView
+            android:id="@+id/addDateIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/add_calendar"
+            android:layout_centerVertical="true"/>
+        <TextView
+            android:id="@+id/addDateText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Select Due Date"
+            android:textSize="20sp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/addDateIcon"/>
+
+        <ImageView
+            android:id="@+id/addTimeIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/add_clock"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="20dp"
+            android:layout_toRightOf="@id/addDateText"/>
+        <TextView
+            android:id="@+id/addTimeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Select Time"
+            android:textSize="20sp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/addTimeIcon"/>
+
+    </RelativeLayout>
+
 
     <Button
         android:id="@+id/saveButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editText"
+        android:layout_below="@id/addDateLayout"
         android:text="Save"
         android:textSize="20sp"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"/>
-
-
-    <EditText
-        android:id="@+id/setDueDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="Select Due Date"
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/editText"
-        android:textColor="@android:color/black"
-        />
-
 </RelativeLayout>
