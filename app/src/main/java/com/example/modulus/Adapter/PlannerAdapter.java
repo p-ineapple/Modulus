@@ -38,7 +38,7 @@ public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.plannerV
         moduleList = planner.getModules();
         holder.term.setText(planner.getTerm());
 
-        NestedModuleAdapter adapter = new NestedModuleAdapter(moduleList);
+        NestedPlannerAdapter adapter = new NestedPlannerAdapter(moduleList);
         holder.nestedRecyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
         holder.nestedRecyclerView.setAdapter(adapter);
         holder.layout.setOnClickListener(new View.OnClickListener() {

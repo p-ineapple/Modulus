@@ -38,7 +38,7 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
     DataBaseHelper myDB;
     Button testButton;
     private List<ToDoModel> mList;
-    private ToDoAdapter adaptor;
+    private ToDoAdapter adapter;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -71,15 +71,15 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
         addButton = view.findViewById(R.id.addButton); //ToDo: edit these
         myDB = new DataBaseHelper(this.getContext());
         mList = new ArrayList<>();
-        adaptor = new ToDoAdapter(myDB, this);
+        adapter = new ToDoAdapter(myDB, this);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        recyclerView.setAdapter(adaptor);
+        recyclerView.setAdapter(adapter);
 
         mList = myDB.getDateTask("16-4-2025");
         Collections.reverse(mList);
-        adaptor.setTasks(mList);
+        adapter.setTasks(mList);
         /*
         testButton = view.findViewById(R.id.testbutton);
         testButton.setOnClickListener(new View.OnClickListener() {
@@ -107,7 +107,7 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
             }
         });
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new RecyclerViewTouchHelper(adaptor)); // for delete and edit
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new RecyclerViewTouchHelper(adapter)); // for delete and edit
         itemTouchHelper.attachToRecyclerView(recyclerView);
         // Inflate the layout for this fragment
         return view;
@@ -132,10 +132,10 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
                 // Handle the click event (same logic as testButton)
                 System.out.println("Selected date: " + date.toString());
 
-                recyclerView.setAdapter(adaptor);
+                recyclerView.setAdapter(HomeFragment.this.adapter);
                 mList = myDB.getDateTask(date.format(DateTimeFormatter.ofPattern("d-M-yyyy"))); // Adjust format if needed
                 Collections.reverse(mList);
-                adaptor.setTasks(mList);
+                HomeFragment.this.adapter.setTasks(mList);
             }
         });
 
@@ -150,8 +150,7 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
     public void onDialogClose(DialogInterface dialogInterface) {
         mList = myDB.getAllTasks();
         Collections.reverse(mList);
-        adaptor.setTasks(mList);
-        adaptor.notifyDataSetChanged();
-
+        adapter.setTasks(mList);
+        adapter.notifyDataSetChanged();
     }
 }

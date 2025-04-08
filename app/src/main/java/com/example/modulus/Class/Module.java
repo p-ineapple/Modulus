@@ -99,10 +99,10 @@ public class Module {
     public static Comparator<Module> idAscending = new Comparator<Module>() {
         @Override
         public int compare(Module mod1, Module mod2) {
-            int id1 = Integer.parseInt(mod1.getId());
-            int id2 = Integer.parseInt(mod2.getId());
+            String id1 = mod1.getId();
+            String id2 = mod2.getId();
 
-            return Integer.compare(id1, id2);
+            return id1.compareTo(id2);
         }
     };
 

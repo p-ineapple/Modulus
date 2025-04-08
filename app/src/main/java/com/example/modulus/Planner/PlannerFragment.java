@@ -28,7 +28,6 @@ import java.util.List;
 
 public class PlannerFragment extends Fragment {
     public static List<Planner> plannerList;
-    PlannerAdapter adapter;
     RecyclerView recyclerView;
     DataBaseHelperInsights myDB;
     ImageView editButton;
@@ -37,8 +36,7 @@ public class PlannerFragment extends Fragment {
     static final String KEY_DATA_MODS = "SHARED_PREF_DATA_MODS";
     static final String PREF_FILE = "mainsharedpref";
     private final String TAG = "Planner";
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_planner, container, false);
 
@@ -46,6 +44,7 @@ public class PlannerFragment extends Fragment {
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "Edit");
                 Intent showDetail = new Intent(getContext(), EditPlanner.class);
                 startActivity(showDetail);
             }
@@ -61,13 +60,13 @@ public class PlannerFragment extends Fragment {
             System.out.println(plannerList);
         }else{
             onResume();
-            Log.d("Refresh", "Refreshed");
+            Log.d(TAG, "Refresh");
         }
         if(InsightsFragment.moduleList == null){
             myDB = new DataBaseHelperInsights(getContext());
             InsightsFragment.moduleList = myDB.getAllModules();
         }
-        adapter = new PlannerAdapter(plannerList);
+        PlannerAdapter adapter = new PlannerAdapter(plannerList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setAdapter(adapter);
         return view;
@@ -101,8 +100,9 @@ public class PlannerFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
-        Gson gson = new Gson();
         if(mPreferences != null){
+            Log.d(TAG, "Resume");
+            Gson gson = new Gson();
             String jsonTerms = mPreferences.getString(KEY_DATA_TERMS, "");
             String jsonMods = mPreferences.getString(KEY_DATA_MODS, "");
             plannerList = new ArrayList<>();
@@ -115,27 +115,22 @@ public class PlannerFragment extends Fragment {
                 Planner planner = new Planner(terms.get(i));
                 List<Module> plannerModules = new ArrayList<Module>();
                 for(int j = modsPointer; j < mods.size(); j++){
-                    if(mods.get(j).toString().equals("?")){
+                    if(mods.get(j).equals("?")){
                         planner.setModules(plannerModules);
                         plannerList.add(planner);
                         modsPointer++;
                         break;
-                    }else if(mods.get(j).toString().equals("NIL")){
+                    }else if(mods.get(j).equals("NIL")){
                         plannerList.add(planner);
                         modsPointer++;
                         break;
                     }else {
                         plannerModules.add(Module.getModuleFromString(mods.get(j)));
-//                    if (mods.get(j).contains("Capstone")) {
-//                        plannerModules.add(new Module("", "Capstone"));
-//                    } else {
-//                        String[] module = mods.get(j).split(" - ");
-//                        plannerModules.add(new Module(module[0], module[1]));
-//                    }
                         modsPointer++;
                     }
                 }
             }
+            Log.d(TAG, "Updated");
         }
     }
 }

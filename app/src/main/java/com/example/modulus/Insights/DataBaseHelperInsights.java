@@ -173,16 +173,4 @@ public class DataBaseHelperInsights extends SQLiteOpenHelper {
 
         return result;
     }
-
-    public boolean updatePlanner(int row, Planner planner, Module module) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("Row", row);
-        contentValues.put("Term", planner.getTermInt());
-        contentValues.put("ID", module.getId());
-        contentValues.put("Name", module.getName());
-        db.update(plannerTable, contentValues, "Row = ?",new String[] {String.valueOf(row)});
-        Log.d("dB", "update?");
-        return true;
-    }
 }
