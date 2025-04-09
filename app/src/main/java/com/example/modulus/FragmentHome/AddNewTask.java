@@ -2,6 +2,7 @@ package com.example.modulus.FragmentHome;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,13 +27,14 @@ import com.example.modulus.Utils.OnDialogCloseListener;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 public class AddNewTask extends BottomSheetDialogFragment {
     public static final String TAG = "AddNewTask";
-    private EditText mEditText;
-    private TextView setDueDate;
-    private Button mSaveButton;
-    private DataBaseHelper myDB;
+    private EditText addTask, addCategory;
+    private TextView setDueDate, setDueTime;
+    private Button saveButton;
+    private DataBaseHelperHome myDB;
     private DatePickerDialog datePickerDialog;
     private Button dateButton;
     public static AddNewTask newInstance(){
@@ -50,32 +53,36 @@ public class AddNewTask extends BottomSheetDialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mEditText = view.findViewById(R.id.addTaskText);
-        mSaveButton = view.findViewById(R.id.saveButton);
+        addTask = view.findViewById(R.id.addTaskText);
+        addCategory = view.findViewById(R.id.addCatText);
+        saveButton = view.findViewById(R.id.saveButton);
         setDueDate = view.findViewById(R.id.addDateText);
+        setDueTime = view.findViewById(R.id.addTimeText );
         final Calendar calendar = Calendar.getInstance();
         final int year = calendar.get(Calendar.YEAR);
         final int month = calendar.get(Calendar.MONTH);
         final int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+        int currentMinute = calendar.get(Calendar.MINUTE);
         //initDatePicker();
         //dateButton = view.findViewById(R.id.datePickerButton);
         //dateButton.setText(getTodaysDate());
 
-        myDB = new DataBaseHelper(getActivity());
+        myDB = new DataBaseHelperHome(getActivity());
         boolean isUpdate = false;
 
         Bundle bundle = getArguments();
         if (bundle!=null){
             isUpdate = true;
             String task = bundle.getString("task");
-            mEditText.setText(task);
+            addTask.setText(task);
 
             if (task.length() > 0){
-                mSaveButton.setEnabled(false);
+                saveButton.setEnabled(false);
             }
         }
 
-        mEditText.addTextChangedListener(new TextWatcher() {
+        addTask.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -83,10 +90,10 @@ public class AddNewTask extends BottomSheetDialogFragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.toString().isEmpty()){
-                    mSaveButton.setEnabled(false);
-                    mSaveButton.setBackgroundColor(Color.GRAY);
+                    saveButton.setEnabled(false);
+                    saveButton.setBackgroundColor(Color.GRAY);
                 }else{
-                    mSaveButton.setEnabled(true);
+                    saveButton.setEnabled(true);
                 }
             }
 
@@ -94,12 +101,37 @@ public class AddNewTask extends BottomSheetDialogFragment {
             public void afterTextChanged(Editable s) {
             }
         });
+
+        addCategory.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().isEmpty()){
+                    saveButton.setEnabled(false);
+                    saveButton.setBackgroundColor(Color.GRAY);
+                }else{
+                    saveButton.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+
         boolean finalIsUpdate = isUpdate;
-        mSaveButton.setOnClickListener(new View.OnClickListener() {
+        saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String text = mEditText.getText().toString();
+                String text = addTask.getText().toString();
                 String date_text = setDueDate.getText().toString();
+                String category = addCategory.getText().toString();
+                String time = setDueTime.getText().toString();
+
                 if (finalIsUpdate){
                     myDB.updateTask(bundle.getInt("ID"),text);
                     //myDB.updateTask(bundle.getInt("ID"),text);
@@ -108,6 +140,8 @@ public class AddNewTask extends BottomSheetDialogFragment {
                     item.setTask(text);
                     item.setDate(date_text);
                     item.setStatus(0);
+                    item.setCategory(category);
+                    item.setTime(time);
                     myDB.insertTask(item);
                 }
                 Log.d(TAG, "Save task");
@@ -122,14 +156,39 @@ public class AddNewTask extends BottomSheetDialogFragment {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         month++;
-                        String date = dayOfMonth + "-" + month + "-" + year;
+                        String date = dayOfMonth + "/" + month + "/" + year;
                         setDueDate.setText(date);
                     }
                 },year, month, day);
                 dialog.show();
             }
         });
+
+        setDueTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimePickerDialog dialog = new TimePickerDialog(requireContext(), new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        String meridiem = "AM";
+                        String zero = "";
+                        if(hourOfDay > 12){
+                            hourOfDay -= 12;
+                            meridiem = "PM";
+                        }
+                        if(minute < 10){
+                            zero = "0";
+                        }
+                        String time = hourOfDay + ":" + zero + minute + " " + meridiem;
+                        setDueTime.setText(time);
+                    }
+                }, currentHour, currentMinute,false);
+                dialog.show();
+            }
+        });
+
     }
+
 
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {

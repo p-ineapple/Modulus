@@ -9,12 +9,64 @@
     android:id="@+id/homeMain"
     tools:context=".FragmentHome.HomeFragment">
 
+    <TextView
+        android:id="@+id/homeTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="Today's Task"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:textSize="20sp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:id="@+id/dateItemRecycler" />
+        android:layout_height="wrap_content"
+        android:id="@+id/dateItemRecycler"
+        android:layout_below="@id/homeTitle"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonRecycler"
+        android:layout_below="@id/dateItemRecycler"
+        android:weightSum="3"
+        android:layout_marginVertical="5dp">
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="All"
+            android:backgroundTint="@color/dark_purple"
+            android:textColor="@color/white"/>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="To-Do"
+            android:backgroundTint="@color/light_purple"/>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Completed"
+            android:backgroundTint="@color/light_purple"/>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5" />
+
+
+    </LinearLayout>
 
     <!--TextView
         android:id="@+id/textView"
@@ -33,13 +85,14 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/dateItemRecycler">
+        android:layout_below="@id/buttonRecycler">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:nestedScrollingEnabled="true"/>
+            android:nestedScrollingEnabled="true"
+            android:layout_marginBottom="20dp"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addButton"
@@ -47,8 +100,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_margin="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="40dp"
             android:src="@drawable/baseline_add_24"/>
+
 
     </RelativeLayout>
 
