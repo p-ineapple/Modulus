@@ -1,16 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="HardcodedText"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:paddingVertical="20sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="32sp"
+            android:layout_height="32sp"
+            android:src="@drawable/arrow_back"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/moduleDetailsIDName"
+            android:text="Module ID and Name"
+            android:textSize="32sp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_toEndOf="@id/backButton"/>
+
+    </RelativeLayout>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"/>
 
     <TextView
+        android:id="@+id/prerequisites"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/moduleDetailsIDName"
-        android:gravity="center"
-        android:text="module name"
-        android:textColor="@color/purple_200"
-        android:textSize="36dp"/>
+        android:layout_height="wrap_content"
+        android:text="Prerequisites"
+        android:textSize="20sp"
+        android:layout_marginHorizontal="10dp"/>
 
-</RelativeLayout>
+</LinearLayout>

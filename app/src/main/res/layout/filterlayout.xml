@@ -11,7 +11,6 @@
     <ImageView
         android:layout_width="40dp"
         android:layout_height="8dp"
-        android:contentDescription="bar"
         android:src="@drawable/rectangle"
         android:layout_gravity="center|top"
         android:scaleType="centerCrop"/>
@@ -48,6 +47,25 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="48dp"
+        android:orientation="horizontal"
+        android:id="@+id/pillarFilterLayout">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/pillarChips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:selectionRequired="false"
+            app:singleSelection="false">
+
+        </com.google.android.material.chip.ChipGroup>
+
+    </LinearLayout>
+
     <com.google.android.material.divider.MaterialDivider
         android:id="@+id/divider1"
         android:layout_width="match_parent"
@@ -72,6 +90,24 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="5dp"
             android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="48dp"
+        android:orientation="horizontal"
+        android:id="@+id/termFilterLayout">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/termChips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:selectionRequired="false"
+            app:singleSelection="false">
+
+        </com.google.android.material.chip.ChipGroup>
 
     </LinearLayout>
 
@@ -102,6 +138,24 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="48dp"
+        android:orientation="horizontal"
+        android:id="@+id/courseTypeFilterLayout">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/courseChips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:selectionRequired="false"
+            app:singleSelection="false">
+
+        </com.google.android.material.chip.ChipGroup>
+
+    </LinearLayout>
+
     <com.google.android.material.divider.MaterialDivider
         android:id="@+id/divider3"
         android:layout_width="match_parent"
@@ -117,7 +171,6 @@
         <Button
             android:id="@+id/resetButton"
             style="@style/Widget.Material3.Button.TonalButton"
-            android:outlineProvider="background"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
