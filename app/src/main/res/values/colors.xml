@@ -7,6 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="dark_purple">#7009E0</color>
+    <color name="purple">#AB94FF</color>
     <color name="light_purple">#E3DBFF</color>
     <color name="dark_blue">#2600FF</color>
     <color name="light_blue">#C2CFFF</color>
@@ -20,5 +21,6 @@
     <color name="calendar_yellow">#F6BF26</color>
     <color name="calendar_purple">#8E24AA</color>
     <color name="calendar_blue">#039BE5</color>
+    <color name="grey">#797979</color>
 </resources>
 

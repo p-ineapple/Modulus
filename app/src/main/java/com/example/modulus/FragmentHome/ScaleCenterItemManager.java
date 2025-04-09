@@ -20,14 +20,14 @@ public class ScaleCenterItemManager extends LinearLayoutManager {
     @Override
     public void onLayoutCompleted(RecyclerView.State state) {
         super.onLayoutCompleted(state);
-        scaleMiddleItem();
+        //scaleMiddleItem();
     }
 
     @Override
     public int scrollHorizontallyBy(int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
         int scrolled = super.scrollHorizontallyBy(dx, recycler, state);
         if(getOrientation() == RecyclerView.HORIZONTAL){
-            scaleMiddleItem();
+            //scaleMiddleItem();
             return scrolled;
         }else{
             return 0;

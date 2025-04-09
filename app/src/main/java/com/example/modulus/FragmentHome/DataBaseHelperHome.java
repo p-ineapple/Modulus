@@ -13,21 +13,25 @@ import com.example.modulus.Model.ToDoModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataBaseHelper extends SQLiteOpenHelper {
+public class DataBaseHelperHome extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "MODULUS";
     private static final String TABLE_NAME = "HOME_TABLE";
     private static final String COL_1 = "ID";
     private static final String COL_2 = "TASK";
     private static final String COL_3 = "STATUS";
     private static final String COL_4 = "DATE";
+    private static final String COL_5 = "TIME";
+
+    private static final String COL_6 = "CATEGORY";
+
     private final String TAG = "Home DB";
-    public DataBaseHelper(Context context) {
+    public DataBaseHelperHome(Context context) {
         super(context, DATABASE_NAME, null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, TASK TEXT, STATUS INTEGER, DATE DATE)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, TASK TEXT, STATUS INTEGER, DATE DATE, TIME TEXT, CATEGORY TEXT)");
         Log.d(TAG, "Create to do database");
     }
 
@@ -43,6 +47,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_2, model.getTask());
         contentValues.put(COL_3, 0);
         contentValues.put(COL_4, model.getDate());
+        contentValues.put(COL_5, model.getTime());
+        contentValues.put(COL_6, model.getCategory());
+
 
         db.insert(TABLE_NAME, null, contentValues);
         Log.d(TAG, "Insert task");
@@ -71,6 +78,22 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         db.update(TABLE_NAME, contentValues, "ID=?", new String[]{String.valueOf(id)});
     }
+
+    public void updateTime(int id, String time){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_5, time);
+
+        db.update(TABLE_NAME, contentValues, "ID=?", new String[]{String.valueOf(id)});
+    }
+
+    public void updateCategory(int id, String category){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_6, category);
+
+        db.update(TABLE_NAME, contentValues, "ID=?", new String[]{String.valueOf(id)});
+    }
     public void deleteTask(int id){
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_NAME,"ID=?", new String[]{String.valueOf(id)});
@@ -94,7 +117,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                         toDoModel.setId((cursor.getInt(cursor.getColumnIndex(COL_1))));
                         toDoModel.setTask((cursor.getString(cursor.getColumnIndex(COL_2))));
                         toDoModel.setStatus((cursor.getInt(cursor.getColumnIndex(COL_3))));
-                        toDoModel.setStatus((cursor.getInt(cursor.getColumnIndex(COL_4))));
+                        toDoModel.setDate((cursor.getString(cursor.getColumnIndex(COL_4))));
+                        toDoModel.setTime((cursor.getString(cursor.getColumnIndex(COL_5))));
+                        toDoModel.setCategory((cursor.getString(cursor.getColumnIndex(COL_6))));
                         modelList.add(toDoModel);
 
                     }while (cursor.moveToNext());
@@ -123,7 +148,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                         toDoModel.setId((cursor.getInt(cursor.getColumnIndex(COL_1))));
                         toDoModel.setTask((cursor.getString(cursor.getColumnIndex(COL_2))));
                         toDoModel.setStatus((cursor.getInt(cursor.getColumnIndex(COL_3))));
-                        toDoModel.setStatus((cursor.getInt(cursor.getColumnIndex(COL_4))));
+                        toDoModel.setDate((cursor.getString(cursor.getColumnIndex(COL_4))));
+                        toDoModel.setTime((cursor.getString(cursor.getColumnIndex(COL_5))));
+                        toDoModel.setCategory((cursor.getString(cursor.getColumnIndex(COL_6))));
                         modelList.add(toDoModel);
 
                     }while (cursor.moveToNext());

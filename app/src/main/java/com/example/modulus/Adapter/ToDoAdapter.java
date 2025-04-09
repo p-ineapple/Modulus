@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,15 +17,15 @@ import com.example.modulus.Model.ToDoModel;
 import com.example.modulus.FragmentHome.HomeFragment;
 import com.example.modulus.FragmentHome.AddNewTask;
 import com.example.modulus.R;
-import com.example.modulus.FragmentHome.DataBaseHelper;
+import com.example.modulus.FragmentHome.DataBaseHelperHome;
 
 import java.util.List;
 public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.MyViewHolder> {
     private List<ToDoModel> mList;
     private HomeFragment home;
-    private DataBaseHelper myDB;
+    private DataBaseHelperHome myDB;
 
-    public ToDoAdapter(DataBaseHelper myDB, HomeFragment home){
+    public ToDoAdapter(DataBaseHelperHome myDB, HomeFragment home){
         this.home = home;
         this.myDB = myDB;
     }
@@ -40,7 +41,9 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         final ToDoModel item = mList.get(position);
-        holder.checkBox.setText(item.getTask());//ToDo: edit her to add timing i think
+        holder.taskDescription.setText(item.getTask());//ToDo: edit her to add timing i think
+        holder.taskCat.setText(item.getCategory());
+        holder.taskTime.setText(item.getTime());
         holder.checkBox.setChecked(toBoolean(item.getStatus()));
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -90,9 +93,15 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.MyViewHolder> 
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         CheckBox checkBox;
+        TextView taskCat;
+        TextView taskDescription;
+        TextView taskTime;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            checkBox = itemView.findViewById(R.id.checkbox);
+            checkBox = itemView.findViewById(R.id.taskCheckBox);
+            taskCat = itemView.findViewById(R.id.taskCat);
+            taskDescription = itemView.findViewById(R.id.taskDescription);
+            taskTime = itemView.findViewById(R.id.taskTime);
         }
 
     }
