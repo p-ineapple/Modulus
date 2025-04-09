@@ -53,7 +53,7 @@ public class PlannerFragment extends Fragment {
         recyclerView = view.findViewById(R.id.plannerRecyclerView);
 
         mPreferences = this.getActivity().getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
-        if(mPreferences == null){
+        if(mPreferences.getString(KEY_DATA_TERMS, "").equals("")){
             Log.d(TAG, "New Account");
             myDB = new DataBaseHelperInsights(getContext());
             plannerList = myDB.getPlanner();
@@ -100,39 +100,37 @@ public class PlannerFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
-        if(mPreferences != null){
-            Log.d(TAG, "Resume");
-            Gson gson = new Gson();
-            String jsonTerms = mPreferences.getString(KEY_DATA_TERMS, "");
-            String jsonMods = mPreferences.getString(KEY_DATA_MODS, "");
+        Log.d(TAG, "Resume");
+        Gson gson = new Gson();
+        String jsonTerms = mPreferences.getString(KEY_DATA_TERMS, "");
+        String jsonMods = mPreferences.getString(KEY_DATA_MODS, "");
+        ArrayList<String> terms = gson.fromJson(jsonTerms, ArrayList.class);
+        ArrayList<String> mods = gson.fromJson(jsonMods, ArrayList.class);
+        System.out.println(terms);
+        System.out.println(mods);
+        if(terms != null && mods != null){
             plannerList = new ArrayList<>();
-            ArrayList<String> terms = gson.fromJson(jsonTerms, ArrayList.class);
-            ArrayList<String> mods = gson.fromJson(jsonMods, ArrayList.class);
-            System.out.println(terms);
-            System.out.println(mods);
-            if(terms != null && mods != null){
-                int modsPointer = 0;
-                for (int i = 0; i< terms.size(); i++) {
-                    PlannerModel planner = new PlannerModel(terms.get(i));
-                    List<ModuleModel> plannerModules = new ArrayList<ModuleModel>();
-                    for(int j = modsPointer; j < mods.size(); j++){
-                        if(mods.get(j).equals("?")){
-                            planner.setModules(plannerModules);
-                            plannerList.add(planner);
-                            modsPointer++;
-                            break;
-                        }else if(mods.get(j).equals("NIL")){
-                            plannerList.add(planner);
-                            modsPointer++;
-                            break;
-                        }else {
-                            plannerModules.add(ModuleModel.getModuleFromString(mods.get(j)));
-                            modsPointer++;
-                        }
+            int modsPointer = 0;
+            for (int i = 0; i< terms.size(); i++) {
+                PlannerModel planner = new PlannerModel(terms.get(i));
+                List<ModuleModel> plannerModules = new ArrayList<ModuleModel>();
+                for(int j = modsPointer; j < mods.size(); j++){
+                    if(mods.get(j).equals("?")){
+                        planner.setModules(plannerModules);
+                        plannerList.add(planner);
+                        modsPointer++;
+                        break;
+                    }else if(mods.get(j).equals("NIL")){
+                        plannerList.add(planner);
+                        modsPointer++;
+                        break;
+                    }else {
+                        plannerModules.add(ModuleModel.getModuleFromString(mods.get(j)));
+                        modsPointer++;
                     }
                 }
-                Log.d(TAG, "Updated");
             }
+            Log.d(TAG, "Updated");
         }
     }
 }
