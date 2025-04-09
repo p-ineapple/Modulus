@@ -2,16 +2,17 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:layout_margin="8dp"
-    android:id="@+id/plannerTerm">
+    android:id="@+id/plannerTerm"
+    tools:ignore="HardcodedText">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/purple_200"
         app:cardCornerRadius="20dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,22 +23,20 @@
                 android:id="@+id/term"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:layout_gravity="center"
                 android:gravity="center"
                 android:text="Term"
-                android:textColor="@color/purple_700"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold"
+                android:layout_marginStart="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/arrow"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginEnd="16dp"
+                android:layout_width="32sp"
+                android:layout_height="32sp"
+                android:layout_marginEnd="20sp"
                 android:src="@drawable/arrow_up"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -46,6 +45,12 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="8dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
