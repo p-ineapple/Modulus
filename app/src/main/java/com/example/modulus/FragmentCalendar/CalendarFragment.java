@@ -59,7 +59,7 @@ public class CalendarFragment extends Fragment {
         //Initialisation
         calendarView = view.findViewById(R.id.calendar);
         hourlyDayView = view.findViewById(dayView);
-        addEventButton = view.findViewById(R.id.addEventButton);
+//        addEventButton = view.findViewById(R.id.addEventButton);
         selectedDateText = view.findViewById(R.id.selectedDateText);
 
         //Override library time format for nicer readability

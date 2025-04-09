@@ -2,15 +2,16 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Modulus" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <item name="colorPrimary">@color/light_purple</item>
-        <item name="colorPrimaryVariant">@color/light_purple</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimary">@color/dark_purple</item>
+        <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/dark_purple</item>
-        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorOnSecondary">@color/light_pink</item>
 
         <item name="bottomAppBarStyle">@style/Widget.App.BottomAppBar</item>
         <item name="floatingActionButtonStyle">@style/Widget.App.FloatingActionButton</item>
         <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigationView</item>
+
+        <item name="materialTimePickerStyle">@style/Widget.App.TimePicker.Clock</item>
     </style>
 
     <style name="Theme.Modulus" parent="Base.Theme.Modulus" />
@@ -49,5 +50,11 @@
 
     <style name="ThemeOverlay.App.BottomNavigationView" parent="">
     <item name="colorOnPrimary">@color/dark_purple</item>
+    </style>
+
+    <style name="Widget.App.TimePicker.Clock" parent="Widget.MaterialComponents.TimePicker.Clock">
+        <item name="clockFaceBackgroundColor">@color/light_blue</item>
+        <item name="clockHandColor">@color/dark_blue</item>
+        <item name="clockNumberTextColor">@color/dark_blue</item>
     </style>
 </resources>
