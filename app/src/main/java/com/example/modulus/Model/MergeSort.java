@@ -11,7 +11,7 @@ public class MergeSort {
             String id1 = mod1.getId();
             String id2 = mod2.getId();
 
-            return id2.compareTo(id1);
+            return id1.compareTo(id2);
         }
 
         @Override
@@ -26,7 +26,7 @@ public class MergeSort {
             String name2 = mod2.getName();
             name1 = name1.toLowerCase();
             name2 = name2.toLowerCase();
-            return name2.compareTo(name1);
+            return name1.compareTo(name2);
         }
 
         @Override
@@ -44,10 +44,10 @@ public class MergeSort {
         List<ModuleModel> r = new ArrayList<ModuleModel>(n - mid);
 
         for (int i = 0; i < mid; i++) {
-            l.set(i, a.get(i));
+            l.add(a.get(i));
         }
         for (int i = mid; i < n; i++) {
-            r.set(i - mid, a.get(i));
+            r.add(a.get(i));
         }
         l = mergeSortID(l, mid);
         r = mergeSortID(r, n - mid);
@@ -83,10 +83,10 @@ public class MergeSort {
         List<ModuleModel> r = new ArrayList<ModuleModel>(n - mid);
 
         for (int i = 0; i < mid; i++) {
-            l.set(i, a.get(i));
+            l.add(a.get(i));
         }
         for (int i = mid; i < n; i++) {
-            r.set(i - mid, a.get(i));
+            r.add(a.get(i));
         }
         l = mergeSortName(l, mid);
         r = mergeSortName(r, n - mid);
