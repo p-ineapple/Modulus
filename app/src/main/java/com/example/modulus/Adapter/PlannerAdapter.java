@@ -47,7 +47,7 @@ public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.plannerV
                 Log.d("Click", "CLICKKKKK");
                 planner.setExpandable(!planner.isExpandable());
                 if (planner.isExpandable()){
-                    holder.arrow.setImageResource(R.drawable.arrow_up);
+                    holder.arrow.setImageResource(R.drawable.arrow2_up);
                     holder.expandableLayout.setVisibility(View.VISIBLE);
 
                 }else{

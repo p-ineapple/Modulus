@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="60dp"
+    android:layout_marginBottom="50dp"
     android:id="@+id/homeMain"
     tools:context=".FragmentHome.HomeFragment">
 
@@ -50,6 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="To-Do"
+            android:textColor="@color/black"
             android:backgroundTint="@color/light_purple"/>
         <Space
             android:layout_width="0dp"
@@ -59,6 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Completed"
+            android:textColor="@color/black"
             android:backgroundTint="@color/light_purple"/>
         <Space
             android:layout_width="0dp"
@@ -101,7 +103,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_marginRight="20dp"
-            android:layout_marginBottom="40dp"
+            android:layout_marginBottom="30dp"
             android:src="@drawable/baseline_add_24"/>
 
 
