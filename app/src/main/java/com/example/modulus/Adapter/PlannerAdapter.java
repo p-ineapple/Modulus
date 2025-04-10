@@ -51,7 +51,7 @@ public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.plannerV
                     holder.expandableLayout.setVisibility(View.VISIBLE);
 
                 }else{
-                    holder.arrow.setImageResource(R.drawable.arrow_down);
+                    holder.arrow.setImageResource(R.drawable.arrow2_down);
                     holder.expandableLayout.setVisibility(View.GONE);
                 }
             }

@@ -119,6 +119,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:chipIcon="@drawable/arrow2_up"
+                app:iconStartPadding="2dp"
+                app:textEndPadding="0dp"
+                app:textStartPadding="0dp"
                 android:checkable="true"
                 app:chipIconVisible="true"
                 android:checked="true"/>
@@ -129,6 +132,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:chipIcon="@drawable/arrow2_down"
+                app:iconStartPadding="2dp"
+                app:textEndPadding="0dp"
+                app:textStartPadding="0dp"
                 app:chipIconVisible="true"
                 android:checkable="true"/>
 

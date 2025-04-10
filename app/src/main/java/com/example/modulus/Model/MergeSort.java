@@ -35,9 +35,9 @@ public class MergeSort {
         }
     };
 
-    public static void mergeSortID(List<ModuleModel> a, int n) {
+    public static List<ModuleModel> mergeSortID(List<ModuleModel> a, int n) {
         if (n < 2) {
-            return;
+            return a;
         }
         int mid = n / 2;
         List<ModuleModel> l = new ArrayList<ModuleModel>(mid);
@@ -49,12 +49,12 @@ public class MergeSort {
         for (int i = mid; i < n; i++) {
             r.set(i - mid, a.get(i));
         }
-        mergeSortID(l, mid);
-        mergeSortID(r, n - mid);
+        l = mergeSortID(l, mid);
+        r = mergeSortID(r, n - mid);
 
-        mergeID(a, l, r, mid, n - mid);
+        return mergeID(a, l, r, mid, n - mid);
     }
-    public static void mergeID(List<ModuleModel> a, List<ModuleModel> l, List<ModuleModel> r, int left, int right) {
+    public static List<ModuleModel> mergeID(List<ModuleModel> a, List<ModuleModel> l, List<ModuleModel> r, int left, int right) {
 
         int i = 0, j = 0, k = 0;
         while (i < left && j < right) {
@@ -71,11 +71,12 @@ public class MergeSort {
         while (j < right) {
             a.set(k++, r.get(j++));
         }
+        return a;
     }
 
-    public static void mergeSortName(List<ModuleModel> a, int n) {
+    public static List<ModuleModel> mergeSortName(List<ModuleModel> a, int n) {
         if (n < 2) {
-            return;
+            return a;
         }
         int mid = n / 2;
         List<ModuleModel> l = new ArrayList<ModuleModel>(mid);
@@ -87,12 +88,12 @@ public class MergeSort {
         for (int i = mid; i < n; i++) {
             r.set(i - mid, a.get(i));
         }
-        mergeSortName(l, mid);
-        mergeSortName(r, n - mid);
+        l = mergeSortName(l, mid);
+        r = mergeSortName(r, n - mid);
 
-        mergeName(a, l, r, mid, n - mid);
+        return mergeName(a, l, r, mid, n - mid);
     }
-    public static void mergeName(List<ModuleModel> a, List<ModuleModel> l, List<ModuleModel> r, int left, int right) {
+    public static List<ModuleModel> mergeName(List<ModuleModel> a, List<ModuleModel> l, List<ModuleModel> r, int left, int right) {
 
         int i = 0, j = 0, k = 0;
         while (i < left && j < right) {
@@ -109,6 +110,7 @@ public class MergeSort {
         while (j < right) {
             a.set(k++, r.get(j++));
         }
+        return a;
     }
 
 }
