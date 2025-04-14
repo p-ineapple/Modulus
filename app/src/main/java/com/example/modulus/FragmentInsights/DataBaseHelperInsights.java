@@ -25,6 +25,7 @@ public class DataBaseHelperInsights extends SQLiteOpenHelper {
     private static String dbPath = "/data/data/com.example.modulus/databases/";
     SQLiteDatabase db;
     private final Context mContext;
+    private static final String col0 = "Pillar";
     private static final String col1 = "Tags";
     private static final String col2 = "Term";
     private static final String col3 = "ID";
@@ -115,14 +116,15 @@ public class DataBaseHelperInsights extends SQLiteOpenHelper {
         Cursor c = db.query(tableName, null, null, null, null, null, null);
 
         while (c.moveToNext()) {
-            String id = c.getString(2);
-            String name = c.getString(3);
+            String id = c.getString(3);
+            String name = c.getString(4);
             ModuleModel module = new ModuleModel(id, name);
-            module.setTags(Arrays.asList(c.getString(0).split(",")));
-            module.setTerm(Arrays.asList(c.getString(1).split(",")));
-            module.setProf(Arrays.asList(c.getString(4).split(",")));
-            module.setPrerequisites(Arrays.asList(c.getString(5).split(",")));
-            module.setDescription(c.getString(7));
+            module.setPillar(c.getString(0));
+            module.setTags(Arrays.asList(c.getString(1).split(",")));
+            module.setTerm(Arrays.asList(c.getString(2).split(",")));
+            module.setProf(Arrays.asList(c.getString(5).split(",")));
+            module.setPrerequisites(Arrays.asList(c.getString(6).split(",")));
+            module.setDescription(c.getString(8));
             result.add(module);
         }
         c.close();
