@@ -17,6 +17,7 @@
         android:theme="@style/CalendarTheme"
         android:weekDayTextAppearance="@style/CalendarWeekDayAppearance" />
 
+
     <RelativeLayout
         android:id="@+id/dateBar"
         android:layout_width="match_parent"

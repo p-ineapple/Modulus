@@ -13,7 +13,7 @@
         android:theme="@style/Theme.Modulus"
         tools:targetApi="31">
         <activity
-            android:name=".ActivityLogIn"
+            android:name=".Login.ActivityLogIn"
             android:exported="true"
             android:theme="@style/Theme.Login.BackgroundImageStyle">
             <intent-filter>
@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity"
-            android:parentActivityName=".ActivityLogIn"/>
+            android:parentActivityName=".Login.ActivityLogIn"/>
 
         <activity android:name=".FragmentInsights.ModuleDetailsActivity"
             android:parentActivityName=".MainActivity">

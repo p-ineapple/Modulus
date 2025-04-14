@@ -29,6 +29,12 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
+    buildFeatures {
+        viewBinding = true
+
+    }
+
 }
 
 dependencies {
@@ -46,6 +52,11 @@ dependencies {
         exclude(group = "com.android.support")
     }
     implementation(libs.android.recyclerview.swipedecorator)
+    implementation("com.applandeo:material-calendar-view:1.9.2"){
+        exclude(group = "com.android.support")
+
+    }
+    implementation ("androidx.cardview:cardview:1.0.0")
 
 
 }
