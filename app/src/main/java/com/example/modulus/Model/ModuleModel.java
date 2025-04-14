@@ -96,26 +96,24 @@ public class ModuleModel {
         }
     }
 
-    public static Comparator<ModuleModel> idAscending = new Comparator<ModuleModel>() {
-        @Override
-        public int compare(ModuleModel mod1, ModuleModel mod2) {
-            String id1 = mod1.getId();
-            String id2 = mod2.getId();
-
-            return id1.compareTo(id2);
-        }
-    };
-
-    public static Comparator<ModuleModel> nameAscending = new Comparator<ModuleModel>() {
-        @Override
-        public int compare(ModuleModel mod1, ModuleModel mod2){
-            String name1 = mod1.getName();
-            String name2 = mod2.getName();
-            name1 = name1.toLowerCase();
-            name2 = name2.toLowerCase();
-            return name1.compareTo(name2);
-        }
-    };
-
-
+//    public static Comparator<ModuleModel> idAscending = new Comparator<ModuleModel>() {
+//        @Override
+//        public int compare(ModuleModel mod1, ModuleModel mod2) {
+//            String id1 = mod1.getId();
+//            String id2 = mod2.getId();
+//
+//            return id1.compareTo(id2);
+//        }
+//    };
+//
+//    public static Comparator<ModuleModel> nameAscending = new Comparator<ModuleModel>() {
+//        @Override
+//        public int compare(ModuleModel mod1, ModuleModel mod2){
+//            String name1 = mod1.getName();
+//            String name2 = mod2.getName();
+//            name1 = name1.toLowerCase();
+//            name2 = name2.toLowerCase();
+//            return name1.compareTo(name2);
+//        }
+//    };
 }
