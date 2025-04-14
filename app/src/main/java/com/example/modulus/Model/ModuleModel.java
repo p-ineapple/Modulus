@@ -6,9 +6,10 @@ import java.util.List;
 public class ModuleModel {
     private String id;
     private String name;
-    private List<String> prof;
+    private String pillar;
     private List<String> tags;
     private List<String> term;
+    private List<String> prof;
     private List<String> prerequisites;
     private String description;
     public ModuleModel(){
@@ -36,17 +37,12 @@ public class ModuleModel {
     public void setName(String name) {
         this.name = name;
     }
-
-    public List<String> getProf() {
-        if(prof == null) {
-            return null;
-        }else{
-            return prof;
-        }
+    public String getPillar() {
+        return pillar;
     }
 
-    public void setProf(List<String> prof) {
-        this.prof = prof;
+    public void setPillar(String pillar) {
+        this.pillar = pillar;
     }
     public List<String> getTags() {
         if(tags == null) {
@@ -68,6 +64,17 @@ public class ModuleModel {
     }
     public void setTerm(List<String> term) {
         this.term = term;
+    }
+    public List<String> getProf() {
+        if(prof == null) {
+            return null;
+        }else{
+            return prof;
+        }
+    }
+
+    public void setProf(List<String> prof) {
+        this.prof = prof;
     }
     public List<String> getPrerequisites() {
         return prerequisites;
@@ -96,26 +103,24 @@ public class ModuleModel {
         }
     }
 
-    public static Comparator<ModuleModel> idAscending = new Comparator<ModuleModel>() {
-        @Override
-        public int compare(ModuleModel mod1, ModuleModel mod2) {
-            String id1 = mod1.getId();
-            String id2 = mod2.getId();
-
-            return id1.compareTo(id2);
-        }
-    };
-
-    public static Comparator<ModuleModel> nameAscending = new Comparator<ModuleModel>() {
-        @Override
-        public int compare(ModuleModel mod1, ModuleModel mod2){
-            String name1 = mod1.getName();
-            String name2 = mod2.getName();
-            name1 = name1.toLowerCase();
-            name2 = name2.toLowerCase();
-            return name1.compareTo(name2);
-        }
-    };
-
-
+//    public static Comparator<ModuleModel> idAscending = new Comparator<ModuleModel>() {
+//        @Override
+//        public int compare(ModuleModel mod1, ModuleModel mod2) {
+//            String id1 = mod1.getId();
+//            String id2 = mod2.getId();
+//
+//            return id1.compareTo(id2);
+//        }
+//    };
+//
+//    public static Comparator<ModuleModel> nameAscending = new Comparator<ModuleModel>() {
+//        @Override
+//        public int compare(ModuleModel mod1, ModuleModel mod2){
+//            String name1 = mod1.getName();
+//            String name2 = mod2.getName();
+//            name1 = name1.toLowerCase();
+//            name2 = name2.toLowerCase();
+//            return name1.compareTo(name2);
+//        }
+//    };
 }

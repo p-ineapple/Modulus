@@ -5,6 +5,8 @@ import java.util.Comparator;
 import java.util.List;
 
 public class MergeSort {
+    public MergeSort(){
+    }
     public static Comparator<ModuleModel> idCompare = new Comparator<ModuleModel>() {
         @Override
         public int compare(ModuleModel mod1, ModuleModel mod2) {
@@ -35,7 +37,7 @@ public class MergeSort {
         }
     };
 
-    public static List<ModuleModel> mergeSortID(List<ModuleModel> a, int n) {
+    public List<ModuleModel> mergeSortID(List<ModuleModel> a, int n) {
         if (n < 2) {
             return a;
         }
@@ -54,7 +56,7 @@ public class MergeSort {
 
         return mergeID(a, l, r, mid, n - mid);
     }
-    public static List<ModuleModel> mergeID(List<ModuleModel> a, List<ModuleModel> l, List<ModuleModel> r, int left, int right) {
+    public List<ModuleModel> mergeID(List<ModuleModel> a, List<ModuleModel> l, List<ModuleModel> r, int left, int right) {
 
         int i = 0, j = 0, k = 0;
         while (i < left && j < right) {
@@ -74,7 +76,7 @@ public class MergeSort {
         return a;
     }
 
-    public static List<ModuleModel> mergeSortName(List<ModuleModel> a, int n) {
+    public List<ModuleModel> mergeSortName(List<ModuleModel> a, int n) {
         if (n < 2) {
             return a;
         }
@@ -93,7 +95,7 @@ public class MergeSort {
 
         return mergeName(a, l, r, mid, n - mid);
     }
-    public static List<ModuleModel> mergeName(List<ModuleModel> a, List<ModuleModel> l, List<ModuleModel> r, int left, int right) {
+    public List<ModuleModel> mergeName(List<ModuleModel> a, List<ModuleModel> l, List<ModuleModel> r, int left, int right) {
 
         int i = 0, j = 0, k = 0;
         while (i < left && j < right) {

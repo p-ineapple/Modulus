@@ -18,7 +18,7 @@
             android:layout_width="32sp"
             android:layout_height="32sp"
             android:src="@drawable/arrow_back"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -27,22 +27,49 @@
             android:text="Module ID and Name"
             android:textSize="32sp"
             android:layout_marginHorizontal="10dp"
-            android:layout_toEndOf="@id/backButton"/>
+            android:layout_toEndOf="@id/backButton" />
 
     </RelativeLayout>
 
     <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/moreInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Description, Learning Objectives and more"
+        android:textSize="16sp"
+        android:layout_marginHorizontal="10dp"
+        android:clickable="true"
+        app:drawableRightCompat="@drawable/arrow_right" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="8dp"/>
 
     <TextView
         android:id="@+id/prerequisites"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Prerequisites"
-        android:textSize="20sp"
+        android:textSize="16sp"
+        android:layout_marginHorizontal="10dp"/>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="8dp"/>
+
+    <TextView
+        android:id="@+id/insights"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Reviews Yay!:"
+        android:textSize="16sp"
         android:layout_marginHorizontal="10dp"/>
 
 </LinearLayout>

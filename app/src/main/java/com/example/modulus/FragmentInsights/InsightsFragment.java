@@ -47,6 +47,7 @@ public class InsightsFragment extends Fragment {
     ImageButton filterButton;
     ImageButton sortButton;
     ConstraintLayout sortTab;
+    MergeSort sort = new MergeSort();
     ArrayList<FilterChipModel> filterChips = new ArrayList<FilterChipModel>();
     final String TAG = "Browser";
 
@@ -116,9 +117,11 @@ public class InsightsFragment extends Fragment {
             public void onClick(View v) {
                 List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
                 if (id.isChecked() && asc.isChecked()) {
-                    filteredModules.sort(ModuleModel.idAscending);
+//                    filteredModules.sort(ModuleModel.idAscending);
+                    sort.mergeSortID(filteredModules, filteredModules.size());
                 } else if (id.isChecked() && des.isChecked()) {
-                    filteredModules.sort(ModuleModel.idAscending);
+//                    filteredModules.sort(ModuleModel.idAscending);
+                    sort.mergeSortID(filteredModules, filteredModules.size());
                     Collections.reverse(filteredModules);
                 }
                 modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));
@@ -130,10 +133,10 @@ public class InsightsFragment extends Fragment {
                 List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
                 if (name.isChecked() && asc.isChecked()) {
 //                    filteredModules.sort(ModuleModel.nameAscending);
-                    MergeSort.mergeSortName(filteredModules, filteredModules.size());
+                    sort.mergeSortName(filteredModules, filteredModules.size());
                 } else if (name.isChecked() && des.isChecked()) {
 //                    filteredModules.sort(ModuleModel.nameAscending);
-                    MergeSort.mergeSortName(filteredModules, filteredModules.size());
+                    sort.mergeSortName(filteredModules, filteredModules.size());
                     Collections.reverse(filteredModules);
                 }
                 modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));
@@ -145,10 +148,10 @@ public class InsightsFragment extends Fragment {
                 List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
                 if (id.isChecked() && asc.isChecked()) {
 //                    filteredModules.sort(ModuleModel.idAscending);
-                    MergeSort.mergeSortID(filteredModules, filteredModules.size());
+                    sort.mergeSortID(filteredModules, filteredModules.size());
                 } else if (name.isChecked() && asc.isChecked()) {
 //                    filteredModules.sort(ModuleModel.nameAscending);
-                    MergeSort.mergeSortName(filteredModules, filteredModules.size());
+                    sort.mergeSortName(filteredModules, filteredModules.size());
                 }
                 modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));
             }
@@ -159,11 +162,11 @@ public class InsightsFragment extends Fragment {
                 List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
                 if (id.isChecked() && des.isChecked()) {
 //                    filteredModules.sort(ModuleModel.idAscending);
-                    MergeSort.mergeSortID(filteredModules, filteredModules.size());
+                    sort.mergeSortID(filteredModules, filteredModules.size());
                     Collections.reverse(filteredModules);
                 } else if (name.isChecked() && des.isChecked()) {
 //                    filteredModules.sort(ModuleModel.nameAscending);
-                    MergeSort.mergeSortName(filteredModules, filteredModules.size());
+                    sort.mergeSortName(filteredModules, filteredModules.size());
                     Collections.reverse(filteredModules);
                 }
                 modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));
@@ -235,9 +238,9 @@ public class InsightsFragment extends Fragment {
         moduleList = myDB.getAllModules();
     }
     public void setUpFilterChips(Dialog filterDialog) {
-        List<String> filterChipNames = Arrays.asList(("ASD,ESD,EPD,DAI,ISTD,HASS,SMT," +
+        List<String> filterChipNames = Arrays.asList(("ASD,EPD,ESD,DAI,ISTD,HASS,SMT," +
                 "Term 1,Term 2,Term 3,Term 4,Term 5,Term 6,Term 7,Term 8," +
-                "Core,Core Elective,Elective / Technical Elective,Freshmore Core,Freshmore Elective").split(","));
+                "Core,Core Elective,Freshmore Core,Freshmore Elective,Elective / Technical Elective").split(","));
         ChipGroup pillarChips = filterDialog.findViewById(R.id.pillarChips);
         ChipGroup termChips = filterDialog.findViewById(R.id.termChips);
         ChipGroup courseChips = filterDialog.findViewById(R.id.courseChips);
@@ -262,7 +265,7 @@ public class InsightsFragment extends Fragment {
             }
             filterChips.get(i).setChip(chip);
         }
-        moduleList.sort(ModuleModel.idAscending);
+        sort.mergeSortID(moduleList, moduleList.size());
     }
 }
 
