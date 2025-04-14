@@ -22,5 +22,8 @@
     <color name="calendar_purple">#8E24AA</color>
     <color name="calendar_blue">#039BE5</color>
     <color name="grey">#797979</color>
+    <color name="transparent">#11000000</color>
+    <color name="mtrl_textinput_default_box_stroke_color">@color/white</color>
+
 </resources>
 

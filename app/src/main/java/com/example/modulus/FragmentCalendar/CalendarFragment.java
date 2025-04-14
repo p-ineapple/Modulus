@@ -3,6 +3,8 @@ package com.example.modulus.FragmentCalendar;
 import static com.example.modulus.R.id.dayView;
 
 import android.annotation.SuppressLint;
+import android.content.res.ColorStateList;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,8 +21,10 @@ import androidx.fragment.app.Fragment;
 import com.example.modulus.R;
 import com.framgia.library.calendardayview.CalendarDayView;
 import com.framgia.library.calendardayview.DayView;
-import com.framgia.library.calendardayview.data.IEvent;
+import com.framgia.library.calendardayview.PopupView;
+import com.framgia.library.calendardayview.data.IPopup;
 import com.framgia.library.calendardayview.decoration.CdvDecorationDefault;
+import com.google.android.material.card.MaterialCardView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,6 +42,7 @@ public class CalendarFragment extends Fragment {
     private ImageButton addEventButton;
     private TextView selectedDateText;
     private ArrayList<Event> allEvents;
+    private ArrayList<Popup> allPops;
     final String TAG = "Calendar";
 
 
@@ -50,11 +55,10 @@ public class CalendarFragment extends Fragment {
 
 
         //set up modules list
-        if (allEvents == null || allEvents.isEmpty() )  {
+        if (allPops == null || allPops.isEmpty())  {
             Log.d(TAG, "Setting up modules");
             setupData();
         }
-        Log.d(TAG, "Database set up");
 
         //Initialisation
         calendarView = view.findViewById(R.id.calendar);
@@ -62,7 +66,9 @@ public class CalendarFragment extends Fragment {
 //        addEventButton = view.findViewById(R.id.addEventButton);
         selectedDateText = view.findViewById(R.id.selectedDateText);
 
-        //Override library time format for nicer readability
+
+        //Override library time format for nicer readability in AM/PM format
+        //Original format in CdvDecorationDefault
         hourlyDayView.setDecorator(new CdvDecorationDefault(getContext()) {
             @Override
             public DayView getDayView(int hour) {
@@ -72,7 +78,39 @@ public class CalendarFragment extends Fragment {
                 calendar.set(Calendar.MINUTE, 0);
                 SimpleDateFormat sdf = new SimpleDateFormat("h a");
                 dayView.setText(sdf.format(calendar.getTime()).toUpperCase());
+
+
                 return dayView;
+            }
+
+            @Override
+            public PopupView getPopupView(IPopup popup, Rect eventBound, int hourHeight, int seperateH) {
+                PopupView view = new PopupView(mContext);
+                view.setOnPopupClickListener(mPopupClickListener);
+                view.setPopup(popup);
+                view.setPosition(eventBound, -hourHeight / 4 + seperateH,  hourHeight / 2 - seperateH * 2 - 10);
+                Popup pop_up = (Popup) popup;
+
+                SimpleDateFormat sdf = new SimpleDateFormat("h:mm a");
+                String startTimeString = sdf.format(pop_up.getStartTime().getTime());
+                String endTimeString = sdf.format(pop_up.getEndTime().getTime());
+                String timeString = startTimeString + " -\n" + endTimeString;
+
+
+
+                int colour = ContextCompat.getColor(mContext, pop_up.getColor());
+
+                MaterialCardView card = view.findViewById(R.id.cardview);
+                TextView timeTextView = view.findViewById(R.id.time);
+                TextView descTextView = view.findViewById(R.id.desc);
+                timeTextView.setText(timeString);
+
+                card.setStrokeColor(colour);
+                timeTextView.setTextColor(colour);
+                descTextView.setTextColor(colour);
+                timeTextView.setCompoundDrawableTintList(ColorStateList.valueOf(colour));
+
+                return view;
             }
         });
 
@@ -97,46 +135,50 @@ public class CalendarFragment extends Fragment {
         });
 
 
-//        addEventButton.setOnClickListener();
-
         return view;
     }
 
 
 
     private void setupData() {
+
         DataBaseHelperCalendar myDB = new DataBaseHelperCalendar(getContext());
-        allEvents = (ArrayList<Event>) myDB.getAllEvents();
+        allPops = (ArrayList<Popup>) myDB.getAllPop();
 
-        Log.d(TAG, "Retrieved "+ allEvents.size() + "events from database");
+        Log.d(TAG, "Retrieved "+ allPops.size() + "events from database");
 
-        for (Event event :allEvents){
-            event.setColour(ContextCompat.getColor(getContext(),event.getColor()));
-        }
+
+
+
 
     }
-
-
 
     //Load the events for the selected Date
     private void loadEventsForSelectedDates(Calendar date){
 
-
         //Load events list
-        ArrayList<IEvent> eventsForDay = new ArrayList<>();
+        ArrayList<IPopup> popForDay = new ArrayList<>();
 
 
-        for (Event event : allEvents) {
-            if (event.isOnDate(date)) {
-                eventsForDay.add(event);
+
+        for (Popup popup : allPops) {
+            if (popup.isOnDate(date)) {
+                popForDay.add(popup);
+
+
             }
+
+
         }
 
         //Set the events onto the day view
-        hourlyDayView.setEvents(eventsForDay);
+
+        hourlyDayView.setPopups(popForDay);
+
+
+
 
     }
-
 
 
 

@@ -22,6 +22,7 @@ import com.example.modulus.FragmentCalendar.CalendarFragment;
 import com.example.modulus.FragmentHome.HomeFragment;
 import com.example.modulus.FragmentInsights.InsightsFragment;
 import com.example.modulus.FragmentPlanner.PlannerFragment;
+import com.example.modulus.Login.ActivityLogIn;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
