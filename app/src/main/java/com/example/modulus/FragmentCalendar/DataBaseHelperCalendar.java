@@ -23,7 +23,7 @@ import java.util.List;
 public class DataBaseHelperCalendar extends SQLiteOpenHelper {
     private static final String dbName = "sutdModules.db";
     private static final String TABLE_NAME = "timetable";
-    private static String dbPath = "/data/data/com.example.modulus/databases/";
+    private static final String dbPath = "/data/data/com.example.modulus/databases/";
     private SQLiteDatabase db;
     private final Context mContext;
     private static final String COL_COLOR_ID = "colorId";
@@ -33,9 +33,6 @@ public class DataBaseHelperCalendar extends SQLiteOpenHelper {
     private static final String COL_START_DAY = "startTime_DAY_OF_MONTH";
     private static final String COL_START_HOUR = "startTime_HOUR_OF_DAY";
     private static final String COL_START_MINUTE = "startTime_MINUTE";
-    private static final String COL_END_YEAR = "endTime_YEAR";
-    private static final String COL_END_MONTH = "endTime_MONTH";
-    private static final String COL_END_DAY = "endTime_DAY_OF_MONTH";
     private static final String COL_END_HOUR = "endTime_HOUR_OF_DAY";
     private static final String COL_END_MINUTE = "endTime_MINUTE";
     private static final String COL_NAME = "name";
