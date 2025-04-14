@@ -76,6 +76,12 @@ public class AddNewTask extends BottomSheetDialogFragment {
             isUpdate = true;
             String task = bundle.getString("task");
             addTask.setText(task);
+            String category = bundle.getString("category");
+            addCategory.setText(category);
+            String date = bundle.getString("date");
+            setDueDate.setText(date);
+            String time = bundle.getString("time");
+            setDueTime.setText(time);
 
             if (task.length() > 0){
                 saveButton.setEnabled(false);
@@ -133,7 +139,7 @@ public class AddNewTask extends BottomSheetDialogFragment {
                 String time = setDueTime.getText().toString();
 
                 if (finalIsUpdate){
-                    myDB.updateTask(bundle.getInt("ID"),text);
+                    myDB.updateTask(bundle.getInt("ID"),text,date_text,category,time);
                     //myDB.updateTask(bundle.getInt("ID"),text);
                 }else{
                     ToDoModel item = new ToDoModel();
@@ -192,12 +198,18 @@ public class AddNewTask extends BottomSheetDialogFragment {
 
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {
+        Log.d("Dismiss", "dismissed");
         super.onDismiss(dialog);
         Activity activity = getActivity();
-        if (activity instanceof OnDialogCloseListener){
-            ((OnDialogCloseListener)activity).onDialogClose(dialog);
+        if (getParentFragment() instanceof OnDialogCloseListener){
+            Log.d("Dismiss", "activity");
+            ((OnDialogCloseListener)getParentFragment()).onDialogClose(dialog);
+        }else if (activity instanceof OnDialogCloseListener) {
+            ((OnDialogCloseListener) activity).onDialogClose(dialog);
         }
     }
+
+
 
     public void openDatePicker(View view)
     {
