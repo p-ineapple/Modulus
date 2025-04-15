@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.modulus.Adapter.DateItemAdapter;
 import com.example.modulus.Adapter.ToDoAdapter;
+import com.example.modulus.Model.MergeSort;
 import com.example.modulus.Model.ToDoModel;
 import com.example.modulus.R;
 import com.example.modulus.Utils.OnDialogCloseListener;
@@ -54,7 +55,7 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
     Button allButton, toDoButton, completedButton;
     TextView homeTitle;
 
-
+    MergeSort sortTime = new MergeSort(ToDoModel.timeCompare);
     private List<ToDoModel> mList;
     private ToDoAdapter toDoAdapter;
     final Calendar calendar = Calendar.getInstance();
@@ -110,8 +111,8 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
         taskRecyclerView.setHasFixedSize(true);
         taskRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         taskRecyclerView.setAdapter(HomeFragment.this.toDoAdapter);
-        mList = myDB.getDateTask(currentDate); // Adjust format if needed
-        Collections.reverse(mList);
+        mList = sort(myDB.getDateTask(currentDate)); // Adjust format if needed
+//        Collections.reverse(mList);
         HomeFragment.this.toDoAdapter.setTasks(mList);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new RecyclerViewTouchHelper(toDoAdapter));
         itemTouchHelper.attachToRecyclerView(taskRecyclerView);
@@ -134,8 +135,8 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
         allButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mList = myDB.getDateTask(clickedDate); // Adjust format if needed
-                Collections.reverse(mList);
+                mList = sort(myDB.getDateTask(clickedDate)); // Adjust format if needed
+//                Collections.reverse(mList);
                 HomeFragment.this.toDoAdapter.setTasks(mList);
                 highlightSelectedButton(allButton, toDoButton, completedButton);
             }
@@ -145,8 +146,8 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
         toDoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mList = myDB.getStatustask(0,clickedDate); // Adjust format if needed
-                Collections.reverse(mList);
+                mList = sort(myDB.getStatustask(0,clickedDate)); // Adjust format if needed
+//                Collections.reverse(mList);
                 HomeFragment.this.toDoAdapter.setTasks(mList);
                 highlightSelectedButton(toDoButton, allButton, completedButton);
             }
@@ -156,8 +157,8 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
         completedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mList = myDB.getStatustask(1, clickedDate); // Adjust format if needed
-                Collections.reverse(mList);
+                mList = sort(myDB.getStatustask(1, clickedDate)); // Adjust format if needed
+//                Collections.reverse(mList);
                 HomeFragment.this.toDoAdapter.setTasks(mList);
                 highlightSelectedButton(completedButton, allButton, toDoButton);
             }
@@ -190,8 +191,8 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
                 String getDate = date.format(DateTimeFormatter.ofPattern("d/M/yyyy"));
                 clickedDate = getDate;
                 taskRecyclerView.setAdapter(HomeFragment.this.toDoAdapter);
-                mList = myDB.getDateTask(getDate); // Adjust format if needed
-                Collections.reverse(mList);
+                mList = sort(myDB.getDateTask(getDate)); // Adjust format if needed
+//                Collections.reverse(mList);
                 HomeFragment.this.toDoAdapter.setTasks(mList);
             }
         });
@@ -206,8 +207,8 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
     @Override
     public void onDialogClose(DialogInterface dialogInterface) {
         Log.d("Home", "onDialogClose");
-        mList = myDB.getAllTasks();
-        Collections.reverse(mList);
+        mList = sort(myDB.getAllTasks());
+//        Collections.reverse(mList);
         toDoAdapter.setTasks(mList);
         toDoAdapter.notifyDataSetChanged();
 
@@ -260,5 +261,20 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
         }
     }
 
+    private List<ToDoModel> sort(List<ToDoModel> list){
+        List<ToDoModel> status1 = new ArrayList<>();
+        List<ToDoModel> status2 = new ArrayList<>();
+        for(ToDoModel task: list){
+            if(task.getStatus() == 1){
+                status1.add(task);
+            }else{
+                status2.add(task);
+            }
+        }
+        sortTime.mergeSort(status1, status1.size());
+        sortTime.mergeSort(status2, status2.size());
+        status1.addAll(status2);
+        return status1;
+    }
 
 }

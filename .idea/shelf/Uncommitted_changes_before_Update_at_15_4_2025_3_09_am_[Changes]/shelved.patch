@@ -1,0 +1,1014 @@
+Index: app/src/main/java/com/example/modulus/FragmentInsights/InsightsFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.FragmentInsights;\r\n\r\nimport android.app.Dialog;\r\nimport android.graphics.Color;\r\nimport android.graphics.drawable.ColorDrawable;\r\nimport android.os.Bundle;\r\n\r\nimport androidx.constraintlayout.widget.ConstraintLayout;\r\nimport androidx.fragment.app.Fragment;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport android.util.Log;\r\nimport android.view.Gravity;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\n\r\nimport android.content.Intent;\r\nimport android.view.Window;\r\nimport android.widget.Button;\r\nimport android.widget.ImageButton;\r\nimport android.widget.ImageView;\r\nimport android.widget.SearchView;\r\n\r\nimport com.example.modulus.Model.FilterChipModel;\r\nimport com.example.modulus.Model.MergeSort;\r\nimport com.example.modulus.Model.ModuleModel;\r\nimport com.example.modulus.Adapter.ModuleAdapter;\r\nimport com.example.modulus.R;\r\nimport com.google.android.material.chip.Chip;\r\nimport com.google.android.material.chip.ChipDrawable;\r\nimport com.google.android.material.chip.ChipGroup;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.Arrays;\r\nimport java.util.Collections;\r\nimport java.util.List;\r\n\r\npublic class InsightsFragment extends Fragment {\r\n    public static ArrayList<ModuleModel> moduleList;\r\n    ArrayList<String> selectedFilters = new ArrayList<String>();\r\n    SearchView search;\r\n    String currentSearchText = \"\";\r\n    RecyclerView modulesRecyclerView;\r\n    ModuleAdapter.OnItemClickListener listener;\r\n    ImageButton filterButton;\r\n    ImageButton sortButton;\r\n    ConstraintLayout sortTab;\r\n    MergeSort sort = new MergeSort();\r\n    ArrayList<FilterChipModel> filterChips = new ArrayList<FilterChipModel>();\r\n    final String TAG = \"Browser\";\r\n\r\n    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {\r\n        View view = inflater.inflate(R.layout.fragment_insights, container, false);\r\n        //set up modules modulesRecyclerView\r\n        if (moduleList == null) {\r\n            Log.d(TAG, \"Setting up modules\");\r\n            setupData();\r\n        }\r\n        Log.d(TAG, \"Database set up\");\r\n        modulesRecyclerView = view.findViewById(R.id.recyclerView);\r\n        listener = new ModuleAdapter.OnItemClickListener() {\r\n            @Override\r\n            public void onItemClick(ModuleModel module) {\r\n                Intent showDetail = new Intent(getContext(), ModuleDetailsActivity.class);\r\n                showDetail.putExtra(\"id\", module.getId());\r\n                startActivity(showDetail);\r\n            }\r\n        };\r\n        modulesRecyclerView.setAdapter(new ModuleAdapter(moduleList, listener));\r\n        modulesRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));\r\n\r\n        //searchWidget\r\n        search = view.findViewById(R.id.modulesListSearchView);\r\n        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {\r\n            @Override\r\n            public boolean onQueryTextSubmit(String s) {\r\n                return false;\r\n            }\r\n\r\n            @Override\r\n            public boolean onQueryTextChange(String s) {\r\n                currentSearchText = s;\r\n                List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);\r\n                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));\r\n                return false;\r\n            }\r\n        });\r\n        filterButton = view.findViewById(R.id.filterButton);\r\n        filterButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                showFilterDialog();\r\n            }\r\n        });\r\n\r\n        sortTab = view.findViewById(R.id.sortTab);\r\n        sortTab.setVisibility(View.VISIBLE);\r\n        sortButton = view.findViewById(R.id.sortButton);\r\n        sortButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                if(sortTab.getVisibility() == View.VISIBLE){\r\n                    sortTab.setVisibility(View.GONE);\r\n                }else{\r\n                    sortTab.setVisibility(View.VISIBLE);\r\n                }\r\n            }\r\n        });\r\n        Chip id = view.findViewById(R.id.id);\r\n        Chip name = view.findViewById(R.id.name);\r\n        Chip asc = view.findViewById(R.id.ascending);\r\n        Chip des = view.findViewById(R.id.descending);\r\n        id.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);\r\n                if (id.isChecked() && asc.isChecked()) {\r\n//                    filteredModules.sort(ModuleModel.idAscending);\r\n                    sort.mergeSortID(filteredModules, filteredModules.size());\r\n                } else if (id.isChecked() && des.isChecked()) {\r\n//                    filteredModules.sort(ModuleModel.idAscending);\r\n                    sort.mergeSortID(filteredModules, filteredModules.size());\r\n                    Collections.reverse(filteredModules);\r\n                }\r\n                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));\r\n            }\r\n        });\r\n        name.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);\r\n                if (name.isChecked() && asc.isChecked()) {\r\n//                    filteredModules.sort(ModuleModel.nameAscending);\r\n                    sort.mergeSortName(filteredModules, filteredModules.size());\r\n                } else if (name.isChecked() && des.isChecked()) {\r\n//                    filteredModules.sort(ModuleModel.nameAscending);\r\n                    sort.mergeSortName(filteredModules, filteredModules.size());\r\n                    Collections.reverse(filteredModules);\r\n                }\r\n                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));\r\n            }\r\n        });\r\n        asc.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);\r\n                if (id.isChecked() && asc.isChecked()) {\r\n//                    filteredModules.sort(ModuleModel.idAscending);\r\n                    sort.mergeSortID(filteredModules, filteredModules.size());\r\n                } else if (name.isChecked() && asc.isChecked()) {\r\n//                    filteredModules.sort(ModuleModel.nameAscending);\r\n                    sort.mergeSortName(filteredModules, filteredModules.size());\r\n                }\r\n                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));\r\n            }\r\n        });\r\n        des.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);\r\n                if (id.isChecked() && des.isChecked()) {\r\n//                    filteredModules.sort(ModuleModel.idAscending);\r\n                    sort.mergeSortID(filteredModules, filteredModules.size());\r\n                    Collections.reverse(filteredModules);\r\n                } else if (name.isChecked() && des.isChecked()) {\r\n//                    filteredModules.sort(ModuleModel.nameAscending);\r\n                    sort.mergeSortName(filteredModules, filteredModules.size());\r\n                    Collections.reverse(filteredModules);\r\n                }\r\n                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));\r\n            }\r\n        });\r\n        return view;\r\n    }\r\n\r\n    private void showFilterDialog() {\r\n        Dialog filterDialog = new Dialog(this.getContext());\r\n        filterDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);\r\n        filterDialog.setContentView(R.layout.filterlayout);\r\n\r\n        setUpFilterChips(filterDialog);\r\n        for (FilterChipModel chipItem : filterChips) {\r\n            Chip chip = chipItem.getChip();\r\n            chip.setOnClickListener(new View.OnClickListener() {\r\n                @Override\r\n                public void onClick(View v) {\r\n                    Log.d(\"click\", \"click\");\r\n                    if (chip.isChecked()) {\r\n                        chipItem.setChipCheck(true);\r\n                        Filter.addFilter(selectedFilters, chipItem.getName());\r\n                    } else {\r\n                        chipItem.setChipCheck(false);\r\n                        Filter.removeFilter(selectedFilters, chipItem.getName());\r\n                    }\r\n                }\r\n            });\r\n        }\r\n\r\n        Button applyButton = filterDialog.findViewById(R.id.applyButton);\r\n        applyButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);\r\n                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));\r\n                filterDialog.dismiss();\r\n            }\r\n        });\r\n\r\n        Button resetButton = filterDialog.findViewById(R.id.resetButton);\r\n        resetButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                selectedFilters.clear();\r\n                for (FilterChipModel chip : filterChips) {\r\n                    chip.setChipCheck(false);\r\n                    chip.getChip().setChecked(false);\r\n                }\r\n            }\r\n        });\r\n\r\n        ImageView closeButton = filterDialog.findViewById(R.id.closeButton);\r\n        closeButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                filterDialog.dismiss();\r\n            }\r\n        });\r\n\r\n        filterDialog.show();\r\n        filterDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);\r\n        filterDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));\r\n        filterDialog.getWindow().setGravity(Gravity.BOTTOM);\r\n    }\r\n    private void setupData() {\r\n        DataBaseHelperInsights myDB = new DataBaseHelperInsights(getContext());\r\n        moduleList = myDB.getAllModules();\r\n    }\r\n    public void setUpFilterChips(Dialog filterDialog) {\r\n        List<String> filterChipNames = Arrays.asList((\"ASD,EPD,ESD,DAI,ISTD,HASS,SMT,\" +\r\n                \"Term 1,Term 2,Term 3,Term 4,Term 5,Term 6,Term 7,Term 8,\" +\r\n                \"Core,Core Elective,Freshmore Core,Freshmore Elective,Elective / Technical Elective\").split(\",\"));\r\n        ChipGroup pillarChips = filterDialog.findViewById(R.id.pillarChips);\r\n        ChipGroup termChips = filterDialog.findViewById(R.id.termChips);\r\n        ChipGroup courseChips = filterDialog.findViewById(R.id.courseChips);\r\n        if (filterChips.isEmpty()) {\r\n            for (int i = 0; i < filterChipNames.size(); i++) {\r\n                FilterChipModel filterChip = new FilterChipModel(filterChipNames.get(i), false);\r\n                filterChips.add(filterChip);\r\n            }\r\n        }\r\n        for (int i = 0; i < filterChipNames.size(); i++) {\r\n            Chip chip = new Chip(this.getContext());\r\n            chip.setChipDrawable(ChipDrawable.createFromAttributes(this.getContext(), null, 0, com.google.android.material.R.style.Widget_MaterialComponents_Chip_Choice));\r\n            chip.setText(filterChipNames.get(i));\r\n            chip.setCheckable(true);\r\n            chip.setChecked(filterChips.get(i).isChipCheck());\r\n            if (i < 7) {\r\n                pillarChips.addView(chip);\r\n            } else if (i < 15) {\r\n                termChips.addView(chip);\r\n            } else {\r\n                courseChips.addView(chip);\r\n            }\r\n            filterChips.get(i).setChip(chip);\r\n        }\r\n        sort.mergeSortID(moduleList, moduleList.size());\r\n    }\r\n}\r\n\r\n//    public void sortChips(View view){\r\n//\r\n//        if(idChip.isChecked() && ascChip.isChecked()){\r\n//            MergeSort.mergeSortID(moduleList, moduleList.size());\r\n//        }else if(idChip.isChecked() && descChip.isChecked()){\r\n//            MergeSort.mergeSortID(moduleList, moduleList.size());\r\n//            Collections.reverse(moduleList);\r\n//        }else if(nameChip.isChecked() && ascChip.isChecked()){\r\n//            MergeSort.mergeSortName(moduleList, moduleList.size());\r\n//        }else if(nameChip.isChecked() && descChip.isChecked()){\r\n//            MergeSort.mergeSortName(moduleList, moduleList.size());\r\n//            Collections.reverse(moduleList);\r\n//        }\r\n//        Filter.checkForFilter();\r\n//    }
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/FragmentInsights/InsightsFragment.java b/app/src/main/java/com/example/modulus/FragmentInsights/InsightsFragment.java
+--- a/app/src/main/java/com/example/modulus/FragmentInsights/InsightsFragment.java	(revision 442cadc3aa99834e6ad40d4ed9903d38026ab449)
++++ b/app/src/main/java/com/example/modulus/FragmentInsights/InsightsFragment.java	(date 1744656633651)
+@@ -1,33 +1,34 @@
+ package com.example.modulus.FragmentInsights;
+ 
++import android.annotation.SuppressLint;
+ import android.app.Dialog;
++import android.content.Intent;
+ import android.graphics.Color;
+ import android.graphics.drawable.ColorDrawable;
+ import android.os.Bundle;
+-
+-import androidx.constraintlayout.widget.ConstraintLayout;
+-import androidx.fragment.app.Fragment;
+-import androidx.recyclerview.widget.LinearLayoutManager;
+-import androidx.recyclerview.widget.RecyclerView;
+-
+ import android.util.Log;
+ import android.view.Gravity;
+ import android.view.LayoutInflater;
+ import android.view.View;
+ import android.view.ViewGroup;
+-
+-import android.content.Intent;
+ import android.view.Window;
+ import android.widget.Button;
+ import android.widget.ImageButton;
+ import android.widget.ImageView;
+ import android.widget.SearchView;
+ 
++import androidx.annotation.NonNull;
++import androidx.constraintlayout.widget.ConstraintLayout;
++import androidx.fragment.app.Fragment;
++import androidx.recyclerview.widget.LinearLayoutManager;
++import androidx.recyclerview.widget.RecyclerView;
++
++import com.example.modulus.Adapter.ModuleAdapter;
+ import com.example.modulus.Model.FilterChipModel;
+ import com.example.modulus.Model.MergeSort;
+ import com.example.modulus.Model.ModuleModel;
+-import com.example.modulus.Adapter.ModuleAdapter;
+ import com.example.modulus.R;
++import com.google.android.material.card.MaterialCardView;
+ import com.google.android.material.chip.Chip;
+ import com.google.android.material.chip.ChipDrawable;
+ import com.google.android.material.chip.ChipGroup;
+@@ -37,6 +38,9 @@
+ import java.util.Collections;
+ import java.util.List;
+ 
++import me.zhanghai.android.fastscroll.FastScroller;
++import me.zhanghai.android.fastscroll.FastScrollerBuilder;
++
+ public class InsightsFragment extends Fragment {
+     public static ArrayList<ModuleModel> moduleList;
+     ArrayList<String> selectedFilters = new ArrayList<String>();
+@@ -49,8 +53,11 @@
+     ConstraintLayout sortTab;
+     MergeSort sort = new MergeSort();
+     ArrayList<FilterChipModel> filterChips = new ArrayList<FilterChipModel>();
++
++    MaterialCardView card;
+     final String TAG = "Browser";
+ 
++    @SuppressLint({"ResourceAsColor", "MissingInflatedId"})
+     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+         View view = inflater.inflate(R.layout.fragment_insights, container, false);
+         //set up modules modulesRecyclerView
+@@ -59,6 +66,10 @@
+             setupData();
+         }
+         Log.d(TAG, "Database set up");
++
++
++
++
+         modulesRecyclerView = view.findViewById(R.id.recyclerView);
+         listener = new ModuleAdapter.OnItemClickListener() {
+             @Override
+@@ -70,6 +81,7 @@
+         };
+         modulesRecyclerView.setAdapter(new ModuleAdapter(moduleList, listener));
+         modulesRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
++        FastScroller fastScroller = new FastScrollerBuilder(modulesRecyclerView).useMd2Style().build();
+ 
+         //searchWidget
+         search = view.findViewById(R.id.modulesListSearchView);
+@@ -95,6 +107,16 @@
+             }
+         });
+ 
++
++
++        int searchPlateId = search.getContext().getResources()
++                .getIdentifier("android:id/search_plate", null, null);
++        View searchPlateView = search.findViewById(searchPlateId);
++        if (searchPlateView != null) {
++            searchPlateView.setBackgroundResource(R.color.light_purple);
++        }
++
++
+         sortTab = view.findViewById(R.id.sortTab);
+         sortTab.setVisibility(View.VISIBLE);
+         sortButton = view.findViewById(R.id.sortButton);
+@@ -172,6 +194,11 @@
+                 modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));
+             }
+         });
++
++
++
++
++
+         return view;
+     }
+ 
+@@ -236,6 +263,9 @@
+     private void setupData() {
+         DataBaseHelperInsights myDB = new DataBaseHelperInsights(getContext());
+         moduleList = myDB.getAllModules();
++
++
++
+     }
+     public void setUpFilterChips(Dialog filterDialog) {
+         List<String> filterChipNames = Arrays.asList(("ASD,EPD,ESD,DAI,ISTD,HASS,SMT," +
+@@ -267,20 +297,10 @@
+         }
+         sort.mergeSortID(moduleList, moduleList.size());
+     }
++
++    @NonNull
++    protected FastScroller createFastScroller(@NonNull RecyclerView recyclerView) {
++        return new FastScrollerBuilder(recyclerView).build();
++    }
+ }
+ 
+-//    public void sortChips(View view){
+-//
+-//        if(idChip.isChecked() && ascChip.isChecked()){
+-//            MergeSort.mergeSortID(moduleList, moduleList.size());
+-//        }else if(idChip.isChecked() && descChip.isChecked()){
+-//            MergeSort.mergeSortID(moduleList, moduleList.size());
+-//            Collections.reverse(moduleList);
+-//        }else if(nameChip.isChecked() && ascChip.isChecked()){
+-//            MergeSort.mergeSortName(moduleList, moduleList.size());
+-//        }else if(nameChip.isChecked() && descChip.isChecked()){
+-//            MergeSort.mergeSortName(moduleList, moduleList.size());
+-//            Collections.reverse(moduleList);
+-//        }
+-//        Filter.checkForFilter();
+-//    }
+\ No newline at end of file
+Index: app/src/main/res/layout/module_cell.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"wrap_content\"\r\n    tools:ignore=\"HardcodedText\">\r\n\r\n    <androidx.cardview.widget.CardView\r\n        android:id=\"@+id/module_cell\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"120dp\"\r\n        android:orientation=\"horizontal\"\r\n        app:cardCornerRadius=\"30dp\"\r\n        android:layout_margin=\"8dp\">\r\n\r\n        <TextView\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:id=\"@+id/moduleTags\"\r\n            android:layout_gravity=\"top\"\r\n            android:text=\"Tags\"\r\n            android:textSize=\"12sp\"\r\n            android:layout_marginHorizontal=\"16dp\"\r\n            android:layout_marginVertical=\"12dp\" />\r\n\r\n        <TextView\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:id=\"@+id/moduleName\"\r\n            android:layout_gravity=\"center_vertical\"\r\n            android:text=\"Name\"\r\n            android:textStyle=\"bold\"\r\n            android:textSize=\"20sp\"\r\n            android:layout_marginHorizontal=\"16dp\"\r\n            android:layout_marginVertical=\"12dp\"/>\r\n\r\n        <TextView\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:id=\"@+id/moduleTermProf\"\r\n            android:layout_gravity=\"bottom\"\r\n            android:text=\"Term / Prof\"\r\n            android:textSize=\"12sp\"\r\n            android:layout_marginHorizontal=\"16dp\"\r\n            android:layout_marginVertical=\"12dp\"\r\n            android:singleLine=\"true\"/>\r\n\r\n    </androidx.cardview.widget.CardView>\r\n\r\n</LinearLayout>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/module_cell.xml b/app/src/main/res/layout/module_cell.xml
+--- a/app/src/main/res/layout/module_cell.xml	(revision 442cadc3aa99834e6ad40d4ed9903d38026ab449)
++++ b/app/src/main/res/layout/module_cell.xml	(date 1744654664116)
+@@ -1,52 +1,83 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<LinearLayout
+-    xmlns:android="http://schemas.android.com/apk/res/android"
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
++    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+     tools:ignore="HardcodedText">
+ 
+-    <androidx.cardview.widget.CardView
++    <com.google.android.material.card.MaterialCardView
+         android:id="@+id/module_cell"
+         android:layout_width="match_parent"
+-        android:layout_height="120dp"
++        android:layout_height="130dp"
+         android:orientation="horizontal"
+-        app:cardCornerRadius="30dp"
++        app:cardBackgroundColor="@color/white"
++
++        card_view:cardCornerRadius="30dp"
++        card_view:cardElevation="6dp"
++        app:strokeColor="@color/calendar_purple"
++        app:strokeWidth="3dp"
+         android:layout_margin="8dp">
+ 
+-        <TextView
+-            android:layout_width="match_parent"
+-            android:layout_height="wrap_content"
+-            android:id="@+id/moduleTags"
+-            android:layout_gravity="top"
+-            android:text="Tags"
+-            android:textSize="12sp"
+-            android:layout_marginHorizontal="16dp"
+-            android:layout_marginVertical="12dp" />
++        <LinearLayout
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:orientation="vertical"
++            android:padding="8dp">
++
++            <androidx.constraintlayout.widget.ConstraintLayout
++                android:id="@+id/info_layout"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content">
++
++
++                <TextView
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:layout_marginHorizontal="12dp"
++                    android:layout_marginVertical="6dp"
++                    android:id="@+id/moduleTags"
++                    android:text="Tags"
++                    android:textStyle="bold"
++                    android:textSize="12sp"
++                    android:ellipsize="end"
++                    android:maxLines="1"
++                    app:layout_constraintStart_toStartOf="parent"
++                    app:layout_constraintTop_toTopOf="parent"/>
+ 
+-        <TextView
+-            android:layout_width="match_parent"
+-            android:layout_height="wrap_content"
+-            android:id="@+id/moduleName"
+-            android:layout_gravity="center_vertical"
+-            android:text="Name"
+-            android:textStyle="bold"
+-            android:textSize="20sp"
+-            android:layout_marginHorizontal="16dp"
+-            android:layout_marginVertical="12dp"/>
++                <TextView
++                    android:layout_width="match_parent"
++                    android:layout_height="66dp"
++                    android:id="@+id/moduleName"
++                    android:text="Name"
++                    android:textStyle="bold"
++                    android:textSize="18sp"
++                    android:maxLines="3"
++                    android:gravity="center_vertical"
++                    android:layout_marginHorizontal="12dp"
++                    app:layout_constraintTop_toBottomOf="@id/moduleTags"
++                    app:layout_constraintStart_toStartOf="parent"
++                    app:layout_constraintBottom_toBottomOf="parent"
++                    app:layout_constraintVertical_bias="0.5"
++                    />
++            </androidx.constraintlayout.widget.ConstraintLayout>
+ 
+-        <TextView
+-            android:layout_width="match_parent"
+-            android:layout_height="wrap_content"
+-            android:id="@+id/moduleTermProf"
+-            android:layout_gravity="bottom"
+-            android:text="Term / Prof"
+-            android:textSize="12sp"
+-            android:layout_marginHorizontal="16dp"
+-            android:layout_marginVertical="12dp"
+-            android:singleLine="true"/>
++            <TextView
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:id="@+id/moduleTermProf"
++                android:layout_gravity="bottom"
++                android:layout_below="@+id/moduleTags"
++                android:text="Term / Prof"
++                android:textSize="12sp"
++                android:textStyle="bold"
++                android:layout_marginHorizontal="12dp"
++                android:layout_marginVertical="5dp"
++                android:singleLine="true"/>
+ 
+-    </androidx.cardview.widget.CardView>
++        </LinearLayout>
++
++    </com.google.android.material.card.MaterialCardView>
+ 
+ </LinearLayout>
+Index: app/src/main/java/com/example/modulus/FragmentInsights/DataBaseHelperInsights.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.FragmentInsights;\r\n\r\nimport android.content.Context;\r\nimport android.database.Cursor;\r\nimport android.database.sqlite.SQLiteDatabase;\r\nimport android.database.sqlite.SQLiteOpenHelper;\r\nimport android.database.sqlite.SQLiteException;\r\nimport android.util.Log;\r\n\r\nimport com.example.modulus.Model.ModuleModel;\r\nimport com.example.modulus.Model.PlannerModel;\r\n\r\nimport java.io.File;\r\nimport java.io.FileOutputStream;\r\nimport java.io.IOException;\r\nimport java.io.InputStream;\r\nimport java.io.OutputStream;\r\nimport java.util.ArrayList;\r\nimport java.util.Arrays;\r\n\r\npublic class DataBaseHelperInsights extends SQLiteOpenHelper {\r\n    private static final String dbName = \"sutdModules.db\";\r\n    private static final String tableName = \"sutdmodules\";\r\n    private static final String plannerTable = \"planner\";\r\n    private static String dbPath = \"/data/data/com.example.modulus/databases/\";\r\n    SQLiteDatabase db;\r\n    private final Context mContext;\r\n    private static final String col0 = \"Pillar\";\r\n    private static final String col1 = \"Tags\";\r\n    private static final String col2 = \"Term\";\r\n    private static final String col3 = \"ID\";\r\n    private static final String col4 = \"Name\";\r\n    private static final String col5 = \"Professors\";\r\n    private static final String col6 = \"Prerequisites\";\r\n\r\n    public DataBaseHelperInsights(Context context) {\r\n        super(context, dbName, null, 1);\r\n        this.mContext = context;\r\n    }\r\n\r\n    @Override\r\n    public void onCreate(SQLiteDatabase db) {\r\n    }\r\n\r\n    @Override\r\n    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {\r\n    }\r\n\r\n    private boolean checkDatabase() {\r\n        try {\r\n            final String mPath = dbPath + dbName;\r\n            Log.d(\"check\", \"check\");\r\n            final File file = new File(mPath);\r\n            return file.exists();\r\n        } catch (SQLiteException e) {\r\n            e.printStackTrace();\r\n            return false;\r\n        }\r\n    }\r\n\r\n    private void copyDatabase() throws IOException {\r\n        try {\r\n            InputStream mInputStream = mContext.getAssets().open(dbName);\r\n            Log.d(\"DB\", \"Copying Database\");\r\n            String outFileName = dbPath + dbName;\r\n            OutputStream mOutputStream = new FileOutputStream(outFileName);\r\n\r\n            byte[] buffer = new byte[2048];\r\n            int length;\r\n            while ((length = mInputStream.read(buffer)) > 0) {\r\n                mOutputStream.write(buffer, 0, length);\r\n            }\r\n            mOutputStream.flush();\r\n            mOutputStream.close();\r\n            mInputStream.close();\r\n        } catch (Exception e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    public void createDatabase() throws IOException {\r\n        boolean mDatabaseExists = checkDatabase();\r\n        Log.d(\"create\", \"create\");\r\n        if (mDatabaseExists) {\r\n            this.getReadableDatabase();\r\n            this.close();\r\n            try {\r\n                copyDatabase();\r\n            } catch (IOException mIOException) {\r\n                mIOException.printStackTrace();\r\n                throw new Error(\"Error copying Database\");\r\n            } finally {\r\n                this.close();\r\n            }\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public synchronized void close() {\r\n        if (db != null) {\r\n            db.close();\r\n        }\r\n        SQLiteDatabase.releaseMemory();\r\n        super.close();\r\n    }\r\n\r\n    public ArrayList<ModuleModel> getAllModules() {\r\n        try {\r\n            createDatabase();\r\n        } catch (IOException e) {\r\n            e.printStackTrace();\r\n        }\r\n        ArrayList<ModuleModel> result = new ArrayList<>();\r\n        SQLiteDatabase db = this.getReadableDatabase();\r\n\r\n        Cursor c = db.query(tableName, null, null, null, null, null, null);\r\n\r\n        while (c.moveToNext()) {\r\n            String id = c.getString(3);\r\n            String name = c.getString(4);\r\n            ModuleModel module = new ModuleModel(id, name);\r\n            module.setPillar(c.getString(0));\r\n            module.setTags(Arrays.asList(c.getString(1).split(\",\")));\r\n            module.setTerm(Arrays.asList(c.getString(2).split(\",\")));\r\n            module.setProf(Arrays.asList(c.getString(5).split(\",\")));\r\n            module.setPrerequisites(Arrays.asList(c.getString(6).split(\",\")));\r\n            module.setDescription(c.getString(8));\r\n            result.add(module);\r\n        }\r\n        c.close();\r\n        db.close();\r\n\r\n        return result;\r\n    }\r\n\r\n    public ArrayList<PlannerModel> getPlanner(String pillar) {\r\n        try {\r\n            createDatabase();\r\n        } catch (IOException e) {\r\n            e.printStackTrace();\r\n        }\r\n        ArrayList<ModuleModel> moduleList = this.getAllModules();\r\n        ArrayList<PlannerModel> result = new ArrayList<PlannerModel>();\r\n        SQLiteDatabase db = this.getReadableDatabase();\r\n\r\n        Cursor c = db.query(plannerTable, null, null, null, null, null, null);\r\n\r\n        for (int i = 1; i <= 8; i++) {\r\n            PlannerModel planner = new PlannerModel(\"Term \" + i);\r\n            result.add(planner);\r\n        }\r\n        while (c.moveToNext()) {\r\n            int index = c.getInt(1);\r\n            int colIndex = c.getColumnIndex(pillar);\r\n            String id = c.getString(colIndex);\r\n            if (id != null) {\r\n                ModuleModel module = moduleList.stream().filter(m -> id.equals(m.getId())).findFirst().orElse(null);\r\n                PlannerModel cPlanner = result.get(index - 1);\r\n                ArrayList<ModuleModel> newMods = (ArrayList<ModuleModel>) cPlanner.getModules();\r\n                newMods.add(module);\r\n                cPlanner.setModules(newMods);\r\n                result.set(index - 1, cPlanner);\r\n            }\r\n        }\r\n        c.close();\r\n        db.close();\r\n\r\n        return result;\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/FragmentInsights/DataBaseHelperInsights.java b/app/src/main/java/com/example/modulus/FragmentInsights/DataBaseHelperInsights.java
+--- a/app/src/main/java/com/example/modulus/FragmentInsights/DataBaseHelperInsights.java	(revision 442cadc3aa99834e6ad40d4ed9903d38026ab449)
++++ b/app/src/main/java/com/example/modulus/FragmentInsights/DataBaseHelperInsights.java	(date 1744654425423)
+@@ -9,6 +9,7 @@
+ 
+ import com.example.modulus.Model.ModuleModel;
+ import com.example.modulus.Model.PlannerModel;
++import com.example.modulus.R;
+ 
+ import java.io.File;
+ import java.io.FileOutputStream;
+@@ -125,6 +126,7 @@
+             module.setProf(Arrays.asList(c.getString(5).split(",")));
+             module.setPrerequisites(Arrays.asList(c.getString(6).split(",")));
+             module.setDescription(c.getString(8));
++            module.setColor(getColourR(c.getString(0)));
+             result.add(module);
+         }
+         c.close();
+@@ -167,4 +169,25 @@
+ 
+         return result;
+     }
++
++    private int getColourR(String Pillar){
++        switch (Pillar){
++            case "ASD":
++                return R.color.ASD;
++            case "EPD":
++                return R.color.EPD;
++            case "ESD":
++                return R.color.ESD;
++            case "DAI":
++                return R.color.DAI;
++            case "ISTD":
++                return R.color.ISTD;
++            case "HASS":
++                return R.color.HASS;
++            case "SMT":
++                return R.color.SMT;
++            default:
++                return R.color.OTHERS;
++        }
++    }
+ }
+\ No newline at end of file
+Index: app/build.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\r\n    alias(libs.plugins.android.application)\r\n}\r\n\r\nandroid {\r\n    namespace = \"com.example.modulus\"\r\n    compileSdk = 35\r\n\r\n    defaultConfig {\r\n        applicationId = \"com.example.modulus\"\r\n        minSdk = 26\r\n        targetSdk = 35\r\n        versionCode = 1\r\n        versionName = \"1.0\"\r\n\r\n        testInstrumentationRunner = \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            isMinifyEnabled = false\r\n            proguardFiles(\r\n                getDefaultProguardFile(\"proguard-android-optimize.txt\"),\r\n                \"proguard-rules.pro\"\r\n            )\r\n        }\r\n    }\r\n    compileOptions {\r\n        sourceCompatibility = JavaVersion.VERSION_11\r\n        targetCompatibility = JavaVersion.VERSION_11\r\n    }\r\n\r\n    buildFeatures {\r\n        viewBinding = true\r\n\r\n    }\r\n\r\n}\r\n\r\ndependencies {\r\n\r\n    implementation(libs.appcompat)\r\n    implementation(libs.material)\r\n    implementation(libs.activity)\r\n    implementation(libs.constraintlayout)\r\n    implementation(libs.compose.theme.adapter)\r\n    implementation(libs.gson)\r\n    testImplementation(libs.junit)\r\n    androidTestImplementation(libs.ext.junit)\r\n    androidTestImplementation(libs.espresso.core)\r\n    implementation(\"com.github.khacpv:Calendar-Day-View:1.0.5\") {\r\n        exclude(group = \"com.android.support\")\r\n    }\r\n    implementation(libs.android.recyclerview.swipedecorator)\r\n    implementation(\"com.applandeo:material-calendar-view:1.9.2\"){\r\n        exclude(group = \"com.android.support\")\r\n\r\n    }\r\n    implementation (\"androidx.cardview:cardview:1.0.0\")\r\n\r\n\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle.kts b/app/build.gradle.kts
+--- a/app/build.gradle.kts	(revision 442cadc3aa99834e6ad40d4ed9903d38026ab449)
++++ b/app/build.gradle.kts	(date 1744656134259)
+@@ -28,6 +28,8 @@
+     compileOptions {
+         sourceCompatibility = JavaVersion.VERSION_11
+         targetCompatibility = JavaVersion.VERSION_11
++        sourceCompatibility = JavaVersion.VERSION_1_8
++        targetCompatibility =JavaVersion.VERSION_1_8
+     }
+ 
+     buildFeatures {
+@@ -57,6 +59,8 @@
+ 
+     }
+     implementation ("androidx.cardview:cardview:1.0.0")
++    implementation("com.google.android.material:material:1.4.0")
++    implementation("me.zhanghai.android.fastscroll:library:1.3.0")
+ 
+ 
+ }
+Index: app/src/main/res/layout/fragment_insights.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"wrap_content\"\r\n    android:layout_marginBottom=\"70dp\"\r\n    android:orientation=\"vertical\"\r\n    tools:context=\".FragmentInsights.InsightsFragment\"\r\n    tools:ignore=\"HardcodedText\">\r\n\r\n    <androidx.cardview.widget.CardView\r\n        android:id=\"@+id/searchBar\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginHorizontal=\"10dp\"\r\n        android:layout_marginTop=\"10dp\"\r\n        android:orientation=\"horizontal\"\r\n        android:backgroundTint=\"@color/light_purple\"\r\n        app:cardCornerRadius=\"24dp\">\r\n\r\n        <SearchView\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:id=\"@+id/modulesListSearchView\"\r\n            android:iconifiedByDefault=\"false\"\r\n            android:background=\"@color/light_purple\"\r\n            android:queryHint=\"Search...\"/>\r\n    </androidx.cardview.widget.CardView>\r\n\r\n    <androidx.cardview.widget.CardView\r\n        android:id=\"@+id/belowSearchBar\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginHorizontal=\"10dp\"\r\n        android:layout_marginTop=\"10dp\"\r\n        android:orientation=\"horizontal\"\r\n        android:backgroundTint=\"@android:color/transparent\"\r\n        app:cardCornerRadius=\"24dp\">\r\n\r\n        <com.google.android.material.chip.ChipGroup\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:id=\"@+id/filteredChips\">\r\n\r\n        </com.google.android.material.chip.ChipGroup>\r\n\r\n        <ImageButton\r\n            android:layout_width=\"30dp\"\r\n            android:layout_height=\"30dp\"\r\n            android:layout_marginVertical=\"4dp\"\r\n            android:layout_marginEnd=\"42dp\"\r\n            android:id=\"@+id/sortButton\"\r\n            android:background=\"@drawable/sort\"\r\n            android:backgroundTint=\"@color/dark_purple\"\r\n            android:layout_gravity=\"end\"\r\n            android:contentDescription=\"Sort\">\r\n        </ImageButton>\r\n\r\n        <ImageButton\r\n            android:layout_width=\"30dp\"\r\n            android:layout_height=\"30dp\"\r\n            android:layout_marginVertical=\"4dp\"\r\n            android:layout_marginEnd=\"8dp\"\r\n            android:id=\"@+id/filterButton\"\r\n            android:background=\"@drawable/filter_icon\"\r\n            android:backgroundTint=\"@color/dark_purple\"\r\n            android:layout_gravity=\"end\"\r\n            android:contentDescription=\"Filter\">\r\n        </ImageButton>\r\n    </androidx.cardview.widget.CardView>\r\n\r\n    <androidx.constraintlayout.widget.ConstraintLayout\r\n        android:id=\"@+id/sortTab\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"horizontal\"\r\n        android:layout_marginHorizontal=\"15dp\">\r\n\r\n        <com.google.android.material.chip.ChipGroup\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            app:singleSelection=\"true\"\r\n            app:selectionRequired=\"true\"\r\n            app:layout_constraintStart_toStartOf=\"@id/sortTab\"\r\n            app:layout_constraintTop_toTopOf=\"@id/sortTab\">\r\n\r\n            <com.google.android.material.chip.Chip\r\n                style=\"@style/Widget.MaterialComponents.Chip.Choice\"\r\n                android:id=\"@+id/id\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"Subject Code\"\r\n                android:checkable=\"true\"\r\n                android:checked=\"true\"/>\r\n\r\n            <com.google.android.material.chip.Chip\r\n                style=\"@style/Widget.MaterialComponents.Chip.Choice\"\r\n                android:id=\"@+id/name\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"Name\"\r\n                android:checkable=\"true\"/>\r\n\r\n        </com.google.android.material.chip.ChipGroup>\r\n\r\n        <com.google.android.material.chip.ChipGroup\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            app:singleSelection=\"true\"\r\n            app:selectionRequired=\"true\"\r\n            app:layout_constraintEnd_toEndOf=\"@id/sortTab\"\r\n            app:layout_constraintTop_toTopOf=\"@id/sortTab\">\r\n\r\n            <com.google.android.material.chip.Chip\r\n                style=\"@style/Widget.MaterialComponents.Chip.Choice\"\r\n                android:id=\"@+id/ascending\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                app:chipIcon=\"@drawable/arrow2_up\"\r\n                app:iconStartPadding=\"2dp\"\r\n                app:textEndPadding=\"0dp\"\r\n                app:textStartPadding=\"0dp\"\r\n                android:checkable=\"true\"\r\n                app:chipIconVisible=\"true\"\r\n                android:checked=\"true\"/>\r\n\r\n            <com.google.android.material.chip.Chip\r\n                style=\"@style/Widget.MaterialComponents.Chip.Choice\"\r\n                android:id=\"@+id/descending\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                app:chipIcon=\"@drawable/arrow2_down\"\r\n                app:iconStartPadding=\"2dp\"\r\n                app:textEndPadding=\"0dp\"\r\n                app:textStartPadding=\"0dp\"\r\n                app:chipIconVisible=\"true\"\r\n                android:checkable=\"true\"/>\r\n\r\n        </com.google.android.material.chip.ChipGroup>\r\n\r\n    </androidx.constraintlayout.widget.ConstraintLayout>\r\n\r\n    <androidx.recyclerview.widget.RecyclerView\r\n        android:id=\"@+id/recyclerView\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:scrollbars=\"vertical\"\r\n        android:layout_marginHorizontal=\"15dp\">\r\n\r\n    </androidx.recyclerview.widget.RecyclerView>\r\n\r\n</LinearLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_insights.xml b/app/src/main/res/layout/fragment_insights.xml
+--- a/app/src/main/res/layout/fragment_insights.xml	(revision 442cadc3aa99834e6ad40d4ed9903d38026ab449)
++++ b/app/src/main/res/layout/fragment_insights.xml	(date 1744656471973)
+@@ -20,55 +20,65 @@
+         android:backgroundTint="@color/light_purple"
+         app:cardCornerRadius="24dp">
+ 
+-        <SearchView
+-            android:layout_width="match_parent"
+-            android:layout_height="wrap_content"
+-            android:id="@+id/modulesListSearchView"
+-            android:iconifiedByDefault="false"
+-            android:background="@color/light_purple"
+-            android:queryHint="Search..."/>
+-    </androidx.cardview.widget.CardView>
+-
+-    <androidx.cardview.widget.CardView
+-        android:id="@+id/belowSearchBar"
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:layout_marginHorizontal="10dp"
+-        android:layout_marginTop="10dp"
+-        android:orientation="horizontal"
+-        android:backgroundTint="@android:color/transparent"
+-        app:cardCornerRadius="24dp">
++        <LinearLayout
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:orientation="horizontal"
++            android:padding="4dp"
++            android:gravity="center_vertical">
++
++            <SearchView
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:id="@+id/modulesListSearchView"
++                android:iconifiedByDefault="false"
++                android:layout_weight="1"
++                android:background="@color/light_purple"
++                android:queryHint="Search"/>
+ 
+-        <com.google.android.material.chip.ChipGroup
+-            android:layout_width="wrap_content"
+-            android:layout_height="wrap_content"
+-            android:id="@+id/filteredChips">
+-
+-        </com.google.android.material.chip.ChipGroup>
+ 
+-        <ImageButton
+-            android:layout_width="30dp"
+-            android:layout_height="30dp"
+-            android:layout_marginVertical="4dp"
+-            android:layout_marginEnd="42dp"
+-            android:id="@+id/sortButton"
+-            android:background="@drawable/sort"
+-            android:backgroundTint="@color/dark_purple"
+-            android:layout_gravity="end"
+-            android:contentDescription="Sort">
+-        </ImageButton>
++            <ImageButton
++                android:layout_width="30dp"
++                android:layout_height="30dp"
++                android:layout_marginVertical="4dp"
++                android:layout_marginEnd="24dp"
++                android:id="@+id/sortButton"
++                android:background="@drawable/sort"
++                android:backgroundTint="@color/dark_purple"
++                android:contentDescription="Sort">
++            </ImageButton>
+ 
+-        <ImageButton
+-            android:layout_width="30dp"
+-            android:layout_height="30dp"
+-            android:layout_marginVertical="4dp"
+-            android:layout_marginEnd="8dp"
+-            android:id="@+id/filterButton"
+-            android:background="@drawable/filter_icon"
+-            android:backgroundTint="@color/dark_purple"
+-            android:layout_gravity="end"
+-            android:contentDescription="Filter">
+-        </ImageButton>
++            <ImageButton
++                android:layout_width="30dp"
++                android:layout_height="30dp"
++                android:layout_marginVertical="4dp"
++                android:layout_marginEnd="16dp"
++                android:id="@+id/filterButton"
++                android:background="@drawable/filter_icon"
++                android:backgroundTint="@color/dark_purple"
++                android:contentDescription="Filter">
++            </ImageButton>
++        </LinearLayout>
++
++    </androidx.cardview.widget.CardView>
++
++    <androidx.cardview.widget.CardView
++        android:id="@+id/belowSearchBar"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:layout_marginHorizontal="10dp"
++        android:layout_marginTop="10dp"
++        android:orientation="horizontal"
++        android:backgroundTint="@android:color/transparent"
++        app:cardCornerRadius="24dp">
++
++        <com.google.android.material.chip.ChipGroup
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:id="@+id/filteredChips">
++
++        </com.google.android.material.chip.ChipGroup>
++
+     </androidx.cardview.widget.CardView>
+ 
+     <androidx.constraintlayout.widget.ConstraintLayout
+@@ -79,42 +89,53 @@
+         android:layout_marginHorizontal="15dp">
+ 
+         <com.google.android.material.chip.ChipGroup
++            android:id="@+id/chipGroupSortSubject"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             app:singleSelection="true"
+             app:selectionRequired="true"
+-            app:layout_constraintStart_toStartOf="@id/sortTab"
+-            app:layout_constraintTop_toTopOf="@id/sortTab">
++            app:layout_constraintStart_toStartOf="parent"
++            app:layout_constraintEnd_toStartOf="@+id/chipGroupSortDirection"
++            app:layout_constraintTop_toTopOf="parent"
++            app:layout_constraintHorizontal_chainStyle="spread">
+ 
+             <com.google.android.material.chip.Chip
+-                style="@style/Widget.MaterialComponents.Chip.Choice"
++                style="@style/Chip"
+                 android:id="@+id/id"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="Subject Code"
++                android:textStyle="bold"
+                 android:checkable="true"
+-                android:checked="true"/>
++                android:checked="true"
++                app:chipCornerRadius="30dp"
++                />
+ 
+             <com.google.android.material.chip.Chip
+-                style="@style/Widget.MaterialComponents.Chip.Choice"
++                style="@style/Chip"
+                 android:id="@+id/name"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="Name"
+-                android:checkable="true"/>
++                android:textStyle="bold"
++                android:checkable="true"
++                app:chipCornerRadius="30dp"
++                />
+ 
+         </com.google.android.material.chip.ChipGroup>
+ 
+         <com.google.android.material.chip.ChipGroup
++            android:id="@+id/chipGroupSortDirection"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             app:singleSelection="true"
+             app:selectionRequired="true"
+-            app:layout_constraintEnd_toEndOf="@id/sortTab"
+-            app:layout_constraintTop_toTopOf="@id/sortTab">
++            app:layout_constraintStart_toEndOf="@+id/chipGroupSortSubject"
++            app:layout_constraintEnd_toEndOf="parent"
++            app:layout_constraintTop_toTopOf="parent">
+ 
+             <com.google.android.material.chip.Chip
+-                style="@style/Widget.MaterialComponents.Chip.Choice"
++                style="@style/Chip"
+                 android:id="@+id/ascending"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+@@ -124,10 +145,12 @@
+                 app:textStartPadding="0dp"
+                 android:checkable="true"
+                 app:chipIconVisible="true"
+-                android:checked="true"/>
++                android:checked="true"
++                app:chipCornerRadius="30dp"
++                />
+ 
+             <com.google.android.material.chip.Chip
+-                style="@style/Widget.MaterialComponents.Chip.Choice"
++                style="@style/Chip"
+                 android:id="@+id/descending"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+@@ -136,7 +159,9 @@
+                 app:textEndPadding="0dp"
+                 app:textStartPadding="0dp"
+                 app:chipIconVisible="true"
+-                android:checkable="true"/>
++                android:checkable="true"
++                app:chipCornerRadius="30dp"
++                />
+ 
+         </com.google.android.material.chip.ChipGroup>
+ 
+Index: app/src/main/java/com/example/modulus/Adapter/ModuleAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.Adapter;\r\n\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.TextView;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.example.modulus.Model.ModuleModel;\r\nimport com.example.modulus.R;\r\n\r\nimport java.util.ArrayList;\r\n\r\npublic class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.moduleCellViewHolder> {\r\n    public interface OnItemClickListener {\r\n        void onItemClick(ModuleModel module);\r\n    }\r\n    ArrayList<ModuleModel> moduleList;\r\n    OnItemClickListener listener;\r\n    public ModuleAdapter(ArrayList<ModuleModel> moduleList, OnItemClickListener listener) {\r\n        this.moduleList = moduleList;\r\n        this.listener = listener;\r\n    }\r\n\r\n    @NonNull\r\n    @Override\r\n    public moduleCellViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {\r\n        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.module_cell, parent, false);\r\n        return new moduleCellViewHolder(view);\r\n    }\r\n\r\n    @Override\r\n    public void onBindViewHolder(@NonNull moduleCellViewHolder holder, int position) {\r\n        ModuleModel module = moduleList.get(position);\r\n        holder.moduleName.setText(module.toString());\r\n        holder.moduleTermProf.setText(\"Term(s): \" + String.join(\", \", module.getTerm())\r\n                + \" | \" + String.join(\", \", module.getProf()));\r\n        holder.moduleTags.setText(String.join(\", \", module.getTags()));\r\n        holder.bind(module, listener);\r\n    }\r\n\r\n    @Override\r\n    public int getItemCount() {\r\n        return moduleList.size();\r\n    }\r\n\r\n    static class moduleCellViewHolder extends RecyclerView.ViewHolder{\r\n        TextView moduleName;\r\n        TextView moduleTermProf;\r\n        TextView moduleTags;\r\n        public moduleCellViewHolder(View itemView){\r\n            super(itemView);\r\n            moduleName = itemView.findViewById(R.id.moduleName);\r\n            moduleTermProf = itemView.findViewById(R.id.moduleTermProf);\r\n            moduleTags = itemView.findViewById(R.id.moduleTags);\r\n        }\r\n\r\n        public void bind(ModuleModel item, final OnItemClickListener listener) {\r\n            itemView.setOnClickListener(new View.OnClickListener() {\r\n                @Override public void onClick(View v) {\r\n                    listener.onItemClick(item);\r\n                }\r\n            });\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/Adapter/ModuleAdapter.java b/app/src/main/java/com/example/modulus/Adapter/ModuleAdapter.java
+--- a/app/src/main/java/com/example/modulus/Adapter/ModuleAdapter.java	(revision 442cadc3aa99834e6ad40d4ed9903d38026ab449)
++++ b/app/src/main/java/com/example/modulus/Adapter/ModuleAdapter.java	(date 1744657591885)
+@@ -6,22 +6,54 @@
+ import android.widget.TextView;
+ 
+ import androidx.annotation.NonNull;
++import androidx.core.content.ContextCompat;
+ import androidx.recyclerview.widget.RecyclerView;
+ 
+ import com.example.modulus.Model.ModuleModel;
+ import com.example.modulus.R;
++import com.google.android.material.card.MaterialCardView;
+ 
+ import java.util.ArrayList;
+ 
+-public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.moduleCellViewHolder> {
++import me.zhanghai.android.fastscroll.PopupTextProvider;
++
++public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.moduleCellViewHolder> implements PopupTextProvider{
++    @NonNull
++    @Override
++    public CharSequence getPopupText(@NonNull View view, int position) {
++        ModuleModel module = moduleList.get(position);
++        if ("subjectCode".equalsIgnoreCase(sortType)) {
++            // Assume getSubjectCode() returns something like "CSC101"
++            // This loop finds and returns the first digit it encounters.
++            String subjectCode = module.getId();
++            for (int i = 0; i < subjectCode.length(); i++) {
++                char ch = subjectCode.charAt(i);
++                if (Character.isDigit(ch)) {
++                    return String.valueOf(ch);
++                }
++            }
++            return "";
++        } else { // default to "name" mode
++            String name = module.getName();
++            if (name.isEmpty()) {
++                return "";
++            } else {
++                return name.substring(0, 1).toUpperCase();
++            }
++        }
++    }
++
+     public interface OnItemClickListener {
+         void onItemClick(ModuleModel module);
+     }
+     ArrayList<ModuleModel> moduleList;
+     OnItemClickListener listener;
+-    public ModuleAdapter(ArrayList<ModuleModel> moduleList, OnItemClickListener listener) {
++    private String sortType;
++
++    public ModuleAdapter(ArrayList<ModuleModel> moduleList, OnItemClickListener listener, String sortType) {
+         this.moduleList = moduleList;
+         this.listener = listener;
++        this.sortType = sortType;
+     }
+ 
+     @NonNull
+@@ -39,6 +71,10 @@
+                 + " | " + String.join(", ", module.getProf()));
+         holder.moduleTags.setText(String.join(", ", module.getTags()));
+         holder.bind(module, listener);
++        int color = ContextCompat.getColor(holder.itemView.getContext(), module.getColor());
++        holder.card.setStrokeColor(color);
++        holder.moduleTermProf.setTextColor(color);
++        holder.moduleTags.setTextColor(color);
+     }
+ 
+     @Override
+@@ -50,11 +86,14 @@
+         TextView moduleName;
+         TextView moduleTermProf;
+         TextView moduleTags;
++        MaterialCardView card;
++
+         public moduleCellViewHolder(View itemView){
+             super(itemView);
+             moduleName = itemView.findViewById(R.id.moduleName);
+             moduleTermProf = itemView.findViewById(R.id.moduleTermProf);
+             moduleTags = itemView.findViewById(R.id.moduleTags);
++            card = itemView.findViewById(R.id.module_cell);
+         }
+ 
+         public void bind(ModuleModel item, final OnItemClickListener listener) {
+Index: app/src/main/res/values/colors.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<resources>\r\n    <color name=\"purple_200\">#FFBB86FC</color>\r\n    <color name=\"purple_500\">#FF6200EE</color>\r\n    <color name=\"purple_700\">#FF3700B3</color>\r\n    <color name=\"teal_200\">#FF03DAC5</color>\r\n    <color name=\"teal_700\">#FF018786</color>\r\n    <color name=\"black\">#FF000000</color>\r\n    <color name=\"dark_purple\">#7009E0</color>\r\n    <color name=\"purple\">#AB94FF</color>\r\n    <color name=\"light_purple\">#E3DBFF</color>\r\n    <color name=\"dark_blue\">#2600FF</color>\r\n    <color name=\"light_blue\">#C2CFFF</color>\r\n    <color name=\"light_pink\">#FFD7DA</color>\r\n    <color name=\"dark_pink\">#FB6975</color>\r\n    <color name=\"white\">#FFFFFFFF</color>\r\n    <color name=\"green\">#4BCC96</color>\r\n    <color name=\"red\">#E44A4A</color>\r\n    <color name=\"calendar_green\">#33B679</color>\r\n    <color name=\"calendar_red\">#D50000</color>\r\n    <color name=\"calendar_yellow\">#F6BF26</color>\r\n    <color name=\"calendar_purple\">#8E24AA</color>\r\n    <color name=\"calendar_blue\">#039BE5</color>\r\n    <color name=\"grey\">#797979</color>\r\n    <color name=\"transparent\">#11000000</color>\r\n    <color name=\"mtrl_textinput_default_box_stroke_color\">@color/white</color>\r\n\r\n</resources>\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/values/colors.xml b/app/src/main/res/values/colors.xml
+--- a/app/src/main/res/values/colors.xml	(revision 442cadc3aa99834e6ad40d4ed9903d38026ab449)
++++ b/app/src/main/res/values/colors.xml	(date 1744654777483)
+@@ -5,7 +5,7 @@
+     <color name="purple_700">#FF3700B3</color>
+     <color name="teal_200">#FF03DAC5</color>
+     <color name="teal_700">#FF018786</color>
+-    <color name="black">#FF000000</color>
++    <color name="black">#121212</color>
+     <color name="dark_purple">#7009E0</color>
+     <color name="purple">#AB94FF</color>
+     <color name="light_purple">#E3DBFF</color>
+@@ -24,6 +24,18 @@
+     <color name="grey">#797979</color>
+     <color name="transparent">#11000000</color>
+     <color name="mtrl_textinput_default_box_stroke_color">@color/white</color>
++    <color name="ASD">#1EA95A</color>
++    <color name="EPD">#FFB347</color>
++    <color name="ESD">#FF3B30</color>
++    <color name="DAI">#D4B900</color>
++    <color name="ISTD">#1BA9DD</color>
++    <color name="HASS">#9B72FF</color>
++    <color name="SMT">#4A90E2</color>
++    <color name="OTHERS">#BFAEFF</color>
++    <color name="dark_grey">#1F1F1F</color>
++    <color name="focused_grey">#2D2D2D</color>
++
++
+ 
+ </resources>
+ 
+Index: app/src/main/java/com/example/modulus/Model/ModuleModel.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.Model;\r\n\r\nimport java.util.Comparator;\r\nimport java.util.List;\r\n\r\npublic class ModuleModel {\r\n    private String id;\r\n    private String name;\r\n    private String pillar;\r\n    private List<String> tags;\r\n    private List<String> term;\r\n    private List<String> prof;\r\n    private List<String> prerequisites;\r\n    private String description;\r\n    public ModuleModel(){\r\n    }\r\n    public ModuleModel(String id, String name) {\r\n        this.id = id;\r\n        this.name = name;\r\n    }\r\n\r\n    public String getId() {\r\n        if(id == null){\r\n            return \"\";\r\n        }else{\r\n            return id;\r\n        }\r\n    }\r\n    public void setId(String id) {\r\n        this.id = id;\r\n    }\r\n\r\n    public String getName() {\r\n        return name;\r\n    }\r\n\r\n    public void setName(String name) {\r\n        this.name = name;\r\n    }\r\n    public String getPillar() {\r\n        return pillar;\r\n    }\r\n\r\n    public void setPillar(String pillar) {\r\n        this.pillar = pillar;\r\n    }\r\n    public List<String> getTags() {\r\n        if(tags == null) {\r\n            return null;\r\n        }else{\r\n            return tags;\r\n        }\r\n    }\r\n    public void setTags(List<String> tags) {\r\n        this.tags = tags;\r\n    }\r\n\r\n    public List<String> getTerm() {\r\n        if(term == null) {\r\n            return null;\r\n        }else{\r\n            return term;\r\n        }\r\n    }\r\n    public void setTerm(List<String> term) {\r\n        this.term = term;\r\n    }\r\n    public List<String> getProf() {\r\n        if(prof == null) {\r\n            return null;\r\n        }else{\r\n            return prof;\r\n        }\r\n    }\r\n\r\n    public void setProf(List<String> prof) {\r\n        this.prof = prof;\r\n    }\r\n    public List<String> getPrerequisites() {\r\n        return prerequisites;\r\n    }\r\n    public void setPrerequisites(List<String> prerequisites) {\r\n        this.prerequisites = prerequisites;\r\n    }\r\n    public String getDescription() {\r\n        return description;\r\n    }\r\n    public void setDescription(String description) {\r\n        this.description = description;\r\n    }\r\n    @Override\r\n    public String toString(){\r\n        return getId() + \" - \" + getName();\r\n    }\r\n    public static ModuleModel getModuleFromString(String s){\r\n        if(s.contains(\" - \")){\r\n            String[] module = s.split(\" - \");\r\n            return new ModuleModel(module[0], module[1]);\r\n        }else if(s.contains(\"Capstone\")){\r\n            return new ModuleModel(\"\", \"Capstone\");\r\n        }else{\r\n            return null;\r\n        }\r\n    }\r\n\r\n//    public static Comparator<ModuleModel> idAscending = new Comparator<ModuleModel>() {\r\n//        @Override\r\n//        public int compare(ModuleModel mod1, ModuleModel mod2) {\r\n//            String id1 = mod1.getId();\r\n//            String id2 = mod2.getId();\r\n//\r\n//            return id1.compareTo(id2);\r\n//        }\r\n//    };\r\n//\r\n//    public static Comparator<ModuleModel> nameAscending = new Comparator<ModuleModel>() {\r\n//        @Override\r\n//        public int compare(ModuleModel mod1, ModuleModel mod2){\r\n//            String name1 = mod1.getName();\r\n//            String name2 = mod2.getName();\r\n//            name1 = name1.toLowerCase();\r\n//            name2 = name2.toLowerCase();\r\n//            return name1.compareTo(name2);\r\n//        }\r\n//    };\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/Model/ModuleModel.java b/app/src/main/java/com/example/modulus/Model/ModuleModel.java
+--- a/app/src/main/java/com/example/modulus/Model/ModuleModel.java	(revision 442cadc3aa99834e6ad40d4ed9903d38026ab449)
++++ b/app/src/main/java/com/example/modulus/Model/ModuleModel.java	(date 1744634314329)
+@@ -1,12 +1,12 @@
+ package com.example.modulus.Model;
+ 
+-import java.util.Comparator;
+ import java.util.List;
+ 
+ public class ModuleModel {
+     private String id;
+     private String name;
+     private String pillar;
++    private int color;
+     private List<String> tags;
+     private List<String> term;
+     private List<String> prof;
+@@ -103,6 +103,14 @@
+         }
+     }
+ 
++    public int getColor() {
++        return color;
++    }
++
++    public void setColor(int color) {
++        this.color = color;
++    }
++
+ //    public static Comparator<ModuleModel> idAscending = new Comparator<ModuleModel>() {
+ //        @Override
+ //        public int compare(ModuleModel mod1, ModuleModel mod2) {
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_07_04_2025_20_57_[Changes]/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_07_04_2025_20_57_[Changes]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Update_at_07_04_2025_20_57_[Changes]/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_07_04_2025_20_57_[Changes]/shelved.patch	(revision 442cadc3aa99834e6ad40d4ed9903d38026ab449)
++++ /dev/null	(revision 442cadc3aa99834e6ad40d4ed9903d38026ab449)
+@@ -1,50 +0,0 @@
+-Index: app/src/main/java/com/example/modulus/Home/DateItemAdapter.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/modulus/Home/DateItemAdapter.java b/app/src/main/java/com/example/modulus/Adapter/DateItemAdapter.java
+-rename from app/src/main/java/com/example/modulus/Home/DateItemAdapter.java
+-rename to app/src/main/java/com/example/modulus/Adapter/DateItemAdapter.java
+---- a/app/src/main/java/com/example/modulus/Home/DateItemAdapter.java	(revision 0aef48500745d26d4e8fef55cb09cd75f7bb7c93)
+-+++ b/app/src/main/java/com/example/modulus/Adapter/DateItemAdapter.java	(date 1744030260552)
+-@@ -1,4 +1,4 @@
+--package com.example.modulus.Home;
+-+package com.example.modulus.Adapter;
+- 
+- import android.view.LayoutInflater;
+- import android.view.View;
+-Index: app/src/main/java/com/example/modulus/Home/HomeFragment.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.modulus.Home;\r\n\r\nimport android.annotation.SuppressLint;\r\nimport android.os.Bundle;\r\n\r\nimport androidx.fragment.app.Fragment;\r\n\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\n\r\nimport android.content.DialogInterface;\r\nimport android.widget.Button;\r\nimport android.widget.LinearLayout;\r\n\r\nimport androidx.core.graphics.Insets;\r\nimport androidx.core.view.ViewCompat;\r\nimport androidx.core.view.WindowInsetsCompat;\r\nimport androidx.recyclerview.widget.ItemTouchHelper;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.example.modulus.Adapter.ToDoAdaptor;\r\nimport com.example.modulus.Class.ToDoModel;\r\nimport com.example.modulus.R;\r\nimport com.example.modulus.Utils.OnDialogCloseListener;\r\nimport com.google.android.material.floatingactionbutton.FloatingActionButton;\r\n\r\nimport java.time.LocalDate;\r\nimport java.time.format.DateTimeFormatter;\r\nimport java.util.ArrayList;\r\nimport java.util.Collections;\r\nimport java.util.List;\r\nimport java.util.Random;\r\n\r\npublic class HomeFragment extends Fragment implements OnDialogCloseListener {\r\n    RecyclerView recyclerView,dateitemRecycler;\r\n    FloatingActionButton addButton;\r\n    DataBaseHelper myDB;\r\n    Button testButton;\r\n    private List<ToDoModel> mList;\r\n    private ToDoAdaptor adaptor;\r\n\r\n    @SuppressLint(\"MissingInflatedId\")\r\n    @Override\r\n    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        View view = inflater.inflate(R.layout.fragment_home, container, false);\r\n        ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.homeMain), (v, insets) -> {\r\n            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());\r\n            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);\r\n            return insets;\r\n        });\r\n\r\n        recyclerView = view.findViewById(R.id.recyclerView);\r\n\r\n        dateitemRecycler = view.findViewById(R.id.dateitemRecycler);\r\n        //LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());\r\n        ScaleCenterItemManager layoutManager = new ScaleCenterItemManager(this.getContext(),LinearLayoutManager.HORIZONTAL,false);\r\n        dateitemRecycler.setLayoutManager(layoutManager);\r\n        generateData();\r\n        /*\r\n        mAdapter.setOnItemClickListener(new ExampleAdapter.OnItemClickListener() {\r\n            @Override\r\n            public void onItemClick(int position) {\r\n                String title = exampleList.get(position).getText1();\r\n\r\n            }\r\n        });*/\r\n\r\n\r\n        addButton = view.findViewById(R.id.addButton); //ToDo: edit these\r\n        myDB = new DataBaseHelper(this.getContext());\r\n        mList = new ArrayList<>();\r\n        adaptor = new ToDoAdaptor(myDB, this);\r\n\r\n        recyclerView.setHasFixedSize(true);\r\n        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));\r\n        recyclerView.setAdapter(adaptor);\r\n\r\n        mList = myDB.getDateTask(\"16-4-2025\");\r\n        Collections.reverse(mList);\r\n        adaptor.setTasks(mList);\r\n        /*\r\n        testButton = view.findViewById(R.id.testbutton);\r\n        testButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n\r\n                LocalDate date = LocalDate.now();\r\n                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(\"yyyy-MM-dd\"); // Change format as needed\r\n                String dateString = date.format(formatter);\r\n\r\n                System.out.println(dateString);\r\n                recyclerView.setAdapter(adaptor);\r\n                mList = myDB.getAllTasks();\r\n                //mList = myDB.getDateTask(\"16-4-2025\");\r\n                Collections.reverse(mList);\r\n                adaptor.setTasks(mList);\r\n            }\r\n        });*/\r\n\r\n        addButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                AddNewTask.newInstance().show(getParentFragmentManager(), AddNewTask.TAG);\r\n\r\n            }\r\n        });\r\n\r\n        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new RecyclerViewTouchHelper(adaptor)); // for delete and edit\r\n        itemTouchHelper.attachToRecyclerView(recyclerView);\r\n        // Inflate the layout for this fragment\r\n        return view;\r\n    }\r\n\r\n    private void generateData() {\r\n        List<LocalDate> dateList = new ArrayList<>();\r\n        LocalDate today = LocalDate.now();\r\n        int currentYear = today.getYear();\r\n        int currentMonth = today.getMonthValue();\r\n        LocalDate firstDayOfMonth = LocalDate.of(currentYear, currentMonth, 1);\r\n        int daysInMonth = firstDayOfMonth.lengthOfMonth();\r\n\r\n        // Add all dates of the current month\r\n        for (int i = 1; i <= daysInMonth; i++) {\r\n            dateList.add(LocalDate.of(currentYear, currentMonth, i));\r\n        }\r\n\r\n        DateItemAdapter adapter = new DateItemAdapter(dateList, new DateItemAdapter.OnItemClickListener() {\r\n            @Override\r\n            public void onItemClick(LocalDate date) {\r\n                // Handle the click event (same logic as testButton)\r\n                System.out.println(\"Selected date: \" + date.toString());\r\n\r\n                recyclerView.setAdapter(adaptor);\r\n                mList = myDB.getDateTask(date.format(DateTimeFormatter.ofPattern(\"d-M-yyyy\"))); // Adjust format if needed\r\n                Collections.reverse(mList);\r\n                adaptor.setTasks(mList);\r\n            }\r\n        });\r\n\r\n        dateitemRecycler.setAdapter(adapter);\r\n\r\n        // Scroll to current date when opening\r\n        int todayPosition = today.getDayOfMonth() - 1;\r\n        dateitemRecycler.scrollToPosition(todayPosition);\r\n    }\r\n\r\n    @Override\r\n    public void onDialogClose(DialogInterface dialogInterface) {\r\n        mList = myDB.getAllTasks();\r\n        Collections.reverse(mList);\r\n        adaptor.setTasks(mList);\r\n        adaptor.notifyDataSetChanged();\r\n\r\n    }\r\n}
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/modulus/Home/HomeFragment.java b/app/src/main/java/com/example/modulus/Home/HomeFragment.java
+---- a/app/src/main/java/com/example/modulus/Home/HomeFragment.java	(revision 0aef48500745d26d4e8fef55cb09cd75f7bb7c93)
+-+++ b/app/src/main/java/com/example/modulus/Home/HomeFragment.java	(date 1744030260537)
+-@@ -11,7 +11,6 @@
+- 
+- import android.content.DialogInterface;
+- import android.widget.Button;
+--import android.widget.LinearLayout;
+- 
+- import androidx.core.graphics.Insets;
+- import androidx.core.view.ViewCompat;
+-@@ -20,6 +19,7 @@
+- import androidx.recyclerview.widget.LinearLayoutManager;
+- import androidx.recyclerview.widget.RecyclerView;
+- 
+-+import com.example.modulus.Adapter.DateItemAdapter;
+- import com.example.modulus.Adapter.ToDoAdaptor;
+- import com.example.modulus.Class.ToDoModel;
+- import com.example.modulus.R;
+-@@ -31,7 +31,6 @@
+- import java.util.ArrayList;
+- import java.util.Collections;
+- import java.util.List;
+--import java.util.Random;
+- 
+- public class HomeFragment extends Fragment implements OnDialogCloseListener {
+-     RecyclerView recyclerView,dateitemRecycler;
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_07_04_2025_20_57__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_07_04_2025_20_57__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Update_at_07_04_2025_20_57__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_07_04_2025_20_57__Changes_.xml	(revision 442cadc3aa99834e6ad40d4ed9903d38026ab449)
++++ /dev/null	(revision 442cadc3aa99834e6ad40d4ed9903d38026ab449)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_07_04_2025_20_57_[Changes]" date="1744030642688" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_07_04_2025_20_57_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 07/04/2025 20:57 [Changes]" />
+-</changelist>
+\ No newline at end of file
+Index: app/src/main/java/com/example/modulus/FragmentCalendar/Event.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.FragmentCalendar;\r\n\r\nimport com.framgia.library.calendardayview.data.IEvent;\r\n\r\nimport java.util.Calendar;\r\n\r\npublic class Event implements IEvent {\r\n\r\n    private int Id;\r\n    private Calendar startTime,endTime,eventDate;\r\n    private String name,location;\r\n\r\n    int color;\r\n\r\n    public Calendar getEventDate() {\r\n        return eventDate;\r\n    }\r\n\r\n    public void setEventDate(Calendar eventDate) {\r\n        this.eventDate = eventDate;\r\n    }\r\n\r\n    public void setStartTime(Calendar startTime) {\r\n        this.startTime = startTime;\r\n    }\r\n\r\n    public void setEndTime(Calendar endTime) {\r\n        this.endTime = endTime;\r\n    }\r\n\r\n    public void setName(String name) {\r\n        this.name = name;\r\n    }\r\n\r\n    public String getLocation() {\r\n        return location;\r\n    }\r\n\r\n    public void setLocation(String location) {\r\n        this.location = location;\r\n    }\r\n\r\n    public int getColour() {\r\n        return color;\r\n    }\r\n\r\n    public void setColour(int color) {\r\n        this.color = color;\r\n    }\r\n\r\n    @Override\r\n    public String getName() {\r\n        return name;\r\n    }\r\n\r\n    @Override\r\n    public int getColor() {\r\n        return color;\r\n    }\r\n\r\n    @Override\r\n    public Calendar getStartTime() {\r\n        return startTime;\r\n    }\r\n\r\n    @Override\r\n    public Calendar getEndTime() {\r\n        return endTime;\r\n    }\r\n\r\n    public int getId() {\r\n        return Id;\r\n    }\r\n\r\n    public void setId(int id) {\r\n        Id = id;\r\n    }\r\n\r\n    public boolean isOnDate(Calendar date) {\r\n        return this.eventDate.get(Calendar.YEAR) == date.get(Calendar.YEAR) &&\r\n                this.eventDate.get(Calendar.MONTH) == date.get(Calendar.MONTH) &&\r\n                this.eventDate.get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH);\r\n    }\r\n\r\n    //Constructor\r\n    public Event(int Id, Calendar eventDate, Calendar startTime, Calendar endTime, String name, String location, int color){\r\n        this.Id = Id;\r\n        this.startTime = startTime;\r\n        this.endTime = endTime;\r\n        this.name = name;\r\n        this.location = location;\r\n        this.color = color;\r\n        this.eventDate = eventDate;\r\n    }\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/FragmentCalendar/Event.java b/app/src/main/java/com/example/modulus/FragmentCalendar/Event.java
+--- a/app/src/main/java/com/example/modulus/FragmentCalendar/Event.java	(revision 442cadc3aa99834e6ad40d4ed9903d38026ab449)
++++ b/app/src/main/java/com/example/modulus/FragmentCalendar/Event.java	(date 1744634314346)
+@@ -10,7 +10,7 @@
+     private Calendar startTime,endTime,eventDate;
+     private String name,location;
+ 
+-    int color;
++    private int color;
+ 
+     public Calendar getEventDate() {
+         return eventDate;
+Index: app/src/main/java/com/example/modulus/Login/DataBaseHelperLogin.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.Login;\r\n\r\nimport android.content.ContentValues;\r\nimport android.content.Context;\r\nimport android.database.Cursor;\r\nimport android.database.sqlite.SQLiteDatabase;\r\nimport android.database.sqlite.SQLiteException;\r\nimport android.database.sqlite.SQLiteOpenHelper;\r\nimport android.util.Log;\r\n\r\nimport java.io.File;\r\nimport java.io.FileOutputStream;\r\nimport java.io.IOException;\r\nimport java.io.InputStream;\r\nimport java.io.OutputStream;\r\n\r\npublic class DataBaseHelperLogin extends SQLiteOpenHelper {\r\n    private static final String dbName = \"sutdModules.db\";\r\n    private static final String TABLE_NAME = \"login\";\r\n    private static String dbPath = \"/data/data/com.example.modulus/databases/\";\r\n    SQLiteDatabase db;\r\n    private final Context mContext;\r\n    private static final String COL_EMAIL = \"Email\";\r\n    private static final String COL_PASSWORD = \"Password\";\r\n\r\n\r\n    public DataBaseHelperLogin(Context context) {\r\n        super(context, dbName, null, 1);\r\n        this.mContext = context;\r\n    }\r\n\r\n    @Override\r\n    public void onCreate(SQLiteDatabase db) {\r\n        String createTableStatement = \"CREATE TABLE IF NOT EXISTS \" + TABLE_NAME +\" (\" +\r\n                COL_EMAIL + \" TEXT, \" +\r\n                COL_PASSWORD + \" TEXT)\";\r\n\r\n        db.execSQL(createTableStatement);\r\n        Log.d(\"Database\", \"Table \" + TABLE_NAME + \" created\");\r\n\r\n    }\r\n\r\n    @Override\r\n    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {\r\n        db.execSQL(\"DROP TABLE IF EXISTS \"+ TABLE_NAME);\r\n        onCreate(db);\r\n    }\r\n    private boolean checkDatabase() {\r\n        try {\r\n            final String mPath = dbPath + dbName;\r\n            Log.d(\"check\", \"check\");\r\n            final File file = new File(mPath);\r\n            return file.exists();\r\n        } catch (SQLiteException e) {\r\n            e.printStackTrace();\r\n            return false;\r\n        }\r\n    }\r\n\r\n    private void copyDatabase() throws IOException {\r\n        try {\r\n            InputStream mInputStream = mContext.getAssets().open(dbName);\r\n            Log.d(\"DB\", \"Copying Database\");\r\n            String outFileName = dbPath + dbName;\r\n            OutputStream mOutputStream = new FileOutputStream(outFileName);\r\n\r\n            byte[] buffer = new byte[2048];\r\n            int length;\r\n            while ((length = mInputStream.read(buffer)) > 0) {\r\n                mOutputStream.write(buffer, 0, length);\r\n            }\r\n            mOutputStream.flush();\r\n            mOutputStream.close();\r\n            mInputStream.close();\r\n        } catch (Exception e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    public void createDatabase() throws IOException {\r\n        boolean mDatabaseExists = checkDatabase();\r\n        Log.d(\"create\", \"create\");\r\n        if (mDatabaseExists) {\r\n            this.getReadableDatabase();\r\n            this.close();\r\n            try {\r\n                copyDatabase();\r\n            } catch (IOException mIOException) {\r\n                mIOException.printStackTrace();\r\n                throw new Error(\"Error copying Database\");\r\n            } finally {\r\n                this.close();\r\n            }\r\n        }\r\n    }\r\n    @Override\r\n    public void onOpen(SQLiteDatabase db) {\r\n        super.onOpen(db);\r\n        Log.d(\"DEBUG\", \"Database onOpen called.\");\r\n        Cursor cursor = db.rawQuery(\"SELECT name FROM sqlite_master WHERE type='table'\", null);\r\n        while (cursor.moveToNext()) {\r\n            Log.d(\"DBTables\", \"Table: \" + cursor.getString(0));\r\n        }\r\n        cursor.close();\r\n    }\r\n\r\n\r\n    public boolean insertUser(String email,String password){\r\n        SQLiteDatabase db = this.getWritableDatabase();\r\n        ContentValues values = new ContentValues();\r\n        values.put(COL_EMAIL,email);\r\n        values.put(COL_PASSWORD,password);\r\n\r\n        long result = db.insert(TABLE_NAME,null,values);\r\n\r\n        return result != -1;\r\n    }\r\n\r\n    public Boolean ifEmailExits(String email){\r\n        SQLiteDatabase db = this.getReadableDatabase();\r\n        String query = \"SELECT 1 FROM \" + TABLE_NAME + \" WHERE \" + COL_EMAIL + \" = ? LIMIT 1\";\r\n        Cursor cursor = db.rawQuery(query, new String[]{email});\r\n        if(cursor.getCount() > 0) {\r\n            return true;\r\n        }else {\r\n            return false;\r\n        }\r\n\r\n    }\r\n\r\n    public Boolean checkEmailPasswordValid(String email,String password){\r\n        SQLiteDatabase db = this.getReadableDatabase();\r\n        String query = \"SELECT 1 FROM \" + TABLE_NAME + \" WHERE \" + COL_EMAIL + \" = ? AND \" + COL_PASSWORD + \" = ? LIMIT 1\";\r\n        Cursor cursor = db.rawQuery(query, new String[]{email,password});\r\n        if(cursor.getCount() > 0) {\r\n            Log.d(\"DBTables\", \"true\");\r\n            return true;\r\n\r\n        }else {\r\n            return false;\r\n        }\r\n\r\n    }\r\n\r\n\r\n\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/Login/DataBaseHelperLogin.java b/app/src/main/java/com/example/modulus/Login/DataBaseHelperLogin.java
+--- a/app/src/main/java/com/example/modulus/Login/DataBaseHelperLogin.java	(revision 442cadc3aa99834e6ad40d4ed9903d38026ab449)
++++ b/app/src/main/java/com/example/modulus/Login/DataBaseHelperLogin.java	(date 1744633004126)
+@@ -58,6 +58,13 @@
+     }
+ 
+     private void copyDatabase() throws IOException {
++        boolean mDatabaseExists = checkDatabase();
++        Log.d("DB", "create");
++
++        if (!mDatabaseExists) {
++            this.getReadableDatabase();
++            this.close();
++        }
+         try {
+             InputStream mInputStream = mContext.getAssets().open(dbName);
+             Log.d("DB", "Copying Database");
+Index: app/src/main/java/com/example/modulus/Login/ActivityLogIn.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.Login;\r\n\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.database.sqlite.SQLiteDatabase;\r\nimport android.os.Bundle;\r\nimport android.text.method.LinkMovementMethod;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.widget.CheckBox;\r\nimport android.widget.EditText;\r\nimport android.widget.RelativeLayout;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.activity.EdgeToEdge;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.core.graphics.Insets;\r\nimport androidx.core.view.ViewCompat;\r\nimport androidx.core.view.WindowInsetsCompat;\r\n\r\nimport com.example.modulus.MainActivity;\r\nimport com.example.modulus.R;\r\n\r\npublic class ActivityLogIn extends AppCompatActivity {\r\n    private TextView forget;\r\n    private EditText email, password;\r\n    private RelativeLayout rl_login_button;\r\n\r\n    private CheckBox rememberme;\r\n\r\n    private DataBaseHelperLogin databasehelper;\r\n\r\n    private final String sharedPrefFile = \"com.example.android.mainsharedprefs\" ;\r\n    private static final String KEY_EMAIL = \"Email\";\r\n    private static final String KEY_PASSWORD = \"Password\";\r\n    private SharedPreferences mPreferences;\r\n    private final String TAG = \"LOGIN\";\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n\r\n        super.onCreate(savedInstanceState);\r\n        EdgeToEdge.enable(this);\r\n        setContentView(R.layout.activity_log_in);\r\n\r\n\r\n        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.login), (v, insets) -> {\r\n            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());\r\n            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);\r\n            return insets;\r\n        });\r\n\r\n\r\n        forget = findViewById(R.id.forget);\r\n        forget.setMovementMethod(LinkMovementMethod.getInstance());\r\n        email = findViewById(R.id.et_email_address);\r\n        password = findViewById(R.id.et_password);\r\n        rememberme = findViewById(R.id.remember_me);\r\n\r\n\r\n        databasehelper = new DataBaseHelperLogin(this);\r\n        SQLiteDatabase db = databasehelper.getReadableDatabase();\r\n        Log.d(TAG, \"Database opened: \" + db.getPath());\r\n\r\n        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);\r\n        String savedEmail = mPreferences.getString(KEY_EMAIL,\"\");\r\n        String savedPassword = mPreferences.getString(KEY_PASSWORD,\"\");\r\n        //Check if there is saved data\r\n        if ((!savedEmail.isEmpty())&& (!savedPassword.isEmpty())){\r\n            email.setText(savedEmail);\r\n            password.setText(savedPassword);\r\n            rememberme.setChecked(true);\r\n        }\r\n\r\n\r\n        rl_login_button = findViewById(R.id.rl_login_button);\r\n        rl_login_button.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n\r\n                String emailText = email.getText().toString().trim();\r\n                String passwordText = password.getText().toString().trim();\r\n\r\n                if (emailText.isEmpty() || passwordText.isEmpty()) {\r\n                    Toast.makeText(ActivityLogIn.this, \"All fields are mandatory\", Toast.LENGTH_SHORT).show();\r\n                    Log.d(TAG, \"Empty Fields\");\r\n                    return;\r\n                }\r\n\r\n\r\n\r\n                if (databasehelper.checkEmailPasswordValid(emailText, passwordText)){\r\n                    Toast.makeText(ActivityLogIn.this, \"Login Successfully!\", Toast.LENGTH_SHORT).show();\r\n                    Log.d(TAG, \"Login Successful\");\r\n\r\n                    SharedPreferences.Editor editor  = mPreferences.edit();\r\n                    if (rememberme.isChecked()){\r\n                        editor.putString(KEY_EMAIL,emailText);\r\n                        editor.putString(KEY_PASSWORD,passwordText);\r\n                        editor.apply();\r\n                    }else{\r\n                        editor.remove(KEY_EMAIL);\r\n                        editor.remove(KEY_PASSWORD);\r\n                        editor.apply();\r\n                    }\r\n\r\n\r\n                    Intent intent = new Intent(ActivityLogIn.this, MainActivity.class);\r\n                    startActivity(intent);\r\n                    finish();\r\n                } else{\r\n                    Toast.makeText(ActivityLogIn.this, \"Login Failed!\", Toast.LENGTH_SHORT).show();\r\n                    Log.d(TAG, \"Login Failed\");\r\n                }\r\n\r\n\r\n\r\n\r\n\r\n            }\r\n        });\r\n\r\n\r\n\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/Login/ActivityLogIn.java b/app/src/main/java/com/example/modulus/Login/ActivityLogIn.java
+--- a/app/src/main/java/com/example/modulus/Login/ActivityLogIn.java	(revision 442cadc3aa99834e6ad40d4ed9903d38026ab449)
++++ b/app/src/main/java/com/example/modulus/Login/ActivityLogIn.java	(date 1744633265920)
+@@ -22,6 +22,8 @@
+ import com.example.modulus.MainActivity;
+ import com.example.modulus.R;
+ 
++import java.io.IOException;
++
+ public class ActivityLogIn extends AppCompatActivity {
+     private TextView forget;
+     private EditText email, password;
+@@ -59,6 +61,13 @@
+ 
+ 
+         databasehelper = new DataBaseHelperLogin(this);
++        try {
++            databasehelper.createDatabase();
++            Log.e(TAG, "Database created");
++        } catch (IOException e) {
++            e.printStackTrace();
++            Log.e(TAG, "Database copy failed", e);
++        }
+         SQLiteDatabase db = databasehelper.getReadableDatabase();
+         Log.d(TAG, "Database opened: " + db.getPath());
+ 
+Index: app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources>\r\n    <string name=\"app_name\">Modulus</string>\r\n    <string name=\"open_nav\">Open Navigation Drawer</string>\r\n    <string name=\"close_nav\">Close Navigation Drawer</string>\r\n    <!-- TODO: Remove or change this placeholder text -->\r\n    <string name=\"hello_blank_fragment\">Hello blank fragment</string>\r\n\r\n    <string name=\"forget\"><a href=\"https://ease.sutd.edu.sg/\">Forget Password?</a></string>\r\n\r\n    <!-- Calendar theme -->\r\n    <style name=\"CalendarTheme\" parent=\"Theme.AppCompat\">\r\n\r\n        <item name=\"android:colorPrimary\">@color/black</item>\r\n        <item name=\"android:colorControlActivated\">@color/dark_purple</item>\r\n        <item name=\"android:textColorPrimary\">@color/white</item>\r\n        <item name=\"android:colorBackground\">@color/black</item>\r\n    </style>\r\n\r\n    <!-- Calendar date text appearance -->\r\n    <style name=\"CalendarDateTextAppearance\">\r\n        <item name=\"android:textColor\">@color/white</item>\r\n        <item name=\"android:textSize\">14sp</item>\r\n    </style>\r\n\r\n    <!-- Calendar weekday text appearance -->\r\n    <style name=\"CalendarWeekDayAppearance\">\r\n        <item name=\"android:textColor\">@color/white</item>\r\n        <item name=\"android:textSize\">12sp</item>\r\n    </style>\r\n    <style name=\"TextInputLayoutStyle\" parent=\"Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense\">\r\n        <item name=\"boxStrokeColor\">@color/white</item>\r\n        <item name=\"boxStrokeWidth\">2dp</item>\r\n    </style>\r\n    <style name=\"ThemeOverlay.AppTheme.TextInputEditText.Outlined\" parent=\"\">\r\n        <item name=\"colorPrimary\">@color/white</item>\r\n    </style>\r\n\r\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/values/strings.xml b/app/src/main/res/values/strings.xml
+--- a/app/src/main/res/values/strings.xml	(revision 442cadc3aa99834e6ad40d4ed9903d38026ab449)
++++ b/app/src/main/res/values/strings.xml	(date 1744651648500)
+@@ -2,7 +2,7 @@
+     <string name="app_name">Modulus</string>
+     <string name="open_nav">Open Navigation Drawer</string>
+     <string name="close_nav">Close Navigation Drawer</string>
+-    <!-- TODO: Remove or change this placeholder text -->
++
+     <string name="hello_blank_fragment">Hello blank fragment</string>
+ 
+     <string name="forget"><a href="https://ease.sutd.edu.sg/">Forget Password?</a></string>
+@@ -35,4 +35,19 @@
+         <item name="colorPrimary">@color/white</item>
+     </style>
+ 
++    <style name="Chip" parent="Widget.MaterialComponents.Chip.Choice">
++        <item name="chipBackgroundColor">@color/chip_background_colour</item>
++        <item name="checkedIconVisible">false</item>
++        <item name="android:textColor">@color/chip_text_colour</item>
++        <item name="android:textAppearance">@style/Bold</item>
++        <item name="shapeAppearanceOverlay">@null</item>
++        <item name="android:drawableTint">@color/chip_text_colour</item>
++        <item name="chipIconTint">@color/chip_text_colour</item>
++
++    </style>
++    <style name="Bold" parent="TextAppearance.MaterialComponents.Chip">
++        <item name="android:textStyle">bold</item>
++    </style>
++
++
+ </resources>
+\ No newline at end of file
+Index: app/src/main/res/layout/view_day.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<RelativeLayout\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    android:orientation=\"vertical\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"wrap_content\"\r\n    android:minHeight=\"@dimen/dayHeight\">\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:gravity=\"center\"\r\n        android:orientation=\"horizontal\">\r\n\r\n        <TextView\r\n            android:id=\"@+id/text_hour\"\r\n            android:layout_width=\"40dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginEnd=\"5dp\"\r\n            android:gravity=\"end\"\r\n            android:textSize=\"12sp\"\r\n            android:textColor=\"@color/dark_purple\"\r\n            android:textStyle=\"bold\"\r\n            android:text=\"12:00\" />\r\n\r\n        <LinearLayout\r\n            android:id=\"@+id/separate_hour\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"0.5dp\"\r\n            android:background=\"#f0f0f0\"\r\n            android:orientation=\"horizontal\" />\r\n    </LinearLayout>\r\n</RelativeLayout>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/view_day.xml b/app/src/main/res/layout/view_day.xml
+--- a/app/src/main/res/layout/view_day.xml	(revision 442cadc3aa99834e6ad40d4ed9903d38026ab449)
++++ b/app/src/main/res/layout/view_day.xml	(date 1744642057840)
+@@ -19,7 +19,7 @@
+             android:layout_marginEnd="5dp"
+             android:gravity="end"
+             android:textSize="12sp"
+-            android:textColor="@color/dark_purple"
++            android:textColor="#AA79E4"
+             android:textStyle="bold"
+             android:text="12:00" />
+ 
+Index: app/src/main/res/color/chip_background_colour.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/color/chip_background_colour.xml b/app/src/main/res/color/chip_background_colour.xml
+new file mode 100644
+--- /dev/null	(date 1744650618989)
++++ b/app/src/main/res/color/chip_background_colour.xml	(date 1744650618989)
+@@ -0,0 +1,5 @@
++<?xml version="1.0" encoding="utf-8"?>
++<selector xmlns:android="http://schemas.android.com/apk/res/android">
++    <item android:color="@color/dark_purple" android:state_checked="true" />
++    <item android:color="@color/light_purple" />
++</selector>
+\ No newline at end of file
+Index: app/src/main/res/color/chip_text_colour.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/color/chip_text_colour.xml b/app/src/main/res/color/chip_text_colour.xml
+new file mode 100644
+--- /dev/null	(date 1744650411747)
++++ b/app/src/main/res/color/chip_text_colour.xml	(date 1744650411747)
+@@ -0,0 +1,5 @@
++<?xml version="1.0" encoding="utf-8"?>
++<selector xmlns:android="http://schemas.android.com/apk/res/android">
++    <item android:color="@color/white" android:state_checked="true" />
++    <item android:color="@color/black" />
++</selector>
+\ No newline at end of file
+Index: app/src/main/res/layout/fragment_home.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<RelativeLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:orientation=\"vertical\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:layout_marginBottom=\"50dp\"\r\n    android:id=\"@+id/homeMain\"\r\n    tools:context=\".FragmentHome.HomeFragment\">\r\n\r\n    <TextView\r\n        android:id=\"@+id/homeTitle\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:textAlignment=\"center\"\r\n        android:text=\"Today's Task\"\r\n        android:textStyle=\"bold\"\r\n        android:textColor=\"@color/white\"\r\n        android:textSize=\"20sp\"/>\r\n\r\n    <androidx.recyclerview.widget.RecyclerView\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:id=\"@+id/dateItemRecycler\"\r\n        android:layout_below=\"@id/homeTitle\"/>\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:id=\"@+id/buttonRecycler\"\r\n        android:layout_below=\"@id/dateItemRecycler\"\r\n        android:weightSum=\"3\"\r\n        android:layout_marginVertical=\"5dp\">\r\n        <Space\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_weight=\"0.5\" />\r\n        <Button\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"All\"\r\n            android:backgroundTint=\"@color/dark_purple\"\r\n            android:textColor=\"@color/white\"/>\r\n        <Space\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_weight=\"1\" />\r\n        <Button\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"To-Do\"\r\n            android:textColor=\"@color/black\"\r\n            android:backgroundTint=\"@color/light_purple\"/>\r\n        <Space\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_weight=\"1\" />\r\n        <Button\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"Completed\"\r\n            android:textColor=\"@color/black\"\r\n            android:backgroundTint=\"@color/light_purple\"/>\r\n        <Space\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_weight=\"0.5\" />\r\n\r\n\r\n    </LinearLayout>\r\n\r\n    <!--TextView\r\n        android:id=\"@+id/textView\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"To Do List\"\r\n        android:layout_centerHorizontal=\"true\"\r\n        android:textSize=\"25sp\"\r\n        android:textStyle=\"bold\"\r\n        android:textColor=\"@color/white\"\r\n        android:layout_margin=\"10dp\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\" /-->\r\n    <RelativeLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        android:layout_below=\"@id/buttonRecycler\">\r\n\r\n        <androidx.recyclerview.widget.RecyclerView\r\n            android:id=\"@+id/recyclerView\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"match_parent\"\r\n            android:nestedScrollingEnabled=\"true\"\r\n            android:layout_marginBottom=\"20dp\"/>\r\n\r\n        <com.google.android.material.floatingactionbutton.FloatingActionButton\r\n            android:id=\"@+id/addButton\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_alignParentEnd=\"true\"\r\n            android:layout_alignParentBottom=\"true\"\r\n            android:layout_marginRight=\"20dp\"\r\n            android:layout_marginBottom=\"30dp\"\r\n            android:src=\"@drawable/baseline_add_24\"/>\r\n\r\n\r\n    </RelativeLayout>\r\n\r\n</RelativeLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_home.xml b/app/src/main/res/layout/fragment_home.xml
+--- a/app/src/main/res/layout/fragment_home.xml	(revision 442cadc3aa99834e6ad40d4ed9903d38026ab449)
++++ b/app/src/main/res/layout/fragment_home.xml	(date 1744642185538)
+@@ -6,6 +6,7 @@
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     android:layout_marginBottom="50dp"
++    android:layout_marginTop="20dp"
+     android:id="@+id/homeMain"
+     tools:context=".FragmentHome.HomeFragment">
+ 
+@@ -20,6 +21,7 @@
+         android:textSize="20sp"/>
+ 
+     <androidx.recyclerview.widget.RecyclerView
++        android:layout_marginTop="10dp"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:id="@+id/dateItemRecycler"

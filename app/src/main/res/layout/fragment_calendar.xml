@@ -12,7 +12,7 @@
         android:id="@+id/calendar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/black"
+        android:background="@color/black_background"
         android:dateTextAppearance="@style/CalendarDateTextAppearance"
         android:theme="@style/CalendarTheme"
         android:weekDayTextAppearance="@style/CalendarWeekDayAppearance" />
@@ -22,7 +22,7 @@
         android:id="@+id/dateBar"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@color/black"
+        android:background="@color/black_background"
         android:padding="8dp">
 
         <TextView

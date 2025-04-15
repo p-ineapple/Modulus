@@ -1,0 +1,130 @@
+Index: app/src/main/java/com/example/modulus/Model/ModuleModel.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.Model;\r\n\r\nimport java.util.List;\r\n\r\npublic class ModuleModel {\r\n    private String id;\r\n    private String name;\r\n    private String pillar;\r\n    private int color;\r\n    private List<String> tags;\r\n    private List<String> term;\r\n    private List<String> prof;\r\n    private List<String> prerequisites;\r\n    private String description;\r\n    public ModuleModel(){\r\n    }\r\n    public ModuleModel(String id, String name) {\r\n        this.id = id;\r\n        this.name = name;\r\n    }\r\n\r\n    public String getId() {\r\n        if(id == null){\r\n            return \"\";\r\n        }else{\r\n            return id;\r\n        }\r\n    }\r\n    public void setId(String id) {\r\n        this.id = id;\r\n    }\r\n\r\n    public String getName() {\r\n        return name;\r\n    }\r\n\r\n    public void setName(String name) {\r\n        this.name = name;\r\n    }\r\n    public String getPillar() {\r\n        return pillar;\r\n    }\r\n\r\n    public void setPillar(String pillar) {\r\n        this.pillar = pillar;\r\n    }\r\n    public List<String> getTags() {\r\n        if(tags == null) {\r\n            return null;\r\n        }else{\r\n            return tags;\r\n        }\r\n    }\r\n    public void setTags(List<String> tags) {\r\n        this.tags = tags;\r\n    }\r\n\r\n    public List<String> getTerm() {\r\n        if(term == null) {\r\n            return null;\r\n        }else{\r\n            return term;\r\n        }\r\n    }\r\n    public void setTerm(List<String> term) {\r\n        this.term = term;\r\n    }\r\n    public List<String> getProf() {\r\n        if(prof == null) {\r\n            return null;\r\n        }else{\r\n            return prof;\r\n        }\r\n    }\r\n\r\n    public void setProf(List<String> prof) {\r\n        this.prof = prof;\r\n    }\r\n    public List<String> getPrerequisites() {\r\n        return prerequisites;\r\n    }\r\n    public void setPrerequisites(List<String> prerequisites) {\r\n        this.prerequisites = prerequisites;\r\n    }\r\n    public String getDescription() {\r\n        return description;\r\n    }\r\n    public void setDescription(String description) {\r\n        this.description = description;\r\n    }\r\n    @Override\r\n    public String toString(){\r\n        return getId() + \" - \" + getName();\r\n    }\r\n    public static ModuleModel getModuleFromString(String s){\r\n        if(s.contains(\" - \")){\r\n            String[] module = s.split(\" - \");\r\n            return new ModuleModel(module[0], module[1]);\r\n        }else if(s.contains(\"Capstone\")){\r\n            return new ModuleModel(\"\", \"Capstone\");\r\n        }else{\r\n            return null;\r\n        }\r\n    }\r\n\r\n    public int getColor() {\r\n        return color;\r\n    }\r\n\r\n    public void setColor(int color) {\r\n        this.color = color;\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/Model/ModuleModel.java b/app/src/main/java/com/example/modulus/Model/ModuleModel.java
+--- a/app/src/main/java/com/example/modulus/Model/ModuleModel.java	(revision 611051abf635480f37ed2adf664f798e47d8f0b1)
++++ b/app/src/main/java/com/example/modulus/Model/ModuleModel.java	(date 1744705499651)
+@@ -1,11 +1,16 @@
+ package com.example.modulus.Model;
+ 
++import android.graphics.Bitmap;
++import android.graphics.drawable.Drawable;
++
+ import java.util.List;
+ 
+ public class ModuleModel {
+     private String id;
+     private String name;
+     private String pillar;
++
++    private Drawable image;
+     private int color;
+     private List<String> tags;
+     private List<String> term;
+@@ -111,4 +116,11 @@
+         this.color = color;
+     }
+ 
++    public Drawable getImage() {
++        return image;
++    }
++
++    public void setImage(Drawable image) {
++        this.image = image;
++    }
+ }
+Index: app/src/main/java/com/example/modulus/FragmentInsights/DataBaseHelperInsights.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.FragmentInsights;\r\n\r\nimport android.content.Context;\r\nimport android.database.Cursor;\r\nimport android.database.sqlite.SQLiteDatabase;\r\nimport android.database.sqlite.SQLiteOpenHelper;\r\nimport android.database.sqlite.SQLiteException;\r\nimport android.util.Log;\r\n\r\nimport com.example.modulus.Model.ModuleModel;\r\nimport com.example.modulus.Model.PlannerModel;\r\nimport com.example.modulus.R;\r\n\r\nimport java.io.File;\r\nimport java.io.FileOutputStream;\r\nimport java.io.IOException;\r\nimport java.io.InputStream;\r\nimport java.io.OutputStream;\r\nimport java.util.ArrayList;\r\nimport java.util.Arrays;\r\n\r\npublic class DataBaseHelperInsights extends SQLiteOpenHelper {\r\n    private static final String dbName = \"sutdModules.db\";\r\n    private static final String tableName = \"sutdmodules\";\r\n    private static final String plannerTable = \"planner\";\r\n    private static String dbPath = \"/data/data/com.example.modulus/databases/\";\r\n    SQLiteDatabase db;\r\n    private final Context mContext;\r\n    private static final String col0 = \"Pillar\";\r\n    private static final String col1 = \"Tags\";\r\n    private static final String col2 = \"Term\";\r\n    private static final String col3 = \"ID\";\r\n    private static final String col4 = \"Name\";\r\n    private static final String col5 = \"Professors\";\r\n    private static final String col6 = \"Prerequisites\";\r\n\r\n    public DataBaseHelperInsights(Context context) {\r\n        super(context, dbName, null, 1);\r\n        this.mContext = context;\r\n    }\r\n\r\n    @Override\r\n    public void onCreate(SQLiteDatabase db) {\r\n    }\r\n\r\n    @Override\r\n    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {\r\n    }\r\n\r\n    private boolean checkDatabase() {\r\n        try {\r\n            final String mPath = dbPath + dbName;\r\n            Log.d(\"check\", \"check\");\r\n            final File file = new File(mPath);\r\n            return file.exists();\r\n        } catch (SQLiteException e) {\r\n            e.printStackTrace();\r\n            return false;\r\n        }\r\n    }\r\n\r\n    private void copyDatabase() throws IOException {\r\n        try {\r\n            InputStream mInputStream = mContext.getAssets().open(dbName);\r\n            Log.d(\"DB\", \"Copying Database\");\r\n            String outFileName = dbPath + dbName;\r\n            OutputStream mOutputStream = new FileOutputStream(outFileName);\r\n\r\n            byte[] buffer = new byte[2048];\r\n            int length;\r\n            while ((length = mInputStream.read(buffer)) > 0) {\r\n                mOutputStream.write(buffer, 0, length);\r\n            }\r\n            mOutputStream.flush();\r\n            mOutputStream.close();\r\n            mInputStream.close();\r\n        } catch (Exception e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    public void createDatabase() throws IOException {\r\n        boolean mDatabaseExists = checkDatabase();\r\n        Log.d(\"create\", \"create\");\r\n        if (mDatabaseExists) {\r\n            this.getReadableDatabase();\r\n            this.close();\r\n            try {\r\n                copyDatabase();\r\n            } catch (IOException mIOException) {\r\n                mIOException.printStackTrace();\r\n                throw new Error(\"Error copying Database\");\r\n            } finally {\r\n                this.close();\r\n            }\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public synchronized void close() {\r\n        if (db != null) {\r\n            db.close();\r\n        }\r\n        SQLiteDatabase.releaseMemory();\r\n        super.close();\r\n    }\r\n\r\n    public ArrayList<ModuleModel> getAllModules() {\r\n        try {\r\n            createDatabase();\r\n        } catch (IOException e) {\r\n            e.printStackTrace();\r\n        }\r\n        ArrayList<ModuleModel> result = new ArrayList<>();\r\n        SQLiteDatabase db = this.getReadableDatabase();\r\n\r\n        Cursor c = db.query(tableName, null, null, null, null, null, null);\r\n\r\n        while (c.moveToNext()) {\r\n            String id = c.getString(3);\r\n            String name = c.getString(4);\r\n            ModuleModel module = new ModuleModel(id, name);\r\n            module.setPillar(c.getString(0));\r\n            module.setTags(Arrays.asList(c.getString(1).split(\",\")));\r\n            module.setTerm(Arrays.asList(c.getString(2).split(\",\")));\r\n            module.setProf(Arrays.asList(c.getString(5).split(\",\")));\r\n            module.setPrerequisites(Arrays.asList(c.getString(6).split(\",\")));\r\n            module.setDescription(c.getString(8));\r\n            module.setColor(getColourR(c.getString(0)));\r\n            result.add(module);\r\n        }\r\n        c.close();\r\n        db.close();\r\n\r\n        return result;\r\n    }\r\n\r\n    private int getColourR(String Pillar){\r\n        switch (Pillar){\r\n            case \"ASD\":\r\n                return R.color.ASD;\r\n            case \"EPD\":\r\n                return R.color.EPD;\r\n            case \"ESD\":\r\n                return R.color.ESD;\r\n            case \"DAI\":\r\n                return R.color.DAI;\r\n            case \"ISTD\":\r\n                return R.color.ISTD;\r\n            case \"HASS\":\r\n                return R.color.HASS;\r\n            case \"SMT\":\r\n                return R.color.SMT;\r\n            default:\r\n                return R.color.OTHERS;\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/FragmentInsights/DataBaseHelperInsights.java b/app/src/main/java/com/example/modulus/FragmentInsights/DataBaseHelperInsights.java
+--- a/app/src/main/java/com/example/modulus/FragmentInsights/DataBaseHelperInsights.java	(revision 611051abf635480f37ed2adf664f798e47d8f0b1)
++++ b/app/src/main/java/com/example/modulus/FragmentInsights/DataBaseHelperInsights.java	(date 1744705499646)
+@@ -5,10 +5,13 @@
+ import android.database.sqlite.SQLiteDatabase;
+ import android.database.sqlite.SQLiteOpenHelper;
+ import android.database.sqlite.SQLiteException;
++import android.graphics.Bitmap;
++import android.graphics.drawable.Drawable;
+ import android.util.Log;
+ 
++import androidx.core.content.ContextCompat;
++
+ import com.example.modulus.Model.ModuleModel;
+-import com.example.modulus.Model.PlannerModel;
+ import com.example.modulus.R;
+ 
+ import java.io.File;
+@@ -127,7 +130,9 @@
+             module.setPrerequisites(Arrays.asList(c.getString(6).split(",")));
+             module.setDescription(c.getString(8));
+             module.setColor(getColourR(c.getString(0)));
++            module.setImage(getImage(mContext,c.getString(0)));
+             result.add(module);
++
+         }
+         c.close();
+         db.close();
+@@ -155,4 +160,38 @@
+                 return R.color.OTHERS;
+         }
+     }
++
++
++
++    private Drawable getImage(Context context, String Pillar){
++        int resId;
++        switch (Pillar){
++            case "ASD":
++                resId = R.drawable.asd;
++                break;
++            case "EPD":
++                resId = R.drawable.epd;
++                break;
++            case "ESD":
++                resId = R.drawable.esd;
++                break;
++            case "DAI":
++                resId = R.drawable.dai;
++                break;
++            case "ISTD":
++                resId = R.drawable.istd;
++                break;
++            case "HASS":
++                resId = R.drawable.hass;
++                break;
++            case "SMT":
++                resId = R.drawable.smt;
++                break;
++            default:
++                resId = R.drawable.others;
++                break;
++        }
++        return ContextCompat.getDrawable(context, resId);
++    }
++
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/modulus/Model/Kahn.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.Model;\r\n\r\npublic class Kahn {\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/Model/Kahn.java b/app/src/main/java/com/example/modulus/Model/Kahn.java
+--- a/app/src/main/java/com/example/modulus/Model/Kahn.java	(revision 611051abf635480f37ed2adf664f798e47d8f0b1)
++++ b/app/src/main/java/com/example/modulus/Model/Kahn.java	(date 1744705499648)
+@@ -1,4 +1,5 @@
+ package com.example.modulus.Model;
+ 
+ public class Kahn {
++
+ }

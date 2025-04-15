@@ -1,0 +1,269 @@
+Index: app/src/main/java/com/example/modulus/FragmentInsights/ModuleDetailsActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.FragmentInsights;\r\n\r\nimport static com.example.modulus.R.id.backgroup;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.core.content.ContextCompat;\r\n\r\nimport android.content.Intent;\r\nimport android.content.res.ColorStateList;\r\nimport android.net.Uri;\r\nimport android.os.Bundle;\r\nimport android.os.Handler;\r\nimport android.os.Looper;\r\nimport android.text.Html;\r\nimport android.text.TextUtils;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.widget.ImageView;\r\nimport android.widget.RelativeLayout;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport com.example.modulus.Model.ModuleModel;\r\nimport com.example.modulus.R;\r\nimport com.example.modulus.Utils.WebView;\r\nimport com.google.android.material.divider.MaterialDivider;\r\n\r\nimport org.json.JSONException;\r\nimport org.json.JSONObject;\r\n\r\nimport java.net.MalformedURLException;\r\nimport java.net.URL;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\nimport java.util.concurrent.ExecutorService;\r\nimport java.util.concurrent.Executors;\r\n\r\npublic class ModuleDetailsActivity extends AppCompatActivity{\r\n    ModuleModel selectedModule;\r\n    final String TAG = \"Module Insights\";\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_module_details);\r\n        getSelectedModule();\r\n        setValues();\r\n\r\n        RelativeLayout backButton = findViewById(backgroup);\r\n        backButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                finish();\r\n            }\r\n        });\r\n\r\n        TextView info = findViewById(R.id.moreInfo);\r\n        info.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                if (WebView.isNetworkAvailable(ModuleDetailsActivity.this)) {\r\n                    openURL();\r\n                } else {\r\n                    Toast.makeText(ModuleDetailsActivity.this, \"No Network\", Toast.LENGTH_SHORT).show();\r\n                }\r\n            }\r\n        });\r\n    }\r\n\r\n    private void getSelectedModule() {\r\n        Intent previousIntent = getIntent();\r\n        String parsedStringID = previousIntent.getStringExtra(\"id\");\r\n        selectedModule = getParsedModule(parsedStringID);\r\n    }\r\n\r\n    private ModuleModel getParsedModule(String parsedID) {\r\n        for (ModuleModel module : InsightsFragment.moduleList) {\r\n            if(module.getId().equals(parsedID))\r\n                return module;\r\n        }\r\n        return null;\r\n    }\r\n\r\n    private void setValues() {\r\n\r\n\r\n\r\n        TextView Name = findViewById(R.id.moduleDetailsName);\r\n        Name.setText(selectedModule.getName());\r\n\r\n        TextView pillar = findViewById(R.id.moduleDetailsPillar);\r\n        pillar.setText(selectedModule.getPillar() + \" \" + selectedModule.getId());\r\n        int color = ContextCompat.getColor(this, selectedModule.getColor());\r\n        pillar.setTextColor(color);\r\n\r\n        RelativeLayout back = findViewById(R.id.backgroup);\r\n        back.setBackgroundColor(color);\r\n\r\n        TextView moreInfo = findViewById(R.id.moreInfo);\r\n\r\n        moreInfo.setCompoundDrawableTintList(ColorStateList.valueOf(color));\r\n\r\n\r\n\r\n\r\n        TextView preReq = findViewById(R.id.prerequisites);\r\n        List<String> modPreReq = selectedModule.getPrerequisites();\r\n        List<String> output = new ArrayList<>();\r\n        for(String id: modPreReq){\r\n            if(!id.contains(\"/\")){\r\n                ModuleModel module = InsightsFragment.moduleList.stream().filter(m -> id.contains(m.getId())).findFirst().orElse(null);\r\n                if(module != null){\r\n                    output.add(module.toString());\r\n                }\r\n            }else{\r\n                String[] splitMods = id.split(\"/\");\r\n                StringBuilder orString = new StringBuilder();\r\n                for(int i = 0; i < splitMods.length; i++){\r\n                    String innerId = splitMods[i];\r\n                    ModuleModel module = InsightsFragment.moduleList.stream().filter(m -> innerId.contains(m.getId())).findFirst().orElse(null);\r\n                    if(module != null) {\r\n                        orString.append(module);\r\n                    }\r\n                    if(i < splitMods.length - 1){\r\n                        orString.append(\" <b>OR</b><br />\");\r\n                    }\r\n                }\r\n                output.add(orString.toString());\r\n            }\r\n\r\n\r\n        }\r\n\r\n        if (!output.isEmpty()){\r\n            preReq.setText(Html.fromHtml(TextUtils.join(\"<br>\", output), Html.FROM_HTML_MODE_LEGACY));\r\n\r\n        } else{\r\n            preReq.setText(\"No Pre-requisites\");\r\n        }\r\n\r\n\r\n\r\n    }\r\n\r\n    private void openURL(){\r\n        ExecutorService executorService = Executors.newSingleThreadExecutor();\r\n        Looper uiLooper = Looper.getMainLooper();\r\n        final Handler handler = new Handler(uiLooper);\r\n\r\n        executorService.execute(new Runnable() {\r\n            @Override\r\n            public void run() { // Background thread\r\n                URL url = WebView.getURLFromDesc(selectedModule);\r\n                String response = WebView.getJson(url);\r\n                if (response == null) {\r\n                    handler.post(new Runnable() { // Main thread\r\n                        @Override\r\n                        public void run() {\r\n                            // main thread\r\n                            Log.i(\"UI Thread\", \"Invalid URL\");\r\n                            Toast.makeText(ModuleDetailsActivity.this, \"Invalid URL\", Toast.LENGTH_SHORT).show();\r\n                        }\r\n                    });\r\n                } else {\r\n                    handler.post(new Runnable() {\r\n                        // main thread\r\n                        @Override\r\n                        public void run() {\r\n                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(selectedModule.getDescription()));\r\n                            startActivity(browserIntent);\r\n                        }\r\n                    });\r\n                }\r\n            }\r\n        });\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/FragmentInsights/ModuleDetailsActivity.java b/app/src/main/java/com/example/modulus/FragmentInsights/ModuleDetailsActivity.java
+--- a/app/src/main/java/com/example/modulus/FragmentInsights/ModuleDetailsActivity.java	(revision 611051abf635480f37ed2adf664f798e47d8f0b1)
++++ b/app/src/main/java/com/example/modulus/FragmentInsights/ModuleDetailsActivity.java	(date 1744704017506)
+@@ -7,6 +7,7 @@
+ 
+ import android.content.Intent;
+ import android.content.res.ColorStateList;
++import android.graphics.drawable.Drawable;
+ import android.net.Uri;
+ import android.os.Bundle;
+ import android.os.Handler;
+@@ -93,13 +94,20 @@
+         int color = ContextCompat.getColor(this, selectedModule.getColor());
+         pillar.setTextColor(color);
+ 
++
++        TextView tags = findViewById(R.id.tags);
++        tags.setText(String.join(", ", selectedModule.getTags()));
++
++
+         RelativeLayout back = findViewById(R.id.backgroup);
+         back.setBackgroundColor(color);
+ 
+         TextView moreInfo = findViewById(R.id.moreInfo);
+-
+         moreInfo.setCompoundDrawableTintList(ColorStateList.valueOf(color));
+ 
++        ImageView imageMod = findViewById(R.id.imageMod);
++        imageMod.setImageDrawable(selectedModule.getImage());
++
+ 
+ 
+ 
+Index: app/src/main/java/com/example/modulus/Model/ModuleModel.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.Model;\r\n\r\nimport java.util.List;\r\n\r\npublic class ModuleModel {\r\n    private String id;\r\n    private String name;\r\n    private String pillar;\r\n    private int color;\r\n    private List<String> tags;\r\n    private List<String> term;\r\n    private List<String> prof;\r\n    private List<String> prerequisites;\r\n    private String description;\r\n    public ModuleModel(){\r\n    }\r\n    public ModuleModel(String id, String name) {\r\n        this.id = id;\r\n        this.name = name;\r\n    }\r\n\r\n    public String getId() {\r\n        if(id == null){\r\n            return \"\";\r\n        }else{\r\n            return id;\r\n        }\r\n    }\r\n    public void setId(String id) {\r\n        this.id = id;\r\n    }\r\n\r\n    public String getName() {\r\n        return name;\r\n    }\r\n\r\n    public void setName(String name) {\r\n        this.name = name;\r\n    }\r\n    public String getPillar() {\r\n        return pillar;\r\n    }\r\n\r\n    public void setPillar(String pillar) {\r\n        this.pillar = pillar;\r\n    }\r\n    public List<String> getTags() {\r\n        if(tags == null) {\r\n            return null;\r\n        }else{\r\n            return tags;\r\n        }\r\n    }\r\n    public void setTags(List<String> tags) {\r\n        this.tags = tags;\r\n    }\r\n\r\n    public List<String> getTerm() {\r\n        if(term == null) {\r\n            return null;\r\n        }else{\r\n            return term;\r\n        }\r\n    }\r\n    public void setTerm(List<String> term) {\r\n        this.term = term;\r\n    }\r\n    public List<String> getProf() {\r\n        if(prof == null) {\r\n            return null;\r\n        }else{\r\n            return prof;\r\n        }\r\n    }\r\n\r\n    public void setProf(List<String> prof) {\r\n        this.prof = prof;\r\n    }\r\n    public List<String> getPrerequisites() {\r\n        return prerequisites;\r\n    }\r\n    public void setPrerequisites(List<String> prerequisites) {\r\n        this.prerequisites = prerequisites;\r\n    }\r\n    public String getDescription() {\r\n        return description;\r\n    }\r\n    public void setDescription(String description) {\r\n        this.description = description;\r\n    }\r\n    @Override\r\n    public String toString(){\r\n        return getId() + \" - \" + getName();\r\n    }\r\n    public static ModuleModel getModuleFromString(String s){\r\n        if(s.contains(\" - \")){\r\n            String[] module = s.split(\" - \");\r\n            return new ModuleModel(module[0], module[1]);\r\n        }else if(s.contains(\"Capstone\")){\r\n            return new ModuleModel(\"\", \"Capstone\");\r\n        }else{\r\n            return null;\r\n        }\r\n    }\r\n\r\n    public int getColor() {\r\n        return color;\r\n    }\r\n\r\n    public void setColor(int color) {\r\n        this.color = color;\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/Model/ModuleModel.java b/app/src/main/java/com/example/modulus/Model/ModuleModel.java
+--- a/app/src/main/java/com/example/modulus/Model/ModuleModel.java	(revision 611051abf635480f37ed2adf664f798e47d8f0b1)
++++ b/app/src/main/java/com/example/modulus/Model/ModuleModel.java	(date 1744702834078)
+@@ -1,11 +1,16 @@
+ package com.example.modulus.Model;
+ 
++import android.graphics.Bitmap;
++import android.graphics.drawable.Drawable;
++
+ import java.util.List;
+ 
+ public class ModuleModel {
+     private String id;
+     private String name;
+     private String pillar;
++
++    private Drawable image;
+     private int color;
+     private List<String> tags;
+     private List<String> term;
+@@ -111,4 +116,11 @@
+         this.color = color;
+     }
+ 
++    public Drawable getImage() {
++        return image;
++    }
++
++    public void setImage(Drawable image) {
++        this.image = image;
++    }
+ }
+Index: app/src/main/res/layout/activity_module_details.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n\r\n<LinearLayout\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    tools:ignore=\"HardcodedText\"\r\n    android:orientation=\"vertical\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:background=\"@color/white\"\r\n    >\r\n\r\n    <RelativeLayout\r\n        android:id=\"@+id/backgroup\"\r\n        android:paddingVertical=\"12sp\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:gravity=\"center_vertical\"\r\n        android:background=\"@color/white\"\r\n\r\n\r\n        >\r\n\r\n        <ImageView\r\n            android:id=\"@+id/backButton\"\r\n            android:layout_width=\"28sp\"\r\n            android:layout_height=\"28sp\"\r\n            android:src=\"@drawable/arrow_back\"\r\n            android:layout_centerVertical=\"true\" />\r\n\r\n        <TextView\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:id=\"@+id/Back\"\r\n            android:text=\"Back\"\r\n            android:textColor=\"@color/black\"\r\n            android:textSize=\"20sp\"\r\n            android:layout_marginHorizontal=\"10dp\"\r\n            android:layout_toEndOf=\"@id/backButton\" />\r\n\r\n\r\n\r\n    </RelativeLayout>\r\n\r\n    <androidx.constraintlayout.widget.ConstraintLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\">\r\n        <ImageView\r\n            android:id=\"@+id/imageMod\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"match_parent\"\r\n            android:src=\"@drawable/asd\"\r\n            android:adjustViewBounds=\"true\">\r\n\r\n        </ImageView>\r\n\r\n        <TextView\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:id=\"@+id/moduleDetailsPillar\"\r\n            android:text=\"Pillar\"\r\n            android:textSize=\"28sp\"\r\n            android:textStyle=\"bold\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/imageMod\"\r\n            app:layout_constraintWidth=\"match_parent\"\r\n            android:layout_marginHorizontal=\"14dp\"\r\n            android:layout_marginVertical=\"10dp\"/>\r\n\r\n\r\n        <TextView\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:id=\"@+id/moduleDetailsName\"\r\n            android:text=\"Module Name\"\r\n            android:textSize=\"24sp\"\r\n            android:textStyle=\"bold\"\r\n            android:textColor=\"@color/black\"\r\n            android:maxLines=\"4\"\r\n            android:gravity=\"center_vertical\"\r\n            android:layout_marginHorizontal=\"14dp\"\r\n            app:layout_constraintVertical_bias=\"0.5\"\r\n            app:layout_constraintWidth=\"match_parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/moduleDetailsPillar\"\r\n            />\r\n\r\n\r\n        <com.google.android.material.divider.MaterialDivider\r\n            android:id=\"@+id/underModuleName\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginTop=\"8dp\"\r\n            app:dividerColor = \"@color/black\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/moduleDetailsName\"\r\n            />\r\n\r\n        <TextView\r\n            android:id=\"@+id/moreInfo\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"Course Description\"\r\n            android:textSize=\"16sp\"\r\n            android:textStyle=\"bold\"\r\n            android:textColor=\"@color/black\"\r\n            android:layout_marginHorizontal=\"14dp\"\r\n            android:layout_marginVertical=\"8dp\"\r\n            android:clickable=\"true\"\r\n            app:drawableRightCompat=\"@drawable/arrow_right\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/underModuleName\"\r\n            />\r\n\r\n        <com.google.android.material.divider.MaterialDivider\r\n            android:id=\"@+id/underInfo\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginTop=\"8dp\"\r\n            app:dividerColor = \"@color/black\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/moreInfo\"\r\n\r\n            />\r\n\r\n        <TextView\r\n            android:id=\"@+id/prerequisites_title\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"Pre-requisites\"\r\n            android:textSize=\"16sp\"\r\n            android:textStyle=\"bold\"\r\n            android:textColor=\"@color/black\"\r\n            android:layout_marginHorizontal=\"14dp\"\r\n            android:layout_marginVertical=\"8dp\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/underInfo\"/>\r\n\r\n\r\n        <TextView\r\n            android:id=\"@+id/prerequisites\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"Prerequisites_added\"\r\n            android:textSize=\"16sp\"\r\n            android:lineSpacingExtra=\"2dp\"\r\n            android:layout_marginHorizontal=\"14dp\"\r\n            android:layout_marginVertical=\"8dp\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/prerequisites_title\"/>\r\n\r\n        <com.google.android.material.divider.MaterialDivider\r\n            android:id=\"@+id/underprereq\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginVertical=\"8dp\"\r\n            app:dividerColor = \"@color/black\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/prerequisites\"\r\n            />\r\n    </androidx.constraintlayout.widget.ConstraintLayout>\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n    <TextView\r\n        android:id=\"@+id/insights\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        android:text=\"Reviews Yay!:\"\r\n        android:textSize=\"16sp\"\r\n        android:adjustViewBounds=\"true\"\r\n        android:layout_marginVertical=\"8dp\"\r\n        android:layout_marginHorizontal=\"14dp\"/>\r\n\r\n</LinearLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_module_details.xml b/app/src/main/res/layout/activity_module_details.xml
+--- a/app/src/main/res/layout/activity_module_details.xml	(revision 611051abf635480f37ed2adf664f798e47d8f0b1)
++++ b/app/src/main/res/layout/activity_module_details.xml	(date 1744704017471)
+@@ -84,6 +84,19 @@
+             app:layout_constraintTop_toBottomOf="@+id/moduleDetailsPillar"
+             />
+ 
++        <TextView
++            android:id="@+id/tags"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:text="Course Tags"
++            android:textSize="16sp"
++            android:textColor="@color/black"
++            android:layout_marginHorizontal="14dp"
++            android:layout_marginVertical="8dp"
++            android:clickable="true"
++            app:layout_constraintTop_toBottomOf="@+id/moduleDetailsName"
++            />
++
+ 
+         <com.google.android.material.divider.MaterialDivider
+             android:id="@+id/underModuleName"
+@@ -91,7 +104,7 @@
+             android:layout_height="wrap_content"
+             android:layout_marginTop="8dp"
+             app:dividerColor = "@color/black"
+-            app:layout_constraintTop_toBottomOf="@+id/moduleDetailsName"
++            app:layout_constraintTop_toBottomOf="@+id/tags"
+             />
+ 
+         <TextView
+@@ -109,13 +122,27 @@
+             app:layout_constraintTop_toBottomOf="@+id/underModuleName"
+             />
+ 
++
++        <TextView
++            android:id="@+id/termProf"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:text="Course Prfs"
++            android:textSize="16sp"
++            android:textColor="@color/black"
++            android:layout_marginHorizontal="14dp"
++            android:layout_marginVertical="8dp"
++            android:clickable="true"
++            app:layout_constraintTop_toBottomOf="@+id/moreInfo"
++            />
++
+         <com.google.android.material.divider.MaterialDivider
+             android:id="@+id/underInfo"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginTop="8dp"
+             app:dividerColor = "@color/black"
+-            app:layout_constraintTop_toBottomOf="@+id/moreInfo"
++            app:layout_constraintTop_toBottomOf="@+id/termProf"
+ 
+             />
+ 
+Index: app/src/main/java/com/example/modulus/FragmentInsights/DataBaseHelperInsights.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.FragmentInsights;\r\n\r\nimport android.content.Context;\r\nimport android.database.Cursor;\r\nimport android.database.sqlite.SQLiteDatabase;\r\nimport android.database.sqlite.SQLiteOpenHelper;\r\nimport android.database.sqlite.SQLiteException;\r\nimport android.util.Log;\r\n\r\nimport com.example.modulus.Model.ModuleModel;\r\nimport com.example.modulus.Model.PlannerModel;\r\nimport com.example.modulus.R;\r\n\r\nimport java.io.File;\r\nimport java.io.FileOutputStream;\r\nimport java.io.IOException;\r\nimport java.io.InputStream;\r\nimport java.io.OutputStream;\r\nimport java.util.ArrayList;\r\nimport java.util.Arrays;\r\n\r\npublic class DataBaseHelperInsights extends SQLiteOpenHelper {\r\n    private static final String dbName = \"sutdModules.db\";\r\n    private static final String tableName = \"sutdmodules\";\r\n    private static final String plannerTable = \"planner\";\r\n    private static String dbPath = \"/data/data/com.example.modulus/databases/\";\r\n    SQLiteDatabase db;\r\n    private final Context mContext;\r\n    private static final String col0 = \"Pillar\";\r\n    private static final String col1 = \"Tags\";\r\n    private static final String col2 = \"Term\";\r\n    private static final String col3 = \"ID\";\r\n    private static final String col4 = \"Name\";\r\n    private static final String col5 = \"Professors\";\r\n    private static final String col6 = \"Prerequisites\";\r\n\r\n    public DataBaseHelperInsights(Context context) {\r\n        super(context, dbName, null, 1);\r\n        this.mContext = context;\r\n    }\r\n\r\n    @Override\r\n    public void onCreate(SQLiteDatabase db) {\r\n    }\r\n\r\n    @Override\r\n    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {\r\n    }\r\n\r\n    private boolean checkDatabase() {\r\n        try {\r\n            final String mPath = dbPath + dbName;\r\n            Log.d(\"check\", \"check\");\r\n            final File file = new File(mPath);\r\n            return file.exists();\r\n        } catch (SQLiteException e) {\r\n            e.printStackTrace();\r\n            return false;\r\n        }\r\n    }\r\n\r\n    private void copyDatabase() throws IOException {\r\n        try {\r\n            InputStream mInputStream = mContext.getAssets().open(dbName);\r\n            Log.d(\"DB\", \"Copying Database\");\r\n            String outFileName = dbPath + dbName;\r\n            OutputStream mOutputStream = new FileOutputStream(outFileName);\r\n\r\n            byte[] buffer = new byte[2048];\r\n            int length;\r\n            while ((length = mInputStream.read(buffer)) > 0) {\r\n                mOutputStream.write(buffer, 0, length);\r\n            }\r\n            mOutputStream.flush();\r\n            mOutputStream.close();\r\n            mInputStream.close();\r\n        } catch (Exception e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    public void createDatabase() throws IOException {\r\n        boolean mDatabaseExists = checkDatabase();\r\n        Log.d(\"create\", \"create\");\r\n        if (mDatabaseExists) {\r\n            this.getReadableDatabase();\r\n            this.close();\r\n            try {\r\n                copyDatabase();\r\n            } catch (IOException mIOException) {\r\n                mIOException.printStackTrace();\r\n                throw new Error(\"Error copying Database\");\r\n            } finally {\r\n                this.close();\r\n            }\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public synchronized void close() {\r\n        if (db != null) {\r\n            db.close();\r\n        }\r\n        SQLiteDatabase.releaseMemory();\r\n        super.close();\r\n    }\r\n\r\n    public ArrayList<ModuleModel> getAllModules() {\r\n        try {\r\n            createDatabase();\r\n        } catch (IOException e) {\r\n            e.printStackTrace();\r\n        }\r\n        ArrayList<ModuleModel> result = new ArrayList<>();\r\n        SQLiteDatabase db = this.getReadableDatabase();\r\n\r\n        Cursor c = db.query(tableName, null, null, null, null, null, null);\r\n\r\n        while (c.moveToNext()) {\r\n            String id = c.getString(3);\r\n            String name = c.getString(4);\r\n            ModuleModel module = new ModuleModel(id, name);\r\n            module.setPillar(c.getString(0));\r\n            module.setTags(Arrays.asList(c.getString(1).split(\",\")));\r\n            module.setTerm(Arrays.asList(c.getString(2).split(\",\")));\r\n            module.setProf(Arrays.asList(c.getString(5).split(\",\")));\r\n            module.setPrerequisites(Arrays.asList(c.getString(6).split(\",\")));\r\n            module.setDescription(c.getString(8));\r\n            module.setColor(getColourR(c.getString(0)));\r\n            result.add(module);\r\n        }\r\n        c.close();\r\n        db.close();\r\n\r\n        return result;\r\n    }\r\n\r\n    private int getColourR(String Pillar){\r\n        switch (Pillar){\r\n            case \"ASD\":\r\n                return R.color.ASD;\r\n            case \"EPD\":\r\n                return R.color.EPD;\r\n            case \"ESD\":\r\n                return R.color.ESD;\r\n            case \"DAI\":\r\n                return R.color.DAI;\r\n            case \"ISTD\":\r\n                return R.color.ISTD;\r\n            case \"HASS\":\r\n                return R.color.HASS;\r\n            case \"SMT\":\r\n                return R.color.SMT;\r\n            default:\r\n                return R.color.OTHERS;\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/FragmentInsights/DataBaseHelperInsights.java b/app/src/main/java/com/example/modulus/FragmentInsights/DataBaseHelperInsights.java
+--- a/app/src/main/java/com/example/modulus/FragmentInsights/DataBaseHelperInsights.java	(revision 611051abf635480f37ed2adf664f798e47d8f0b1)
++++ b/app/src/main/java/com/example/modulus/FragmentInsights/DataBaseHelperInsights.java	(date 1744702940575)
+@@ -5,10 +5,13 @@
+ import android.database.sqlite.SQLiteDatabase;
+ import android.database.sqlite.SQLiteOpenHelper;
+ import android.database.sqlite.SQLiteException;
++import android.graphics.Bitmap;
++import android.graphics.drawable.Drawable;
+ import android.util.Log;
+ 
++import androidx.core.content.ContextCompat;
++
+ import com.example.modulus.Model.ModuleModel;
+-import com.example.modulus.Model.PlannerModel;
+ import com.example.modulus.R;
+ 
+ import java.io.File;
+@@ -127,7 +130,9 @@
+             module.setPrerequisites(Arrays.asList(c.getString(6).split(",")));
+             module.setDescription(c.getString(8));
+             module.setColor(getColourR(c.getString(0)));
++            module.setImage(getImage(mContext,c.getString(0)));
+             result.add(module);
++
+         }
+         c.close();
+         db.close();
+@@ -155,4 +160,38 @@
+                 return R.color.OTHERS;
+         }
+     }
++
++
++
++    private Drawable getImage(Context context, String Pillar){
++        int resId;
++        switch (Pillar){
++            case "ASD":
++                resId = R.drawable.asd;
++                break;
++            case "EPD":
++                resId = R.drawable.epd;
++                break;
++            case "ESD":
++                resId = R.drawable.esd;
++                break;
++            case "DAI":
++                resId = R.drawable.dai;
++                break;
++            case "ISTD":
++                resId = R.drawable.istd;
++                break;
++            case "HASS":
++                resId = R.drawable.hass;
++                break;
++            case "SMT":
++                resId = R.drawable.smt;
++                break;
++            default:
++                resId = R.drawable.others;
++                break;
++        }
++        return ContextCompat.getDrawable(context, resId);
++    }
++
+ }
+\ No newline at end of file
+Index: app/src/main/res/layout/fragment_calendar.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    android:id=\"@+id/calendarFragmentRoot\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:orientation=\"vertical\"\r\n    tools:context=\".FragmentCalendar.CalendarFragment\">\r\n\r\n    <CalendarView\r\n        android:id=\"@+id/calendar\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:background=\"@color/black\"\r\n        android:dateTextAppearance=\"@style/CalendarDateTextAppearance\"\r\n        android:theme=\"@style/CalendarTheme\"\r\n        android:weekDayTextAppearance=\"@style/CalendarWeekDayAppearance\" />\r\n\r\n\r\n    <RelativeLayout\r\n        android:id=\"@+id/dateBar\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"48dp\"\r\n        android:background=\"@color/black\"\r\n        android:padding=\"8dp\">\r\n\r\n        <TextView\r\n            android:id=\"@+id/selectedDateText\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"Selected Date\"\r\n            android:textColor=\"@color/white\"\r\n            android:layout_centerInParent=\"true\"\r\n            android:textSize=\"20sp\" />\r\n\r\n\r\n    </RelativeLayout>\r\n\r\n    <ScrollView\r\n        android:id=\"@+id/scrollViewDay\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"0dp\"\r\n        android:layout_weight=\"1\"\r\n        android:fillViewport=\"true\">\r\n\r\n        <com.framgia.library.calendardayview.CalendarDayView\r\n            android:id=\"@+id/dayView\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"0dp\"\r\n            android:layout_weight=\"1\"\r\n            android:paddingLeft=\"10dp\"\r\n            app:textHourSize=\"20sp\"\r\n            app:dayHeight=\"@dimen/dayHeight\"\r\n            app:startHour=\"0\"\r\n            app:endHour=\"23\" />\r\n\r\n    </ScrollView>\r\n</LinearLayout>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_calendar.xml b/app/src/main/res/layout/fragment_calendar.xml
+--- a/app/src/main/res/layout/fragment_calendar.xml	(revision 611051abf635480f37ed2adf664f798e47d8f0b1)
++++ b/app/src/main/res/layout/fragment_calendar.xml	(date 1744702098731)
+@@ -12,7 +12,7 @@
+         android:id="@+id/calendar"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+-        android:background="@color/black"
++        android:background="@color/black_background"
+         android:dateTextAppearance="@style/CalendarDateTextAppearance"
+         android:theme="@style/CalendarTheme"
+         android:weekDayTextAppearance="@style/CalendarWeekDayAppearance" />
+@@ -22,7 +22,7 @@
+         android:id="@+id/dateBar"
+         android:layout_width="match_parent"
+         android:layout_height="48dp"
+-        android:background="@color/black"
++        android:background="@color/black_background"
+         android:padding="8dp">
+ 
+         <TextView
+Index: app/src/main/res/layout/activity_main.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.drawerlayout.widget.DrawerLayout\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:id=\"@+id/drawer_layout\"\r\n    android:fitsSystemWindows=\"true\"\r\n    tools:openDrawer=\"start\"\r\n    android:background=\"@color/black_background\"\r\n    tools:context=\".MainActivity\">\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        android:orientation=\"vertical\">\r\n\r\n        <androidx.appcompat.widget.Toolbar\r\n            android:id=\"@+id/toolbar\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:background=\"@color/black\"\r\n            android:elevation=\"4dp\"\r\n            android:popupTheme=\"@style/ThemeOverlay.AppCompat.Light\"\r\n            android:theme=\"@style/ThemeOverlay.AppCompat.Dark.ActionBar\"\r\n            app:itemTextColor=\"@color/white\"/>\r\n\r\n        <FrameLayout\r\n            android:id=\"@+id/frame_layout\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"match_parent\" />\r\n\r\n    </LinearLayout>\r\n\r\n    <com.google.android.material.navigation.NavigationView\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"match_parent\"\r\n        android:id=\"@+id/nav_view\"\r\n        android:layout_gravity=\"start\"\r\n        app:headerLayout=\"@layout/nav_header\"\r\n        app:menu=\"@menu/nav_menu\"\r\n        android:backgroundTint=\"@color/light_purple\"\r\n        app:itemIconTint=\"@color/dark_purple\"\r\n        app:itemTextColor=\"@color/dark_purple\" />\r\n\r\n\r\n    <androidx.coordinatorlayout.widget.CoordinatorLayout\r\n\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\">\r\n\r\n        <com.google.android.material.bottomappbar.BottomAppBar\r\n            android:id=\"@+id/bottomAppBar\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"60dp\"\r\n            android:layout_gravity=\"bottom\">\r\n\r\n            <com.google.android.material.bottomnavigation.BottomNavigationView\r\n                android:id=\"@+id/bottomNavigationView\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:background=\"@android:color/transparent\"\r\n                android:layout_marginEnd=\"20dp\"\r\n                app:labelVisibilityMode=\"labeled\"\r\n                app:menu=\"@menu/bottom_menu\"/>\r\n\r\n        </com.google.android.material.bottomappbar.BottomAppBar>\r\n\r\n    </androidx.coordinatorlayout.widget.CoordinatorLayout>\r\n</androidx.drawerlayout.widget.DrawerLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_main.xml b/app/src/main/res/layout/activity_main.xml
+--- a/app/src/main/res/layout/activity_main.xml	(revision 611051abf635480f37ed2adf664f798e47d8f0b1)
++++ b/app/src/main/res/layout/activity_main.xml	(date 1744702053933)
+@@ -20,7 +20,7 @@
+             android:id="@+id/toolbar"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+-            android:background="@color/black"
++            android:background="@color/black_background"
+             android:elevation="4dp"
+             android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"

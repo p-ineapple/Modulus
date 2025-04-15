@@ -15,10 +15,17 @@ public class ModuleVertex {
         }
         List<String> preReq = module.getPrerequisites();
         if(!preReq.isEmpty()){
-            if(preReq.contains("OR")){
-                this.soft = preReq;
-            }else{
+            if(module.getCost().equals("Hard")){
                 this.hard = preReq;
+            }else{
+                this.soft = preReq;
+                for(String preReqMod: preReq){
+                    if(preReqMod.contains("/")){
+                        this.soft_count = 1;
+                    }else{
+                        this.soft_count = 0;
+                    }
+                }
             }
         }
     }

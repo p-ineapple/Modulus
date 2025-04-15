@@ -84,6 +84,19 @@
             app:layout_constraintTop_toBottomOf="@+id/moduleDetailsPillar"
             />
 
+        <TextView
+            android:id="@+id/tags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Course Tags"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:layout_marginHorizontal="14dp"
+            android:layout_marginVertical="8dp"
+            android:clickable="true"
+            app:layout_constraintTop_toBottomOf="@+id/moduleDetailsName"
+            />
+
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/underModuleName"
@@ -91,7 +104,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:dividerColor = "@color/black"
-            app:layout_constraintTop_toBottomOf="@+id/moduleDetailsName"
+            app:layout_constraintTop_toBottomOf="@+id/tags"
             />
 
         <TextView
@@ -109,13 +122,27 @@
             app:layout_constraintTop_toBottomOf="@+id/underModuleName"
             />
 
+
+        <TextView
+            android:id="@+id/termProf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Course Prfs"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:layout_marginHorizontal="14dp"
+            android:layout_marginVertical="8dp"
+            android:clickable="true"
+            app:layout_constraintTop_toBottomOf="@+id/moreInfo"
+            />
+
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/underInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:dividerColor = "@color/black"
-            app:layout_constraintTop_toBottomOf="@+id/moreInfo"
+            app:layout_constraintTop_toBottomOf="@+id/termProf"
 
             />
 
