@@ -19,7 +19,7 @@
             android:layout_marginEnd="5dp"
             android:gravity="end"
             android:textSize="12sp"
-            android:textColor="@color/dark_purple"
+            android:textColor="#AA79E4"
             android:textStyle="bold"
             android:text="12:00" />
 

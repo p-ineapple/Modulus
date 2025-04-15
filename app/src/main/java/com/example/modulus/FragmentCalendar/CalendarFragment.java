@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.ImageButton;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -119,7 +120,7 @@ public class CalendarFragment extends Fragment {
         Calendar today = Calendar.getInstance();
         String todayFormatted = android.text.format.DateFormat.format("dd MMMM", today.getTime()).toString();
         selectedDateText.setText("Schedule On " + todayFormatted);
-        loadEventsForSelectedDates(today);
+        loadEventsForSelectedDates(today,view);
 
 
         //Onclick, change date to SelectedDate on Calendarview
@@ -130,9 +131,10 @@ public class CalendarFragment extends Fragment {
                 selectedDates.set(year,month,dayOfMonth);
                 String selectedFormatted = android.text.format.DateFormat.format("dd MMMM", selectedDates.getTime()).toString();
                 selectedDateText.setText("Schedule On " + selectedFormatted);
-                loadEventsForSelectedDates(selectedDates);
+                loadEventsForSelectedDates(selectedDates,getView());
             }
         });
+
 
 
         return view;
@@ -154,12 +156,10 @@ public class CalendarFragment extends Fragment {
     }
 
     //Load the events for the selected Date
-    private void loadEventsForSelectedDates(Calendar date){
+    private void loadEventsForSelectedDates(Calendar date,View v){
 
         //Load events list
         ArrayList<IPopup> popForDay = new ArrayList<>();
-
-
 
         for (Popup popup : allPops) {
             if (popup.isOnDate(date)) {
@@ -167,15 +167,31 @@ public class CalendarFragment extends Fragment {
 
 
             }
-
-
         }
 
         //Set the events onto the day view
-
         hourlyDayView.setPopups(popForDay);
+        int scrollOffset;
+        int dayHeightInPixels = 170;
+        if (!popForDay.isEmpty()) {
+            Popup firstEvent = (Popup) popForDay.get(0);
+            Calendar startTime = firstEvent.getStartTime();
+            float frac= startTime.get(Calendar.HOUR_OF_DAY) + (startTime.get(Calendar.MINUTE) / 60);
+            scrollOffset = (int) (frac * dayHeightInPixels);
+        } else {
+            Calendar now = Calendar.getInstance();
+            float fract = now.get(Calendar.HOUR_OF_DAY) + (now.get(Calendar.MINUTE) / 60);
+            scrollOffset = (int) (fract* dayHeightInPixels);
 
+        }
 
+        final ScrollView scrollViewDay = v.findViewById(R.id.scrollViewDay);
+        scrollViewDay.post(new Runnable() {
+            @Override
+            public void run() {
+                scrollViewDay.scrollTo(0, scrollOffset);
+            }
+        });
 
 
     }

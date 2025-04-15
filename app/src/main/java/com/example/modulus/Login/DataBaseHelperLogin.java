@@ -58,6 +58,13 @@ public class DataBaseHelperLogin extends SQLiteOpenHelper {
     }
 
     private void copyDatabase() throws IOException {
+        boolean mDatabaseExists = checkDatabase();
+        Log.d("DB", "create");
+
+        if (!mDatabaseExists) {
+            this.getReadableDatabase();
+            this.close();
+        }
         try {
             InputStream mInputStream = mContext.getAssets().open(dbName);
             Log.d("DB", "Copying Database");

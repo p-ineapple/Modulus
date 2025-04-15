@@ -28,6 +28,8 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility =JavaVersion.VERSION_1_8
     }
 
     buildFeatures {
@@ -57,6 +59,8 @@ dependencies {
 
     }
     implementation ("androidx.cardview:cardview:1.0.0")
+    implementation("com.google.android.material:material:1.4.0")
+    implementation("me.zhanghai.android.fastscroll:library:1.3.0")
 
 
 }
