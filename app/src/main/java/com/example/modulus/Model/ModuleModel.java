@@ -126,10 +126,6 @@ public class ModuleModel {
             return false;
         }
     };
-
-
-
-
     public static Comparator<ModuleModel> nameCompare = new Comparator<ModuleModel>() {
         @Override
         public int compare(ModuleModel mod1, ModuleModel mod2) {
@@ -152,11 +148,12 @@ public class ModuleModel {
         this.image = image;
     }
 
+    public int getColor() {
+        return color;
+    }
+
     public void setColor(int color) {
         this.color = color;
     }
 
-    public int getColor() {
-        return color;
-    }
 }
