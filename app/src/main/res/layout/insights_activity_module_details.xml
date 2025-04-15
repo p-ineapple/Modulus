@@ -38,6 +38,8 @@
 
     </RelativeLayout>
 
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -57,6 +59,7 @@
             android:text="Pillar"
             android:textSize="28sp"
             android:textStyle="bold"
+            app:drawableRightCompat="@drawable/info"
             app:layout_constraintTop_toBottomOf="@+id/imageMod"
             app:layout_constraintWidth="match_parent"
             android:layout_marginHorizontal="14dp"
@@ -84,8 +87,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Course Tags"
-            android:textSize="16sp"
+            android:textSize="18sp"
             android:textColor="@color/black"
+            android:textStyle="bold"
             android:layout_marginHorizontal="14dp"
             android:layout_marginVertical="8dp"
             android:clickable="true"
@@ -93,53 +97,86 @@
             />
 
 
-        <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/underModuleName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:dividerColor = "@color/black"
-            app:layout_constraintTop_toBottomOf="@+id/tags"
-            />
+<!--        <com.google.android.material.divider.MaterialDivider-->
+<!--            android:id="@+id/underModuleName"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            app:dividerColor = "@color/black"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/tags"-->
+<!--            />-->
 
         <TextView
-            android:id="@+id/moreInfo"
+            android:id="@+id/termlabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Course Description"
+            android:text="Term(s)"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:layout_marginHorizontal="14dp"
             android:layout_marginVertical="8dp"
             android:clickable="true"
-            app:drawableRightCompat="@drawable/arrow_right"
-            app:layout_constraintTop_toBottomOf="@+id/underModuleName"
+            app:layout_constraintTop_toBottomOf="@+id/tags"
             />
-
-
         <TextView
-            android:id="@+id/termProf"
+            android:id="@+id/terms"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Course Prfs"
+            android:text="Terms"
             android:textSize="16sp"
             android:textColor="@color/black"
             android:layout_marginHorizontal="14dp"
             android:layout_marginVertical="8dp"
             android:clickable="true"
-            app:layout_constraintTop_toBottomOf="@+id/moreInfo"
+            app:layout_constraintTop_toBottomOf="@+id/termlabel"
             />
 
-        <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/underInfo"
+<!--        <com.google.android.material.divider.MaterialDivider-->
+<!--            android:id="@+id/underInfo"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            app:dividerColor = "@color/black"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/terms"-->
+
+<!--            />-->
+
+        <TextView
+            android:id="@+id/termProflabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:dividerColor = "@color/black"
-            app:layout_constraintTop_toBottomOf="@+id/termProf"
-
+            android:text="Course Instructors"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_marginHorizontal="14dp"
+            android:layout_marginVertical="8dp"
+            android:clickable="true"
+            app:layout_constraintTop_toBottomOf="@+id/terms"
             />
+        <TextView
+            android:id="@+id/termProf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Course Instructors"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:layout_marginHorizontal="14dp"
+            android:layout_marginVertical="8dp"
+            android:clickable="true"
+            app:layout_constraintTop_toBottomOf="@+id/termProflabel"
+            />
+
+<!--        <com.google.android.material.divider.MaterialDivider-->
+<!--            android:id="@+id/undertermProf"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            app:dividerColor = "@color/black"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/termProf"-->
+
+<!--            />-->
 
         <TextView
             android:id="@+id/prerequisites_title"
@@ -151,7 +188,7 @@
             android:textColor="@color/black"
             android:layout_marginHorizontal="14dp"
             android:layout_marginVertical="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/underInfo"/>
+            app:layout_constraintTop_toBottomOf="@+id/termProf"/>
 
 
         <TextView
@@ -165,14 +202,7 @@
             android:layout_marginVertical="8dp"
             app:layout_constraintTop_toBottomOf="@+id/prerequisites_title"/>
 
-        <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/underprereq"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="8dp"
-            app:dividerColor = "@color/black"
-            app:layout_constraintTop_toBottomOf="@+id/prerequisites"
-            />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <RelativeLayout
@@ -199,7 +229,6 @@
             android:layout_height="match_parent"
             android:layout_below="@id/reviewText">
 
-        <!-- Existing Reviews List -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/reviewRecyclerView"
             android:layout_width="match_parent"

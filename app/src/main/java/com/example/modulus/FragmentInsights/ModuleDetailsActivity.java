@@ -16,6 +16,7 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,7 +50,7 @@ public class ModuleDetailsActivity extends AppCompatActivity{
             }
         });
 
-        TextView info = findViewById(R.id.moreInfo);
+        TextView info = findViewById(R.id.moduleDetailsPillar);
         info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,17 +88,24 @@ public class ModuleDetailsActivity extends AppCompatActivity{
         pillar.setText(selectedModule.getPillar() + " " + selectedModule.getId());
         int color = ContextCompat.getColor(this, selectedModule.getColor());
         pillar.setTextColor(color);
+        pillar.setCompoundDrawableTintList(ColorStateList.valueOf(color));
 
 
         TextView tags = findViewById(R.id.tags);
-        tags.setText(String.join(", ", selectedModule.getTags()));
+        tags.setText( selectedModule.getType());
+        tags.setTextColor(color);
+
+        TextView prof = findViewById(R.id.termProf);
+        prof.setText(String.join(", ", selectedModule.getProf()));
+        prof.setTextColor(color);
 
 
         RelativeLayout back = findViewById(R.id.backgroup);
         back.setBackgroundColor(color);
 
-        TextView moreInfo = findViewById(R.id.moreInfo);
-        moreInfo.setCompoundDrawableTintList(ColorStateList.valueOf(color));
+        TextView term = findViewById(R.id.terms);
+        term.setText(String.join(", ", selectedModule.getTerm()));
+        term.setTextColor(color);
 
         ImageView imageMod = findViewById(R.id.imageMod);
         imageMod.setImageDrawable(selectedModule.getImage());
@@ -136,11 +144,12 @@ public class ModuleDetailsActivity extends AppCompatActivity{
         if (!output.isEmpty()){
             preReq.setText(Html.fromHtml(TextUtils.join("<br>", output), Html.FROM_HTML_MODE_LEGACY));
 
+
         } else{
             preReq.setText("No Pre-requisites");
         }
 
-
+        preReq.setTextColor(color);
 
     }
 
