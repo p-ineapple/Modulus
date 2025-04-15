@@ -134,41 +134,6 @@ public class DataBaseHelperInsights extends SQLiteOpenHelper {
         return result;
     }
 
-    public ArrayList<PlannerModel> getPlanner(String pillar) {
-        try {
-            createDatabase();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        ArrayList<ModuleModel> moduleList = this.getAllModules();
-        ArrayList<PlannerModel> result = new ArrayList<PlannerModel>();
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor c = db.query(plannerTable, null, null, null, null, null, null);
-
-        for (int i = 1; i <= 8; i++) {
-            PlannerModel planner = new PlannerModel("Term " + i);
-            result.add(planner);
-        }
-        while (c.moveToNext()) {
-            int index = c.getInt(1);
-            int colIndex = c.getColumnIndex(pillar);
-            String id = c.getString(colIndex);
-            if (id != null) {
-                ModuleModel module = moduleList.stream().filter(m -> id.equals(m.getId())).findFirst().orElse(null);
-                PlannerModel cPlanner = result.get(index - 1);
-                ArrayList<ModuleModel> newMods = (ArrayList<ModuleModel>) cPlanner.getModules();
-                newMods.add(module);
-                cPlanner.setModules(newMods);
-                result.set(index - 1, cPlanner);
-            }
-        }
-        c.close();
-        db.close();
-
-        return result;
-    }
-
     private int getColourR(String Pillar){
         switch (Pillar){
             case "ASD":
