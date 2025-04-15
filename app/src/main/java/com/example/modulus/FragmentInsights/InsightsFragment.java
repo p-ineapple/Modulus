@@ -3,6 +3,7 @@ package com.example.modulus.FragmentInsights;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -112,7 +113,7 @@ public class InsightsFragment extends Fragment {
                 .getIdentifier("android:id/search_plate", null, null);
         View searchPlateView = search.findViewById(searchPlateId);
         if (searchPlateView != null) {
-            searchPlateView.setBackgroundResource(R.color.light_purple);
+            searchPlateView.setBackgroundResource(R.color.white);
         }
 
 
@@ -287,10 +288,22 @@ public class InsightsFragment extends Fragment {
         }
         for (int i = 0; i < filterChipNames.size(); i++) {
             Chip chip = new Chip(this.getContext());
-            chip.setChipDrawable(ChipDrawable.createFromAttributes(this.getContext(), null, 0, com.google.android.material.R.style.Widget_MaterialComponents_Chip_Choice));
+            chip.setChipDrawable(ChipDrawable.createFromAttributes(this.getContext(), null, 0, R.style.Chip2));
             chip.setText(filterChipNames.get(i));
             chip.setCheckable(true);
             chip.setChecked(filterChips.get(i).isChipCheck());
+
+
+            chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) {
+                    chip.setChipBackgroundColor(ColorStateList.valueOf(getResources().getColor(R.color.dark_purple)));
+                    chip.setTextColor(getResources().getColor(R.color.white));
+                } else {
+                    chip.setChipBackgroundColor(ColorStateList.valueOf(getResources().getColor(R.color.light_purple)));
+                    chip.setTextColor(getResources().getColor(R.color.black));
+                }
+            });
+
             if (i < 7) {
                 pillarChips.addView(chip);
             } else if (i < 15) {

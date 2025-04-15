@@ -6,12 +6,13 @@ import java.util.List;
 public class PlannerModel {
     private String term;
     private int termInt;
-    private List<ModuleModel> modules = new ArrayList<ModuleModel>();
+    private List<ModuleModel> modules;
     boolean expandable;
     public PlannerModel(String term){
         this.term = term;
         this.expandable = true;
         this.termInt = Integer.parseInt(term.substring(term.length()-1));
+        this.modules = new ArrayList<>();
     }
 
     public String getTerm() {

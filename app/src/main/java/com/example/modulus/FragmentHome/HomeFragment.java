@@ -216,11 +216,11 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
 
     private void highlightSelectedButton(Button selected, Button... others) {
         selected.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.dark_purple));
-        selected.setTextColor(ContextCompat.getColor(getContext(), R.color.light_purple));
+        selected.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
 
         for (Button btn : others) {
             btn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.light_purple));
-            btn.setTextColor(ContextCompat.getColor(getContext(), R.color.dark_purple));
+            btn.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
         }
     }
 

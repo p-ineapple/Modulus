@@ -9,6 +9,8 @@ public class ModuleModel {
     private String id;
     private String name;
     private String pillar;
+
+    private String type;
     private List<String> tags;
     private List<String> term;
     private List<String> prof;
@@ -108,11 +110,7 @@ public class ModuleModel {
         if(s.contains(" - ")){
             String[] module = s.split(" - ");
             return new ModuleModel(module[0], module[1]);
-        }else if(s.contains("Capstone")){
-            return new ModuleModel("", "Capstone");
-        }else{
-            return null;
-        }
+        }return null;
     }
     public static Comparator<ModuleModel> idCompare = new Comparator<ModuleModel>() {
         @Override
@@ -156,4 +154,11 @@ public class ModuleModel {
         this.color = color;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 }

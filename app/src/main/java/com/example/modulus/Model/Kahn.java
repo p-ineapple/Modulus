@@ -1,8 +1,17 @@
 //package com.example.modulus.Model;
 //
+//import com.example.modulus.FragmentInsights.InsightsFragment;
+//
 //import java.util.List;
 //
 //public class Kahn {
+//
+//    List<ModuleVertex> adjList;
+//    public void setUpGraph(){
+//        for(ModuleModel mod: InsightsFragment.moduleList){
+//            adjList.add(new ModuleVertex(mod));
+//        }
+//    }
 //    public List<ModuleModel> RestrictedSet(Inputs){
 //
 //    }
