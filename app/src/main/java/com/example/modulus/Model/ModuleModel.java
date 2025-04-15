@@ -127,9 +127,7 @@ public class ModuleModel {
         }
     };
 
-    public int getColor() {
-        return color;
-    }
+
 
 
     public static Comparator<ModuleModel> nameCompare = new Comparator<ModuleModel>() {
@@ -156,5 +154,9 @@ public class ModuleModel {
 
     public void setColor(int color) {
         this.color = color;
+    }
+
+    public int getColor() {
+        return color;
     }
 }
