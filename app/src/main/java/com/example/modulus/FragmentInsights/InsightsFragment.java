@@ -68,9 +68,6 @@ public class InsightsFragment extends Fragment {
         }
         Log.d(TAG, "Database set up");
 
-
-
-
         modulesRecyclerView = view.findViewById(R.id.recyclerView);
         listener = new ModuleAdapter.OnItemClickListener() {
             @Override
@@ -310,4 +307,3 @@ public class InsightsFragment extends Fragment {
         return new FastScrollerBuilder(recyclerView).build();
     }
 }
-
