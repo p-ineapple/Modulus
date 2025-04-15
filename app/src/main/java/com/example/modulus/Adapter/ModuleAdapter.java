@@ -16,8 +16,6 @@ import com.google.android.material.card.MaterialCardView;
 import java.util.ArrayList;
 
 public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.moduleCellViewHolder>  {
-
-
     public interface OnItemClickListener {
         void onItemClick(ModuleModel module);
     }

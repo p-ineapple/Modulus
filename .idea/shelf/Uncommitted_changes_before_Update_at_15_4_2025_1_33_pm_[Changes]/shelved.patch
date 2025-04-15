@@ -1,0 +1,185 @@
+Index: app/src/main/java/com/example/modulus/FragmentInsights/ModuleDetailsActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.FragmentInsights;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.content.Intent;\r\nimport android.net.Uri;\r\nimport android.os.Bundle;\r\nimport android.os.Handler;\r\nimport android.os.Looper;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport com.example.modulus.Model.ModuleModel;\r\nimport com.example.modulus.R;\r\nimport com.example.modulus.Utils.WebView;\r\n\r\nimport org.json.JSONException;\r\nimport org.json.JSONObject;\r\n\r\nimport java.net.MalformedURLException;\r\nimport java.net.URL;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\nimport java.util.concurrent.ExecutorService;\r\nimport java.util.concurrent.Executors;\r\n\r\npublic class ModuleDetailsActivity extends AppCompatActivity{\r\n    ModuleModel selectedModule;\r\n    final String TAG = \"Module Insights\";\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_module_details);\r\n        getSelectedModule();\r\n        setValues();\r\n\r\n        ImageView backButton = findViewById(R.id.backButton);\r\n        backButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                finish();\r\n            }\r\n        });\r\n\r\n        TextView info = findViewById(R.id.moreInfo);\r\n        info.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                if (WebView.isNetworkAvailable(ModuleDetailsActivity.this)) {\r\n                    openURL();\r\n                } else {\r\n                    Toast.makeText(ModuleDetailsActivity.this, \"No Network\", Toast.LENGTH_SHORT).show();\r\n                }\r\n            }\r\n        });\r\n    }\r\n\r\n    private void getSelectedModule() {\r\n        Intent previousIntent = getIntent();\r\n        String parsedStringID = previousIntent.getStringExtra(\"id\");\r\n        selectedModule = getParsedModule(parsedStringID);\r\n    }\r\n\r\n    private ModuleModel getParsedModule(String parsedID) {\r\n        for (ModuleModel module : InsightsFragment.moduleList) {\r\n            if(module.getId().equals(parsedID))\r\n                return module;\r\n        }\r\n        return null;\r\n    }\r\n\r\n    private void setValues() {\r\n        TextView idName = findViewById(R.id.moduleDetailsIDName);\r\n        idName.setText(selectedModule.toString());\r\n        TextView preReq = findViewById(R.id.prerequisites);\r\n        List<String> modPreReq = selectedModule.getPrerequisites();\r\n        List<String> output = new ArrayList<>();\r\n        for(String id: modPreReq){\r\n            if(!id.contains(\"/\")){\r\n                ModuleModel module = InsightsFragment.moduleList.stream().filter(m -> id.contains(m.getId())).findFirst().orElse(null);\r\n                if(module != null){\r\n                    output.add(module.toString());\r\n                }\r\n            }else{\r\n                String[] splitMods = id.split(\"/\");\r\n                StringBuilder orString = new StringBuilder();\r\n                for(int i = 0; i < splitMods.length; i++){\r\n                    String innerId = splitMods[i];\r\n                    ModuleModel module = InsightsFragment.moduleList.stream().filter(m -> innerId.contains(m.getId())).findFirst().orElse(null);\r\n                    if(module != null) {\r\n                        orString.append(module);\r\n                    }\r\n                    if(i < splitMods.length - 1){\r\n                        orString.append(\" or \");\r\n                    }\r\n                }\r\n                output.add(orString.toString());\r\n            }\r\n        }\r\n        preReq.setText(\"Pre-Requisites: \\n - \" + String.join(\"\\n - \", output));\r\n    }\r\n\r\n    private void openURL(){\r\n        ExecutorService executorService = Executors.newSingleThreadExecutor();\r\n        Looper uiLooper = Looper.getMainLooper();\r\n        final Handler handler = new Handler(uiLooper);\r\n\r\n        executorService.execute(new Runnable() {\r\n            @Override\r\n            public void run() { // Background thread\r\n                URL url = WebView.getURLFromDesc(selectedModule);\r\n                String response = WebView.getJson(url);\r\n                if (response == null) {\r\n                    handler.post(new Runnable() { // Main thread\r\n                        @Override\r\n                        public void run() {\r\n                            // main thread\r\n                            Log.i(\"UI Thread\", \"Invalid URL\");\r\n                            Toast.makeText(ModuleDetailsActivity.this, \"Invalid URL\", Toast.LENGTH_SHORT).show();\r\n                        }\r\n                    });\r\n                } else {\r\n                    handler.post(new Runnable() {\r\n                        // main thread\r\n                        @Override\r\n                        public void run() {\r\n                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(selectedModule.getDescription()));\r\n                            startActivity(browserIntent);\r\n                        }\r\n                    });\r\n                }\r\n            }\r\n        });\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/FragmentInsights/ModuleDetailsActivity.java b/app/src/main/java/com/example/modulus/FragmentInsights/ModuleDetailsActivity.java
+--- a/app/src/main/java/com/example/modulus/FragmentInsights/ModuleDetailsActivity.java	(revision 4c858aabee74edf4e3c2238add7553cb916496a5)
++++ b/app/src/main/java/com/example/modulus/FragmentInsights/ModuleDetailsActivity.java	(date 1744690896360)
+@@ -1,5 +1,7 @@
+ package com.example.modulus.FragmentInsights;
+ 
++import static com.example.modulus.R.id.backgroup;
++
+ import androidx.appcompat.app.AppCompatActivity;
+ 
+ import android.content.Intent;
+@@ -10,6 +12,7 @@
+ import android.util.Log;
+ import android.view.View;
+ import android.widget.ImageView;
++import android.widget.RelativeLayout;
+ import android.widget.TextView;
+ import android.widget.Toast;
+ 
+@@ -38,7 +41,7 @@
+         getSelectedModule();
+         setValues();
+ 
+-        ImageView backButton = findViewById(R.id.backButton);
++        RelativeLayout backButton = findViewById(backgroup);
+         backButton.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+@@ -100,6 +103,8 @@
+                 }
+                 output.add(orString.toString());
+             }
++
++
+         }
+         preReq.setText("Pre-Requisites: \n - " + String.join("\n - ", output));
+     }
+Index: app/src/main/res/layout/activity_module_details.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    tools:ignore=\"HardcodedText\"\r\n    android:orientation=\"vertical\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"wrap_content\">\r\n\r\n    <RelativeLayout\r\n        android:paddingVertical=\"20sp\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\">\r\n\r\n        <ImageView\r\n            android:id=\"@+id/backButton\"\r\n            android:layout_width=\"32sp\"\r\n            android:layout_height=\"32sp\"\r\n            android:src=\"@drawable/arrow_back\"\r\n            android:layout_centerVertical=\"true\" />\r\n\r\n        <TextView\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:id=\"@+id/moduleDetailsIDName\"\r\n            android:text=\"Module ID and Name\"\r\n            android:textSize=\"32sp\"\r\n            android:layout_marginHorizontal=\"10dp\"\r\n            android:layout_toEndOf=\"@id/backButton\" />\r\n\r\n    </RelativeLayout>\r\n\r\n    <com.google.android.material.divider.MaterialDivider\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginBottom=\"8dp\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/moreInfo\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"Description, Learning Objectives and more\"\r\n        android:textSize=\"16sp\"\r\n        android:layout_marginHorizontal=\"10dp\"\r\n        android:clickable=\"true\"\r\n        app:drawableRightCompat=\"@drawable/arrow_right\" />\r\n\r\n    <com.google.android.material.divider.MaterialDivider\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginVertical=\"8dp\"/>\r\n\r\n    <TextView\r\n        android:id=\"@+id/prerequisites\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"Prerequisites\"\r\n        android:textSize=\"16sp\"\r\n        android:layout_marginHorizontal=\"10dp\"/>\r\n\r\n    <com.google.android.material.divider.MaterialDivider\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginVertical=\"8dp\"/>\r\n\r\n    <TextView\r\n        android:id=\"@+id/insights\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"Reviews Yay!:\"\r\n        android:textSize=\"16sp\"\r\n        android:layout_marginHorizontal=\"10dp\"/>\r\n\r\n</LinearLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_module_details.xml b/app/src/main/res/layout/activity_module_details.xml
+--- a/app/src/main/res/layout/activity_module_details.xml	(revision 4c858aabee74edf4e3c2238add7553cb916496a5)
++++ b/app/src/main/res/layout/activity_module_details.xml	(date 1744690896333)
+@@ -6,35 +6,79 @@
+     tools:ignore="HardcodedText"
+     android:orientation="vertical"
+     android:layout_width="match_parent"
+-    android:layout_height="wrap_content">
++    android:layout_height="wrap_content"
++    >
+ 
+     <RelativeLayout
+-        android:paddingVertical="20sp"
++        android:id="@+id/backgroup"
++        android:paddingVertical="12sp"
+         android:layout_width="match_parent"
+-        android:layout_height="wrap_content">
++        android:layout_height="wrap_content"
++        android:gravity="center_vertical"
++
++
++        >
+ 
+         <ImageView
+             android:id="@+id/backButton"
+-            android:layout_width="32sp"
+-            android:layout_height="32sp"
++            android:layout_width="28sp"
++            android:layout_height="28sp"
+             android:src="@drawable/arrow_back"
+             android:layout_centerVertical="true" />
+ 
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+-            android:id="@+id/moduleDetailsIDName"
+-            android:text="Module ID and Name"
+-            android:textSize="32sp"
++            android:id="@+id/Back"
++            android:text="Back"
++            android:textSize="20sp"
+             android:layout_marginHorizontal="10dp"
+             android:layout_toEndOf="@id/backButton" />
+ 
++
++
+     </RelativeLayout>
+ 
++    <androidx.constraintlayout.widget.ConstraintLayout
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content">
++        <ImageView
++            android:id="@+id/imageMod"
++            android:layout_width="match_parent"
++            android:layout_height="match_parent"
++            android:src="@drawable/asd"
++            android:adjustViewBounds="true">
++
++        </ImageView>
++
++        <TextView
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:id="@+id/moduleDetailsPillar"
++            android:text="Pillar"
++            android:textSize="20sp"
++            android:textStyle="bold"
++            app:layout_constraintTop_toBottomOf="@+id/imageMod"
++            app:layout_constraintWidth="match_parent"
++            android:layout_marginHorizontal="10dp"
++            android:layout_marginVertical="10dp"/>
++    </androidx.constraintlayout.widget.ConstraintLayout>
++
++
++    <TextView
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:id="@+id/moduleDetailsIDName"
++        android:text="Module ID and Name"
++        android:textSize="28sp"
++        android:textStyle="bold"
++        android:layout_marginHorizontal="10dp"
++        android:layout_marginVertical="10dp"/>
++
+     <com.google.android.material.divider.MaterialDivider
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+-        android:layout_marginBottom="8dp" />
++        />
+ 
+     <TextView
+         android:id="@+id/moreInfo"
+@@ -43,13 +87,14 @@
+         android:text="Description, Learning Objectives and more"
+         android:textSize="16sp"
+         android:layout_marginHorizontal="10dp"
++        android:layout_marginVertical="8dp"
+         android:clickable="true"
+         app:drawableRightCompat="@drawable/arrow_right" />
+ 
+     <com.google.android.material.divider.MaterialDivider
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+-        android:layout_marginVertical="8dp"/>
++        >
+ 
+     <TextView
+         android:id="@+id/prerequisites"
+@@ -57,12 +102,13 @@
+         android:layout_height="wrap_content"
+         android:text="Prerequisites"
+         android:textSize="16sp"
+-        android:layout_marginHorizontal="10dp"/>
++        android:layout_marginHorizontal="10dp"
++        android:layout_marginVertical="8dp"/>
+ 
+     <com.google.android.material.divider.MaterialDivider
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+-        android:layout_marginVertical="8dp"/>
++        />
+ 
+     <TextView
+         android:id="@+id/insights"
+@@ -70,6 +116,8 @@
+         android:layout_height="wrap_content"
+         android:text="Reviews Yay!:"
+         android:textSize="16sp"
++        android:adjustViewBounds="true"
++        android:layout_marginVertical="8dp"
+         android:layout_marginHorizontal="10dp"/>
+ 
+ </LinearLayout>
+\ No newline at end of file

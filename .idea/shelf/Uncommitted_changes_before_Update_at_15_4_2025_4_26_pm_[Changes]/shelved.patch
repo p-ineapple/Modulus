@@ -1,0 +1,1225 @@
+Index: app/src/main/java/com/example/modulus/FragmentInsights/InsightsFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.FragmentInsights;\r\n\r\nimport android.annotation.SuppressLint;\r\nimport android.app.Dialog;\r\nimport android.content.Intent;\r\nimport android.graphics.Color;\r\nimport android.graphics.drawable.ColorDrawable;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.Gravity;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.view.Window;\r\nimport android.widget.Button;\r\nimport android.widget.ImageButton;\r\nimport android.widget.ImageView;\r\nimport android.widget.SearchView;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.constraintlayout.widget.ConstraintLayout;\r\nimport androidx.fragment.app.Fragment;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.example.modulus.Adapter.ModuleAdapter;\r\nimport com.example.modulus.Model.FilterChipModel;\r\nimport com.example.modulus.Model.MergeSort;\r\nimport com.example.modulus.Model.ModuleModel;\r\nimport com.example.modulus.R;\r\nimport com.google.android.material.card.MaterialCardView;\r\nimport com.google.android.material.chip.Chip;\r\nimport com.google.android.material.chip.ChipDrawable;\r\nimport com.google.android.material.chip.ChipGroup;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.Arrays;\r\nimport java.util.Collections;\r\nimport java.util.List;\r\n\r\nimport me.zhanghai.android.fastscroll.FastScroller;\r\nimport me.zhanghai.android.fastscroll.FastScrollerBuilder;\r\n\r\npublic class InsightsFragment extends Fragment {\r\n    public static ArrayList<ModuleModel> moduleList;\r\n    ArrayList<String> selectedFilters = new ArrayList<String>();\r\n    SearchView search;\r\n    String currentSearchText = \"\";\r\n    RecyclerView modulesRecyclerView;\r\n    ModuleAdapter.OnItemClickListener listener;\r\n    ImageButton filterButton;\r\n    ImageButton sortButton;\r\n    ConstraintLayout sortTab;\r\n    MergeSort sort = new MergeSort();\r\n    ArrayList<FilterChipModel> filterChips = new ArrayList<FilterChipModel>();\r\n\r\n    private String currentSortType = \"name\";\r\n    MaterialCardView card;\r\n    final String TAG = \"Browser\";\r\n\r\n    @SuppressLint({\"ResourceAsColor\", \"MissingInflatedId\"})\r\n    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {\r\n        View view = inflater.inflate(R.layout.fragment_insights, container, false);\r\n        //set up modules modulesRecyclerView\r\n        if (moduleList == null) {\r\n            Log.d(TAG, \"Setting up modules\");\r\n            setupData();\r\n        }\r\n        Log.d(TAG, \"Database set up\");\r\n\r\n        modulesRecyclerView = view.findViewById(R.id.recyclerView);\r\n        listener = new ModuleAdapter.OnItemClickListener() {\r\n            @Override\r\n            public void onItemClick(ModuleModel module) {\r\n                Intent showDetail = new Intent(getContext(), ModuleDetailsActivity.class);\r\n                showDetail.putExtra(\"id\", module.getId());\r\n                startActivity(showDetail);\r\n            }\r\n        };\r\n        modulesRecyclerView.setAdapter(new ModuleAdapter(moduleList, listener));\r\n        modulesRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));\r\n        FastScroller fastScroller = new FastScrollerBuilder(modulesRecyclerView).useMd2Style().build();\r\n\r\n        //searchWidget\r\n        search = view.findViewById(R.id.modulesListSearchView);\r\n        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {\r\n            @Override\r\n            public boolean onQueryTextSubmit(String s) {\r\n                return false;\r\n            }\r\n\r\n            @Override\r\n            public boolean onQueryTextChange(String s) {\r\n                currentSearchText = s;\r\n                List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);\r\n                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));\r\n                return false;\r\n            }\r\n        });\r\n        filterButton = view.findViewById(R.id.filterButton);\r\n        filterButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                showFilterDialog();\r\n            }\r\n        });\r\n\r\n\r\n\r\n        int searchPlateId = search.getContext().getResources()\r\n                .getIdentifier(\"android:id/search_plate\", null, null);\r\n        View searchPlateView = search.findViewById(searchPlateId);\r\n        if (searchPlateView != null) {\r\n            searchPlateView.setBackgroundResource(R.color.light_purple);\r\n        }\r\n\r\n\r\n        sortTab = view.findViewById(R.id.sortTab);\r\n        sortTab.setVisibility(View.VISIBLE);\r\n        sortButton = view.findViewById(R.id.sortButton);\r\n        sortButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                if(sortTab.getVisibility() == View.VISIBLE){\r\n                    sortTab.setVisibility(View.GONE);\r\n                }else{\r\n                    sortTab.setVisibility(View.VISIBLE);\r\n                }\r\n            }\r\n        });\r\n        Chip id = view.findViewById(R.id.id);\r\n        Chip name = view.findViewById(R.id.name);\r\n        Chip asc = view.findViewById(R.id.ascending);\r\n        Chip des = view.findViewById(R.id.descending);\r\n        id.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                currentSortType = \"subjectCode\";\r\n                List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);\r\n                if (id.isChecked() && asc.isChecked()) {\r\n//                    filteredModules.sort(ModuleModel.idAscending);\r\n                    sort.mergeSortID(filteredModules, filteredModules.size());\r\n                } else if (id.isChecked() && des.isChecked()) {\r\n//                    filteredModules.sort(ModuleModel.idAscending);\r\n                    sort.mergeSortID(filteredModules, filteredModules.size());\r\n                    Collections.reverse(filteredModules);\r\n                }\r\n                ModuleAdapter adapter = new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener);\r\n                adapter.setSortType(currentSortType);\r\n                modulesRecyclerView.setAdapter(adapter);\r\n            }\r\n        });\r\n        name.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                currentSortType = \"name\";\r\n                List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);\r\n                if (name.isChecked() && asc.isChecked()) {\r\n//                    filteredModules.sort(ModuleModel.nameAscending);\r\n                    sort.mergeSortName(filteredModules, filteredModules.size());\r\n                } else if (name.isChecked() && des.isChecked()) {\r\n//                    filteredModules.sort(ModuleModel.nameAscending);\r\n                    sort.mergeSortName(filteredModules, filteredModules.size());\r\n                    Collections.reverse(filteredModules);\r\n                }\r\n                ModuleAdapter adapter = new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener);\r\n                adapter.setSortType(currentSortType);\r\n                modulesRecyclerView.setAdapter(adapter);\r\n            }\r\n        });\r\n        asc.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);\r\n                if (id.isChecked() && asc.isChecked()) {\r\n//                    filteredModules.sort(ModuleModel.idAscending);\r\n                    sort.mergeSortID(filteredModules, filteredModules.size());\r\n                } else if (name.isChecked() && asc.isChecked()) {\r\n//                    filteredModules.sort(ModuleModel.nameAscending);\r\n                    sort.mergeSortName(filteredModules, filteredModules.size());\r\n                }\r\n                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));\r\n            }\r\n        });\r\n        des.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);\r\n                if (id.isChecked() && des.isChecked()) {\r\n//                    filteredModules.sort(ModuleModel.idAscending);\r\n                    sort.mergeSortID(filteredModules, filteredModules.size());\r\n                    Collections.reverse(filteredModules);\r\n                } else if (name.isChecked() && des.isChecked()) {\r\n//                    filteredModules.sort(ModuleModel.nameAscending);\r\n                    sort.mergeSortName(filteredModules, filteredModules.size());\r\n                    Collections.reverse(filteredModules);\r\n                }\r\n                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));\r\n            }\r\n        });\r\n\r\n\r\n\r\n\r\n\r\n        return view;\r\n    }\r\n\r\n    private void showFilterDialog() {\r\n        Dialog filterDialog = new Dialog(this.getContext());\r\n        filterDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);\r\n        filterDialog.setContentView(R.layout.filterlayout);\r\n\r\n        setUpFilterChips(filterDialog);\r\n        for (FilterChipModel chipItem : filterChips) {\r\n            Chip chip = chipItem.getChip();\r\n            chip.setOnClickListener(new View.OnClickListener() {\r\n                @Override\r\n                public void onClick(View v) {\r\n                    Log.d(\"click\", \"click\");\r\n                    if (chip.isChecked()) {\r\n                        chipItem.setChipCheck(true);\r\n                        Filter.addFilter(selectedFilters, chipItem.getName());\r\n                    } else {\r\n                        chipItem.setChipCheck(false);\r\n                        Filter.removeFilter(selectedFilters, chipItem.getName());\r\n                    }\r\n                }\r\n            });\r\n        }\r\n\r\n        Button applyButton = filterDialog.findViewById(R.id.applyButton);\r\n        applyButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);\r\n                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));\r\n                filterDialog.dismiss();\r\n            }\r\n        });\r\n\r\n        Button resetButton = filterDialog.findViewById(R.id.resetButton);\r\n        resetButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                selectedFilters.clear();\r\n                for (FilterChipModel chip : filterChips) {\r\n                    chip.setChipCheck(false);\r\n                    chip.getChip().setChecked(false);\r\n                }\r\n            }\r\n        });\r\n\r\n        ImageView closeButton = filterDialog.findViewById(R.id.closeButton);\r\n        closeButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                filterDialog.dismiss();\r\n            }\r\n        });\r\n\r\n        filterDialog.show();\r\n        filterDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);\r\n        filterDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));\r\n        filterDialog.getWindow().setGravity(Gravity.BOTTOM);\r\n    }\r\n    private void setupData() {\r\n        DataBaseHelperInsights myDB = new DataBaseHelperInsights(getContext());\r\n        moduleList = myDB.getAllModules();\r\n\r\n\r\n\r\n    }\r\n    public void setUpFilterChips(Dialog filterDialog) {\r\n        List<String> filterChipNames = Arrays.asList((\"ASD,EPD,ESD,DAI,ISTD,HASS,SMT,\" +\r\n                \"Term 1,Term 2,Term 3,Term 4,Term 5,Term 6,Term 7,Term 8,\" +\r\n                \"Core,Core Elective,Freshmore Core,Freshmore Elective,Elective / Technical Elective\").split(\",\"));\r\n        ChipGroup pillarChips = filterDialog.findViewById(R.id.pillarChips);\r\n        ChipGroup termChips = filterDialog.findViewById(R.id.termChips);\r\n        ChipGroup courseChips = filterDialog.findViewById(R.id.courseChips);\r\n        if (filterChips.isEmpty()) {\r\n            for (int i = 0; i < filterChipNames.size(); i++) {\r\n                FilterChipModel filterChip = new FilterChipModel(filterChipNames.get(i), false);\r\n                filterChips.add(filterChip);\r\n            }\r\n        }\r\n        for (int i = 0; i < filterChipNames.size(); i++) {\r\n            Chip chip = new Chip(this.getContext());\r\n            chip.setChipDrawable(ChipDrawable.createFromAttributes(this.getContext(), null, 0, com.google.android.material.R.style.Widget_MaterialComponents_Chip_Choice));\r\n            chip.setText(filterChipNames.get(i));\r\n            chip.setCheckable(true);\r\n            chip.setChecked(filterChips.get(i).isChipCheck());\r\n            if (i < 7) {\r\n                pillarChips.addView(chip);\r\n            } else if (i < 15) {\r\n                termChips.addView(chip);\r\n            } else {\r\n                courseChips.addView(chip);\r\n            }\r\n            filterChips.get(i).setChip(chip);\r\n        }\r\n        sort.mergeSortID(moduleList, moduleList.size());\r\n    }\r\n\r\n    @NonNull\r\n    protected FastScroller createFastScroller(@NonNull RecyclerView recyclerView) {\r\n        return new FastScrollerBuilder(recyclerView).build();\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/FragmentInsights/InsightsFragment.java b/app/src/main/java/com/example/modulus/FragmentInsights/InsightsFragment.java
+--- a/app/src/main/java/com/example/modulus/FragmentInsights/InsightsFragment.java	(revision 611051abf635480f37ed2adf664f798e47d8f0b1)
++++ b/app/src/main/java/com/example/modulus/FragmentInsights/InsightsFragment.java	(date 1744705578402)
+@@ -51,7 +51,8 @@
+     ImageButton filterButton;
+     ImageButton sortButton;
+     ConstraintLayout sortTab;
+-    MergeSort sort = new MergeSort();
++    MergeSort sortID = new MergeSort(ModuleModel.idCompare);
++    MergeSort sortName = new MergeSort(ModuleModel.nameCompare);
+     ArrayList<FilterChipModel> filterChips = new ArrayList<FilterChipModel>();
+ 
+     private String currentSortType = "name";
+@@ -139,10 +140,10 @@
+                 List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
+                 if (id.isChecked() && asc.isChecked()) {
+ //                    filteredModules.sort(ModuleModel.idAscending);
+-                    sort.mergeSortID(filteredModules, filteredModules.size());
++                    sortID.mergeSort(filteredModules, filteredModules.size());
+                 } else if (id.isChecked() && des.isChecked()) {
+ //                    filteredModules.sort(ModuleModel.idAscending);
+-                    sort.mergeSortID(filteredModules, filteredModules.size());
++                    sortID.mergeSort(filteredModules, filteredModules.size());
+                     Collections.reverse(filteredModules);
+                 }
+                 ModuleAdapter adapter = new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener);
+@@ -157,10 +158,10 @@
+                 List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
+                 if (name.isChecked() && asc.isChecked()) {
+ //                    filteredModules.sort(ModuleModel.nameAscending);
+-                    sort.mergeSortName(filteredModules, filteredModules.size());
++                    sortName.mergeSort(filteredModules, filteredModules.size());
+                 } else if (name.isChecked() && des.isChecked()) {
+ //                    filteredModules.sort(ModuleModel.nameAscending);
+-                    sort.mergeSortName(filteredModules, filteredModules.size());
++                    sortName.mergeSort(filteredModules, filteredModules.size());
+                     Collections.reverse(filteredModules);
+                 }
+                 ModuleAdapter adapter = new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener);
+@@ -174,10 +175,10 @@
+                 List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
+                 if (id.isChecked() && asc.isChecked()) {
+ //                    filteredModules.sort(ModuleModel.idAscending);
+-                    sort.mergeSortID(filteredModules, filteredModules.size());
++                    sortID.mergeSort(filteredModules, filteredModules.size());
+                 } else if (name.isChecked() && asc.isChecked()) {
+ //                    filteredModules.sort(ModuleModel.nameAscending);
+-                    sort.mergeSortName(filteredModules, filteredModules.size());
++                    sortName.mergeSort(filteredModules, filteredModules.size());
+                 }
+                 modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));
+             }
+@@ -188,11 +189,11 @@
+                 List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
+                 if (id.isChecked() && des.isChecked()) {
+ //                    filteredModules.sort(ModuleModel.idAscending);
+-                    sort.mergeSortID(filteredModules, filteredModules.size());
++                    sortID.mergeSort(filteredModules, filteredModules.size());
+                     Collections.reverse(filteredModules);
+                 } else if (name.isChecked() && des.isChecked()) {
+ //                    filteredModules.sort(ModuleModel.nameAscending);
+-                    sort.mergeSortName(filteredModules, filteredModules.size());
++                    sortName.mergeSort(filteredModules, filteredModules.size());
+                     Collections.reverse(filteredModules);
+                 }
+                 modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));
+@@ -299,7 +300,7 @@
+             }
+             filterChips.get(i).setChip(chip);
+         }
+-        sort.mergeSortID(moduleList, moduleList.size());
++        sortID.mergeSort(moduleList, moduleList.size());
+     }
+ 
+     @NonNull
+Index: app/src/main/java/com/example/modulus/Model/ModuleModel.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.Model;\r\n\r\nimport java.util.List;\r\n\r\npublic class ModuleModel {\r\n    private String id;\r\n    private String name;\r\n    private String pillar;\r\n    private int color;\r\n    private List<String> tags;\r\n    private List<String> term;\r\n    private List<String> prof;\r\n    private List<String> prerequisites;\r\n    private String description;\r\n    public ModuleModel(){\r\n    }\r\n    public ModuleModel(String id, String name) {\r\n        this.id = id;\r\n        this.name = name;\r\n    }\r\n\r\n    public String getId() {\r\n        if(id == null){\r\n            return \"\";\r\n        }else{\r\n            return id;\r\n        }\r\n    }\r\n    public void setId(String id) {\r\n        this.id = id;\r\n    }\r\n\r\n    public String getName() {\r\n        return name;\r\n    }\r\n\r\n    public void setName(String name) {\r\n        this.name = name;\r\n    }\r\n    public String getPillar() {\r\n        return pillar;\r\n    }\r\n\r\n    public void setPillar(String pillar) {\r\n        this.pillar = pillar;\r\n    }\r\n    public List<String> getTags() {\r\n        if(tags == null) {\r\n            return null;\r\n        }else{\r\n            return tags;\r\n        }\r\n    }\r\n    public void setTags(List<String> tags) {\r\n        this.tags = tags;\r\n    }\r\n\r\n    public List<String> getTerm() {\r\n        if(term == null) {\r\n            return null;\r\n        }else{\r\n            return term;\r\n        }\r\n    }\r\n    public void setTerm(List<String> term) {\r\n        this.term = term;\r\n    }\r\n    public List<String> getProf() {\r\n        if(prof == null) {\r\n            return null;\r\n        }else{\r\n            return prof;\r\n        }\r\n    }\r\n\r\n    public void setProf(List<String> prof) {\r\n        this.prof = prof;\r\n    }\r\n    public List<String> getPrerequisites() {\r\n        return prerequisites;\r\n    }\r\n    public void setPrerequisites(List<String> prerequisites) {\r\n        this.prerequisites = prerequisites;\r\n    }\r\n    public String getDescription() {\r\n        return description;\r\n    }\r\n    public void setDescription(String description) {\r\n        this.description = description;\r\n    }\r\n    @Override\r\n    public String toString(){\r\n        return getId() + \" - \" + getName();\r\n    }\r\n    public static ModuleModel getModuleFromString(String s){\r\n        if(s.contains(\" - \")){\r\n            String[] module = s.split(\" - \");\r\n            return new ModuleModel(module[0], module[1]);\r\n        }else if(s.contains(\"Capstone\")){\r\n            return new ModuleModel(\"\", \"Capstone\");\r\n        }else{\r\n            return null;\r\n        }\r\n    }\r\n\r\n    public int getColor() {\r\n        return color;\r\n    }\r\n\r\n    public void setColor(int color) {\r\n        this.color = color;\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/Model/ModuleModel.java b/app/src/main/java/com/example/modulus/Model/ModuleModel.java
+--- a/app/src/main/java/com/example/modulus/Model/ModuleModel.java	(revision 611051abf635480f37ed2adf664f798e47d8f0b1)
++++ b/app/src/main/java/com/example/modulus/Model/ModuleModel.java	(date 1744705578405)
+@@ -1,17 +1,19 @@
+ package com.example.modulus.Model;
+ 
++import java.util.Comparator;
+ import java.util.List;
+ 
+-public class ModuleModel {
++public class ModuleModel extends Object{
+     private String id;
+     private String name;
+     private String pillar;
+-    private int color;
+     private List<String> tags;
+     private List<String> term;
+     private List<String> prof;
+     private List<String> prerequisites;
++    private String cost;
+     private String description;
++    private int color;
+     public ModuleModel(){
+     }
+     public ModuleModel(String id, String name) {
+@@ -82,12 +84,25 @@
+     public void setPrerequisites(List<String> prerequisites) {
+         this.prerequisites = prerequisites;
+     }
++    public String getCost() {
++        return cost;
++    }
++
++    public void setCost(String cost) {
++        this.cost = cost;
++    }
+     public String getDescription() {
+         return description;
+     }
+     public void setDescription(String description) {
+         this.description = description;
+     }
++    public int getColor() {
++        return color;
++    }
++    public void setColor(int color) {
++        this.color = color;
++    }
+     @Override
+     public String toString(){
+         return getId() + " - " + getName();
+@@ -102,13 +117,33 @@
+             return null;
+         }
+     }
++    public static Comparator<ModuleModel> idCompare = new Comparator<ModuleModel>() {
++        @Override
++        public int compare(ModuleModel mod1, ModuleModel mod2) {
++            String id1 = mod1.getId();
++            String id2 = mod2.getId();
+ 
+-    public int getColor() {
+-        return color;
+-    }
++            return id1.compareTo(id2);
++        }
+ 
+-    public void setColor(int color) {
+-        this.color = color;
+-    }
++        @Override
++        public boolean equals(Object obj) {
++            return false;
++        }
++    };
++    public static Comparator<ModuleModel> nameCompare = new Comparator<ModuleModel>() {
++        @Override
++        public int compare(ModuleModel mod1, ModuleModel mod2) {
++            String name1 = mod1.getName();
++            String name2 = mod2.getName();
++            name1 = name1.toLowerCase();
++            name2 = name2.toLowerCase();
++            return name1.compareTo(name2);
++        }
+ 
++        @Override
++        public boolean equals(Object obj) {
++            return false;
++        }
++    };
+ }
+Index: app/src/main/java/com/example/modulus/Adapter/ModuleAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.Adapter;\r\n\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.TextView;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.core.content.ContextCompat;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.example.modulus.Model.ModuleModel;\r\nimport com.example.modulus.R;\r\nimport com.google.android.material.card.MaterialCardView;\r\n\r\nimport java.util.ArrayList;\r\n\r\npublic class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.moduleCellViewHolder>  {\r\n\r\n\r\n    public interface OnItemClickListener {\r\n        void onItemClick(ModuleModel module);\r\n    }\r\n    ArrayList<ModuleModel> moduleList;\r\n    OnItemClickListener listener;\r\n    private String sortType = \"name\";\r\n\r\n    public ModuleAdapter(ArrayList<ModuleModel> moduleList, OnItemClickListener listener) {\r\n        this.moduleList = moduleList;\r\n        this.listener = listener;\r\n    }\r\n\r\n    @NonNull\r\n    @Override\r\n    public moduleCellViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {\r\n        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.module_cell, parent, false);\r\n        return new moduleCellViewHolder(view);\r\n    }\r\n\r\n    @Override\r\n    public void onBindViewHolder(@NonNull moduleCellViewHolder holder, int position) {\r\n        ModuleModel module = moduleList.get(position);\r\n        holder.moduleName.setText(module.toString());\r\n        holder.moduleTermProf.setText(\"Term(s): \" + String.join(\", \", module.getTerm())\r\n                + \" | \" + String.join(\", \", module.getProf()));\r\n        holder.moduleTags.setText(String.join(\", \", module.getTags()));\r\n        holder.bind(module, listener);\r\n        int color = ContextCompat.getColor(holder.itemView.getContext(), module.getColor());\r\n        holder.card.setStrokeColor(color);\r\n        holder.moduleTermProf.setTextColor(color);\r\n        holder.moduleTags.setTextColor(color);\r\n    }\r\n\r\n    @Override\r\n    public int getItemCount() {\r\n        return moduleList.size();\r\n    }\r\n\r\n    static class moduleCellViewHolder extends RecyclerView.ViewHolder{\r\n        TextView moduleName;\r\n        TextView moduleTermProf;\r\n        TextView moduleTags;\r\n        MaterialCardView card;\r\n\r\n        public moduleCellViewHolder(View itemView){\r\n            super(itemView);\r\n            moduleName = itemView.findViewById(R.id.moduleName);\r\n            moduleTermProf = itemView.findViewById(R.id.moduleTermProf);\r\n            moduleTags = itemView.findViewById(R.id.moduleTags);\r\n            card = itemView.findViewById(R.id.module_cell);\r\n        }\r\n\r\n        public void bind(ModuleModel item, final OnItemClickListener listener) {\r\n            itemView.setOnClickListener(new View.OnClickListener() {\r\n                @Override public void onClick(View v) {\r\n                    listener.onItemClick(item);\r\n                }\r\n            });\r\n        }\r\n    }\r\n\r\n    public void setSortType(String sortType) {\r\n        this.sortType = sortType;\r\n        notifyDataSetChanged();\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/Adapter/ModuleAdapter.java b/app/src/main/java/com/example/modulus/Adapter/ModuleAdapter.java
+--- a/app/src/main/java/com/example/modulus/Adapter/ModuleAdapter.java	(revision 611051abf635480f37ed2adf664f798e47d8f0b1)
++++ b/app/src/main/java/com/example/modulus/Adapter/ModuleAdapter.java	(date 1744705578399)
+@@ -16,8 +16,6 @@
+ import java.util.ArrayList;
+ 
+ public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.moduleCellViewHolder>  {
+-
+-
+     public interface OnItemClickListener {
+         void onItemClick(ModuleModel module);
+     }
+Index: app/src/main/assets/sutdModules.db
+===================================================================
+diff --git a/app/src/main/assets/sutdModules.db b/app/src/main/assets/sutdModules.db
+deleted file mode 100644
+--- a/app/src/main/assets/sutdModules.db	(revision 611051abf635480f37ed2adf664f798e47d8f0b1)
++++ /dev/null	(revision 611051abf635480f37ed2adf664f798e47d8f0b1)
+@@ -1,349 +0,0 @@
+-SQLite format 3   @     
+-                                                               
+- .zq
+-� 	
+- 
+-�V�	
+-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         �;	�Qtabletrackstracks� �tabletrackstracksCREATE TABLE "tracks" (
+-	"Minor"	TEXT,
+-	"Eligibility"	TEXT,
+-	"CSD"	TEXT,
+-	"EPD"	TEXT,
+-	"ESD"	TEXT,
+-	"Artificial Intelligence"	TEXT,
+-	"Data Analytics"	TEXT,
+-	"Financial Technology"	TEXT,
+-	"IoT and Intelligent Systems"	TEXT,
+-	"Security"	TEXT,
+-	"Software Engineering"	TEXT,
+-	"Visual Analytics and Computing"	TEXT,
+-	"Custom"	TEXT,
+-	"Beyond Industry 4.0"	TEXT,
+-	"Computer Engineering"	TEXT,
+-	"Electrical Engineering"	TEXT,
+-	"Healthcare Engineering Design"	TEXT,
+-	"Mechanical Engineering"	TEXT,
+-	"Robotics"	TEXT,
+-	"Self-Directed"	TEXT,
+-	"Aviation Systems"	TEXT,
+-	"Business Analytics and Operations Research"	TEXT,
+-	"Financial Services"	TEXT,
+-	"Supply Chain and Logistics"	TEXT,
+-	"ES Minor"	TEXT,
+-	"AI Minor"	TEXT,
+-	"CS Minor"	TEXT,
+-	"DIVE"	TEXT,
+-	"DTS Minor"	TEXT,
+-	"DH Minor"	TEXT,
+-	"HI Minor"	TEXT,
+-	"Human-Centred Design"	TEXT,
+-	"Psychology and Business Management"	TEXT,
+-	"Sustainability by Design"	TEXT
+-)�S
+-##�mtablesutdmodulessutdmodulesCREATE TABLE "sutdmodules" (
+-	"Pillar"	TEXT,
+-	"Tags"	TEXT,
+-	"Term"	TEXT,
+-	"ID"	TEXT,
+-	"Name"	TEXT,
+-	"Professors"	TEXT,
+-	"Preresquites"	TEXT,
+-	"Cost"	TEXT,
+-	"Description"	TEXT
+-)�Q�qtabletimetabletimetable	CREATE TABLE "timetable" (
+-	"Id"	INTEGER,
+-	"name"	TEXT,
+-	"location"	TEXT,
+-	"startTime_YEAR"	INTEGER,
+-	"startTime_MONTH"	INTEGER,
+-	"startTime_DAY_OF_MONTH"	INTEGER,
+-	"startTime_HOUR_OF_DAY"	INTEGER,
+-	"startTime_MINUTE"	INTEGER,
+-	"endTime_HOUR_OF_DAY"	INTEGER,
+-	"endTime_MINUTE"	INTEGER,
+-	"colorId"	INTEGER
+-)   /�5tableplannerplanner
+-CREATE TAB     N}tableloginloginCREATE TABLE "login" (
+-	"Email"	TEXT,
+-	"Password"	TEXT
+-)�'�%tableplannerplanner
+-CREATE TABLE "planner" (
+-	"Row"	INTEGER,
+-	"Term"	INTEGER,
+-	"Default"	TEXT,
+-	"ASD"	TEXT,
+-	"CSD"	TEXT,
+-	"DAI"	TEXT,
+-	"ESD"	TEXT,
+-	"EPD"	TEXT
+-)   	�    ����������k��- < ��[�N�^�b�T�g w                                         �
+-#	Q�; HASS,Electiv�*Q73�	HASSHASS,Elective / Technical Elective4,6,802.121DHThe Question of BeingPaolo Di Leo (HASS)NILNILhttps://www.sutd.edu.sg/course/02-121dh-the-question-of-being/�UQe5�7HASSHASS,Elective / Technical Elective702.120DHHistory of Traditional Chinese Short FictionZhao Zhenxing (HASS)NILNILhttps://www.sutd.edu.sg/course/02-120dh-history-of-traditional-chinese-short-fiction/�Q�5�cHASSHASS,Elective / Technical Elective702.110DHThe Chinese Lyrical Tradition: Arts, Literature and Landscape DesignZhao Zhenxing (HASS)NILNILhttps://www.sutd.edu.sg/course/02-110dh-the-chinese-lyrical-tradition-arts-literature-and-landscape-design/�bQq7�?HASSHASS,Elective / Technical ElectiveNIL02.108DHModern China: Pluralism, and Beyond TerritorialityPang Yang Huei (HASS)NILNILhttps://www.sutd.edu.sg/course/02-108dh-modern-china-pluralism-and-beyond-territoriality/�*Q�77�HASSHASS,Elective / Technical ElectiveNIL02.104TSThe History of International Development in Asia: The Role of Engineers and DesignersPang Yang Huei (HASS)NILNILhttps://www.sutd.edu.sg/course/02-104ts-the-history-of-international-development-in-asia-the-role-of-engineers-and-designers/�'Q57�	HASSHASS,Elective / Technical Elective502.102HTThe World Since 1400Pang Yang Huei (HASS)NILNILhttps://www.sutd.edu.sg/course/02-102-ht-the-world-since-1400/�L3��GHASSHASS,Freshmore Core1,302.003Social Science: Understanding Behaviour, Culture & SocietyNILNILNILhttps://www.sutd.edu.sg/course/02-003-social-science-understanding-behaviour-culture-society/�B3w�?HASSHASS,Freshmore Core1,302.001Global Humanities: Literature, Philosophy, and EthicsNILNILNILhttps://www.sutd.edu.sg/course/02-001-global-humanities-literature-philosophy-and-ethics/v
+-!�NILCapstone801.401Capstone 2NILNILNILhttps://www.sutd.edu.sg/education/undergraduate/capstone/for-students/v!�NILCapstone701.400Capstone 1NILNILNILhttps://www.sutd.edu.sg/education/undergraduate/capstone/for-students/�6OI7�SMTSMT,Elective / Technical Elective7,801.119Nanoelectronics and TechnologyShubhakar Kayla (SMT)NILNILhttps://www.sutd.edu.sg/course/01-119-nanoelectronics-and-technology/�e
+-Og]�5SMTSMT,Elective / Technical Elective801.117Brain-inspired Computing and its ApplicationsDesmond Loke (SMT),Angela Wang Bo (ISTD)NILNILhttps://www.sutd.edu.sg/course/01-117-brain-inspired-computing-and-its-applications/�F	Oa3�'SMTSMT,Elective / Technical Elective601.115Science of Sound: Acoustics, Audio & MusicChen Jer-Ming (SMT)NILNILhttps://www.sutd.edu.sg/course/01-115-science-of-sound-acoustics-audio-music/�NOu�CSMTSMT,Elective / Technical Elective701.114Instructional Design of Serious Games for HealthcareNILNILNILhttps://www.sutd.edu.sg/course/01-114-instructional-design-of-serious-games-for-healthcare/�O5�ESDESD,Elective / Technical Elective701.107Urban TransportationNILNILNILhttps://www.sutd.edu.sg/course/01-107-urban-transportation/�O9)�EPDEPD,Elective / Technical Elective801.106Engineering ManagementDawn Tan (EPD)NILNILhttps://www.sutd.edu.sg/course/01-106-engineering-management/�+OG'�ESDESD,Elective / Technical Elective601.102Energy Systems and ManagementNIL10.018,10.022Hardhttps://www.sutd.edu.sg/course/01-102-energy-systems-and-management/�aOaa�/SMTSMT,Elective / Technical Elective701.101Technologies for Sustainable Global HealthShireen Goh (EPD),Zhu Yajuan (Julia) (SMT)NILNILhttps://www.sutd.edu.sg/course/01-101-technologies-for-sustainable-global-health/�1?�SMTSMT,Freshmore Core301.020Design Thinking Project INILNILNILhttps://www.sutd.edu.sg/course/01-020-design-thinking-project-iii/�
+-1?�SMTSMT,Freshmore Core201.019Design Thinking Project INILNILNILhttps://www.sutd.edu.sg/course/01-019-design-thinking-project-ii/�	1?�
+-SMTSMT,Freshmore Core101.018Design Thinking Project INILNILNILhttps://www.sutd   �:   �%   
+-�   z   e   P   9   '   
+-   
+-� *�
+-��
+-�
+-	�	�:�           � �[�N�^�b�T�g w                                         �
+-#	Q�; HASS,Electiv�*Q73�	HASSHASS,Elective / Technical Elective4,6,802.121DHThe Question of BeingPaolo Di Leo (HASS)NILNILhttps://www.sutd.edu.sg/course/02-121dh-the-question-of-being/�UQe5�7HASSHASS,Elective / Technical Elective702.120DHHistory of Traditional Chinese Short FictionZhao Zhenxing (HASS)NILNILhttps://www.sutd.edu.sg/course/02-120dh-history-of-traditional-chinese-short-fiction/�Q�5�cHASSHASS,Elective / Technical Elective702.110DHThe Chinese Lyrical Tradition: Arts, Literature and Landscape DesignZhao Zhenxing (HASS)NILNILhttps://www.sutd.edu.sg/course/02-110dh-the-chinese-lyrical-tradition-arts-literature-and-landscape-design/�bQq7�?HASSHASS,Elective / Technical ElectiveNIL02.108DHModern China: Pluralism, and Beyond TerritorialityPang Yang Huei (HASS)NILNILhttps://www.sutd.edu.sg/course/02-108dh-modern-china-pluralism-and-beyond-territoriality/�*Q�77�HASSHASS,Elective / Technical ElectiveNIL02.104TSThe History of International Development in Asia: The Role of Engineers and DesignersPang Yang Huei (HASS)NILNILhttps://www.sutd.edu.sg/course/02-104ts-the-history-of-international-development-in-asia-the-role-of-engineers-and-designers/�'Q57�	HASSHASS,Elective / Technical Elective502.102HTThe World Since 1400Pang Yang Huei (HASS)NILNILhttps://www.sutd.edu.sg/course/02-102-ht-the-world-since-1400/�L3��GHASSHASS,Freshmore Core1,302.003Social Science: Understanding Behaviour, Culture & SocietyNILNILNILhttps://www.sutd.edu.sg/course/02-003-social-science-understanding-behaviour-culture-society/�B3w�?HASSHASS,Freshmore Core1,302.001Global Humanities: Literature, Philosophy, and EthicsNILNILNILhttps://www.sutd.edu.sg/course/02-001-global-humanities-literature-philosophy-and-ethics/v
+-!�NILCapstone801.401Capstone 2NILNILNILhttps://www.sutd.edu.sg/educati{�G7�DAIDAI,Core660.008Systems Design StudioNIL50.004Hardhttps://www.sutd.edu.sg/course/60-008-systems-design-studio/w�F7�DAIDAI,Core760.006Spatial Design StudioNILNILNILhttps://www.sutd.edu.sg/course/60-006-spatial-design-studio/d�E
+-!oDAIDAI,Core560.005HCI and AINIL10.014Hardhttps://www.sutd.edu.sg/course/60-005-hci-and-ai/��D7'�DAIDAI,Core560.004Service Design StudioNIL10.014,50.004Hardhttps://www.sutd.edu.sg/course/60-004-service-design-studio/w�C7�DAIDAI,Core460.003Product Design StudioNILNILNILhttps://www.sutd.edu.sg/course/60-003-product-design-studio/�B?�
+-DAIDAI,Core460.002AI applications in DesignNILNILNILhttps://www.sutd.edu.sg/course/60-002-ai-applications-in-design/{�A7�DAIDAI,Core660.001Applied Deep LearningNIL50.007Hardhttps://www.sutd.edu.sg/course/60-001-applied-deep-learning/�o�@Qci�1ISTDISTD,Elective / Technical Elective6,850.056Software Abstraction Functional ProgrammingOka Kurniawan (ISTD),Kenny Lu Zhuo Ming (ISTD)10.014Hardhttps://www.sutd.edu.sg/course/50-056-software-abstraction-functional-programming/�a�?Qa;5�-ISTDISTD,Elective / Technical Elective850.055Special Topic: Machine Learning OperationsDaniel Dahlmeier (ISTD)50.007,50.039/60.001Hardhttps://www.sutd.edu.sg/course/50-055-special-topic-machine-learning-operations/�J�>QU?�#ISTDISTD,Elective / Technical Elective750.054Compiler Design and Program AnalysisKenny Lu Zhuo Ming (ISTD)50.004Hardhttps://www.sutd.edu.sg/course/50-054-compiler-design-and-program-analysis/�I�=QOE�ISTDISTD,Elective / Technical Elective6,850.053Software Testing and VerificationSudipta Chattopadhyay (ISTD)50.003Softhttps://www.sutd.edu.sg/course/50-053-software-testing-and-verification/��<
+-Q--{ISTDISTD,Elective / Technical Elective750.052Extended RealitySong Peng (ISTD)50.001Softhttps://www.sutd.edu.sg/course/50-052-extended-reality/�R�;QGg�ISTDISTD,Elective / Technical Elective6,850.051Programming Language ConceptsSimon Perrault (ISTD),Matthieu De Mari (ISTD)10.014Hardhttps://www.sutd.edu.sg/course/50-051-programming-language-concepts/
+-    � t�Y
+-u�'�
+-�	�	[�k��- < ��S�h	�&�X��K � y                                       PH9W SMT,Freshmor�*Q73�	HASSHASS,Elective / Technical Elective4,6,802.121DHThe Question of BeingPaolo Di Leo (HASS)NILNILhttps://www.sutd.edu.sg/course/02-121dh-the-question-of-being/�UQe5�7HASSHASS,Elective / Technical Elective702.120DHHistory of Traditional Chinese Short FictionZhao Zhenxing (HASS)NILNILhttps://www.sutd.edu.sg/course/02-120dh-history-of-traditional-chinese-short-fiction/�Q�5�cHASSHASS,Elective / Technical Elective702.110DHThe Chinese Lyrical Tradition: Arts, Literature and Landscape DesignZhao Zhenxing (HASS)NILNILhttps://www.sutd.edu.sg/course/02-110dh-the-chinese-lyrical-tradition-arts-literature-and-landscape-design/�bQq7�?HASSHASS,Elective / Technical ElectiveNIL02.108DHModern China: Pluralism, and Beyond TerritorialityPang Yang Huei (HASS)NILNILhttps://www.sutd.edu.sg/course/02-108dh-modern-china-pluralism-and-beyond-territoriality/�*Q�77�HASSHASS,Elective / Technical ElectiveNIL02.104TSThe History of International Development in Asia: The Role of Engineers and DesignersPang Yang Huei (HASS)NILNILhttps://www.sutd.edu.sg/course/02-104ts-the-history-of-international-development-in-asia-the-role-of-engineers-and-designers/�'Q57�	HASSHASS,Elective / Technical Elective502.102HTThe World Since 1400Pang Yang Huei (HASS)NILNILhttps://www.sutd.edu.sg/course/02-102-ht-the-world-since-1400/�L3��GHASSHASS,Freshmore Core1,302.003Social Science: Understanding Behaviour, Culture & SocietyNILNILNILhttps://www.sutd.edu.sg/course/02-003-social-science-understanding-behaviour-culture-society/�B3w�?HASSHASS,Freshmore Core1,302.001Global Humanities: Literature, Philosophy, and EthicsNILNILNILhttps://www.sutd.edu.sg/course/02-001-global-humanities-literature-philosophy-and-ethics/v
+-!�NILCapstone801.401Capstone 2NILNILNILhttps://www.sutd.edu.sg/education/undergraduate/capstone/for-students/v!�NILCapstone701.400Capstone 1NILNILNILhttps://www.sutd.edu.sg/education/undergraduate/capstone/for-students/�6OI7�SMTSMT,Elective / Technical Elective7,801.119Nanoelectronics and TechnologyShubhakar Kayla (SMT)NILNILhttps://www.sutd.edu.sg/course/01-119-nanoelectronics-and-technology/�e
+-Og]�5SMTSMT,Elective / Technical Elective801.117Brain-inspired Computing and its ApplicationsDesmond Loke (SMT),Angela Wang Bo (ISTD)NILNILhttps://www.sutd.edu.sg/course/01-117-brain-inspired-computing-and-its-applications/�F	Oa3�'SMTSMT,Elective / Technical Elective601.115Science of Sound: Acoustics, Audio & MusicChen Jer-Ming (SMT)NILNILhttps://www.sutd.edu.sg/course/01-115-science-of-sound-acoustics-audio-music/�NOu�CSMTSMT,Elective / Technical Elective701.114Instructional Design of Serious Games for HealthcareNILNILNILhttps://www.sutd.edu.sg/course/01-114-instructional-design-of-serious-games-for-healthcare/�O5�ESDESD,Elective / Technical Elective701.107Urban TransportationNILNILNILhttps://www.sutd.edu.sg/course/01-107-urban-transportation/�O9)�EPDEPD,Elective / Technical Elective801.106Engineering ManagementDawn Tan (EPD)NILNILhttps://www.sutd.edu.sg/course/01-106-engineering-management/�+OG'�ESDESD,Elective / Technical Elective601.102Energy Systems and ManagementNIL10.018,10.022Hardhttps://www.sutd.edu.sg/course/01-102-energy-systems-and-management/�aOaa�/SMTSMT,Elective / Technical Elective701.101Technologies for Sustainable Global HealthShireen Goh (EPD),Zhu Yajuan (Julia) (SMT)NILNILhttps://www.sutd.edu.sg/course/01-101-technologies-for-sustainable-global-health/�1?�SMTSMT,Freshmore Core301.020Design Thinking Project INILNILNILhttps://www.sutd.edu.sg/course/01-020-design-thinking-project-iii/�
+-1?�SMTSMT,Freshmore Core201.019Design Thinking Project INILNILNILhttps://www.sutd.edu.sg/course/01-019-design-thinking-project-ii/�	1?�
+-SMTSMT,Freshmore Core101.018Design Thinking Project INILNILNILhttps://www.sutd.edu.sg/course/01-018-design-thinking-project-i/
+-    e ��a
+-�
+-
+-O�
+-�
+-Q	�	#TDwxg�-D eI�^��&�r�a	�1�� �             �\eOs+�AASDASD,Elective / Technical Elective820.307Toward Carbon-Neutral Architecture and Urban DesignZheng Kai (ASD)20.203Hardhttps://www.sutd.edu.sg/course/20-307-toward-carbon-neutral-architecture-and-urban-design/�fdOy3�GASDASD,Elective / Technical Elective820.305Conservation Theories and Approaches of Built HeritageYeo Kang Shua (ASD)20.222Hardhttps://www.sutd.edu.sg/course/20-305-conservation-theories-and-approaches-of-built-heritage/�1cO=C�ASDASD,Elective / Technical ElectiveNIL20.304Urban Housing TypologiesNIL20.101,20.102,20.221,20.222Hardhttps://www.sutd.edu.sg/course/20-304-urban-housing-typologies/�b
+-O)wASDASD,Elective / Technical ElectiveNIL20.303Urban AnalysisNILNILNILhttps://www.sutd.edu.sg/course/20-303-urban-analysis/�aO�G�eASDASD,Elective / Technical ElectiveNIL20.302Advanced Topics in Performative Design: Daylight and Electric LightingDaniel Joseph Whittaker (ASD)NILNILhttps://www.sutd.edu.sg/course/20-302-advanced-topics-in-performative-design-daylight-and-electric-lighting/�|`O�+5�QASDASD,Elective / Technical Elective820.301Material Computation: Advanced Topics in Geometry and MatterJason Lim (ASD)20.202,20.212,20.213Hardhttps://www.sutd.edu.sg/course/20-301-material-computation-advanced-topics-in-geometry-and-matter/�J_}1�GASDASD,Core820.224Artificial & Architectural Intelligences in Design (HTC)Immanuel Koh (DAI)NILNILhttps://www.sutd.edu.sg/course/20-224-artificial-architectural-intelligences-in-design-htc-2/�
+-^O�/�yASDASD,Elective / Technical ElectiveNIL20.223Contemporary Architecture: Between Technology, Science and Culture (HTC Elective)NIL20.221Hardhttps://www.sutd.edu.sg/course/20-223-contemporary-architecture-between-technology-science-and-culture-htc-elective-2/�L]{3�CASDASD,Core520.222Modernism: Technology and Society in Architecture (HTC)Yeo Kang Shua (ASD)20.221Hardhttps://www.sutd.edu.sg/course/20-222-modernism-technology-and-society-in-architecture-htc/�q\�G�aASDASD,Core420.221Traditions: World history connections to vernacular architecture (HTC)Daniel Joseph Whittaker (ASD)NILNILhttps://www.sutd.edu.sg/course/20-221-traditions-world-history-connections-to-vernacular-architecture-htc/�[G+�ASDASD,Core520.213Building Information ModelingJason Lim (ASD)20.212Hardhttps://www.sutd.edu.sg/course/20-213-building-information-modeling/�ZI;�ASDASD,Core420.212Digital Design and FabricationStylianos Dritsas (ASD)NILNILhttps://www.sutd.edu.sg/course/20-212-digital-design-and-fabrication/�YE+'�ASDASD,Core620.203Architectural Energy SystemsZheng Kai (ASD)20.201,20.202Hardhttps://www.sutd.edu.sg/course/20-203-architectural-energy-systems/�2Xa9�+ASDASD,Core420.202Architectural Structure & Enclosure DesignSam Conrad Joyce (DAI)NILNILhttps://www.sutd.edu.sg/course/20-202-architectural-structure-enclosure-design/�'WOG�ASDASD,Core520.201Architecture Science & TechnologyDaniel Joseph Whittaker (ASD)NILNILhttps://www.sutd.edu.sg/course/20-201-architecture-science-technology/�;VQ5C�ASDASD,Core820.112Sustainable Design Option Studio 2Khoo Peng Beng (ASD)20.102,20.102,20.103,20.111Hardhttps://www.sutd.edu.sg/course/20-112-sustainable-design-option-studio-2/�4UQ55�ASDASD,Core720.111Sustainable Design Option Studio 1Khoo Peng Beng (ASD)20.102,20.102,20.103Hardhttps://www.sutd.edu.sg/course/20-111-sustainable-design-option-studio-1/�TA/'�ASDASD,Core620.103Architecture Core Studio 3Calvin Chua (ASD)20.101,20.102Hardhttps://www.sutd.edu.sg/course/20-103-architecture-core-studio-3/�SA-�ASDASD,Core520.102Architecture Core Studio 2Eva Castro (ASD)20.102Hardhttps://www.sutd.edu.sg/course/20-102-architecture-core-studio-2/�RA1�ASDASD,Core420.101Architecture Core Studio 1Carlos Banon (ASD)NILNILhttps://www.sutd.edu.sg/course/20-101-architecture-core-studio-1/uQ
+-/+yASDASD,Core ElectiveNIL20.099Urban SketchingNILNILNILhttps://www.sutd.edu.sg/course/20-099-urban-sketching/
+-    � �I
+-}�
+-
+-p	�	BR�6�!�
+-z�>� � �N �T��%��E � ��6�%!�1oISTDISTD,Core450.004AlgorithmsErnest Chong (ISTD),So�P95�ASDASD,Freshmore Elective310.024Spatial Design WorldNILNILNILhttps://www.sutd.edu.sg/course/10-024-spatial-design-world/�O9=�SMTSMT,Freshmore Elective310.023Designing Energy SystemsNILNILNILhttps://www.sutd.edu.sg/course/10-023-designing-energy-systems-elective/�N17�ESDESD,Freshmore Core310.022Modelling UncertaintyNIL10.018Hardhttps://www.sutd.edu.sg/course/10-022-modelling-uncertainty/�M;/�ISTDISTD,Freshmore Elective310.020Data Driven WorldNILNILNILhttps://www.sutd.edu.sg/course/10-020-data-driven-world-elective/�.L9W�7SMTSMT,Freshmore Elective310.019Science and Technology for HealthcareNILNILNILhttps://www.sutd.edu.sg/course/10-019-science-and-technology-for-healthcare-elective/�
+-K1C�SMTSMT,Freshmore Core210.018Modelling Space and SystemsNILNILNILhttps://www.sutd.edu.sg/course/10-018-modelling-space-and-systems/}J13�SMTSMT,Freshmore Core210.017Technological WorldNILNILNILhttps://www.sutd.edu.sg/course/10-017-technological-world/�I1K�SMTSMT,Freshmore Core210.016Science for a Sustainable WorldNILNILNILhttps://www.sutd.edu.sg/course/10-016-science-for-a-sustainable-world/rH
+-1)wSMTSMT,Freshmore Core110.015Physical WorldNILNILNILhttps://www.sutd.edu.sg/course/10-015-physical-world/�G;O�ASDASD,ISTD,Freshmore Core110.014Computational Thinking for DesignNILNILNILhttps://www.sutd.edu.sg/course/10-014-computational-thinking-for-design/�F19�SMTSMT,Freshmore Core110.013Modelling and AnalysisNILNILNILhttps://www.sutd.edu.sg/course/10-013-modelling-and-analysis/�E1I�ASDASD,Freshmore Core203.007Design Thinking and InnovationNILNILNILhttps://www.sutd.edu.sg/course/03-007-design-thinking-and-innovation/�mDQ3�KHASSHASS,Elective / Technical Elective4,6,802.231TS Transportation Technology and Policy in Urban ProgressJin Murakami (HASS)NILNILhttps://www.sutd.edu.sg/course/02-231ts-transportation-technology-and-policy-in-urban-progress/�KCQ]1�/HASSHASS,Elective / Technical Elective702.230TSHealth Communication and Behavior ChangeEvelyn Chew (HASS)NILNILhttps://www.sutd.edu.sg/course/02-230ts-health-communication-and-behavior-change/�<BQAC�HASSHASS,Elective / Technical Elective4,6,802.228TSDesign in the AnthropoceneJeffrey Chan Kok Hui (HASS)NILNILhttps://www.sutd.edu.sg/course/02-228ts-design-in-the-anthropocene/�A
+-Q31}HASSHASS,Elective / Technical Elective4,6,802.226Leaders & FollowersGrace Dixon (HASS)NILNILhttps://www.sutd.edu.sg/course/02-226-leaders-followers/�%@Q35�HASSHASS,Elective / Technical ElectiveNIL02.222TSUnnatural DisastersLyle Fearnley (HASS)NILNILhttps://www.sutd.edu.sg/course/02-222ts-unnatural-disasters/�r?Q�5�OHASSHASS,Elective / Technical ElectiveNIL02.219TSRice Cultures: Technology, Society and Environment in AsiaLyle Fearnley (HASS)NILNILhttps://www.sutd.edu.sg/course/02-219ts-rice-cultures-technology-society-and-environment-in-asia/�1>QG3�HASSHASS,Elective / Technical ElectiveNIL02.218TS Introduction to PsychologyYow Wei Quin (HASS)NILNILhttps://www.sutd.edu.sg/course/02-218-introduction-to-psychology/�9=QG?�HASSHASS,Elective / Technical ElectiveNIL02.217Gender, Sexuality and SocietyNilanjan Raghunath (HASS)NILNILhttps://www.sutd.edu.sg/course/02-217-gender-sexuality-and-society/�I<QY3�)HASSHASS,Elective / Technical ElectiveNIL02.216TSHuman Behaviour, Technology and DesignYow Wei Quin (HASS)NILNILhttps://www.sutd.edu.sg/course/02-216ts-human-behaviour-technology-and-design/�/;QA1�HASSHASS,Elective / Technical Elective4,6,802.211Critical Management SkillsGrace Dixon (HASS)NILNILhttps://www.sutd.edu.sg/course/02-211-critical-management-skills/�:Q�?�[HASSHASS,Elective / Technical ElectiveNIL02.210TSWho Gets Ahead? Sociology of Social Networks and Social CapitalNilanjan Raghunath (HASS)NILNILhttps://www.sutd.edu.sg/course/02-210ts-who-gets-ahead-sociology-of-social-networks-and-social-capital/
+-    � 4
+-?r�
+-�	��� {zM��-� ��, Q
+-�4�G�m��% �     �W�:Q_3'�-ISTDISTD,Elective / Technical Elective6,850.050Discrete Mathematics and Algorithm DesignErnest Chong (ISTD)50.004,10.018Hardhttps:/�9
+-Q)1wHASSHASS,Elective / Technical Elective4,5,6,802.208MicroeconomicsSu Mengyang (HASS)10.018Hardhttps://www.sutd.edu.sg/course/02-208-microeconomics/�(8Q;3�	HASSHASS,Elective / Technical ElectiveNIL02.204Technology and the SelfYow Wei Quin (HASS)NILNILhttps://www.sutd.edu.sg/course/02-204-technology-and-the-self/�J7Q]3�+HASSHASS,Elective / Technical ElectiveNIL02.203Psychological Approaches to BilingualismYow Wei Quin (HASS)NILNILhttps://www.sutd.edu.sg/course/02-203-psychological-approaches-to-bilingualism/�'6Q=1�HASSHASS,Elective / Technical Elective502.202Organizational ProcessesGrace Dixon (HASS)NILNILhttps://www.sutd.edu.sg/course/02-202-organizational-processes/�&5Q/?�HASSHASS,Elective / Technical ElectiveNIL02.201TSDigital SociologyNilanjan Raghunath (HASS)NILNILhttps://www.sutd.edu.sg/course/02-201ts-digital-sociology/�*4Q�;7�HASSHASS,Elective / Technical Elective502.178HTHuman Existence and Technology: A Historical and Philosophical Inquiry (Special Topics)Adam Groves (Adjunct)NILNILhttps://www.sutd.edu.sg/course/02-178ht-human-existence-and-technology-a-historical-and-philosophical-inquiry-special-topics/�~3Q�3�WHASSHASS,Elective / Technical Elective502.177On Wind and Water: Metaphysics, Design, and Technology (Special Topics)Dean Wang (Adjunct)NILNILhttps://www.sutd.edu.sg/course/02-177-on-wind-water-metaphysics-design-and-technology-special-topics/�"2Q3;�HASSHASS,Elective / Technical Elective502.176Collective BehaviorRyutaro Uchiyama (HASS)NILNILhttps://www.sutd.edu.sg/course/02-176-collective-behavior/�?1QK3�HASSHASS,Elective / Technical Elective4,6,7,802.175DHGlobal Film: Art and TechnologyLorenz Hegel (HASS)NILNILhttps://www.sutd.edu.sg/course/02-175dh-global-film-art-and-technology/�=0QK1�HASSHASS,Elective / Technical Elective4,6,802.174TSThe Design of Digital PlatformsSu Mengyang (HASS)NILNILhttps://www.sutd.edu.sg/course/02-174ts-the-design-of-digital-platforms/�/Q�E�SHASSHASS,Elective / Technical Elective4,6,7,802.173DHThe Medium and the Message: An Introduction to Media TheoryMelissa Tu Shao-Hsuan (HASS)NILNILhttps://www.sutd.edu.sg/course/02-173dh-the-medium-and-the-message-an-introduction-to-media-theory/�&.Q�)E�wHASSHASS,Elective / Technical Elective4,6,7,802.172DHImagine Dragons: Monsters and Outcasts in Literature, from Beowulf to MurakamiMelissa Tu Shao-Hsuan (HASS)NILNILhttps://www.sutd.edu.sg/course/02-172dh-imagine-dragons-monsters-and-outcasts-in-literature-from-beowulf-to-murakami/�P-Qw�=HASSHASS,Elective / Technical ElectiveNIL02.171Religion & Society in Southeast Asia (Special Topics)NILNILNILhttps://www.sutd.edu.sg/course/02-171-religion-society-in-southeast-asia-special-topics/�M,QY=�+HASSHASS,Elective / Technical Elective702.170HTHistory of Surveillance in Modern AsiaTakahiro Yamamoto (HASS)NILNILhttps://www.sutd.edu.sg/course/02-170ht-history-of-surveillance-in-modern-asia/�J+Q[1�'HASSHASS,Elective / Technical Elective4,6,802.167HTFashion: East and West (Special Topics)Courtney Fu (HASS)NILNILhttps://www.sutd.edu.sg/course/02-167ht-fashion-east-and-west-special-topics/�r*Q�9�OHASSHASS,Elective / Technical Elective702.166TSUrban Southeast Asia: Diversity, Sustainability and ChangeCheng Nien Yuan (HASS)NILNILhttps://www.sutd.edu.sg/course/02-166ts-urban-southeast-asia-diversity-sustainability-and-change/�d)Qy1�EHASSHASS,Elective / Technical Elective502.165TSEmpathy: An interdisciplinary concept (Special Topics)Evelyn Chew (HASS)NILNILhttps://www.sutd.edu.sg/course/02-165ts-empathy-an-interdisciplinary-concept-special-topics/�b(Qs9�?HASSHASS,Elective / Technical Elective702.164DHPerformance: Design, Dramaturgy, and InterpretationCheng Nien Yuan (HASS)NILNILhttps://www.sutd.edu.sg/course/02-164dh-performance-design-dramaturgy-and-interpretation/
+-    � 1@
+-��/
+-l	�����/5��� � / �](
+-Qs9�?HASS,Elective / Technical Elective702.164DHPerformance: Design, Dramaturgy, and InterpretationCheng Nien Yuan (HASS)NILNI�k'Q�/�KHASSHASS,Elective / Technical ElectiveNIL02.163International Trade: Free Trade, Governance and TechnologyGordon Tan (HASS)NILNILhttps://www.sutd.edu.sg/course/02-163-international-trade-free-trade-governance-and-technology/�o&Q{;�KHASSHASS,Elective / Technical ElectiveNIL02.159HTEquitable Tech: Reimagining Our Digital InfrastructuresSetsuko Yokoyama (HASS)NILNILhttps://www.sutd.edu.sg/course/02-159ht-equitable-tech-reimagining-our-digital-infrastructures/�t%Q�;�MHASSHASS,Elective / Technical ElectiveNIL02.158DHKings, monks, and merchants: A history of Asia before 1750Alastair Gornell (HASS)NILNILhttps://www.sutd.edu.sg/course/02-158dh-kings-monks-and-merchants-a-history-of-asia-before-1750/�&$Q13�HASSHASS,Elective / Technical Elective4,5,6,802.156DHGames of HistoriesPaolo Di Leo (HASS)NILNILhttps://www.sutd.edu.sg/course/02-156dh-games-of-histories/�w#Q�7�UHASSHASS,Elective / Technical Elective702.153TSA History of Nuclear Strategy, Design, Technology and SocietyPang Yang Huei (HASS)NILNILhttps://www.sutd.edu.sg/course/02-153ts-a-history-of-nuclear-strategy-design-technology-and-society/�"
+-Q%CwHASSHASS,Elective / Technical ElectiveNIL02.152HTUrban TheoryJeffrey Chan Kok Hui (HASS)NILNILhttps://www.sutd.edu.sg/course/02-152ts-urban-theory/�#!Q�3/�HASSHASS,Elective / Technical Elective4,6,802.151HTDigital Worlds, Space and Spatialities: Geographical Perspectives on DigitalisationGordon Tan (HASS)NILNILhttps://www.sutd.edu.sg/course/02-151ht-digital-worlds-space-and-spatialities-geographical-perspectives-on-digitalisation/�K QK/�;HASSHASS,Elective / Technical Elective4,6,802.148HTGeographies of Mony and FinanceGordon Tan (HASS)NILNILhttps://www.sutd.edu.sg/course/02-147ts-interventions-in-design-technology-and-society/�_Qm=�;HASSHASS,Elective / Technical Elective402.147TSInterventions in Design, Technology, and SocietyTakahiro Yamamoto (HASS)NILNILhttps://www.sutd.edu.sg/course/02-147ts-interventions-in-design-technology-and-society/�]Qs3�?HASSHASS,Elective / Technical Elective702.146Financing Cities of the Future: Theory and PracticeJin Murakami (HASS)NILNILhttps://www.sutd.edu.sg/course/02-146-financing-cities-of-the-future-theory-and-practice/�dQu3�CHASSHASS,Elective / Technical ElectiveNIL02.144DHBeing in the World: from Homer and Heidegger to A.I.Paolo Di Leo (HASS)NILNILhttps://www.sutd.edu.sg/course/02-144dh-being-in-the-world-from-homer-and-heidegger-to-a-i/�@QQ3�HASSHASS,Elective / Technical ElectiveNIL02.143DHArtificial Intelligence and EthicsPaolo Di Leo (HASS)NILNILhttps://www.sutd.edu.sg/course/02-143-artificial-intelligence-and-ethics/�^Qg?�5HASSHASS,Elective / Technical Elective4,6,802.140TSShaping Futures: Innovation, Work and SocietyNilanjan Raghunath (HASS)NILNILhttps://www.sutd.edu.sg/course/02-140ts-shaping-futures-innovation-work-and-society/�\QQk�#HASSHASS,Elective / Technical Elective402.137DHIntroduction to Digital HumanitiesAlastair Gornell (HASS),Setsuko Yokoyama (HASS)NILNILhttps://www.sutd.edu.sg/course/02-137dh-introduction-to-digital-humanities/�2QA3�HASSHASS,Elective / Technical ElectiveNIL02.135HTThe Question of TechnologyPaolo Di Leo (HASS)NILNILhttps://www.sutd.edu.sg/course/02-135ht-the-question-of-technology/�
+-Q)3{HASSHASS,Elective / Technical ElectiveNIL02.132DHBeing and TimePaolo Di Leo (HASS)NILNILhttps://www.sutd.edu.sg/course/02-132dh-being-and-time/�nQy;�KHASSHASS,Elective / Technical ElectiveNIL02.128DHClassical South and Southeast Asian Literature and ArtAlastair Gornell (HASS)NILNILhttps://www.sutd.edu.sg/course/02-128dh-classical-south-and-southeast-asian-literature-and-art/�LQ[7�)HASSHASS,Elective / Technical ElectiveNIL02.124DHThe Modern East Asian Nexus - A HistoryPang Yang Huei (HASS)NILNILhttps://www.sutd.edu.sg/course/02-124dh-the-modern-east-asian-nexus-a-history/   �    ���y5
+-�
+-�
+-p
+-.��i ��Z
+-�
+-�
+-S
+-	�	�	L	��=��G�x?��i%��s/��k(��m*��]$ � �                                        7<)5<Algorithms LECECC Building 1 1.102�A;=5;Interventions in DTS LECECC Building 1 1.203�7:)5:Algorithms LECECC Building 1 1.102�
+-C9A59Computation Structures LECECC Building 1 1.203�
+-H8K58Intro to Info Sys & Program LECECC Building 1 1.203�	
+-<7U7Intro to Info Sys & Program MidtermsMPH�	A6=56Interventions in DTS CBLECC Building 1 1.308�
+-65K5Computation Structures MidtermsMPH�
+-A4=54Interventions in DTS LECECC Building 1 1.203�>3753Algorithms Midterms 1ECC Building 1 1.102�
+-A2A5	2Computation Structures CBLECC Building 1 1.310�71)5	1Algorithms CBLECC Building 1 1.310�
+-@0=5	0Interventions in DTS CBLECC Building 1 1.308�
+-G/K5	/Intro to Info Sys & Program LECECC Building 1 1.203�B.A5	.Computation Structures LECECC Building 1 1.203�6-)5	-Algorithms LECECC Building 1 1.102�@,=5	,Interventions in DTS LECECC Building 1 1.203�6+)5	+Algorithms LECECC Building 1 1.102�
+-B*A5	*Computation Structures LECECC Building 1 1.203�
+-G)K5	)Intro to Info Sys & Program LECECC Building 1 1.203�	
+-H(K5	(Intro to Info Sys & Program CBLECC Building 1 1.313�
+-A'A5	'Computation Structures CBLECC Building 1 1.310�7&)5	&Algorithms CBLECC Building 1 1.310�
+-@%=5	%Interventions in DTS CBLECC Building 1 1.308�
+-G$K5	$Intro to Info Sys & Program LECECC Building 1 1.203�B#A5	#Computation Structures LECECC Building 1 1.203�6")5	"Algorithms LECECC Building 1 1.102�@!=5	!Interventions in DTS LECECC Building 1 1.203�6 )5	 Algorithms LECECC Building 1 1.102�
+-BA5	Computation Structures LECECC Building 1 1.203�
+-GK5	Intro to Info Sys & Program LECECC Building 1 1.203�	
+-HK5	Intro to Info Sys & Program CBLECC Building 1 1.313�
+-AA5	Computation Structures CBLECC Building 1 1.310�
+-7)5	Algorithms CBLECC Building 1 1.310�
+-
+-@=5	Interventions in DTS CBLECC Building 1 1.308�
+-
+-GK5	Intro to Info Sys & Program LECECC Building 1 1.203�BA5	Computation Structures LECECC Building 1 1.203�6)5	Algorithms LECECC Building 1 1.102�@=5	Interventions in DTS LECECC Building 1 1.203�
+-6)5	Algorithms LECECC Building 1 1.102�
+-
+-BA5	Computation Structures LECECC Building 1 1.203�
+-
+-GK5	Intro to Info Sys & Program LECECC Building 1 1.203�
+-	
+-HK5	Intro to Info Sys & Program CBLECC Building 1 1.313�
+-AA5	Computation Structures CBLECC Building 1 1.310�7)5	Algorithms CBLECC Building 1 1.310�
+-GK5	Intro to Info Sys & Program LECECC Building 1 1.203�GK5	Intro to Info Sys & Program LECECC Building 1 1.203�B
+-A5	
+-Computation Structures LECECC Building 1 1.203�6)5	Algorithms LECECC Building 1 1.102�@=5	Interventions in DTS LECECC Building 1 1.203�6
+-)5	
+-Algorithms LECECC Building 1 1.102�
+-B	A5		Computation Structures LECECC Building 1 1.203�
+-GK5	Intro to Info Sys & Program LECECC Building 1 1.203�	
+-BA5Computation Structures LECECC Building 1 1.203�6)5Algorithms LECECC Building 1 1.102�@=5Interventions in DTS LECECC Building 1 1.203�6)5Algorithms LECECC Building 1 1.102�
+-GK5Intro to Info Sys & Program LECECC Building 1 1.102�
+-
+-BA5Computation Structures LECECC Building 1 1.203�
+-F	K5Intro to Info Sys & Program LECECC Building 1 1.203�   <
+-   (X ��qA5��qd3&
+-�
+-�
+-�
+-�
+-Z
+-G
+-:
+-�����gTA4�����reX                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                (	      ('	      '&	      &%	     %20.112/$	$01.40101.40101.40101.40101.40101.401#	      #"	      "!	      ! 	     20.11160.006/	01.40001.40001.40001.40001.40001.400	      	     20.319	     20.318	    20.20360.008	   20.10360.00140.015	      	     20.222#	  20.21360.00440.01830.007)	 20.20150.00560.00540.01630.103)	 20.10250.00350.00740.01230.101	      	     20.221)	 20.21250.00460.00340.01730.001)	 20.20250.00260.00240.01130.002)	 20.10150.00150.00440.00230.100	      /	02.00302.00302.00302.00302.00302.003
+-	      
+-	      /	10.02210.02210.02210.02210.02210.022
+-	      
+-/			03.00703.00703.00703.00703.00703.007/	10.01810.01810.01810.01810.01810.018/	10.01710.01710.01710.01710.01710.017/	10.01610.01610.01610.01610.01610.016
+-		      .		02.00102.00102.00102.00102.00102.001.		10.01510.01510.01510.01510.01510.015.		10.01410.01410.01410.01410.01410.014-			10.01310.01310.01310.01310.01310.013
+-   < � �t+��y5
+-�
+-�
+-p
+-.��i ��Z
+-�
+-�
+-S
+-	�	�	L	��=��G�x?��i%��s/��k(��m*��]$ � �                                        7<)5<Algorithms LECECC Building 1 1.102�A;=5;Interventions in DTS LECECC Building 1 1.203�7:)5:Algorithms LECECC Building 1 1.102�
+-C9A59Computation Structures LECECC Building 1 1.203�
+-H8K58Intro to Info Sys & Program LECECC Building 1 1.203�	
+-<7U7Intro to Info Sys & Program MidtermsMPH�	A6=56Interventions in DTS CBLECC Building 1 1.308�
+-65K5Computation Structures MidtermsMPH�
+-A4=54Interventions in DTS LECECC Building 1 1.203�>3753Algorithms Midterms 1ECC Building 1 1.102�
+-A2A5	2Computation Structures CBLECC Building 1 1.310�71)5	1Algorithms CBLECC Building 1 1.310�
+-@0=5	0Interventions in DTS CBLECC Building 1 1.308�
+-G/K5	/Intro to Info Sys & Program LECECC Building 1 1.203�B.A5	.Computation Structures LECECC Building 1 1.203�6-)5	-Algorithms LECECC Building 1 1.102�@,=5	,Interventions in DTS LECECC Building 1 1.203�6+)5	+Algorithms LECECC Building 1 1.102�
+-B*A5	*Computation Structures LECECC Building 1 1.203�
+-G)K5	)Intro to Info Sys & Program LECECC Building 1 1.203�	
+-H(K5	(Intro to Info Sys & Program CBLECC Building 1 1.313�
+-A'A5	'Computation Structures CBLECC Building 1 1.310�7&)5	&Algorithms CBLECC Building 1 1.310�
+-@%=5	%Interventions in DTS CBLECC Building 1 1.308�
+-G$K5	$Intro to Info Sys & Program LECECC Building 1 1.203�B#A5	#Computation Structures LECECC Building 1 1.203�6")5	"Algorithms LECECC Building 1 1.102�@!=5	!Interventions in DTS LECECC Building 1 1.203�6 )5	 Algorithms LECECC Building 1 1.102�
+-BA5	Computation Structures LECECC Building 1 1.203�
+-GK5	Intro to Info Sys & Program LECECC Building 1 1.203�	
+-HK5	Intro to Info Sys & Program CBLECC Building 1 1.313�
+-AA5	Computation Structures CBLECC Building 1 1.310�
+-7)5	Algorithms CBLECC Building 1 1.310�
+-
+-@=5	Interventions in DTS CBLECC Building 1 1.308�
+-
+-GK5	Intro to Info Sys & Program LECECC Building 1 1.203�BA5	Computation Structures LECECC Building 1 1.203�6)5	Algorithms LECECC Building 1 1.102�@=5	Interventions in DTS LECECC Building 1 1.203�
+-6)5	Algorithms LECECC Building 1 1.102�
+-
+-BA5	Computation Structures LECECC Building 1 1.203�
+-
+-GK5	Intro to Info Sys & Program LECECC Building 1 1.203�
+-	
+-HK5	Intro to Info Sys & Program CBLECC Building 1 1.313�
+-AA5	Computation Structures CBLECC Building 1 1.310�7)5	Algorithms CBLECC Building 1 1.310�
+-GK5	Intro to Info Sys & Program LECECC Building 1 1.203�GK5	Intro to Info Sys & Program LECECC Building 1 1.203�B
+-A5	
+-Computation Structures LECECC Building 1 1.203�6)5	Algorithms LECECC Building 1 1.102�@=5	Interventions in DTS LECECC Building 1 1.203�6
+-)5	
+-Algorithms LECECC Building 1 1.102�
+-B	A5		Computation Structures LECECC Building 1 1.203�
+-GK5	Intro to Info Sys & Program LECECC Building 1 1.203�	
+-BA5Computation Structures LECECC Building 1 1.203�6)5Algorithms LECECC Building 1 1.102�@=5Interventions in DTS LECECC Building 1 1.203�6)5Algorithms LECECC Building 1 1.102�
+-GK5Intro to Info Sys & Program LECECC Building 1 1.102�
+-
+-BA5Computation Structures LECECC Building 1 1.203�
+-F	K5Intro to Info Sys & Program LECECC Building 1 1.203�	
+-
+-   4� �q.��_
+-�
+-�
+-Y
+-��G��8
+-�
+-�
+-w
+-,	�	�	]	��Y��V��R��V��R��l6��                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       @p=5	pInterventions in DTS CBLECC Building 1 1.308�
+-;oUoIntro to Info Sys & Program Finals 2MPH�
+-4nGnComputation Structures FinalsMPH�(m/mAlgorithms FinalsMPH�
+-<lUlIntro to Info Sys & Program Finals 1MPH�	BkA5kComputation Structures CBLECC Building 1 1.310�8j)5jAlgorithms CBLECC Building 1 1.310�
+-Ai=5iInterventions in DTS CBLECC Building 1 1.308�
+-ChA5hComputation Structures LECECC Building 1 1.203�7g)5gAlgorithms LECECC Building 1 1.102�Af=5fInterventions in DTS LECECC Building 1 1.203�7e)5eAlgorithms LECECC Building 1 1.102�
+-CdA5dComputation Structures LECECC Building 1 1.203�
+-BcA5cComputation Structures CBLECC Building 1 1.310�8b)5bAlgorithms CBLECC Building 1 1.310�
+-Aa=5aInterventions in DTS CBLECC Building 1 1.308�
+-C`A5`Computation Structures LECECC Building 1 1.203�7_)5_Algorithms LECECC Building 1 1.102�A^=5^Interventions in DTS LECECC Building 1 1.203�7])5]Algorithms LECECC Building 1 1.102�
+-C\A5\Computation Structures LECECC Building 1 1.203�
+-I[K5[Intro to Info Sys & Program CBLECC Building 1 1.313�
+-8Z)5ZAlgorithms CBLECC Building 1 1.310�
+-
+-AY=5YInterventions in DTS CBLECC Building 1 1.308�
+-
+-CXA5XComputation Structures LECECC Building 1 1.203�7W)5WAlgorithms LECECC Building 1 1.102�AV=5VInterventions in DTS LECECC Building 1 1.203�>U75UAlgorithms Midterms 2ECC Building 1 1.102�
+-CTA5TComputation Structures LECECC Building 1 1.203�
+-HSK5SIntro to Info Sys & Program LECECC Building 1 1.203�	
+-IRK5RIntro to Info Sys & Program CBLECC Building 1 1.313�
+-BQA5QComputation Structures CBLECC Building 1 1.310�8P)5PAlgorithms CBLECC Building 1 1.310�
+-AO=5OInterventions in DTS CBLECC Building 1 1.308�
+-HNK5NIntro to Info Sys & Program LECECC Building 1 1.203�GMK5	MIntro to Info Sys & Program LECECC Building 1 1.203�BLA5	LComputation Structures LECECC Building 1 1.203�6K)5	KAlgorithms LECECC Building 1 1.102�IJK5JIntro to Info Sys & Program CBLECC Building 1 1.313�
+-8I)5IAlgorithms CBLECC Building 1 1.310�
+-AH=5HInterventions in DTS CBLECC Building 1 1.308�
+-HGK5GIntro to Info Sys & Program LECECC Building 1 1.203�CFA5FComputation Structures LECECC Building 1 1.203�7E)5EAlgorithms LECECC Building 1 1.102�AD=5DInterventions in DTS LECECC Building 1 1.203�CCA5CComputation Structures LECECC Building 1 1.203�
+-HBK5BIntro to Info Sys & Program LECECC Building 1 1.203�	
+-IAK5AIntro to Info Sys & Program CBLECC Building 1 1.313�
+-8@)5@Algorithms CBLECC Building 1 1.310�
+-A?=5?Interventions in DTS CBLECC Building 1 1.308�
+-H>K5>Intro to Info Sys & Program LECECC Building 1 1.203�C=A5=Computation Structures LECECC Building 1 1.203�
+-    l X�
+-y��3
+-�	��N����<#� l V                                  ��
+-G5�E�\eO� �U'�#ESDESD,Core540.012Manufacturing and Service OperationsNIL40.002,40.017Hardhttps://www.sutd.edu.sg/course/40-012-manufacturing-and-service-operations/�$�C'�=ESDESD,Core440.011Data and Business AnalyticsNIL10.014,10.022Hardhttps://www.sutd.edu.sg/course/40-011-data-and-business-analytics-for-esd-students-only/h�
+-%sESDESD,Core440.002OptimisationNIL10.018Hardhttps://www.sutd.edu.sg/course/40-002-optimisation/��/�oC�QEPDEPD,Core Elective630.316Digital Biomimetics: Sustainable Materials and ManufacturingJavier G. Fernandex (EPD),Stylianos Dritsas (ASD)20.211,20.212,30.001,30.007Hardhttps://www.sutd.edu.sg/course/30-316-digital-biomimetics-sustainable-materials-and-manufacturing/�H�OAs�EPDEPD,Elective / Technical Elective730.303Industry 4.0 & 3D PrintingJavier G. Fernandex (EPD),Tan Thong Lip Alvin (EPD)NILNILhttps://www.sutd.edu.sg/course/30-303-industry-4-0-3d-printing/�M�
+-/k/'�9EPDEPD,Core Elective630.203Topics in Biomedical and Healthcare EngineeringShireen Goh (EPD)10.016,30.001Hardhttps://www.sutd.edu.sg/course/30-203-topics-in-biomedical-and-healthcare-engineering/��	O�/_�UEPDEPD,Elective / Technical Elective730.202Design of Intelligent Digital Integrated Circuits and SystemsTeo Tee Hui (EPD)10.013,10.015,10.017,10.018,30.101,30.002Hardhttps://www.sutd.edu.sg/course/30-202-design-of-intelligent-digital-integrated-circuits-and-systems/�Q�Oi1�7EPDEPD,Elective / Technical Elective830.201Wireless Communications and Internet of ThingsKwan Wei Lek (SMT)NILNILhttps://www.sutd.edu.sg/course/30-201-wireless-communications-and-internet-of-things/�5�OI#'�EPDEPD,Elective / Technical Elective830.200Micro-Nano Projects LaboratoryAi Ye (EPD)30.103,30.108Hardhttps://www.sutd.edu.sg/course/30-200-micro-nano-projects-laboratory/�I�O?5Q�
+-EPDEPD,Elective / Technical Elective730.123Healthcare Product DesignHuang Shaoying (EPD)03.007,30.001,30.002,30.007,30.101Hardhttps://www.sutd.edu.sg/course/30-123-healthcare-product-design/�!�O9-�EPDEPD,Elective / Technical Elective730.120Design & ManufacturingTan U-Xuan (EPD)10.015Hardhttps://www.sutd.edu.sg/course/30-120-design-manufacturing/�&�O5-'�EPDEPD,Elective / Technical Elective730.119Intelligent RoboticsTan U-Xuan (EPD)30.002,30.101Hardhttps://www.sutd.edu.sg/course/30-119-intelligent-robotics/�h�Oa/Q�/EPDEPD,Elective / Technical Elective830.117Electric Power Systems Analysis and DesignTeo Tee Hui (EPD)10.013,10.015,10.017,10.018,30.002Hardhttps://www.sutd.edu.sg/course/30-117-electric-power-systems-analysis-and-design/�&�O?'�
+-EPDEPD,Elective / Technical Elective830.115Digital Signal ProcessingCai Kui (SMT)10.018Hardhttps://www.sutd.edu.sg/course/30-115-digital-signal-processing/�4�OG3�EPDEPD,Elective / Technical Elective730.114Advanced Feedback and ControlFoong Shaohui (EPD)30.101Hardhttps://www.sutd.edu.sg/course/30-114-advanced-feedback-and-control/�}� O�1'�UEPDEPD,Elective / Technical Elective830.113Design and Fabrication of Microelectromechanical Systems (MEMS)Tan Mei Chee (EPD)30.001,30.002Hardhttps://www.sutd.edu.sg/course/30-113-design-and-fabrication-of-microelectromechanical-systems-mems/�
+-
+-/-={EPDEPD,Core Elective630.111EntrepreneurshipMohan Rajesh Elara (EPD)NILNILhttps://www.sutd.edu.sg/course/30-111-entrepreneurship/�~/A/�EPDEPD,Core Elective630.110Digital Systems LaboratoryTeo Tee Hui (EPD)30.002Hardhttps://www.sutd.edu.sg/course/30-110-digital-systems-laboratory/�2}/[+�%EPDEPD,Core Elective630.109Thermal Systems For Power & EnvironmentApple Koh (SMT)10.015Hardhttps://www.sutd.edu.sg/course/30-109-thermal-systems-for-power-environment/�|
+-/-1{EPDEPD,Core Elective630.108Material ScienceTan Mei Chee (EPD)30.001Hardhttps://www.sutd.edu.sg/course/30-108-material-science/�%{
+-///Q}EPDEPD,Core Elective630.107Power ElectronicsTeo Tee Hui (EPD)10.013,10.015,10.017,10.018,30.002Hardhttps://www.sutd.edu.sg/course/30-107-power-electronics/
+-    V k�8
+-�
+-`�
+-�	�	5r�m��0i�� V �                                �6�%!�1oISTDISTD,Core450.004AlgorithmsErnest Chong (ISTD),Soh De Wen (ISTD),Cyrille Jegourel (ISTD),Pritee Agrawal (DAI)10.014Hardhttps://www.sutd.edu.sg/course/50-004-algorithms/�C�$Oo�ISTDISTD,Core550.003Elements of Software ConstructionKenny Lu Zhuo Ming (ISTD),Dileepa Fernando (ISTD)50.001Hardhttps://www.sutd.edu.sg/course/50-003-elements-of-software-construction/�7�#9��ISTDISTD,Core450.002Computation StructuresNatalie Agus (ISTD),Angela Wang Bo (ISTD),Felix Loh (ISTD)10.014Hardhttps://www.sutd.edu.sg/course/50-002-computation-structures/�S�"O��ISTDISTD,Core450.001Information Systems & ProgrammingNorman Lee Tiong Seng (ISTD),Fredy Tantri (ISTD),Qin Yanxia (ISTD)10.014Hardhttps://www.sutd.edu.sg/course/50-001-information-systems-programming/�C�!O?E5�
+-ESDESD,Elective / Technical Elective640.324Fundamentals of InvestingDouglas Streeter Rolph (ESD)10.013,10.018,10.022Hardhttps://www.sutd.edu.sg/course/40-324-fundamentals-of-investing/�)� 
+-O-E'{ESDESD,Elective / Technical Elective740.323Equity ValuationDouglas Streeter Rolph (ESD)40.017,40.240Hardhttps://www.sutd.edu.sg/course/40-323-equity-valuation/�X�O]A'�+ESDESD,Elective / Technical Elective740.321Airport Systems Modelling and SimulationNuno Antunes Ribeiro (ESD)40.002/60.008Softhttps://www.sutd.edu.sg/course/40-321-airport-systems-modelling-and-simulation/�0�OS�!ESDESD,Elective / Technical Elective640.320Airport Systems Planning and DesignNIL40.012Hardhttps://www.sutd.edu.sg/course/40-320-airport-systems-planning-and-design/�*�OM�ESDESD,Elective / Technical Elective640.319Statistical and Machine LearningNIL40.017Hardhttps://www.sutd.edu.sg/course/40-319-statistical-and-machine-learning/�A�OY'�'ESDESD,Elective / Technical Elective740.318Supply Chain Digitalisation and DesignXu Ying (ESD)40.260,Hardhttps://www.sutd.edu.sg/course/40-318-supply-chain-digitalisation-and-design/��
+-O#1qESDESD,Elective / Technical Elective840.316Game TheoryDuan Lingjie (ESD)10.022Hardhttps://www.sutd.edu.sg/course/40-316-game-theory/�?�O['�)ESDESD,Elective / Technical Elective740.305Advanced Topics in Stochastic ModellingNIL40.017,40.012Hardhttps://www.sutd.edu.sg/course/40-305-advanced-topics-in-stochastic-modelling/�@�OKC�ESDESD,Elective / Technical Elective740.302Advanced Topics in OptimisationAntonios Varvitsiotis (ESD)40.002Hardhttps://www.sutd.edu.sg/course/40-302-advanced-topics-in-optimisation/�)�O;''�	ESDESD,Elective / Technical Elective640.260Supply Chain ManagementXu Ying (ESD)40.017,40.012Hardhttps://www.sutd.edu.sg/course/40-260-supply-chain-management/�V�OYE'�'ESDESD,Elective / Technical Elective740.242Derivative Pricing and Risk ManagementDouglas Streeter Rolph (ESD)40.240/40.324Softhttps://www.sutd.edu.sg/course/40-242-derivative-pricing-and-risk-management/�\�OaE'�+ESDESD,Elective / Technical Elective640.240Investment Science (for ESD students only)Douglas Streeter Rolph (ESD)40.017,40.011Hardhttps://www.sutd.edu.sg/course/40-240-investment-science-for-esd-students-only/�'�O?1�
+-ESDESD,Elective / Technical Elective640.230Design for SustainabilityTan Mei Xuan (SMT)NILNILhttps://www.sutd.edu.sg/course/40-230-design-for-sustainability/��G5�ESDESD,Core540.018Heuristics and Systems TheoryNIL10.018,40.002,40.017Hardhttps://www.sutd.edu.sg/course/40-018-heuristics-and-systems-theory/��A'�ESDESD,Core440.017Probability and StatisticsNIL10.018,10.022Hardhttps://www.sutd.edu.sg/course/40-017-probability-and-statistics/{�
+-1'ESDESD,Core540.016The Analytics EdgeNIL40.017,10.022Hardhttps://www.sutd.edu.sg/course/40-016-the-analytics-edge/�1�OA'�ESDESD,Core640.015Simulation Modelling and AnalysisNuno Antunes Ribeiro (ESD)40.017,40.012Hardhttps://www.sutd.edu.sg/course/40-015-simulation-modelling-and-analysis/��M�ESDESD,Core540.014Engineering Systems ArchitectureNIL40.002Hardhttps://www.sutd.edu.sg/course/40-014-engineering-systems-architecture/
+-    Q R�
+-�
+-,y�
+-�
+-	n��	R��
+-h��, Q                               �W�:Q_3'�-ISTDISTD,Elective / Technical Elective6,850.050Discrete Mathematics and Algorithm DesignErnest Chong (ISTD)50.004,10.018Hardhttps://www.sutd.edu.sg/course/50-050-discrete-mathematics-and-algorithm-design/�*�9
+-Q+95yISTDISTD,Elective / Technical Elective750.047Mobile RoboticsMalika Meghjani (ISTD)10.020,10.022,50.004Hardhttps://www.sutd.edu.sg/course/50-047-mobile-robotics/�I�8QY5�'ISTDISTD,Elective / Technical Elective750.046Cloud Computing and Internet of ThingsJiang Wenchao (ISTD)50.005Softhttps://www.sutd.edu.sg/course/50-046-cloud-computing-and-internet-of-things/�=�7Q77C�ISTDISTD,Elective / Technical Elective750.045Information RetrievalSoujanya Poria (ISTD)50.007/50.021/50.038/50.039Softhttps://www.sutd.edu.sg/course/50-045-information-retrieval/��6
+-Q+9yISTDISTD,Elective / Technical Elective6,850.044System SecurityDaisuke Mashima (ISTD)50.042Hardhttps://www.sutd.edu.sg/course/50-044-system-security/�D�5
+-Q-w'{ISTDISTD,Elective / Technical Elective550.043Database SystemsQin Yanxia (ISTD),Roy Lee (ISTD),Zhang Wenxuan (ISTD)10.014,50.004Hardhttps://www.sutd.edu.sg/course/50-043-database-systems/�1�4QE-�ISTDISTD,Elective / Technical Elective550.042Foundations of CybersecurityFelix Loh (ISTD)50.005Hardhttps://www.sutd.edu.sg/course/50-042-foundations-of-cybersecurity/�G�3QOE�ISTDISTD,Elective / Technical Elective750.041Distributed Systems and ComputingSudipta Chattopadhyay (ISTD)50.004Hardhttps://www.sutd.edu.sg/course/50-041-distributed-systems-and-computing/�3�2QC''�ISTDISTD,Elective / Technical Elective750.040Natural Language ProcessingLu Wei (ITSD)50.007/40.319Softhttps://www.sutd.edu.sg/course/50-040-natural-language-processing/�a�1QU['�#ISTDISTD,Elective / Technical Elective6,850.039Theory and Practice of Deep LearningMatthieu De Mari (ISTD),Song Qin (ISTD)50.007/40.319Softhttps://www.sutd.edu.sg/course/50-039-theory-and-practice-of-deep-learning/�L�0QAg�ISTDISTD,Elective / Technical Elective6,850.038Computational Data ScienceDorien Herremans (ISTD),Soujanya Poria (ISTD)10.014Hardhttps://www.sutd.edu.sg/course/50-038-computational-data-science/�,�/Q71'�ISTDISTD,Elective / Technical Elective750.037Blockchain TechnologyXiong Zehui (ISTD)50.004,50.005Hardhttps://www.sutd.edu.sg/course/50-037-blockchain-technology/�+�.
+-Q+E'yISTDISTD,Elective / Technical Elective6,850.035Computer VisionCheung Hgai-Man (Man) (ISTD)50.007/40.319Softhttps://www.sutd.edu.sg/course/50-035-computer-vision/�X�-Qa3)�/ISTDISTD,Elective / Technical Elective750.033Foundations of Game Design and DevelopmentNatalie Agus (ISTD)50.001, 50.004Hardhttps://www.sutd.edu.sg/course/50-033-foundations-of-game-design-and-development/�Z�,Q;eC�	ISTDISTD,Elective / Technical Elective6,850.021Artificial IntelligenceLim Kwan Hui (ISTD),Ezekiel Soremekun (ISTD)50.007/40.319,10.022,10.014Hardhttps://www.sutd.edu.sg/course/50-021-artificial-intelligence/��+
+-Q-9{ISTDISTD,Elective / Technical Elective750.020Network SecurityDaisuke Mashima (ISTD)50.042Hardhttps://www.sutd.edu.sg/course/50-020-network-security/�/�*QA-�ISTDISTD,Elective / Technical Elective8,650.017Graphics and VisualisationSong Peng (ISTD)50.003Hardhttps://www.sutd.edu.sg/course/50-017-graphics-and-visualisation/�
+-�)
+-Q1kISTDISTD,Elective / Technical Elective650.012NetworksChen Binbin (ISTD)50.005Hardhttps://www.sutd.edu.sg/course/50-012-networks/�B�(
+-Q-o'{ISTDISTD,Elective / Technical Elective5,650.007Machine LearningPritee Agrawal (DAI),Lu Wei (ISTD),Zhao Na (ISTD)50.001,50.004Hardhttps://www.sutd.edu.sg/course/50-007-machine-learning/�N�'Q]7�+ISTDISTD,Elective / Technical Elective750.006User Interface Design and ImplementationSimon Perrault (ISTD)10.014Hardhttps://www.sutd.edu.sg/course/50-006-user-interface-design-and-implementation/�*�&CU�ISTDISTD,Core550.005Computer System EngineeringDavid Yau (ISTD),Natalie Agus (ISTD)50.002Hardhttps://www.sutd.edu.sg/course/50-005-computer-system-engineering/
+-    � 7T
+-���R
+-F	p��
+-t�8��r�P �                                                                                               �<z/W5'�%EPDEPD,Core Elective630.106Microelectronics Circuits and DevicesCheah Chin Wei (SMT)10.005,30.002Hardhttps://www.sutd.edu.sg/course/30-106-microelectronics-circuits-and-devices/�y/91�EPDEPD,Core Elective630.105Machine Element DesignSoh Gim Song (EPD)30.001Hardhttps://www.sutd.edu.sg/course/30-105-machine-element-design/�x
+-/35kEPDEPD,Core Elective630.104DynamicsDario Poletti (SMT)10.004,10.002,30.101Hardhttps://www.sutd.edu.sg/course/30-104-dynamics/w
+-+=yEPDEPD,Core530.103Fluid MechanicsMichinao Hashimoto (EPD)NILNILhttps://www.sutd.edu.sg/course/30-103-fluid-mechanics/�,vK55�EPDEPD,Core530.102Electromagnetics & ApplicationsHuang Shaoying (EPD)10.001,10.004,10.005Hardhttps://www.sutd.edu.sg/course/30-102-electromagnetics-applications/�u
+-/K'yEPDEPD,Core530.101Systems & ControlFoong Shaohui (EPD),Ye Ai (EPD)10.018,30.002Hardhttps://www.sutd.edu.sg/course/30-101-systems-control/�Tt_=Q�-EPDEPD,Core430.100Computational and Data-Driven EngineeringNagarajan Raghavan (EPD)10.013,10.015,10.017,10.018,10.022Hardhttps://www.sutd.edu.sg/course/30-100-computational-and-data-driven-engineering/�JsGu5�EPDEPD,Core530.007Engineering Design InnovationPablo Valivia y Alvarado (EPD),Bradley Camburn (EPD)03.007,10.015,10.017Hardhttps://www.sutd.edu.sg/course/30-007-engineering-design-innovation/�r9+5�EPDEPD,Core430.002Circuits & ElectronicsJoel Yang (EPD)10.013,10.017,10.018Hardhttps://www.sutd.edu.sg/course/30-002-circuits-electronics/�q9'5�EPDEPD,Core430.001Structures & MaterialsWu Ping (EPD)10.013,10.015,10.016Hardhttps://www.sutd.edu.sg/course/30-001-structures-materials/�GpO[-�)ASDASD,Elective / Technical ElectiveNIL20.323Forms and Types of Media RepresentationEva Castro (ASD)20.102Hardhttps://www.sutd.edu.sg/course/20-323-forms-and-types-of-media-representation/�yoO�E�QASDASD,Elective / Technical ElectiveNIL20.322Net Zero Design: Case Studies for Whole Life DecarbonisationFrederick Peter Ortner (ASD)NILNILhttps://www.sutd.edu.sg/course/20-322-net-zero-design-case-studies-for-whole-life-decarbonisation/�nO9'�ASDASD,Elective / Technical Elective620.321Architecture AcousticsNIL20.201,20.202Hardhttps://www.sutd.edu.sg/course/20-321-architecture-acoustics/�SmOc+'�1ASDASD,Elective / Technical Elective620.320Project Management in the Built EnvironmentZheng Kai (ASD)20.201,20.202Hardhttps://www.sutd.edu.sg/course/20-320-project-management-in-the-built-environment/�	lO�G�cASDASD,Elective / Technical Elective620.319Architectural Theory and Design Application in the 20th-21st CenturyDaniel Joseph Whittaker (ASD)NILNILhttps://www.sutd.edu.sg/course/20-319-architectural-theory-and-design-application-in-the-20th-21st-century/�'kO?1�
+-ASDASD,Elective / Technical Elective620.318Creative Machine LearningImmanuel Koh (DAI)NILNILhttps://www.sutd.edu.sg/course/20-318-creative-machine-learning/�j
+-O-+{ASDASD,Elective / Technical ElectiveNIL20.317Augmented DesignJason Lim (ASD)20.212Hardhttps://www.sutd.edu.sg/course/20-317-augmented-design/�iO�o5�QASDASD,Elective / Technical Elective620.316Digital Biomimetics: Sustainable Materials and ManufacturingStylianos Dritsas (ASD),Javier G. Fernandez (EPD)20.212/30.001,30.007Softhttps://www.sutd.edu.sg/course/20-316-digital-biomimetics-sustainable-materials-and-manufacturing/�hO;�	ASDASD,Elective / Technical ElectiveNIL20.314Paradigms of AdaptationNIL20.222Hardhttps://www.sutd.edu.sg/course/20-314-paradigms-of-adaptation/�`gO��QASDASD,Elective / Technical ElectiveNIL20.313Advanced Topics in Performative Design: Urban SustainabilityNILNILNILhttps://www.sutd.edu.sg/course/20-313-advanced-topics-in-performative-design-urban-sustainability/�FfO])�)ASDASD,Elective / Technical Elective820.312Social Architecture: Theory and PracticeChong Keng HuaCapstoneHardhttps://www.sutd.edu.sg/course/20-312-social-architecture-theory-and-practice/
+-   
+-_ ��V��vQ,
+-�
+-�
+-�
+-s
+-l
+-_                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       testtest11#A1007891@mymail.sutd.edu.sgsaveme#
+-A1007872@mymail.sutd.edu.sgsaveme#A1007855@mymail.sutd.edu.sgsaveme#A1007851@mymail.sutd.edu.sgsaveme#
+-A1007809@mymail.sutd.edu.sgsaveme#	A1007793@mymail.sutd.edu.sgsaveme#A1007784@mymail.sutd.edu.sgsaveme6G9yizhe_chin@mymail.sutd.edu.sgilovefredyyanxianorman4C9ryan_teo@mymail.sutd.edu.sgilovefredyyanxianorman7I9elijah_soon@mymail.sutd.edu.sgilovefredyyanxianorman7I9rachel_tan2@mymail.sutd.edu.sgilovefredyyanxianorman8K9weiyang_hoon@mymail.sutd.edu.sgilovefredyyanxianorman6G9queenie_li@mymail.sutd.edu.sgilovefredyyanxianorman6G9justin_kok@mymail.sutd.edu.sgilovefredyyanxianorman   �    ���.o� t                                                                                          �'	$Q3   +++++++ ++++++++  + ++++//    Psychology and Business ManagementASD,CSD,DAI,EPD,ESDElective,01.117Elective,40.016Elective,40.242Elective,30.115Elective,50.006Elective,01.116Elective,50.020Elective,50.007Elective,50.004Elective,30.203Elective,30.108Elective,30.114Elective,30.316Elective,30.110Elective,40.302Elective,40.316Elec�(#53  +++++!++++++++++  +++++//    Human-Centred DesignASD,CSD,DAI,EPD,ESDCustomElective,01.116Elective,01.117Elective,01.117Elective,30.002Elective,60.004Rec,60.004Elective,50.012Elective,50.021Elective,30.316Elective,50.002Elective,30.111Elective,30.107Elective,50.007Elective,30.203Elective,30.109Elective,40.260Elective,40.302Elective,50.021Elective,50.045Elective,50.020Elective,02.226Elective,02.151HTElective,02.124DH�<#3I' !++++!++++++++++  +++++//    HI MinorASD,CSD,DAI,EPD,ESDVisual Analytics and ComputingSelf-DirectedRec,50.040Elective,01.116Elective,01.116Elective,01.117Elective,01.117Rec,50.056Elective,50.007Elective,50.020Elective,30.110Elective,50.001Elective,30.110Elective,30.106Elective,30.203Elective,30.111Elective,30.108Elective,40.242Elective,40.242Elective,40.316Elective,50.040Elective,50.017Elective,02.223Elective,02.148HTElective,02.121DH�##35 !!!++!++++++++++  +++++//    DH MinorASD,CSD,DAI,EPD,ESDSoftware EngineeringRoboticsRec,50.006Rec,50.040Rec,50.040Elective,01.116Elective,01.116Rec,50.054Elective,60.004Elective,50.017Elective,30.109Elective,30.203Elective,30.109Elective,30.105Elective,30.111Elective,30.110Elective,30.107Elective,40.240Elective,40.240Elective,30.115Elective,50.039Elective,50.012Elective,02.202Elective,02.145TSElective,02.120DH�#39 !!!!!!++++++++++  ++++///    DTS MinorASD,CSD,DAI,EPD,ESDSecurityMechanical EngineeringRec,50.035Rec,50.039Rec,50.037Rec,50.044Rec,50.037Rec,50.033Elective,01.117Elective,50.012Elective,30.105Elective,30.111Elective,30.108Elective,30.104Elective,30.109Elective,30.105Elective,30.106Elective,40.230Elective,40.230Elective,30.114Elective,50.038Elective,50.007Elective,02.140TSElective,02.140TSElective,02.115DH�R#+CGA!!!!!!++++++++++# +++++//    DIVECSD,DAI,EPD,ESDIoT and Intelligent SystemsHealthcare Engineering DesignSupply Chain and LogisticsRec,50.038Rec,50.035Rec,50.006Rec,50.038Rec,50.041Rec,50.006Elective,01.116Elective,50.007Elective,30.108Elective,30.107Elective,01.102Elective,30.103Elective,30.108Elective,30.104Elective,30.105Elective,01.107Core,40.319Elective,01.107Elective,30.100Elective,50.035Elective,50.006Elective,02.133Elective,02.135HTElective,02.110DH�P##591##!####+++++++++##+;+++//    CS MinorESD,EPD,DAIFinancial TechnologyElectrical EngineeringFinancial ServicesCore,50.021Core,50.043Rec,50.038Core,50.021Core,50.044Core,50.053Core,50.017Elective,50.006Elective,30.103Elective,30.106Elective,01.106Elective,30.102Elective,30.104Elective,30.103Elective,30.104Elective,01.102Core,40.316Core,40.323Elective,01.102Core,40.319/Core,50.007Elective,50.021Elective,01.117Elective,01.106Elective,02.130TSElective,02.108DH�a##)5a######;+++##+++####;;+#//    AI MinorCSD,ESD,EPDData AnalyticsComputer EngineeringBusiness Analytics and Operations ResearchCore,50.039Core,50.040Core,40.324Core,50.041Core,50.020Core,50.051Core,50.035/Core,50.039Elective,01.117Elective,30.102Elective,30.102Core,30.117Core,30.123Elective,30.103Elective,30.102Elective,30.103Core,40.321Core,40.305Core,40.242Core,40.318Core,40.015/Core,50.038Core,50.007/Core,40.319Elective,01.116Core,30.111Elective,02.104TSElective,02.105DH�|$+;3-;;#;###+######+#####;�#//    ES MinorASD,CSD,DAI,EPDArtificial IntelligenceBeyond Industry 4.0Aviation SystemsCore,50.007/Core,40.319Core,50.007/Core,40.319Core,50.043Core,50.046/Core,50.012Core,50.042Core,50.043Core,50.006Elective,01.116Core,30.303Core,30.110Core,30.107Core,30.203Core,30.105Core,30.119Elective,30.102Core,40.320Core,40.302Core,40.240Core,40.260Core,40.002Core,50.003/Core,50.004Core,50.001/Core,50.002/Core,50.003/Core,50.004/Core,50.005Core,30.007Elective,02.102HTElectiv      
+-   o �
+-���
+-�	����(��8��o                                                                          �'	$Q3   +++++++ ++++++++  + ++++//    Psychology and Business ManagementASD,CSD,DAI,EPD,ESDElective,01.117Elective,40.016Elective,40.242Elective,30.115Elective,50.006Elective,01.116Elective,50.020Elective,50.007Elective,50.004Elective,30.203Elective,30.108Elective,30.114Elective,30.316Elective,30.110Elective,40.302Elective,40.316Elective,50.039Elective,50.047Elective,50.021Elective,02.228Elective,02.152TSElective,02.127DH�$53  +++++!+ ++++++++  + ++++//    Human-Centred DesignASD,CSD,DAI,EPD,ESDCustomElective,01.116Elective,01.117Elective,01.117Elective,30.002Elective,60.004Rec,60.004Elective,50.012Elective,30.316Elective,50.002Elective,30.111Elective,30.107Elective,50.007Elective,30.203Elective,30.109Elective,40.260Elective,40.302Elective,50.021Ele2$#       +                          Elective,50.056A##     + +                          Elective,50.056Elective,50.055P"#     + +  +                       Elective,50.055Elective,50.054Elective,50.056n!#     ++++ +                       Elective,50.054Elective,50.056Elective,50.053Elective,50.056Elective,50.055n #     ++++ +                       Elective,50.053Elective,50.055Elective,50.052Elective,50.055Elective,50.054}#     ++++++                       Elective,50.052Elective,50.054Elective,50.051Elective,50.054Elective,50.056Elective,50.052�#     ++++++                 /     Elective,50.051Elective,50.053Elective,50.050Elective,50.053Elective,50.055Elective,50.050Elective,02.231TS�.#     ++++++               + //    Elective,50.050Elective,50.052Elective,50.047Elective,50.052Elective,50.054Elective,50.047Elective,50.056Elective,02.230TSElective,02.173DH�[#     ++++++++      +      + //    Elective,50.047Elective,50.051Elective,50.046Elective,50.051Elective,50.053Elective,50.046Elective,50.056Elective,50.056Elective,01.102Elective,50.055Elective,02.228TSElective,02.172DH�j#     ++++++++ +    +      + //    Elective,50.046Elective,50.050Elective,50.045Elective,50.050Elective,50.052Elective,50.045Elective,50.055Elective,50.055Elective,50.021Elective,01.106Elective,50.054Elective,02.225TSElective,02.170HT�j#     ++++++++ +    +      + //    Elective,50.045Elective,50.047Elective,50.044Elective,50.047Elective,50.051Elective,50.044Elective,50.054Elective,50.054Elective,50.017Elective,30.200Elective,50.053Elective,02.222TSElective,02.167HT�y#     ++++++++ + +  +      + //    Elective,50.044Elective,50.046Elective,50.042Elective,50.045Elective,50.050Elective,50.042Elective,50.053Elective,50.053Elective,30.115Elective,01.102Elective,30.201Elective,50.052Elective,02.220TSElective,02.164DH�y#     ++++++++ + +  +      + //    Elective,50.043Elective,50.045Elective,50.041Elective,50.044Elective,50.047Elective,50.041Elective,50.052Elective,50.052Elective,30.201Elective,01.106Elective,30.118Elective,50.051Elective,02.219TSElective,02.162DH�#     ++++++++ +++  +      + //    Elective,50.042Elective,50.044Elective,50.040Elective,50.043Elective,50.046Elective,50.040Elective,50.051Elective,50.051Elective,01.101Elective,01.102Elective,30.201Elective,30.117Elective,50.050Elective,02.218TSElective,02.161DH�#     ++++++++++++  +      + //    Elective,50.041Elective,50.042Elective,50.039Elective,50.042Elective,50.045Elective,50.039Elective,50.050Elective,50.050Elective,01.102Elective,30.120Elective,01.106Elective,30.200Elective,30.115Elective,50.047Elective,02.216TSElective,02.159HT�&#     ++++++++++++ ++      + //    Elective,50.040Elective,50.041Elective,50.038Elective,50.040Elective,50.043Elective,50.038Elective,50.047Elective,50.047Elective,01.106Elective,01.119Elective,30.201Elective,30.118Elective,01.102Elective,30.113Elective,50.046Elective,02.212TSElective,02.158DH�&#     ++++++++++++ ++      + //    Elective,50.038Elective,50.039Elective,50.037Elective,50.039Elective,50.041Elective,50.037Elective,50.046Elective,50.046Elective,50.021Elective,50.046Elective,30.118Elective,30.115Elective,01.106Elective,01.101Elective,50.045Elective,02.210TSElective,02.156DH
+-   � 
+-Ju�.o��� �                                                                                                                                  �$     +++++++ ++++ ++       + //    Elective,50.040Elective,50.041Elective,50.038Elective,50.040Elective,50.043Elective,50.038Elective,50.047Elective,01.106Elective,01.119Elective,30.201Elective,30.118Elective,01.102Elective,30.113Elective,50.046Elective,02.212TSElective,02.158DH�$   �(#53  +++++!++++++++++  +++++//    Human-Centred DesignASD,CSD,DAI,EPD,ESDCustomElective,01.116Elective,01.117Elective,01.117Elective,30.002Elective,60.004Rec,60.004Elective,50.012Elective,50.021Elective,30.316Elective,50.002Elective,30.111Elective,30.107Elective,50.007Elective,30.203Elective,30.109Elective,40.260Elective,40.302Elective,50.021Elective,50.045Elective,50.020Elective,02.226Elective,02.151HTElective,02.124DH�<#3I' !++++!++++++++++  +++++//    HI MinorASD,CSD,DAI,EPD,ESDVisual Analytics and ComputingSelf-DirectedRec,50.040Elective,01.116Elective,01.116Elective,01.117Elective,01.117Rec,50.056Elective,50.007Elective,50.020Elective,30.110Elective,50.001Elective,30.110Elective,30.106Elective,30.203Elective,30.111Elective,30.108Elective,40.242Elective,40.242Elective,40.316Elective,50.040Elective,50.017Elective,02.223Elective,02.148HTElective,02.121DH�##35 !!!++!++++++++++  +++++//    DH MinorASD,CSD,DAI,EPD,ESDSoftware EngineeringRoboticsRec,50.006Rec,50.040Rec,50.040Elective,01.116Elective,01.116Rec,50.054Elective,60.004Elective,50.017Elective,30.109Elective,30.203Elective,30.109Elective,30.105Elective,30.111Elective,30.110Elective,30.107Elective,40.240Elective,40.240Elective,30.115Elective,50.039Elective,50.012Elective,02.202Elective,02.145TSElective,02.120DH�#39 !!!!!!++++++++++  ++++///    DTS MinorASD,CSD,DAI,EPD,ESDSecurityMechanical EngineeringRec,50.035Rec,50.039Rec,50.037Rec,50.044Rec,50.037Rec,50.033Elective,01.117Elective,50.012Elective,30.105Elective,30.111Elective,30.108Elective,30.104Elective,30.109Elective,30.105Elective,30.106Elective,40.230Elective,40.230Elective,30.114Elective,50.038Elective,50.007Elective,02.140TSElective,02.140TSElective,02.115DH�R#+CGA!!!!!!++++++++++# +++++//    DIVECSD,DAI,EPD,ESDIoT and Intelligent SystemsHealthcare Engineering DesignSupply Chain and LogisticsRec,50.038Rec,50.035Rec,50.006Rec,50.038Rec,50.041Rec,50.006Elective,01.116Elective,50.007Elective,30.108Elective,30.107Elective,01.102Elective,30.103Elective,30.108Elective,30.104Elective,30.105Elective,01.107Core,40.319Elective,01.107Elective,30.100Elective,50.035Elective,50.006Elective,02.133Elective,02.135HTElective,02.110DH�P##591##!####+++++++++##+;+++//    CS MinorESD,EPD,DAIFinancial TechnologyElectrical EngineeringFinancial ServicesCore,50.021Core,50.043Rec,50.038Core,50.021Core,50.044Core,50.053Core,50.017Elective,50.006Elective,30.103Elective,30.106Elective,01.106Elective,30.102Elective,30.104Elective,30.103Elective,30.104Elective,01.102Core,40.316Core,40.323Elective,01.102Core,40.319/Core,50.007Elective,50.021Elective,01.117Elective,01.106Elective,02.130TSElective,02.108DH�a##)5a######;+++##+++####;;+#//    AI MinorCSD,ESD,EPDData AnalyticsComputer EngineeringBusiness Analytics and Operations ResearchCore,50.039Core,50.040Core,40.324Core,50.041Core,50.020Core,50.051Core,50.035/Core,50.039Elective,01.117Elective,30.102Elective,30.102Core,30.117Core,30.123Elective,30.103Elective,30.102Elective,30.103Core,40.321Core,40.305Core,40.242Core,40.318Core,40.015/Core,50.038Core,50.007/Core,40.319Elective,01.116Core,30.111Elective,02.104TSElective,02.105DH�|$+;3-;;#;###+######+#####;�#//    ES MinorASD,CSD,DAI,EPDArtificial IntelligenceBeyond Industry 4.0Aviation SystemsCore,50.007/Core,40.319Core,50.007/Core,40.319Core,50.043Core,50.046/Core,50.012Core,50.042Core,50.043Core,50.006Elective,01.116Core,30.303Core,30.110Core,30.107Core,30.203Core,30.105Core,30.119Elective,30.102Core,40.320Core,40.302Core,40.240Core,40.260Core,40.002Core,50.003/Core,50.004Core,50.001/Core,50.002/Core,50.003/Core,50.004/Core,50.005Core,30.007Elective,02.102HTElective,02.102HT
+-    � H�5	�M��<� ���P                                                                                                              �5#     +++++++++++++++      + //    Elective,50.037Elective,50.038Elective,50.035Elective,50.038Elective,50.040Elective,50.035Elective,50.045Elective,50.045Elective,30.201Elective,50.035Elective,30.115Elective,30.113Elective,01.102Elective,30.201Elective,30.303Elective,50.044Elective,02.204TSElective,02.155HT�5#     +++++++++++++++      + //    Elective,50.035Elective,50.037Elective,50.033Elective,50.037Elective,50.039Elective,50.033Elective,50.044Elective,50.044Elective,30.115Elective,50.020Elective,30.113Elective,01.101Elective,01.106Elective,30.118Elective,30.202Elective,50.043Elective,02.201TSElective,02.151HT�5#     +++++++++++++++      + //    Elective,50.033Elective,50.035Elective,50.021Elective,50.035Elective,50.038Elective,50.021Elective,50.043Elective,50.043Elective,01.101Elective,50.006Elective,01.119Elective,30.120Elective,30.200Elective,30.117Elective,30.123Elective,50.042Elective,02.170HTElective,02.148HT�D#     +++++++++++++++     ++ //    Elective,50.020Elective,50.033Elective,50.020Elective,50.033Elective,50.037Elective,50.020Elective,50.042Elective,50.042Elective,50.007Elective,30.202Elective,01.101Elective,30.119Elective,30.201Elective,30.115Elective,30.120Elective,50.056Elective,50.041Elective,02.167HTElective,02.144DH�S#     +++++++++++++++    +++ //    Elective,50.017Elective,50.021Elective,50.017Elective,50.020Elective,50.035Elective,50.017Elective,50.041Elective,50.041Elective,30.120Elective,30.123Elective,30.202Elective,30.114Elective,30.118Elective,01.101Elective,30.119Elective,50.055Elective,50.055Elective,50.040Elective,02.166TSElective,02.143DH�q#     ++++++++++++++++  ++++ //    Elective,50.012Elective,50.020Elective,50.012Elective,50.017Elective,50.033Elective,50.012Elective,50.040Elective,50.040Elective,30.119Elective,40.319Elective,30.123Elective,50.007Elective,30.113Elective,30.123Elective,30.114Elective,40.324Elective,40.324Elective,50.050Elective,50.054Elective,50.039Elective,02.165TSElective,02.136DH�q
+-#     ++++++++++++++++  ++++ //    Elective,50.006Elective,50.017Elective,50.007Elective,50.007Elective,50.021Elective,50.007Elective,50.038Elective,50.039Elective,30.114Elective,50.043Elective,30.119Elective,30.316Elective,01.101Elective,30.120Elective,40.319Elective,40.323Elective,40.323Elective,50.045Elective,50.053Elective,50.038Elective,02.160TSElective,02.135DH�q#     ++++++++++++++++  ++++ //    Elective,60.004Elective,50.012Elective,50.006Elective,50.006Elective,50.017Elective,50.006Elective,50.037Elective,50.038Elective,40.319Elective,50.039Elective,30.114Elective,30.111Elective,30.123Elective,30.114Elective,50.007Elective,40.319Elective,40.321Elective,50.043Elective,50.052Elective,50.037Elective,02.159HTElective,02.132DH�q#     ++++++++++++++++  ++++ //    Elective,40.316Elective,50.006Elective,60.004Elective,60.004Elective,50.012Elective,60.004Elective,50.033Elective,50.037Elective,40.002Elective,50.038Elective,50.007Elective,30.110Elective,30.120Elective,40.319Elective,30.203Elective,40.318Elective,40.320Elective,50.040Elective,50.051Elective,50.035Elective,02.155HTElective,02.129DH�
+-#=3   ++++++++++++++++  ++++ //    Sustainability by DesignASD,CSD,DAI,EPD,ESDElective,30.119Elective,60.004Elective,40.316Elective,30.202Elective,50.007Elective,01.117Elective,50.021Elective,50.035Elective,50.042Elective,50.007Elective,30.316Elective,30.109Elective,30.119Elective,50.007Elective,30.111Elective,40.316Elective,40.319Elective,50.035Elective,50.050Elective,50.033Elective,02.153TSElective,02.128DH�5	#Q3   ++++++++++++++++  +++++//    Psychology and Business ManagementASD,CSD,DAI,EPD,ESDElective,01.117Elective,40.016Elective,40.242Elective,30.115Elective,50.006Elective,01.116Elective,50.020Elective,50.033Elective,50.007Elective,50.004Elective,30.203Elective,30.108Elective,30.114Elective,30.316Elective,30.110Elective,40.302Elective,40.316Elective,50.039Elective,50.047Elective,50.021Elective,02.228Elective,02.152TSElective,02.127DH
+\ No newline at end of file
+Index: app/src/main/java/com/example/modulus/FragmentInsights/DataBaseHelperInsights.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.FragmentInsights;\r\n\r\nimport android.content.Context;\r\nimport android.database.Cursor;\r\nimport android.database.sqlite.SQLiteDatabase;\r\nimport android.database.sqlite.SQLiteOpenHelper;\r\nimport android.database.sqlite.SQLiteException;\r\nimport android.util.Log;\r\n\r\nimport com.example.modulus.Model.ModuleModel;\r\nimport com.example.modulus.Model.PlannerModel;\r\nimport com.example.modulus.R;\r\n\r\nimport java.io.File;\r\nimport java.io.FileOutputStream;\r\nimport java.io.IOException;\r\nimport java.io.InputStream;\r\nimport java.io.OutputStream;\r\nimport java.util.ArrayList;\r\nimport java.util.Arrays;\r\n\r\npublic class DataBaseHelperInsights extends SQLiteOpenHelper {\r\n    private static final String dbName = \"sutdModules.db\";\r\n    private static final String tableName = \"sutdmodules\";\r\n    private static final String plannerTable = \"planner\";\r\n    private static String dbPath = \"/data/data/com.example.modulus/databases/\";\r\n    SQLiteDatabase db;\r\n    private final Context mContext;\r\n    private static final String col0 = \"Pillar\";\r\n    private static final String col1 = \"Tags\";\r\n    private static final String col2 = \"Term\";\r\n    private static final String col3 = \"ID\";\r\n    private static final String col4 = \"Name\";\r\n    private static final String col5 = \"Professors\";\r\n    private static final String col6 = \"Prerequisites\";\r\n\r\n    public DataBaseHelperInsights(Context context) {\r\n        super(context, dbName, null, 1);\r\n        this.mContext = context;\r\n    }\r\n\r\n    @Override\r\n    public void onCreate(SQLiteDatabase db) {\r\n    }\r\n\r\n    @Override\r\n    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {\r\n    }\r\n\r\n    private boolean checkDatabase() {\r\n        try {\r\n            final String mPath = dbPath + dbName;\r\n            Log.d(\"check\", \"check\");\r\n            final File file = new File(mPath);\r\n            return file.exists();\r\n        } catch (SQLiteException e) {\r\n            e.printStackTrace();\r\n            return false;\r\n        }\r\n    }\r\n\r\n    private void copyDatabase() throws IOException {\r\n        try {\r\n            InputStream mInputStream = mContext.getAssets().open(dbName);\r\n            Log.d(\"DB\", \"Copying Database\");\r\n            String outFileName = dbPath + dbName;\r\n            OutputStream mOutputStream = new FileOutputStream(outFileName);\r\n\r\n            byte[] buffer = new byte[2048];\r\n            int length;\r\n            while ((length = mInputStream.read(buffer)) > 0) {\r\n                mOutputStream.write(buffer, 0, length);\r\n            }\r\n            mOutputStream.flush();\r\n            mOutputStream.close();\r\n            mInputStream.close();\r\n        } catch (Exception e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    public void createDatabase() throws IOException {\r\n        boolean mDatabaseExists = checkDatabase();\r\n        Log.d(\"create\", \"create\");\r\n        if (mDatabaseExists) {\r\n            this.getReadableDatabase();\r\n            this.close();\r\n            try {\r\n                copyDatabase();\r\n            } catch (IOException mIOException) {\r\n                mIOException.printStackTrace();\r\n                throw new Error(\"Error copying Database\");\r\n            } finally {\r\n                this.close();\r\n            }\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public synchronized void close() {\r\n        if (db != null) {\r\n            db.close();\r\n        }\r\n        SQLiteDatabase.releaseMemory();\r\n        super.close();\r\n    }\r\n\r\n    public ArrayList<ModuleModel> getAllModules() {\r\n        try {\r\n            createDatabase();\r\n        } catch (IOException e) {\r\n            e.printStackTrace();\r\n        }\r\n        ArrayList<ModuleModel> result = new ArrayList<>();\r\n        SQLiteDatabase db = this.getReadableDatabase();\r\n\r\n        Cursor c = db.query(tableName, null, null, null, null, null, null);\r\n\r\n        while (c.moveToNext()) {\r\n            String id = c.getString(3);\r\n            String name = c.getString(4);\r\n            ModuleModel module = new ModuleModel(id, name);\r\n            module.setPillar(c.getString(0));\r\n            module.setTags(Arrays.asList(c.getString(1).split(\",\")));\r\n            module.setTerm(Arrays.asList(c.getString(2).split(\",\")));\r\n            module.setProf(Arrays.asList(c.getString(5).split(\",\")));\r\n            module.setPrerequisites(Arrays.asList(c.getString(6).split(\",\")));\r\n            module.setDescription(c.getString(8));\r\n            module.setColor(getColourR(c.getString(0)));\r\n            result.add(module);\r\n        }\r\n        c.close();\r\n        db.close();\r\n\r\n        return result;\r\n    }\r\n\r\n    private int getColourR(String Pillar){\r\n        switch (Pillar){\r\n            case \"ASD\":\r\n                return R.color.ASD;\r\n            case \"EPD\":\r\n                return R.color.EPD;\r\n            case \"ESD\":\r\n                return R.color.ESD;\r\n            case \"DAI\":\r\n                return R.color.DAI;\r\n            case \"ISTD\":\r\n                return R.color.ISTD;\r\n            case \"HASS\":\r\n                return R.color.HASS;\r\n            case \"SMT\":\r\n                return R.color.SMT;\r\n            default:\r\n                return R.color.OTHERS;\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/FragmentInsights/DataBaseHelperInsights.java b/app/src/main/java/com/example/modulus/FragmentInsights/DataBaseHelperInsights.java
+--- a/app/src/main/java/com/example/modulus/FragmentInsights/DataBaseHelperInsights.java	(revision 611051abf635480f37ed2adf664f798e47d8f0b1)
++++ b/app/src/main/java/com/example/modulus/FragmentInsights/DataBaseHelperInsights.java	(date 1744705578402)
+@@ -125,6 +125,7 @@
+             module.setTerm(Arrays.asList(c.getString(2).split(",")));
+             module.setProf(Arrays.asList(c.getString(5).split(",")));
+             module.setPrerequisites(Arrays.asList(c.getString(6).split(",")));
++            module.setCost(c.getString(7));
+             module.setDescription(c.getString(8));
+             module.setColor(getColourR(c.getString(0)));
+             result.add(module);
+Index: app/src/main/java/com/example/modulus/FragmentPlanner/PlannerFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.FragmentPlanner;\r\n\r\nimport android.app.AlertDialog;\r\nimport android.content.Context;\r\nimport android.content.DialogInterface;\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.os.Bundle;\r\n\r\nimport androidx.activity.result.ActivityResult;\r\nimport androidx.activity.result.ActivityResultCallback;\r\nimport androidx.activity.result.ActivityResultLauncher;\r\nimport androidx.activity.result.contract.ActivityResultContracts;\r\nimport androidx.fragment.app.Fragment;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport android.util.Log;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.Button;\r\nimport android.widget.ImageView;\r\nimport android.widget.LinearLayout;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport com.example.modulus.Adapter.PlannerAdapter;\r\nimport com.example.modulus.Model.ModuleModel;\r\nimport com.example.modulus.Model.PlannerModel;\r\nimport com.example.modulus.FragmentInsights.InsightsFragment;\r\nimport com.example.modulus.Model.TrackModel;\r\nimport com.example.modulus.R;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.Arrays;\r\nimport java.util.List;\r\n\r\npublic class PlannerFragment extends Fragment {\r\n    public static List<PlannerModel> plannerList;\r\n    public static String myPillar;\r\n    public static String myTrack;\r\n    public static String myMinor;\r\n    public static TrackModel trackModel;\r\n    public static TrackModel minorModel;\r\n    PlannerAdapter adapter;\r\n    RecyclerView recyclerView;\r\n    DataBaseHelperPlanner myDB;\r\n    DataBaseHelperTracks tracksDB;\r\n    ImageView editButton;\r\n    SharedPreferences mPreferences;\r\n    static final String KEY_DATA_PILLAR = \"SHARED_PREF_DATA_PILLAR\";\r\n    static final String KEY_DATA_TRACK = \"SHARED_PREF_DATA_TRACK\";\r\n    static final String KEY_DATA_MINOR = \"SHARED_PREF_DATA_MINOR\";\r\n    static final String KEY_DATA_TERMS = \"SHARED_PREF_DATA_TERMS\";\r\n    static final String KEY_DATA_MODS = \"SHARED_PREF_DATA_MODS\";\r\n    static final String PREF_FILE = \"mainsharedpref\";\r\n    private final String TAG = \"PlannerModel\";\r\n    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {\r\n        // Inflate the layout for this fragment\r\n        View view = inflater.inflate(R.layout.fragment_planner, container, false);\r\n\r\n        recyclerView = view.findViewById(R.id.plannerRecyclerView);\r\n\r\n        myDB = new DataBaseHelperPlanner(getContext());\r\n        tracksDB = new DataBaseHelperTracks(getContext());\r\n\r\n        mPreferences = this.getActivity().getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);\r\n        if(mPreferences.getString(KEY_DATA_TERMS, \"\").equals(\"\")){\r\n            Log.d(TAG, \"New Account\");\r\n            plannerList = myDB.getPlanner(\"Default\");\r\n            System.out.println(plannerList);\r\n        }else{\r\n            onResume();\r\n            Log.d(TAG, \"Refresh\");\r\n        }\r\n        if(InsightsFragment.moduleList == null){\r\n            myDB = new DataBaseHelperPlanner(getContext());\r\n            InsightsFragment.moduleList = myDB.getAllModules();\r\n        }\r\n        adapter = new PlannerAdapter(plannerList);\r\n        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));\r\n        recyclerView.setAdapter(adapter);\r\n\r\n        LinearLayout editTab = view.findViewById(R.id.editTab);\r\n        editTab.setVisibility(View.GONE);\r\n        editButton = view.findViewById(R.id.editButton);\r\n        editButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                if(editTab.getVisibility() == View.VISIBLE){\r\n                    editTab.setVisibility(View.GONE);\r\n                }else{\r\n                    editTab.setVisibility(View.VISIBLE);\r\n                }\r\n            }\r\n        });\r\n\r\n        Button pillarButton = view.findViewById(R.id.pillarButton);\r\n        TextView pillarText = view.findViewById(R.id.pillarText);\r\n        String pillarPref = mPreferences.getString(KEY_DATA_PILLAR, \"\");\r\n        if(!pillarPref.isEmpty()){\r\n            pillarText.setText(pillarPref);\r\n            myPillar = pillarPref;\r\n        }\r\n        TextView trackText = view.findViewById(R.id.specializationText);\r\n        String trackPref = mPreferences.getString(KEY_DATA_TRACK, \"\");\r\n        if(!trackPref.isEmpty()){\r\n            trackText.setText(trackPref);\r\n            myTrack = trackPref;\r\n        }\r\n        TextView minorText = view.findViewById(R.id.minorText);\r\n        String minorPref = mPreferences.getString(KEY_DATA_MINOR, \"\");\r\n        if(!minorPref.isEmpty()){\r\n            minorText.setText(trackPref);\r\n            myMinor = minorPref;\r\n        }\r\n        String[] pillars = new String[]{\"ASD\", \"CSD\", \"DAI\", \"EPD\", \"ESD\"};\r\n        pillarButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());\r\n                mBuilder.setTitle(\"Select a Pillar\");\r\n                mBuilder.setSingleChoiceItems(pillars, -1, new DialogInterface.OnClickListener() {\r\n                    @Override\r\n                    public void onClick(DialogInterface dialog, int which) {\r\n                        pillarText.setText(pillars[which]);\r\n                        myPillar = pillars[which];\r\n                        plannerList = myDB.getPlanner(pillars[which]);\r\n                        recyclerView.setAdapter(adapter);\r\n                        SharedPreferences.Editor prefsEditor = mPreferences.edit();\r\n                        prefsEditor.putString(PlannerFragment.KEY_DATA_PILLAR, pillars[which]);\r\n                        trackText.setText(\"No Specialization\");\r\n                        prefsEditor.putString(PlannerFragment.KEY_DATA_TRACK, \"No Specialization\");\r\n                        minorText.setText(\"No Minor\");\r\n                        prefsEditor.putString(PlannerFragment.KEY_DATA_MINOR, \"No Minor\");\r\n                        prefsEditor.apply();\r\n                        dialog.dismiss();\r\n                    }\r\n                });\r\n                mBuilder.setNeutralButton(\"Cancel\", new DialogInterface.OnClickListener() {\r\n                    @Override\r\n                    public void onClick(DialogInterface dialog, int which) {\r\n\r\n                    }\r\n                });\r\n                AlertDialog mDialog = mBuilder.create();\r\n                mDialog.show();\r\n            }\r\n        });\r\n\r\n        Button trackButton = view.findViewById(R.id.trackButton);\r\n        trackButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                if(myPillar == null){\r\n                    Toast.makeText(getContext(), \"Select Pillar First!\", Toast.LENGTH_SHORT).show();\r\n                }else if(myPillar.equals(\"ASD\") || myPillar.equals(\"DAI\")){\r\n                    Toast.makeText(getContext(), \"No Tracks Available\", Toast.LENGTH_SHORT).show();\r\n                }else {\r\n                    String[] tracks = tracksDB.getTracks(myPillar);\r\n                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());\r\n                    builder.setTitle(\"Select a Specialization\");\r\n                    builder.setSingleChoiceItems(tracks, -1, new DialogInterface.OnClickListener() {\r\n                        @Override\r\n                        public void onClick(DialogInterface dialog, int which) {\r\n                            trackText.setText(tracks[which]);\r\n                            myTrack = tracks[which];\r\n                            trackModel = tracksDB.getTrackModel(tracks[which], pillarPref);\r\n                            SharedPreferences.Editor prefsEditor = mPreferences.edit();\r\n                            prefsEditor.putString(PlannerFragment.KEY_DATA_TRACK, tracks[which]);\r\n                            prefsEditor.apply();\r\n                            dialog.dismiss();\r\n                        }\r\n                    }).setNeutralButton(\"Cancel\", new DialogInterface.OnClickListener() {\r\n                        @Override\r\n                        public void onClick(DialogInterface dialog, int which) {\r\n                        }\r\n                    });\r\n                    AlertDialog mDialog = builder.create();\r\n                    mDialog.show();\r\n                }\r\n            }\r\n        });\r\n\r\n        Button minorButton = view.findViewById(R.id.minorButton);\r\n        minorButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                if(myPillar == null){\r\n                    Toast.makeText(getContext(), \"Select Pillar First!\", Toast.LENGTH_SHORT).show();\r\n                }else {\r\n                    String[] allMinors = tracksDB.getMinors();\r\n                    ArrayList<String[]> allMinorsEligibility = tracksDB.getMinorsEligibility();\r\n                    List<String> availableMinorsList = new ArrayList<>();\r\n\r\n                    for(int i = 0; i < allMinorsEligibility.size(); i++){\r\n                        List<String> eligibility = Arrays.asList(allMinorsEligibility.get(i));\r\n                        if(eligibility.contains(myPillar)){\r\n                            availableMinorsList.add(allMinors[i]);\r\n                        }\r\n                    }\r\n                    availableMinorsList.add(\"No Minor\");\r\n                    String[] availableMinors = availableMinorsList.toArray(new String[0]);\r\n\r\n                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());\r\n                    mBuilder.setTitle(\"Select a Minor\");\r\n                    mBuilder.setSingleChoiceItems(availableMinors, -1, new DialogInterface.OnClickListener() {\r\n                        @Override\r\n                        public void onClick(DialogInterface dialog, int which) {\r\n                            minorText.setText(availableMinors[which]);\r\n                            myMinor = availableMinors[which];\r\n                            minorModel = tracksDB.getTrackModel(availableMinors[which], pillarPref);\r\n                            SharedPreferences.Editor prefsEditor = mPreferences.edit();\r\n                            prefsEditor.putString(PlannerFragment.KEY_DATA_MINOR, availableMinors[which]);\r\n                            prefsEditor.apply();\r\n                            dialog.dismiss();\r\n                        }\r\n                    });\r\n                    mBuilder.setNeutralButton(\"Cancel\", new DialogInterface.OnClickListener() {\r\n                        @Override\r\n                        public void onClick(DialogInterface dialog, int which) {\r\n                        }\r\n                    });\r\n                    AlertDialog mDialog = mBuilder.create();\r\n                    mDialog.show();\r\n                }\r\n            }\r\n        });\r\n\r\n        final ActivityResultLauncher<Intent> launcher = registerForActivityResult(\r\n                new ActivityResultContracts.StartActivityForResult(),\r\n                new ActivityResultCallback<ActivityResult>() {\r\n                    @Override\r\n                    public void onActivityResult(ActivityResult result) {\r\n                        // Result from DataEntryActivity is obtained\r\n                        // Get the data and insert it into datasource\r\n                        Log.d(\"TAG\", \"Back to Planner\");\r\n                        Bundle b = result.getData().getExtras();\r\n                        if(b != null){\r\n                            String newModules = b.getString(EditPlannerMenu.KEY_NAME);\r\n                            String term = b.getString(EditPlannerMenu.KEY_PATH);\r\n                            System.out.println(term);\r\n                            String[] updatedModules = newModules.split(\"\\n\");\r\n                            List<ModuleModel> newPlannerModules = new ArrayList<ModuleModel>();\r\n                            for(String moduleString: updatedModules){\r\n                                for(ModuleModel module: InsightsFragment.moduleList){\r\n                                    if(moduleString.contains(module.getId())){\r\n                                        newPlannerModules.add(module);\r\n                                    }\r\n                                }\r\n                            }\r\n//                        for(PlannerModel planner: editPlannerList){\r\n//                            String t = planner.getTerm();\r\n//                            if(t.equals(term)){\r\n//                                if(t.contains(\"7\") || t.contains(\"8\")){\r\n//                                    newPlannerModules.add(new ModuleModel(\"\", \"Capstone\"));\r\n//                                }\r\n//                                planner.setModules(newPlannerModules);\r\n//                            }\r\n//                        }\r\n                            System.out.println(newPlannerModules.toString());\r\n                            Log.d(TAG, \"Planners Updated\");\r\n                        }else{\r\n                            Log.d(TAG, \"Nothing to Update\");\r\n                        }\r\n                    }\r\n                }\r\n\r\n        );\r\n\r\n        Button edit = view.findViewById(R.id.planTermButton);\r\n        edit.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Log.d(TAG, \"Edit\");\r\n                System.out.println(trackModel);\r\n                Intent intent = new Intent(getContext(), EditPlannerMenu.class);\r\n                launcher.launch(intent);\r\n            }\r\n        });\r\n\r\n        return view;\r\n    }\r\n\r\n//    @Override\r\n//    public void onPause(){\r\n//        super.onPause();\r\n//        SharedPreferences.Editor prefsEditor = mPreferences.edit();\r\n//        Gson gson = new Gson();\r\n//        ArrayList<String> terms = new ArrayList<>();\r\n//        ArrayList<String> plannerModules = new ArrayList<>();\r\n//        for (PlannerModel planner: plannerList) {\r\n//            terms.add(planner.getTerm());\r\n//            if (planner.getModules() != null){\r\n//                for(ModuleModel module: planner.getModules()){\r\n//                    plannerModules.add(module.toString());\r\n//                }\r\n//                plannerModules.add(\"?\");\r\n//            }else{\r\n//                plannerModules.add(\"NIL\");\r\n//            }\r\n//        }\r\n//        String jsonTerms = gson.toJson(terms);\r\n//        String jsonMods = gson.toJson( plannerModules );\r\n//        prefsEditor.putString(KEY_DATA_TERMS, jsonTerms);\r\n//        prefsEditor.putString(KEY_DATA_MODS, jsonMods);\r\n//        prefsEditor.apply();\r\n//    }\r\n\r\n    @Override\r\n    public void onResume(){\r\n        super.onResume();\r\n        Log.d(TAG, \"Resume\");\r\n//        Gson gson = new Gson();\r\n//        String jsonTerms = mPreferences.getString(KEY_DATA_TERMS, \"\");\r\n//        String jsonMods = mPreferences.getString(KEY_DATA_MODS, \"\");\r\n//        ArrayList<String> terms = gson.fromJson(jsonTerms, ArrayList.class);\r\n//        ArrayList<String> mods = gson.fromJson(jsonMods, ArrayList.class);\r\n//        System.out.println(terms);\r\n//        System.out.println(mods);\r\n//        if(terms != null && mods != null){\r\n//            plannerList = new ArrayList<>();\r\n//            int modsPointer = 0;\r\n//            for (int i = 0; i< terms.size(); i++) {\r\n//                PlannerModel planner = new PlannerModel(terms.get(i));\r\n//                List<ModuleModel> plannerModules = new ArrayList<ModuleModel>();\r\n//                for(int j = modsPointer; j < mods.size(); j++){\r\n//                    if(mods.get(j).equals(\"?\")){\r\n//                        planner.setModules(plannerModules);\r\n//                        plannerList.add(planner);\r\n//                        modsPointer++;\r\n//                        break;\r\n//                    }else if(mods.get(j).equals(\"NIL\")){\r\n//                        plannerList.add(planner);\r\n//                        modsPointer++;\r\n//                        break;\r\n//                    }else {\r\n//                        plannerModules.add(ModuleModel.getModuleFromString(mods.get(j)));\r\n//                        modsPointer++;\r\n//                    }\r\n//                }\r\n//            }\r\n//            Log.d(TAG, \"Updated\");\r\n//        }\r\n\r\n        String pillarPref = mPreferences.getString(KEY_DATA_PILLAR, \"\");\r\n        if(!pillarPref.isEmpty()) {\r\n            plannerList = myDB.getPlanner(pillarPref);\r\n            adapter = new PlannerAdapter(plannerList);\r\n            recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));\r\n        };\r\n\r\n        recyclerView.setAdapter(adapter);\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/FragmentPlanner/PlannerFragment.java b/app/src/main/java/com/example/modulus/FragmentPlanner/PlannerFragment.java
+--- a/app/src/main/java/com/example/modulus/FragmentPlanner/PlannerFragment.java	(revision 611051abf635480f37ed2adf664f798e47d8f0b1)
++++ b/app/src/main/java/com/example/modulus/FragmentPlanner/PlannerFragment.java	(date 1744705578404)
+@@ -210,11 +210,13 @@
+                         public void onClick(DialogInterface dialog, int which) {
+                             minorText.setText(availableMinors[which]);
+                             myMinor = availableMinors[which];
+-                            minorModel = tracksDB.getTrackModel(availableMinors[which], pillarPref);
+-                            SharedPreferences.Editor prefsEditor = mPreferences.edit();
+-                            prefsEditor.putString(PlannerFragment.KEY_DATA_MINOR, availableMinors[which]);
+-                            prefsEditor.apply();
+-                            dialog.dismiss();
++                            if(!myMinor.equals("No Minor")){
++                                minorModel = tracksDB.getTrackModel(availableMinors[which], pillarPref);
++                                SharedPreferences.Editor prefsEditor = mPreferences.edit();
++                                prefsEditor.putString(PlannerFragment.KEY_DATA_MINOR, availableMinors[which]);
++                                prefsEditor.apply();
++                                dialog.dismiss();
++                            }
+                         }
+                     });
+                     mBuilder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+Index: app/src/main/java/com/example/modulus/FragmentPlanner/EditPlanner.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.FragmentPlanner;\r\n\r\nimport android.app.Activity;\r\nimport android.content.Context;\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.ImageView;\r\n\r\nimport androidx.activity.result.ActivityResult;\r\nimport androidx.activity.result.ActivityResultCallback;\r\nimport androidx.activity.result.ActivityResultLauncher;\r\nimport androidx.activity.result.contract.ActivityResultContracts;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.recyclerview.widget.GridLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.example.modulus.Adapter.EditPlannerAdapter;\r\nimport com.example.modulus.Model.ModuleModel;\r\nimport com.example.modulus.Model.PlannerModel;\r\nimport com.example.modulus.FragmentInsights.InsightsFragment;\r\nimport com.example.modulus.R;\r\nimport com.google.gson.Gson;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\npublic class EditPlanner extends AppCompatActivity {\r\n    List<PlannerModel> editPlannerList = PlannerFragment.plannerList;\r\n    ImageView backButton;\r\n    Button confirmButton;\r\n    RecyclerView editRecyclerView;\r\n    SharedPreferences mPreferences;\r\n    private final String TAG = \"Edit PlannerModel\";\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.edit_planner_activity);\r\n        backButton = findViewById(R.id.backButton);\r\n        backButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Intent resultIntent = new Intent();\r\n                setResult( Activity.RESULT_OK, resultIntent);\r\n                finish();\r\n            }\r\n        });\r\n        final ActivityResultLauncher<Intent> launcher = registerForActivityResult(\r\n                new ActivityResultContracts.StartActivityForResult(),\r\n                new ActivityResultCallback<ActivityResult>() {\r\n                    @Override\r\n                    public void onActivityResult(ActivityResult result) {\r\n                        // Result from DataEntryActivity is obtained\r\n                        // Get the data and insert it into datasource\r\n                        Log.d(\"TAG\", \"Back to Edit\");\r\n                        Bundle b = result.getData().getExtras();\r\n                        String newModules = b.getString(EditPlannerMenu.KEY_NAME);\r\n                        String term = b.getString(EditPlannerMenu.KEY_PATH);\r\n                        System.out.println(term);\r\n                        String[] updatedModules = newModules.split(\"\\n\");\r\n                        List<ModuleModel> newPlannerModules = new ArrayList<ModuleModel>();\r\n                        for(String moduleString: updatedModules){\r\n                            for(ModuleModel module: InsightsFragment.moduleList){\r\n                                if(moduleString.contains(module.getId())){\r\n                                    newPlannerModules.add(module);\r\n                                }\r\n                            }\r\n                        }\r\n//                        for(PlannerModel planner: editPlannerList){\r\n//                            String t = planner.getTerm();\r\n//                            if(t.equals(term)){\r\n//                                if(t.contains(\"7\") || t.contains(\"8\")){\r\n//                                    newPlannerModules.add(new ModuleModel(\"\", \"Capstone\"));\r\n//                                }\r\n//                                planner.setModules(newPlannerModules);\r\n//                            }\r\n//                        }\r\n                        for(PlannerModel planner: editPlannerList) {\r\n                            System.out.println(planner.getModules().toString());\r\n                        }\r\n                        System.out.println(newPlannerModules.toString());\r\n                        Log.d(TAG, \"Planners Updated\");\r\n                    }\r\n                }\r\n\r\n        );\r\n        EditPlannerAdapter.OnItemClickListener listener = new EditPlannerAdapter.OnItemClickListener() {\r\n            @Override\r\n            public void onItemClick(PlannerModel planner) {\r\n                Intent intent = new Intent(EditPlanner.this, EditPlannerMenu.class);\r\n                intent.putExtra(\"id\", planner.getTerm());\r\n                launcher.launch(intent);\r\n            }\r\n        };\r\n        EditPlannerAdapter termButtonsAdapter = new EditPlannerAdapter(PlannerFragment.plannerList, listener);\r\n        editRecyclerView = findViewById(R.id.editRecyclerView);\r\n        editRecyclerView.setAdapter(termButtonsAdapter);\r\n        editRecyclerView.setLayoutManager(new GridLayoutManager(EditPlanner.this, 2));\r\n\r\n        mPreferences = this.getSharedPreferences(PlannerFragment.PREF_FILE, Context.MODE_PRIVATE);\r\n        confirmButton = findViewById(R.id.confirmButton);\r\n        confirmButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                SharedPreferences.Editor prefsEditor = mPreferences.edit();\r\n                Gson gson = new Gson();\r\n                ArrayList<String> terms = new ArrayList<>();\r\n                ArrayList<String> plannerModules = new ArrayList<>();\r\n                for (PlannerModel planner: editPlannerList) {\r\n                    terms.add(planner.getTerm());\r\n                    if (planner.getModules() != null){\r\n                        for(ModuleModel module: planner.getModules()){\r\n                            plannerModules.add(module.toString());\r\n                        }\r\n                        plannerModules.add(\"?\");\r\n                    }else{\r\n                        plannerModules.add(\"NIL\");\r\n                    }\r\n                }\r\n                String jsonTerms = gson.toJson(terms);\r\n                String jsonMods = gson.toJson( plannerModules );\r\n                prefsEditor.putString(PlannerFragment.KEY_DATA_TERMS, jsonTerms);\r\n                prefsEditor.putString(PlannerFragment.KEY_DATA_MODS, jsonMods);\r\n                prefsEditor.apply();\r\n                Intent resultIntent = new Intent();\r\n                setResult( Activity.RESULT_OK, resultIntent);\r\n                finish();\r\n            }\r\n        });\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/FragmentPlanner/EditPlanner.java b/app/src/main/java/com/example/modulus/FragmentPlanner/EditPlanner.java
+--- a/app/src/main/java/com/example/modulus/FragmentPlanner/EditPlanner.java	(revision 611051abf635480f37ed2adf664f798e47d8f0b1)
++++ b/app/src/main/java/com/example/modulus/FragmentPlanner/EditPlanner.java	(date 1744705578403)
+@@ -1,134 +1,134 @@
+-package com.example.modulus.FragmentPlanner;
+-
+-import android.app.Activity;
+-import android.content.Context;
+-import android.content.Intent;
+-import android.content.SharedPreferences;
+-import android.os.Bundle;
+-import android.util.Log;
+-import android.view.View;
+-import android.widget.Button;
+-import android.widget.ImageView;
+-
+-import androidx.activity.result.ActivityResult;
+-import androidx.activity.result.ActivityResultCallback;
+-import androidx.activity.result.ActivityResultLauncher;
+-import androidx.activity.result.contract.ActivityResultContracts;
+-import androidx.appcompat.app.AppCompatActivity;
+-import androidx.recyclerview.widget.GridLayoutManager;
+-import androidx.recyclerview.widget.RecyclerView;
+-
+-import com.example.modulus.Adapter.EditPlannerAdapter;
+-import com.example.modulus.Model.ModuleModel;
+-import com.example.modulus.Model.PlannerModel;
+-import com.example.modulus.FragmentInsights.InsightsFragment;
+-import com.example.modulus.R;
+-import com.google.gson.Gson;
+-
+-import java.util.ArrayList;
+-import java.util.List;
+-
+-public class EditPlanner extends AppCompatActivity {
+-    List<PlannerModel> editPlannerList = PlannerFragment.plannerList;
+-    ImageView backButton;
+-    Button confirmButton;
+-    RecyclerView editRecyclerView;
+-    SharedPreferences mPreferences;
+-    private final String TAG = "Edit PlannerModel";
+-    @Override
+-    protected void onCreate(Bundle savedInstanceState) {
+-        super.onCreate(savedInstanceState);
+-        setContentView(R.layout.edit_planner_activity);
+-        backButton = findViewById(R.id.backButton);
+-        backButton.setOnClickListener(new View.OnClickListener() {
+-            @Override
+-            public void onClick(View v) {
+-                Intent resultIntent = new Intent();
+-                setResult( Activity.RESULT_OK, resultIntent);
+-                finish();
+-            }
+-        });
+-        final ActivityResultLauncher<Intent> launcher = registerForActivityResult(
+-                new ActivityResultContracts.StartActivityForResult(),
+-                new ActivityResultCallback<ActivityResult>() {
+-                    @Override
+-                    public void onActivityResult(ActivityResult result) {
+-                        // Result from DataEntryActivity is obtained
+-                        // Get the data and insert it into datasource
+-                        Log.d("TAG", "Back to Edit");
+-                        Bundle b = result.getData().getExtras();
+-                        String newModules = b.getString(EditPlannerMenu.KEY_NAME);
+-                        String term = b.getString(EditPlannerMenu.KEY_PATH);
+-                        System.out.println(term);
+-                        String[] updatedModules = newModules.split("\n");
+-                        List<ModuleModel> newPlannerModules = new ArrayList<ModuleModel>();
+-                        for(String moduleString: updatedModules){
+-                            for(ModuleModel module: InsightsFragment.moduleList){
+-                                if(moduleString.contains(module.getId())){
+-                                    newPlannerModules.add(module);
+-                                }
+-                            }
+-                        }
+-//                        for(PlannerModel planner: editPlannerList){
+-//                            String t = planner.getTerm();
+-//                            if(t.equals(term)){
+-//                                if(t.contains("7") || t.contains("8")){
+-//                                    newPlannerModules.add(new ModuleModel("", "Capstone"));
+-//                                }
+-//                                planner.setModules(newPlannerModules);
+-//                            }
++//package com.example.modulus.FragmentPlanner;
++//
++//import android.app.Activity;
++//import android.content.Context;
++//import android.content.Intent;
++//import android.content.SharedPreferences;
++//import android.os.Bundle;
++//import android.util.Log;
++//import android.view.View;
++//import android.widget.Button;
++//import android.widget.ImageView;
++//
++//import androidx.activity.result.ActivityResult;
++//import androidx.activity.result.ActivityResultCallback;
++//import androidx.activity.result.ActivityResultLauncher;
++//import androidx.activity.result.contract.ActivityResultContracts;
++//import androidx.appcompat.app.AppCompatActivity;
++//import androidx.recyclerview.widget.GridLayoutManager;
++//import androidx.recyclerview.widget.RecyclerView;
++//
++//import com.example.modulus.Adapter.EditPlannerAdapter;
++//import com.example.modulus.Model.ModuleModel;
++//import com.example.modulus.Model.PlannerModel;
++//import com.example.modulus.FragmentInsights.InsightsFragment;
++//import com.example.modulus.R;
++//import com.google.gson.Gson;
++//
++//import java.util.ArrayList;
++//import java.util.List;
++//
++//public class EditPlanner extends AppCompatActivity {
++//    List<PlannerModel> editPlannerList = PlannerFragment.plannerList;
++//    ImageView backButton;
++//    Button confirmButton;
++//    RecyclerView editRecyclerView;
++//    SharedPreferences mPreferences;
++//    private final String TAG = "Edit PlannerModel";
++//    @Override
++//    protected void onCreate(Bundle savedInstanceState) {
++//        super.onCreate(savedInstanceState);
++//        setContentView(R.layout.edit_planner_activity);
++//        backButton = findViewById(R.id.backButton);
++//        backButton.setOnClickListener(new View.OnClickListener() {
++//            @Override
++//            public void onClick(View v) {
++//                Intent resultIntent = new Intent();
++//                setResult( Activity.RESULT_OK, resultIntent);
++//                finish();
++//            }
++//        });
++//        final ActivityResultLauncher<Intent> launcher = registerForActivityResult(
++//                new ActivityResultContracts.StartActivityForResult(),
++//                new ActivityResultCallback<ActivityResult>() {
++//                    @Override
++//                    public void onActivityResult(ActivityResult result) {
++//                        // Result from DataEntryActivity is obtained
++//                        // Get the data and insert it into datasource
++//                        Log.d("TAG", "Back to Edit");
++//                        Bundle b = result.getData().getExtras();
++//                        String newModules = b.getString(EditPlannerMenu.KEY_NAME);
++//                        String term = b.getString(EditPlannerMenu.KEY_PATH);
++//                        System.out.println(term);
++//                        String[] updatedModules = newModules.split("\n");
++//                        List<ModuleModel> newPlannerModules = new ArrayList<ModuleModel>();
++//                        for(String moduleString: updatedModules){
++//                            for(ModuleModel module: InsightsFragment.moduleList){
++//                                if(moduleString.contains(module.getId())){
++//                                    newPlannerModules.add(module);
++//                                }
++//                            }
++//                        }
++////                        for(PlannerModel planner: editPlannerList){
++////                            String t = planner.getTerm();
++////                            if(t.equals(term)){
++////                                if(t.contains("7") || t.contains("8")){
++////                                    newPlannerModules.add(new ModuleModel("", "Capstone"));
++////                                }
++////                                planner.setModules(newPlannerModules);
++////                            }
++////                        }
++//                        for(PlannerModel planner: editPlannerList) {
++//                            System.out.println(planner.getModules().toString());
++//                        }
++//                        System.out.println(newPlannerModules.toString());
++//                        Log.d(TAG, "Planners Updated");
++//                    }
++//                }
++//
++//        );
++//        EditPlannerAdapter.OnItemClickListener listener = new EditPlannerAdapter.OnItemClickListener() {
++//            @Override
++//            public void onItemClick(PlannerModel planner) {
++//                Intent intent = new Intent(EditPlanner.this, EditPlannerMenu.class);
++//                intent.putExtra("id", planner.getTerm());
++//                launcher.launch(intent);
++//            }
++//        };
++//        EditPlannerAdapter termButtonsAdapter = new EditPlannerAdapter(PlannerFragment.plannerList, listener);
++//        editRecyclerView = findViewById(R.id.editRecyclerView);
++//        editRecyclerView.setAdapter(termButtonsAdapter);
++//        editRecyclerView.setLayoutManager(new GridLayoutManager(EditPlanner.this, 2));
++//
++//        mPreferences = this.getSharedPreferences(PlannerFragment.PREF_FILE, Context.MODE_PRIVATE);
++//        confirmButton = findViewById(R.id.confirmButton);
++//        confirmButton.setOnClickListener(new View.OnClickListener() {
++//            @Override
++//            public void onClick(View v) {
++//                SharedPreferences.Editor prefsEditor = mPreferences.edit();
++//                Gson gson = new Gson();
++//                ArrayList<String> terms = new ArrayList<>();
++//                ArrayList<String> plannerModules = new ArrayList<>();
++//                for (PlannerModel planner: editPlannerList) {
++//                    terms.add(planner.getTerm());
++//                    if (planner.getModules() != null){
++//                        for(ModuleModel module: planner.getModules()){
++//                            plannerModules.add(module.toString());
+ //                        }
+-                        for(PlannerModel planner: editPlannerList) {
+-                            System.out.println(planner.getModules().toString());
+-                        }
+-                        System.out.println(newPlannerModules.toString());
+-                        Log.d(TAG, "Planners Updated");
+-                    }
+-                }
+-
+-        );
+-        EditPlannerAdapter.OnItemClickListener listener = new EditPlannerAdapter.OnItemClickListener() {
+-            @Override
+-            public void onItemClick(PlannerModel planner) {
+-                Intent intent = new Intent(EditPlanner.this, EditPlannerMenu.class);
+-                intent.putExtra("id", planner.getTerm());
+-                launcher.launch(intent);
+-            }
+-        };
+-        EditPlannerAdapter termButtonsAdapter = new EditPlannerAdapter(PlannerFragment.plannerList, listener);
+-        editRecyclerView = findViewById(R.id.editRecyclerView);
+-        editRecyclerView.setAdapter(termButtonsAdapter);
+-        editRecyclerView.setLayoutManager(new GridLayoutManager(EditPlanner.this, 2));
+-
+-        mPreferences = this.getSharedPreferences(PlannerFragment.PREF_FILE, Context.MODE_PRIVATE);
+-        confirmButton = findViewById(R.id.confirmButton);
+-        confirmButton.setOnClickListener(new View.OnClickListener() {
+-            @Override
+-            public void onClick(View v) {
+-                SharedPreferences.Editor prefsEditor = mPreferences.edit();
+-                Gson gson = new Gson();
+-                ArrayList<String> terms = new ArrayList<>();
+-                ArrayList<String> plannerModules = new ArrayList<>();
+-                for (PlannerModel planner: editPlannerList) {
+-                    terms.add(planner.getTerm());
+-                    if (planner.getModules() != null){
+-                        for(ModuleModel module: planner.getModules()){
+-                            plannerModules.add(module.toString());
+-                        }
+-                        plannerModules.add("?");
+-                    }else{
+-                        plannerModules.add("NIL");
+-                    }
+-                }
+-                String jsonTerms = gson.toJson(terms);
+-                String jsonMods = gson.toJson( plannerModules );
+-                prefsEditor.putString(PlannerFragment.KEY_DATA_TERMS, jsonTerms);
+-                prefsEditor.putString(PlannerFragment.KEY_DATA_MODS, jsonMods);
+-                prefsEditor.apply();
+-                Intent resultIntent = new Intent();
+-                setResult( Activity.RESULT_OK, resultIntent);
+-                finish();
+-            }
+-        });
+-    }
+-}
++//                        plannerModules.add("?");
++//                    }else{
++//                        plannerModules.add("NIL");
++//                    }
++//                }
++//                String jsonTerms = gson.toJson(terms);
++//                String jsonMods = gson.toJson( plannerModules );
++//                prefsEditor.putString(PlannerFragment.KEY_DATA_TERMS, jsonTerms);
++//                prefsEditor.putString(PlannerFragment.KEY_DATA_MODS, jsonMods);
++//                prefsEditor.apply();
++//                Intent resultIntent = new Intent();
++//                setResult( Activity.RESULT_OK, resultIntent);
++//                finish();
++//            }
++//        });
++//    }
++//}
+Index: app/src/main/java/com/example/modulus/Model/ToDoModel.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.Model;\r\n\r\npublic class ToDoModel {\r\n    private String task;\r\n    private String date;\r\n    private String time;\r\n    private String category;\r\n    private int id, status;\r\n\r\n    public String getDate() {\r\n        return date;\r\n    }\r\n    public void setDate(String date) {\r\n        this.date = date;\r\n    }\r\n    public String getTask() {\r\n        return task;\r\n    }\r\n    public void setTask(String task) {\r\n        this.task = task;\r\n    }\r\n    public int getId() {\r\n        return id;\r\n    }\r\n    public void setId(int id) {this.id = id;}\r\n    public int getStatus() {return status;}\r\n    public void setStatus(int status) {this.status = status;}\r\n    public String getTime() {return time;}\r\n    public void setTime(String time) {this.time = time;}\r\n    public String getCategory() {return category;}\r\n    public void setCategory(String category) {this.category = category;}\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/Model/ToDoModel.java b/app/src/main/java/com/example/modulus/Model/ToDoModel.java
+--- a/app/src/main/java/com/example/modulus/Model/ToDoModel.java	(revision 611051abf635480f37ed2adf664f798e47d8f0b1)
++++ b/app/src/main/java/com/example/modulus/Model/ToDoModel.java	(date 1744705578406)
+@@ -1,5 +1,7 @@
+ package com.example.modulus.Model;
+ 
++import java.util.Comparator;
++
+ public class ToDoModel {
+     private String task;
+     private String date;
+@@ -29,4 +31,38 @@
+     public void setTime(String time) {this.time = time;}
+     public String getCategory() {return category;}
+     public void setCategory(String category) {this.category = category;}
++
++    public static Comparator<ToDoModel> timeCompare = new Comparator<ToDoModel>() {
++        @Override
++        public int compare(ToDoModel model1, ToDoModel model2) {
++            String time1 = model1.getTime();
++            String time2 = model2.getTime();
++
++            return time1.compareTo(time2);
++        }
++
++        @Override
++        public boolean equals(Object obj) {
++            return false;
++        }
++    };
++    public static Comparator<ToDoModel> statusCompare = new Comparator<ToDoModel>() {
++        @Override
++        public int compare(ToDoModel model1, ToDoModel model2) {
++            int status1 = model1.getStatus();
++            int status2 = model2.getStatus();
++            if (status1 > status2){
++                return 1;
++            }else if(status1 < status2){
++                return -1;
++            }else{
++                return 0;
++            }
++        }
++
++        @Override
++        public boolean equals(Object obj) {
++            return false;
++        }
++    };
+ }
+Index: app/src/main/java/com/example/modulus/Model/MergeSort.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.Model;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.Comparator;\r\nimport java.util.List;\r\n\r\npublic class MergeSort {\r\n    public MergeSort(){\r\n    }\r\n    public static Comparator<ModuleModel> idCompare = new Comparator<ModuleModel>() {\r\n        @Override\r\n        public int compare(ModuleModel mod1, ModuleModel mod2) {\r\n            String id1 = mod1.getId();\r\n            String id2 = mod2.getId();\r\n\r\n            return id1.compareTo(id2);\r\n        }\r\n\r\n        @Override\r\n        public boolean equals(Object obj) {\r\n            return false;\r\n        }\r\n    };\r\n    public static Comparator<ModuleModel> nameCompare = new Comparator<ModuleModel>() {\r\n        @Override\r\n        public int compare(ModuleModel mod1, ModuleModel mod2) {\r\n            String name1 = mod1.getName();\r\n            String name2 = mod2.getName();\r\n            name1 = name1.toLowerCase();\r\n            name2 = name2.toLowerCase();\r\n            return name1.compareTo(name2);\r\n        }\r\n\r\n        @Override\r\n        public boolean equals(Object obj) {\r\n            return false;\r\n        }\r\n    };\r\n\r\n    public List<ModuleModel> mergeSortID(List<ModuleModel> a, int n) {\r\n        if (n < 2) {\r\n            return a;\r\n        }\r\n        int mid = n / 2;\r\n        List<ModuleModel> l = new ArrayList<ModuleModel>(mid);\r\n        List<ModuleModel> r = new ArrayList<ModuleModel>(n - mid);\r\n\r\n        for (int i = 0; i < mid; i++) {\r\n            l.add(a.get(i));\r\n        }\r\n        for (int i = mid; i < n; i++) {\r\n            r.add(a.get(i));\r\n        }\r\n        l = mergeSortID(l, mid);\r\n        r = mergeSortID(r, n - mid);\r\n\r\n        return mergeID(a, l, r, mid, n - mid);\r\n    }\r\n    public List<ModuleModel> mergeID(List<ModuleModel> a, List<ModuleModel> l, List<ModuleModel> r, int left, int right) {\r\n\r\n        int i = 0, j = 0, k = 0;\r\n        while (i < left && j < right) {\r\n            if (idCompare.compare(l.get(i), r.get(i)) <= 0) {\r\n                a.set(k++, l.get(i++));\r\n            }\r\n            else {\r\n                a.set(k++, r.get(j++));\r\n            }\r\n        }\r\n        while (i < left) {\r\n            a.set(k++, l.get(i++));\r\n        }\r\n        while (j < right) {\r\n            a.set(k++, r.get(j++));\r\n        }\r\n        return a;\r\n    }\r\n\r\n    public List<ModuleModel> mergeSortName(List<ModuleModel> a, int n) {\r\n        if (n < 2) {\r\n            return a;\r\n        }\r\n        int mid = n / 2;\r\n        List<ModuleModel> l = new ArrayList<ModuleModel>(mid);\r\n        List<ModuleModel> r = new ArrayList<ModuleModel>(n - mid);\r\n\r\n        for (int i = 0; i < mid; i++) {\r\n            l.add(a.get(i));\r\n        }\r\n        for (int i = mid; i < n; i++) {\r\n            r.add(a.get(i));\r\n        }\r\n        l = mergeSortName(l, mid);\r\n        r = mergeSortName(r, n - mid);\r\n\r\n        return mergeName(a, l, r, mid, n - mid);\r\n    }\r\n    public List<ModuleModel> mergeName(List<ModuleModel> a, List<ModuleModel> l, List<ModuleModel> r, int left, int right) {\r\n\r\n        int i = 0, j = 0, k = 0;\r\n        while (i < left && j < right) {\r\n            if (nameCompare.compare(l.get(i), r.get(i)) <= 0) {\r\n                a.set(k++, l.get(i++));\r\n            }\r\n            else {\r\n                a.set(k++, r.get(j++));\r\n            }\r\n        }\r\n        while (i < left) {\r\n            a.set(k++, l.get(i++));\r\n        }\r\n        while (j < right) {\r\n            a.set(k++, r.get(j++));\r\n        }\r\n        return a;\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/Model/MergeSort.java b/app/src/main/java/com/example/modulus/Model/MergeSort.java
+--- a/app/src/main/java/com/example/modulus/Model/MergeSort.java	(revision 611051abf635480f37ed2adf664f798e47d8f0b1)
++++ b/app/src/main/java/com/example/modulus/Model/MergeSort.java	(date 1744705578405)
+@@ -4,85 +4,19 @@
+ import java.util.Comparator;
+ import java.util.List;
+ 
+-public class MergeSort {
+-    public MergeSort(){
++public class MergeSort{
++    private Comparator comparator;
++    public MergeSort(Comparator comparator){
++        this.comparator = comparator;
+     }
+-    public static Comparator<ModuleModel> idCompare = new Comparator<ModuleModel>() {
+-        @Override
+-        public int compare(ModuleModel mod1, ModuleModel mod2) {
+-            String id1 = mod1.getId();
+-            String id2 = mod2.getId();
+-
+-            return id1.compareTo(id2);
+-        }
+-
+-        @Override
+-        public boolean equals(Object obj) {
+-            return false;
+-        }
+-    };
+-    public static Comparator<ModuleModel> nameCompare = new Comparator<ModuleModel>() {
+-        @Override
+-        public int compare(ModuleModel mod1, ModuleModel mod2) {
+-            String name1 = mod1.getName();
+-            String name2 = mod2.getName();
+-            name1 = name1.toLowerCase();
+-            name2 = name2.toLowerCase();
+-            return name1.compareTo(name2);
+-        }
+ 
+-        @Override
+-        public boolean equals(Object obj) {
+-            return false;
+-        }
+-    };
+-
+-    public List<ModuleModel> mergeSortID(List<ModuleModel> a, int n) {
+-        if (n < 2) {
+-            return a;
+-        }
+-        int mid = n / 2;
+-        List<ModuleModel> l = new ArrayList<ModuleModel>(mid);
+-        List<ModuleModel> r = new ArrayList<ModuleModel>(n - mid);
+-
+-        for (int i = 0; i < mid; i++) {
+-            l.add(a.get(i));
+-        }
+-        for (int i = mid; i < n; i++) {
+-            r.add(a.get(i));
+-        }
+-        l = mergeSortID(l, mid);
+-        r = mergeSortID(r, n - mid);
+-
+-        return mergeID(a, l, r, mid, n - mid);
+-    }
+-    public List<ModuleModel> mergeID(List<ModuleModel> a, List<ModuleModel> l, List<ModuleModel> r, int left, int right) {
+-
+-        int i = 0, j = 0, k = 0;
+-        while (i < left && j < right) {
+-            if (idCompare.compare(l.get(i), r.get(i)) <= 0) {
+-                a.set(k++, l.get(i++));
+-            }
+-            else {
+-                a.set(k++, r.get(j++));
+-            }
+-        }
+-        while (i < left) {
+-            a.set(k++, l.get(i++));
+-        }
+-        while (j < right) {
+-            a.set(k++, r.get(j++));
+-        }
+-        return a;
+-    }
+-
+-    public List<ModuleModel> mergeSortName(List<ModuleModel> a, int n) {
++    public List mergeSort(List a, int n) {
+         if (n < 2) {
+             return a;
+         }
+         int mid = n / 2;
+-        List<ModuleModel> l = new ArrayList<ModuleModel>(mid);
+-        List<ModuleModel> r = new ArrayList<ModuleModel>(n - mid);
++        List l = new ArrayList<>(mid);
++        List r = new ArrayList<>(n - mid);
+ 
+         for (int i = 0; i < mid; i++) {
+             l.add(a.get(i));
+@@ -90,16 +24,16 @@
+         for (int i = mid; i < n; i++) {
+             r.add(a.get(i));
+         }
+-        l = mergeSortName(l, mid);
+-        r = mergeSortName(r, n - mid);
++        l = mergeSort(l, mid);
++        r = mergeSort(r, n - mid);
+ 
+-        return mergeName(a, l, r, mid, n - mid);
++        return merge(a, l, r, mid, n - mid);
+     }
+-    public List<ModuleModel> mergeName(List<ModuleModel> a, List<ModuleModel> l, List<ModuleModel> r, int left, int right) {
++    public List merge(List a, List l, List r, int left, int right) {
+ 
+         int i = 0, j = 0, k = 0;
+         while (i < left && j < right) {
+-            if (nameCompare.compare(l.get(i), r.get(i)) <= 0) {
++            if (comparator.compare(l.get(i), r.get(i)) <= 0) {
+                 a.set(k++, l.get(i++));
+             }
+             else {
+Index: app/src/main/java/com/example/modulus/FragmentHome/HomeFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.FragmentHome;\r\n\r\nimport android.annotation.SuppressLint;\r\nimport android.content.Context;\r\nimport android.os.Bundle;\r\n\r\nimport androidx.core.content.ContextCompat;\r\nimport androidx.fragment.app.Fragment;\r\n\r\nimport android.util.Log;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\n\r\nimport android.content.DialogInterface;\r\nimport android.widget.Button;\r\nimport android.widget.TextView;\r\n\r\nimport androidx.core.graphics.Insets;\r\nimport androidx.core.view.ViewCompat;\r\nimport androidx.core.view.WindowInsetsCompat;\r\nimport androidx.recyclerview.widget.ItemTouchHelper;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.example.modulus.Adapter.DateItemAdapter;\r\nimport com.example.modulus.Adapter.ToDoAdapter;\r\nimport com.example.modulus.Model.ToDoModel;\r\nimport com.example.modulus.R;\r\nimport com.example.modulus.Utils.OnDialogCloseListener;\r\nimport com.google.android.material.floatingactionbutton.FloatingActionButton;\r\n\r\nimport org.json.JSONArray;\r\nimport org.json.JSONException;\r\nimport org.json.JSONObject;\r\n\r\nimport java.io.IOException;\r\nimport java.io.InputStream;\r\nimport java.nio.charset.StandardCharsets;\r\nimport java.time.DayOfWeek;\r\nimport java.time.LocalDate;\r\nimport java.time.format.DateTimeFormatter;\r\nimport java.time.format.TextStyle;\r\nimport java.util.ArrayList;\r\nimport java.util.Calendar;\r\nimport java.util.Collections;\r\nimport java.util.List;\r\nimport java.util.Locale;\r\n\r\npublic class HomeFragment extends Fragment implements OnDialogCloseListener {\r\n    RecyclerView taskRecyclerView, dateItemRecycler;\r\n    FloatingActionButton addButton;\r\n    DataBaseHelperHome myDB;\r\n    Button allButton, toDoButton, completedButton;\r\n    TextView homeTitle;\r\n\r\n\r\n    private List<ToDoModel> mList;\r\n    private ToDoAdapter toDoAdapter;\r\n    final Calendar calendar = Calendar.getInstance();\r\n    final int year = calendar.get(Calendar.YEAR);\r\n    final int month = calendar.get(Calendar.MONTH) + 1;\r\n    final int day = calendar.get(Calendar.DAY_OF_MONTH);\r\n    String currentDate = day + \"/\" + month + \"/\" + year;\r\n\r\n    public String clickedDate = currentDate;\r\n\r\n    @SuppressLint(\"MissingInflatedId\")\r\n    @Override\r\n    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        //insertTasksFromJson(this.getContext());\r\n        View view = inflater.inflate(R.layout.fragment_home, container, false);\r\n        ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.homeMain), (v, insets) -> {\r\n            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());\r\n            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);\r\n            return insets;\r\n        });\r\n\r\n        // Set Title to current date\r\n        homeTitle = view.findViewById(R.id.homeTitle);\r\n        // Convert your currentDate string to a LocalDate\r\n        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern(\"d/M/yyyy\");\r\n        LocalDate todayDate = LocalDate.parse(currentDate, inputFormatter);\r\n\r\n        // Extract day of week, day of month, and month name\r\n        DayOfWeek dayOfWeek = todayDate.getDayOfWeek();\r\n        int dayOfMonth = todayDate.getDayOfMonth();\r\n        String monthName = todayDate.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH); // \"April\"\r\n\r\n        // Format the display text\r\n        String displayText = String.format(\"Welcome! It's %s %d %s\", dayOfWeek.getDisplayName(TextStyle.FULL, Locale.ENGLISH), dayOfMonth, monthName);\r\n\r\n        // Set the formatted text to your TextView\r\n        homeTitle.setText(displayText);\r\n\r\n\r\n        //Date Items Recycler\r\n        dateItemRecycler = view.findViewById(R.id.dateItemRecycler);\r\n        //LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false);\r\n        ScaleCenterItemManager layoutManager = new ScaleCenterItemManager(this.getContext(),LinearLayoutManager.HORIZONTAL,false);\r\n        dateItemRecycler.setLayoutManager(layoutManager);\r\n        generateData();\r\n\r\n\r\n        //Task Recycler\r\n        taskRecyclerView = view.findViewById(R.id.recyclerView);\r\n        myDB = new DataBaseHelperHome(this.getContext());\r\n        toDoAdapter = new ToDoAdapter(myDB, this);\r\n        taskRecyclerView.setHasFixedSize(true);\r\n        taskRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));\r\n        taskRecyclerView.setAdapter(HomeFragment.this.toDoAdapter);\r\n        mList = myDB.getDateTask(currentDate); // Adjust format if needed\r\n        Collections.reverse(mList);\r\n        HomeFragment.this.toDoAdapter.setTasks(mList);\r\n        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new RecyclerViewTouchHelper(toDoAdapter));\r\n        itemTouchHelper.attachToRecyclerView(taskRecyclerView);\r\n\r\n\r\n\r\n        //Add Button\r\n        addButton = view.findViewById(R.id.addButton);\r\n        addButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                AddNewTask.newInstance().show(getChildFragmentManager(), AddNewTask.TAG);\r\n                Log.d(\"addButton\",\"AddNewTask instance\");\r\n            }\r\n        });\r\n\r\n        //Buttons\r\n        //String clickedDate = currentDate;\r\n        allButton = view.findViewById(R.id.AllButton);\r\n        allButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                mList = myDB.getDateTask(clickedDate); // Adjust format if needed\r\n                Collections.reverse(mList);\r\n                HomeFragment.this.toDoAdapter.setTasks(mList);\r\n                highlightSelectedButton(allButton, toDoButton, completedButton);\r\n            }\r\n        });\r\n\r\n        toDoButton = view.findViewById(R.id.ToDoButton);\r\n        toDoButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                mList = myDB.getStatustask(0,clickedDate); // Adjust format if needed\r\n                Collections.reverse(mList);\r\n                HomeFragment.this.toDoAdapter.setTasks(mList);\r\n                highlightSelectedButton(toDoButton, allButton, completedButton);\r\n            }\r\n        });\r\n\r\n        completedButton = view.findViewById(R.id.CompletedButton);\r\n        completedButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                mList = myDB.getStatustask(1, clickedDate); // Adjust format if needed\r\n                Collections.reverse(mList);\r\n                HomeFragment.this.toDoAdapter.setTasks(mList);\r\n                highlightSelectedButton(completedButton, allButton, toDoButton);\r\n            }\r\n        });\r\n\r\n        highlightSelectedButton(allButton, toDoButton, completedButton);\r\n\r\n        // Inflate the layout for this fragment\r\n        return view;\r\n    }\r\n\r\n    private void generateData() {\r\n        List<LocalDate> dateList = new ArrayList<>();\r\n        LocalDate today = LocalDate.now();\r\n        int currentYear = today.getYear();\r\n        int currentMonth = today.getMonthValue();\r\n        LocalDate firstDayOfMonth = LocalDate.of(currentYear, currentMonth, 1);\r\n        int daysInMonth = firstDayOfMonth.lengthOfMonth();\r\n\r\n        // Add all dates of the current month\r\n        for (int i = 1; i <= daysInMonth; i++) {\r\n            dateList.add(LocalDate.of(currentYear, currentMonth, i));\r\n        }\r\n\r\n        DateItemAdapter adapter = new DateItemAdapter(dateList, new DateItemAdapter.OnItemClickListener() {\r\n            @Override\r\n            public void onItemClick(LocalDate date) {\r\n                // Handle the click event (same logic as testButton)\r\n                //System.out.println(\"Selected date: \" + date.toString());\r\n                String getDate = date.format(DateTimeFormatter.ofPattern(\"d/M/yyyy\"));\r\n                clickedDate = getDate;\r\n                taskRecyclerView.setAdapter(HomeFragment.this.toDoAdapter);\r\n                mList = myDB.getDateTask(getDate); // Adjust format if needed\r\n                Collections.reverse(mList);\r\n                HomeFragment.this.toDoAdapter.setTasks(mList);\r\n            }\r\n        });\r\n\r\n        dateItemRecycler.setAdapter(adapter);\r\n\r\n        // Scroll to current date when opening\r\n        int todayPosition = today.getDayOfMonth() - 1;\r\n        dateItemRecycler.scrollToPosition(todayPosition-2);\r\n    }\r\n\r\n    @Override\r\n    public void onDialogClose(DialogInterface dialogInterface) {\r\n        Log.d(\"Home\", \"onDialogClose\");\r\n        mList = myDB.getAllTasks();\r\n        Collections.reverse(mList);\r\n        toDoAdapter.setTasks(mList);\r\n        toDoAdapter.notifyDataSetChanged();\r\n\r\n    }\r\n\r\n    private void highlightSelectedButton(Button selected, Button... others) {\r\n        selected.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.dark_purple));\r\n        selected.setTextColor(ContextCompat.getColor(getContext(), R.color.light_purple));\r\n\r\n        for (Button btn : others) {\r\n            btn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.light_purple));\r\n            btn.setTextColor(ContextCompat.getColor(getContext(), R.color.dark_purple));\r\n        }\r\n    }\r\n\r\n\r\n    private void insertTasksFromJson(Context context) {\r\n        DataBaseHelperHome dbHelper = new DataBaseHelperHome(context);\r\n        try {\r\n            // Load JSON from assets\r\n            InputStream is = context.getAssets().open(\"school_tasks.json\");\r\n            int size = is.available();\r\n            byte[] buffer = new byte[size];\r\n            is.read(buffer);\r\n            is.close();\r\n\r\n            // Convert to JSON string\r\n            String json = new String(buffer, StandardCharsets.UTF_8);\r\n\r\n            // Parse JSON array\r\n            JSONArray jsonArray = new JSONArray(json);\r\n            for (int i = 0; i < jsonArray.length(); i++) {\r\n                JSONObject taskObject = jsonArray.getJSONObject(i);\r\n\r\n                ToDoModel model = new ToDoModel();\r\n                model.setTask(taskObject.getString(\"task\"));\r\n                model.setStatus(taskObject.getInt(\"status\"));\r\n                model.setDate(taskObject.getString(\"date\"));\r\n                model.setTime(taskObject.getString(\"time\"));\r\n                model.setCategory(taskObject.getString(\"category\"));\r\n\r\n                dbHelper.insertTask(model);\r\n            }\r\n\r\n            Log.d(\"DB_INSERT\", \"All tasks inserted successfully\");\r\n\r\n        } catch (IOException | JSONException e) {\r\n            e.printStackTrace();\r\n            Log.e(\"DB_INSERT\", \"Error inserting tasks: \" + e.getMessage());\r\n        }\r\n    }\r\n\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/FragmentHome/HomeFragment.java b/app/src/main/java/com/example/modulus/FragmentHome/HomeFragment.java
+--- a/app/src/main/java/com/example/modulus/FragmentHome/HomeFragment.java	(revision 611051abf635480f37ed2adf664f798e47d8f0b1)
++++ b/app/src/main/java/com/example/modulus/FragmentHome/HomeFragment.java	(date 1744705578401)
+@@ -25,6 +25,7 @@
+ 
+ import com.example.modulus.Adapter.DateItemAdapter;
+ import com.example.modulus.Adapter.ToDoAdapter;
++import com.example.modulus.Model.MergeSort;
+ import com.example.modulus.Model.ToDoModel;
+ import com.example.modulus.R;
+ import com.example.modulus.Utils.OnDialogCloseListener;
+@@ -54,7 +55,7 @@
+     Button allButton, toDoButton, completedButton;
+     TextView homeTitle;
+ 
+-
++    MergeSort sortTime = new MergeSort(ToDoModel.timeCompare);
+     private List<ToDoModel> mList;
+     private ToDoAdapter toDoAdapter;
+     final Calendar calendar = Calendar.getInstance();
+@@ -110,8 +111,8 @@
+         taskRecyclerView.setHasFixedSize(true);
+         taskRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+         taskRecyclerView.setAdapter(HomeFragment.this.toDoAdapter);
+-        mList = myDB.getDateTask(currentDate); // Adjust format if needed
+-        Collections.reverse(mList);
++        mList = sort(myDB.getDateTask(currentDate)); // Adjust format if needed
++//        Collections.reverse(mList);
+         HomeFragment.this.toDoAdapter.setTasks(mList);
+         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new RecyclerViewTouchHelper(toDoAdapter));
+         itemTouchHelper.attachToRecyclerView(taskRecyclerView);
+@@ -134,8 +135,8 @@
+         allButton.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+-                mList = myDB.getDateTask(clickedDate); // Adjust format if needed
+-                Collections.reverse(mList);
++                mList = sort(myDB.getDateTask(clickedDate)); // Adjust format if needed
++//                Collections.reverse(mList);
+                 HomeFragment.this.toDoAdapter.setTasks(mList);
+                 highlightSelectedButton(allButton, toDoButton, completedButton);
+             }
+@@ -145,8 +146,8 @@
+         toDoButton.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+-                mList = myDB.getStatustask(0,clickedDate); // Adjust format if needed
+-                Collections.reverse(mList);
++                mList = sort(myDB.getStatustask(0,clickedDate)); // Adjust format if needed
++//                Collections.reverse(mList);
+                 HomeFragment.this.toDoAdapter.setTasks(mList);
+                 highlightSelectedButton(toDoButton, allButton, completedButton);
+             }
+@@ -156,8 +157,8 @@
+         completedButton.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+-                mList = myDB.getStatustask(1, clickedDate); // Adjust format if needed
+-                Collections.reverse(mList);
++                mList = sort(myDB.getStatustask(1, clickedDate)); // Adjust format if needed
++//                Collections.reverse(mList);
+                 HomeFragment.this.toDoAdapter.setTasks(mList);
+                 highlightSelectedButton(completedButton, allButton, toDoButton);
+             }
+@@ -190,8 +191,8 @@
+                 String getDate = date.format(DateTimeFormatter.ofPattern("d/M/yyyy"));
+                 clickedDate = getDate;
+                 taskRecyclerView.setAdapter(HomeFragment.this.toDoAdapter);
+-                mList = myDB.getDateTask(getDate); // Adjust format if needed
+-                Collections.reverse(mList);
++                mList = sort(myDB.getDateTask(getDate)); // Adjust format if needed
++//                Collections.reverse(mList);
+                 HomeFragment.this.toDoAdapter.setTasks(mList);
+             }
+         });
+@@ -206,8 +207,8 @@
+     @Override
+     public void onDialogClose(DialogInterface dialogInterface) {
+         Log.d("Home", "onDialogClose");
+-        mList = myDB.getAllTasks();
+-        Collections.reverse(mList);
++        mList = sort(myDB.getAllTasks());
++//        Collections.reverse(mList);
+         toDoAdapter.setTasks(mList);
+         toDoAdapter.notifyDataSetChanged();
+ 
+@@ -260,5 +261,20 @@
+         }
+     }
+ 
++    private List<ToDoModel> sort(List<ToDoModel> list){
++        List<ToDoModel> status1 = new ArrayList<>();
++        List<ToDoModel> status2 = new ArrayList<>();
++        for(ToDoModel task: list){
++            if(task.getStatus() == 1){
++                status1.add(task);
++            }else{
++                status2.add(task);
++            }
++        }
++        sortTime.mergeSort(status1, status1.size());
++        sortTime.mergeSort(status2, status2.size());
++        status1.addAll(status2);
++        return status1;
++    }
+ 
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/modulus/Model/ModuleVertex.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.Model;\r\n\r\nimport java.util.List;\r\n\r\npublic class ModuleVertex {\r\n    String type;\r\n    List<String> hard = null;\r\n    List<String> soft = null;\r\n    int soft_count = 0;\r\n    public ModuleVertex(ModuleModel module){\r\n        if(module.getTags().contains(\"HASS\")){\r\n            this.type = \"HASS\";\r\n        }else{\r\n            this.type = \"Pillar\";\r\n        }\r\n        List<String> preReq = module.getPrerequisites();\r\n        if(!preReq.isEmpty()){\r\n            if(preReq.contains(\"OR\")){\r\n                this.soft = preReq;\r\n            }else{\r\n                this.hard = preReq;\r\n            }\r\n        }\r\n    }\r\n\r\n    public String getType() {\r\n        return type;\r\n    }\r\n    public void setType(String type) {\r\n        this.type = type;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/Model/ModuleVertex.java b/app/src/main/java/com/example/modulus/Model/ModuleVertex.java
+--- a/app/src/main/java/com/example/modulus/Model/ModuleVertex.java	(revision 611051abf635480f37ed2adf664f798e47d8f0b1)
++++ b/app/src/main/java/com/example/modulus/Model/ModuleVertex.java	(date 1744705578406)
+@@ -15,10 +15,17 @@
+         }
+         List<String> preReq = module.getPrerequisites();
+         if(!preReq.isEmpty()){
+-            if(preReq.contains("OR")){
++            if(module.getCost().equals("Hard")){
++                this.hard = preReq;
++            }else{
+                 this.soft = preReq;
+-            }else{
+-                this.hard = preReq;
++                for(String preReqMod: preReq){
++                    if(preReqMod.contains("/")){
++                        this.soft_count = 1;
++                    }else{
++                        this.soft_count = 0;
++                    }
++                }
+             }
+         }
+     }
+Index: app/src/main/java/com/example/modulus/Model/Kahn.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.Model;\r\n\r\npublic class Kahn {\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/Model/Kahn.java b/app/src/main/java/com/example/modulus/Model/Kahn.java
+--- a/app/src/main/java/com/example/modulus/Model/Kahn.java	(revision 611051abf635480f37ed2adf664f798e47d8f0b1)
++++ b/app/src/main/java/com/example/modulus/Model/Kahn.java	(date 1744705578404)
+@@ -1,4 +1,5 @@
+ package com.example.modulus.Model;
+ 
+ public class Kahn {
++
+ }

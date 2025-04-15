@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -87,12 +88,19 @@ public class ModuleDetailsActivity extends AppCompatActivity{
         int color = ContextCompat.getColor(this, selectedModule.getColor());
         pillar.setTextColor(color);
 
+
+        TextView tags = findViewById(R.id.tags);
+        tags.setText(String.join(", ", selectedModule.getTags()));
+
+
         RelativeLayout back = findViewById(R.id.backgroup);
         back.setBackgroundColor(color);
 
         TextView moreInfo = findViewById(R.id.moreInfo);
-
         moreInfo.setCompoundDrawableTintList(ColorStateList.valueOf(color));
+
+        ImageView imageMod = findViewById(R.id.imageMod);
+        imageMod.setImageDrawable(selectedModule.getImage());
 
 
 

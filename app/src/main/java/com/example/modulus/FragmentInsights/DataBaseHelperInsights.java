@@ -5,10 +5,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteException;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 
+import androidx.core.content.ContextCompat;
+
 import com.example.modulus.Model.ModuleModel;
-import com.example.modulus.Model.PlannerModel;
 import com.example.modulus.R;
 
 import java.io.File;
@@ -125,9 +128,12 @@ public class DataBaseHelperInsights extends SQLiteOpenHelper {
             module.setTerm(Arrays.asList(c.getString(2).split(",")));
             module.setProf(Arrays.asList(c.getString(5).split(",")));
             module.setPrerequisites(Arrays.asList(c.getString(6).split(",")));
+            module.setCost(c.getString(7));
             module.setDescription(c.getString(8));
             module.setColor(getColourR(c.getString(0)));
+            module.setImage(getImage(mContext,c.getString(0)));
             result.add(module);
+
         }
         c.close();
         db.close();
@@ -155,4 +161,38 @@ public class DataBaseHelperInsights extends SQLiteOpenHelper {
                 return R.color.OTHERS;
         }
     }
+
+
+
+    private Drawable getImage(Context context, String Pillar){
+        int resId;
+        switch (Pillar){
+            case "ASD":
+                resId = R.drawable.asd;
+                break;
+            case "EPD":
+                resId = R.drawable.epd;
+                break;
+            case "ESD":
+                resId = R.drawable.esd;
+                break;
+            case "DAI":
+                resId = R.drawable.dai;
+                break;
+            case "ISTD":
+                resId = R.drawable.istd;
+                break;
+            case "HASS":
+                resId = R.drawable.hass;
+                break;
+            case "SMT":
+                resId = R.drawable.smt;
+                break;
+            default:
+                resId = R.drawable.others;
+                break;
+        }
+        return ContextCompat.getDrawable(context, resId);
+    }
+
 }
