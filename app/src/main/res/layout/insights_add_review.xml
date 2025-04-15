@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingHorizontal="30dp"
-    android:paddingTop="10dp">
+    android:paddingTop="10dp"
+    android:background="@color/white">
 
     <TextView
         android:id="@+id/reviewTitle"
@@ -51,14 +52,17 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
-
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/submitReviewBtn"
-        android:text="Submit Review"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColorHighlight="@color/dark_purple"
+        android:text="Submit Review"
+        android:textColor="@color/white"
+        app:cornerRadius="16dp"
+        app:backgroundTint="@color/dark_purple"
         android:layout_below="@id/commentInputLayout"
-        android:layout_marginBottom="30dp"/>
+        android:layout_marginBottom="30dp" />
+
+
 
 </RelativeLayout>

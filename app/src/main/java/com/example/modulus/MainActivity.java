@@ -71,21 +71,21 @@ public class MainActivity extends AppCompatActivity {
                     // Show a Toast message for the Account item
                     Toast.makeText(MainActivity.this, "Account Details", Toast.LENGTH_SHORT).show();
                 }
-                if (item.getItemId() == R.id.nav_settings) {
-                    // Show a Toast message for the Settings item
-                    Toast.makeText(MainActivity.this, "Settings Opened", Toast.LENGTH_SHORT).show();
-                }
-                if (item.getItemId() == R.id.nav_about) {
-                    // Show a Toast message for the Settings item
-                    Toast.makeText(MainActivity.this, "About Us", Toast.LENGTH_SHORT).show();
-                }
-                if (item.getItemId() == R.id.nav_logout) {
-                    // Show a Toast message for the Logout item
-                    Toast.makeText(MainActivity.this, "You are Logged Out", Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "Logging out");
-                    Intent intent = new Intent(MainActivity.this, ActivityLogIn.class);
-                    startActivity(intent);
-                }
+//                if (item.getItemId() == R.id.nav_settings) {
+//                    // Show a Toast message for the Settings item
+//                    Toast.makeText(MainActivity.this, "Settings Opened", Toast.LENGTH_SHORT).show();
+//                }
+//                if (item.getItemId() == R.id.nav_about) {
+//                    // Show a Toast message for the Settings item
+//                    Toast.makeText(MainActivity.this, "About Us", Toast.LENGTH_SHORT).show();
+//                }
+//                if (item.getItemId() == R.id.nav_logout) {
+//                    // Show a Toast message for the Logout item
+//                    Toast.makeText(MainActivity.this, "You are Logged Out", Toast.LENGTH_SHORT).show();
+//                    Log.d(TAG, "Logging out");
+//                    Intent intent = new Intent(MainActivity.this, ActivityLogIn.class);
+//                    startActivity(intent);
+//                }
 
                 // Close the drawer after selection
                 //drawerLayout.closeDrawers();
