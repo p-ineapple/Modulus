@@ -10,7 +10,7 @@ public class Event implements IEvent {
     private Calendar startTime,endTime,eventDate;
     private String name,location;
 
-    int color;
+    private int color;
 
     public Calendar getEventDate() {
         return eventDate;

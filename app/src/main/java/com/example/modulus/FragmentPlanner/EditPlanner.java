@@ -69,16 +69,15 @@ public class EditPlanner extends AppCompatActivity {
                                 }
                             }
                         }
-                        for(PlannerModel planner: editPlannerList){
-                            String t = planner.getTerm();
-                            if(t.equals(term)){
-                                if(t.contains("7") || t.contains("8")){
-                                    newPlannerModules.add(new ModuleModel("", "Capstone"));
-                                }
-                                planner.setModules(newPlannerModules);
-                                break;
-                            }
-                        }
+//                        for(PlannerModel planner: editPlannerList){
+//                            String t = planner.getTerm();
+//                            if(t.equals(term)){
+//                                if(t.contains("7") || t.contains("8")){
+//                                    newPlannerModules.add(new ModuleModel("", "Capstone"));
+//                                }
+//                                planner.setModules(newPlannerModules);
+//                            }
+//                        }
                         for(PlannerModel planner: editPlannerList) {
                             System.out.println(planner.getModules().toString());
                         }

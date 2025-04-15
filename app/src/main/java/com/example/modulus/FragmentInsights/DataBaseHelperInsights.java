@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.example.modulus.Model.ModuleModel;
 import com.example.modulus.Model.PlannerModel;
+import com.example.modulus.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -125,6 +126,7 @@ public class DataBaseHelperInsights extends SQLiteOpenHelper {
             module.setProf(Arrays.asList(c.getString(5).split(",")));
             module.setPrerequisites(Arrays.asList(c.getString(6).split(",")));
             module.setDescription(c.getString(8));
+            module.setColor(getColourR(c.getString(0)));
             result.add(module);
         }
         c.close();
@@ -133,38 +135,24 @@ public class DataBaseHelperInsights extends SQLiteOpenHelper {
         return result;
     }
 
-    public ArrayList<PlannerModel> getPlanner(String pillar) {
-        try {
-            createDatabase();
-        } catch (IOException e) {
-            e.printStackTrace();
+    private int getColourR(String Pillar){
+        switch (Pillar){
+            case "ASD":
+                return R.color.ASD;
+            case "EPD":
+                return R.color.EPD;
+            case "ESD":
+                return R.color.ESD;
+            case "DAI":
+                return R.color.DAI;
+            case "ISTD":
+                return R.color.ISTD;
+            case "HASS":
+                return R.color.HASS;
+            case "SMT":
+                return R.color.SMT;
+            default:
+                return R.color.OTHERS;
         }
-        ArrayList<ModuleModel> moduleList = this.getAllModules();
-        ArrayList<PlannerModel> result = new ArrayList<PlannerModel>();
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor c = db.query(plannerTable, null, null, null, null, null, null);
-
-        for (int i = 1; i <= 8; i++) {
-            PlannerModel planner = new PlannerModel("Term " + i);
-            result.add(planner);
-        }
-        while (c.moveToNext()) {
-            int index = c.getInt(1);
-            int colIndex = c.getColumnIndex(pillar);
-            String id = c.getString(colIndex);
-            if (id != null) {
-                ModuleModel module = moduleList.stream().filter(m -> id.equals(m.getId())).findFirst().orElse(null);
-                PlannerModel cPlanner = result.get(index - 1);
-                ArrayList<ModuleModel> newMods = (ArrayList<ModuleModel>) cPlanner.getModules();
-                newMods.add(module);
-                cPlanner.setModules(newMods);
-                result.set(index - 1, cPlanner);
-            }
-        }
-        c.close();
-        db.close();
-
-        return result;
     }
 }

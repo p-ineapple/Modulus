@@ -109,10 +109,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginHorizontal="10dp">
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="8dp">
 
         <Button
-            android:id="@+id/pillar"
+            android:id="@+id/pillarButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Pillar"
@@ -121,7 +122,7 @@
             android:layout_marginHorizontal="4dp"/>
 
         <Button
-            android:id="@+id/track"
+            android:id="@+id/trackButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Track"
@@ -130,7 +131,7 @@
             android:layout_marginHorizontal="4dp"/>
 
         <Button
-            android:id="@+id/minor"
+            android:id="@+id/minorButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Minor"
@@ -139,7 +140,7 @@
             android:layout_marginHorizontal="4dp"/>
 
         <Button
-            android:id="@+id/planTerm"
+            android:id="@+id/planTermButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Plan"
