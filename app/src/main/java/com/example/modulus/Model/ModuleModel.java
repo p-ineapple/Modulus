@@ -153,4 +153,8 @@ public class ModuleModel {
     public void setImage(Drawable image) {
         this.image = image;
     }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
 }
