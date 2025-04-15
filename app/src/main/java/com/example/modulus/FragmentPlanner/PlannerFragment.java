@@ -210,11 +210,13 @@ public class PlannerFragment extends Fragment {
                         public void onClick(DialogInterface dialog, int which) {
                             minorText.setText(availableMinors[which]);
                             myMinor = availableMinors[which];
-                            minorModel = tracksDB.getTrackModel(availableMinors[which], pillarPref);
-                            SharedPreferences.Editor prefsEditor = mPreferences.edit();
-                            prefsEditor.putString(PlannerFragment.KEY_DATA_MINOR, availableMinors[which]);
-                            prefsEditor.apply();
-                            dialog.dismiss();
+                            if(!myMinor.equals("No Minor")){
+                                minorModel = tracksDB.getTrackModel(availableMinors[which], pillarPref);
+                                SharedPreferences.Editor prefsEditor = mPreferences.edit();
+                                prefsEditor.putString(PlannerFragment.KEY_DATA_MINOR, availableMinors[which]);
+                                prefsEditor.apply();
+                                dialog.dismiss();
+                            }
                         }
                     });
                     mBuilder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {

@@ -125,6 +125,7 @@ public class DataBaseHelperInsights extends SQLiteOpenHelper {
             module.setTerm(Arrays.asList(c.getString(2).split(",")));
             module.setProf(Arrays.asList(c.getString(5).split(",")));
             module.setPrerequisites(Arrays.asList(c.getString(6).split(",")));
+            module.setCost(c.getString(7));
             module.setDescription(c.getString(8));
             module.setColor(getColourR(c.getString(0)));
             result.add(module);
