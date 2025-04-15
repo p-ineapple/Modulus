@@ -1,5 +1,6 @@
 package com.example.modulus.Adapter;
 
+import android.content.res.ColorStateList;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,10 +21,14 @@ import com.example.modulus.R;
 import java.util.List;
 
 public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.plannerViewHolder> {
+    private final int colour;
     List<PlannerModel> plannerList;
     List<ModuleModel> moduleList;
-    public PlannerAdapter(List<PlannerModel> plannerList) {
+
+
+    public PlannerAdapter(List<PlannerModel> plannerList,int colour) {
         this.plannerList = plannerList;
+        this.colour = colour;
     }
 
     @NonNull
@@ -37,8 +43,12 @@ public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.plannerV
         PlannerModel planner = plannerList.get(position);
         moduleList = planner.getModules();
         holder.term.setText(planner.getTerm());
+        int holdercolor = ContextCompat.getColor(holder.itemView.getContext(), colour);
+        holder.term.setTextColor(holdercolor);
+        holder.cardPlanner.setStrokeColor(holdercolor);
+        holder.arrow.setImageTintList(ColorStateList.valueOf(holdercolor));
 
-        NestedPlannerAdapter adapter = new NestedPlannerAdapter(moduleList);
+        NestedPlannerAdapter adapter = new NestedPlannerAdapter(moduleList,holdercolor);
         holder.nestedRecyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
         holder.nestedRecyclerView.setAdapter(adapter);
         holder.layout.setOnClickListener(new View.OnClickListener() {
@@ -56,6 +66,7 @@ public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.plannerV
                 }
             }
         });
+
     }
 
     @Override
@@ -70,6 +81,11 @@ public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.plannerV
         RecyclerView nestedRecyclerView;
         LinearLayout expandableLayout;
 
+        com.google.android.material.card.MaterialCardView cardPlanner;
+
+        androidx.cardview.widget.CardView modcard;
+
+
         public plannerViewHolder(View itemView) {
             super(itemView);
             term = itemView.findViewById(R.id.term);
@@ -77,6 +93,8 @@ public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.plannerV
             layout = itemView.findViewById(R.id.plannerTerm);
             nestedRecyclerView = itemView.findViewById(R.id.plannerNestedRecyclerView);
             expandableLayout = itemView.findViewById(R.id.expandableLayout);
+            cardPlanner = itemView.findViewById(R.id.termcard);
+            modcard = itemView.findViewById(R.id.modcard);
         }
     }
 }

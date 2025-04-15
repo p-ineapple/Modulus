@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResult;
@@ -82,8 +83,8 @@ public class PlannerFragment extends Fragment {
             myDB = new DataBaseHelperPlanner(getContext());
             InsightsFragment.moduleList = myDB.getAllModules();
         }
-
-        adapter = new PlannerAdapter(mPlannerList);
+        int color = getColourR(myPillar);
+        adapter = new PlannerAdapter(mPlannerList,color);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setAdapter(adapter);
 
@@ -121,7 +122,7 @@ public class PlannerFragment extends Fragment {
             minorText.setText(minorPref);
             myMinor = minorPref;
         }
-        com.google.android.material.card.MaterialCardView plannercard = view.findViewById(R.id.plannercard);
+
 
         String[] pillars = new String[]{"ASD", "CSD", "DAI", "EPD", "ESD"};
         pillarButton.setOnClickListener(new View.OnClickListener() {
@@ -132,16 +133,9 @@ public class PlannerFragment extends Fragment {
                 mBuilder.setSingleChoiceItems(pillars, -1, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        pillarText.setText(pillars[which]);
                         myPillar = pillars[which];
+                        pillarText.setText(pillars[which]);
 
-                        int colour = getColourR(myPillar);
-                        pillarText.setTextColor(ContextCompat.getColor(getContext(), colour));
-                        plannercard.setStrokeColor(ContextCompat.getColor(getContext(), colour));
-                        basePlannerList = myDB.getPlanner(pillars[which]);
-                        mPlannerList = myDB.getPlanner(pillars[which]);
-
-                        recyclerView.setAdapter(adapter);
                         SharedPreferences.Editor prefsEditor = mPreferences.edit();
                         prefsEditor.putString(PlannerFragment.KEY_DATA_PILLAR, pillars[which]);
                         trackText.setText("No Specialisation");
@@ -149,6 +143,18 @@ public class PlannerFragment extends Fragment {
                         minorText.setText("No Minor");
                         prefsEditor.putString(PlannerFragment.KEY_DATA_MINOR, "No Minor");
                         prefsEditor.apply();
+
+
+                        updatePillarColor(view, pillars[which]);
+
+
+                        basePlannerList = myDB.getPlanner(pillars[which]);
+                        mPlannerList = myDB.getPlanner(pillars[which]);
+
+                        int newcolor = getColourR(myPillar);
+                        adapter = new PlannerAdapter(mPlannerList,newcolor);
+                        recyclerView.setAdapter(adapter);
+
                         dialog.dismiss();
                     }
                 });
@@ -397,8 +403,13 @@ public class PlannerFragment extends Fragment {
             }
             Log.d(TAG, "Updated");
         }
-        adapter = new PlannerAdapter(mPlannerList);
+        int color = getColourR(myPillar);
+        adapter = new PlannerAdapter(mPlannerList,color);
         recyclerView.setAdapter(adapter);
+        View view = getView();
+        if(view != null) {
+            updatePillarColor(view,myPillar);
+        }
     }
 
     private int getColourR(String pillar) {
@@ -413,6 +424,8 @@ public class PlannerFragment extends Fragment {
                 return R.color.DAI;
             case "ISTD":
                 return R.color.ISTD;
+            case "CSD":
+                return R.color.ISTD;
             case "HASS":
                 return R.color.HASS;
             case "SMT":
@@ -421,4 +434,20 @@ public class PlannerFragment extends Fragment {
                 return R.color.OTHERS;
         }
     }
+
+    private void updatePillarColor(View view,String pillar) {
+        int colour = getColourR(pillar);
+        TextView pillarText = view.findViewById(R.id.pillarText);
+        ImageView editb = view.findViewById(R.id.editButton);
+
+        pillarText.setText(pillar);
+        pillarText.setTextColor(ContextCompat.getColor(getContext(), colour));
+
+        editb.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), colour)));
+
+        com.google.android.material.card.MaterialCardView plannercard = view.findViewById(R.id.plannercard);
+        plannercard.setStrokeColor(ContextCompat.getColor(getContext(), colour));
+
+    }
+
 }

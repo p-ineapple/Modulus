@@ -16,8 +16,10 @@ import java.util.List;
 public class NestedPlannerAdapter extends RecyclerView.Adapter<NestedPlannerAdapter.NestedModuleViewHolder> {
     private List<ModuleModel> moduleList;
 
-    public NestedPlannerAdapter(List<ModuleModel> moduleList){
+    private int holdercolour;
+    public NestedPlannerAdapter(List<ModuleModel> moduleList,int holdercolour){
         this.moduleList = moduleList;
+        this.holdercolour= holdercolour;
     }
     @Override
     public NestedModuleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -34,6 +36,10 @@ public class NestedPlannerAdapter extends RecyclerView.Adapter<NestedPlannerAdap
                 holder.plannerModule.setText("Capstone");
             } else{
                 holder.plannerModule.setText(module.toString());
+            }
+
+            if (holder.modcard != null) {
+                holder.modcard.setCardBackgroundColor(holdercolour);
             }
 //        holder.plannerCell.setBackgroundColor(R.color.dark_pink);
 //        if(Objects.equals(module.getName(), "Capstone")){
@@ -56,9 +62,13 @@ public class NestedPlannerAdapter extends RecyclerView.Adapter<NestedPlannerAdap
     }
     public class NestedModuleViewHolder extends RecyclerView.ViewHolder{
         TextView plannerModule;
+        androidx.cardview.widget.CardView modcard;
+
+
         public NestedModuleViewHolder(View itemView) {
             super(itemView);
             plannerModule = itemView.findViewById(R.id.plannerModule);
+            modcard = itemView.findViewById(R.id.modcard);
         }
     }
 }

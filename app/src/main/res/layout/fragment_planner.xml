@@ -78,6 +78,7 @@
                     android:layout_marginVertical="4dp"
                      />
             </LinearLayout>
+
             <ImageView
                 android:id="@+id/editButton"
                 android:layout_width="28dp"
@@ -105,7 +106,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Pillar"
-            android:textSize="12sp"
+            android:textSize="12dp"
             android:layout_weight="1"
             android:layout_marginHorizontal="4dp"/>
 
@@ -114,7 +115,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Track"
-            android:textSize="12sp"
+            android:textSize="12dp"
             android:layout_weight="1"
             android:layout_marginHorizontal="4dp"/>
 
@@ -123,7 +124,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Minor"
-            android:textSize="12sp"
+            android:textSize="12dp"
             android:layout_weight="1"
             android:layout_marginHorizontal="4dp"/>
 
@@ -132,7 +133,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Plan"
-            android:textSize="12sp"
+            android:textSize="12dp"
             android:layout_weight="1"
             android:layout_marginHorizontal="4dp"/>
 
