@@ -28,13 +28,12 @@
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
             <TextView
-                android:id="@+id/term"
+                android:id="@+id/editPlannerText"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="Term"
-                android:textColor="@color/purple_700"
+                android:text="Select: 1. Term, 2. Modules"
                 android:textSize="20dp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -47,9 +46,10 @@
     </androidx.cardview.widget.CardView>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/selectCard"
+        android:id="@+id/selectTermCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="4dp"
         app:cardCornerRadius="16dp">
 
         <RelativeLayout
@@ -57,19 +57,105 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/tvModules"
+                android:id="@+id/tvTerm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:hint="Select Modules"
-                android:textSize="20dp" />
+                android:hint="Select Term"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:layout_margin="4dp" />
 
             <ImageView
                 android:layout_width="42dp"
                 android:layout_height="42dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerInParent="true"
-                android:src="@drawable/arrow_down" />
+                android:src="@drawable/arrow2_down" />
+
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/capstoneCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        app:cardCornerRadius="16dp"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tvCapstone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Capstone"
+                android:textSize="20sp"
+                android:layout_margin="4dp"/>
+
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/selectElectivesCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        app:cardCornerRadius="16dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tvElectives"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:hint="Select Elective(s)"
+                android:textSize="20sp"
+                android:layout_margin="4dp" />
+
+            <ImageView
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:src="@drawable/arrow2_down" />
+
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/selectHASSCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        app:cardCornerRadius="16dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tvHASS"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:hint="Select HASS"
+                android:textSize="20sp"
+                android:layout_margin="4dp" />
+
+            <ImageView
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:src="@drawable/arrow2_down" />
 
         </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>
