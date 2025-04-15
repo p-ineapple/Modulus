@@ -15,7 +15,6 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,12 +22,7 @@ import android.widget.Toast;
 import com.example.modulus.Model.ModuleModel;
 import com.example.modulus.R;
 import com.example.modulus.Utils.WebView;
-import com.google.android.material.divider.MaterialDivider;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +36,7 @@ public class ModuleDetailsActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_module_details);
+        setContentView(R.layout.insights_activity_module_details);
         getSelectedModule();
         setValues();
 
