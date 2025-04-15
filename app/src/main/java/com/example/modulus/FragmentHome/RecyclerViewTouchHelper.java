@@ -33,7 +33,7 @@ public class RecyclerViewTouchHelper extends ItemTouchHelper.SimpleCallback {
         if(direction == ItemTouchHelper.RIGHT){
             AlertDialog.Builder builder = new AlertDialog.Builder(adapter.getContext());
             builder.setTitle("Delete Task");
-            builder.setMessage("noooooooooooo:(((((");
+            builder.setMessage("Are you sure?");
             builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {

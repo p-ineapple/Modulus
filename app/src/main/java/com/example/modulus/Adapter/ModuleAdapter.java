@@ -6,19 +6,25 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.modulus.Model.ModuleModel;
 import com.example.modulus.R;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 
-public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.moduleCellViewHolder> {
+public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.moduleCellViewHolder>  {
+
+
     public interface OnItemClickListener {
         void onItemClick(ModuleModel module);
     }
     ArrayList<ModuleModel> moduleList;
     OnItemClickListener listener;
+    private String sortType = "name";
+
     public ModuleAdapter(ArrayList<ModuleModel> moduleList, OnItemClickListener listener) {
         this.moduleList = moduleList;
         this.listener = listener;
@@ -39,6 +45,10 @@ public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.moduleCell
                 + " | " + String.join(", ", module.getProf()));
         holder.moduleTags.setText(String.join(", ", module.getTags()));
         holder.bind(module, listener);
+        int color = ContextCompat.getColor(holder.itemView.getContext(), module.getColor());
+        holder.card.setStrokeColor(color);
+        holder.moduleTermProf.setTextColor(color);
+        holder.moduleTags.setTextColor(color);
     }
 
     @Override
@@ -50,11 +60,14 @@ public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.moduleCell
         TextView moduleName;
         TextView moduleTermProf;
         TextView moduleTags;
+        MaterialCardView card;
+
         public moduleCellViewHolder(View itemView){
             super(itemView);
             moduleName = itemView.findViewById(R.id.moduleName);
             moduleTermProf = itemView.findViewById(R.id.moduleTermProf);
             moduleTags = itemView.findViewById(R.id.moduleTags);
+            card = itemView.findViewById(R.id.module_cell);
         }
 
         public void bind(ModuleModel item, final OnItemClickListener listener) {
@@ -64,5 +77,10 @@ public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.moduleCell
                 }
             });
         }
+    }
+
+    public void setSortType(String sortType) {
+        this.sortType = sortType;
+        notifyDataSetChanged();
     }
 }

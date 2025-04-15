@@ -5,7 +5,7 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
+    <color name="black">#121212</color>
     <color name="dark_purple">#7009E0</color>
     <color name="purple">#AB94FF</color>
     <color name="light_purple">#E3DBFF</color>
@@ -24,6 +24,18 @@
     <color name="grey">#797979</color>
     <color name="transparent">#11000000</color>
     <color name="mtrl_textinput_default_box_stroke_color">@color/white</color>
+    <color name="ASD">#1EA95A</color>
+    <color name="EPD">#FFB347</color>
+    <color name="ESD">#FF3B30</color>
+    <color name="DAI">#D4B900</color>
+    <color name="ISTD">#1BA9DD</color>
+    <color name="HASS">#9B72FF</color>
+    <color name="SMT">#4A90E2</color>
+    <color name="OTHERS">#BFAEFF</color>
+    <color name="dark_grey">#1F1F1F</color>
+    <color name="focused_grey">#2D2D2D</color>
+
+
 
 </resources>
 

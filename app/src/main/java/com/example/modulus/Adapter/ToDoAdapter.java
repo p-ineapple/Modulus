@@ -44,16 +44,29 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.MyViewHolder> 
         holder.taskDescription.setText(item.getTask());//ToDo: edit her to add timing i think
         holder.taskCat.setText(item.getCategory());
         holder.taskTime.setText(item.getTime());
+        /*
         holder.checkBox.setChecked(toBoolean(item.getStatus()));
+        Log.d("homeadapter",String.valueOf(item.getStatus()));
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean b) {
                 if (buttonView.isChecked()){
-                    myDB.updateStatus(item.getId(), 1); // tutorial said it put int 1 part 3, 29:27
+                    myDB.updateStatus(item.getId(), 1);
                 }else{
                     myDB.updateStatus(item.getId(), 0);
                 }
             }
+        });*/
+        // Temporarily remove listener before setting checked state
+        holder.checkBox.setOnCheckedChangeListener(null);
+        holder.checkBox.setChecked(toBoolean(item.getStatus()));
+
+        // Re-attach listener
+        holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            int newStatus = isChecked ? 1 : 0;
+            myDB.updateStatus(item.getId(), newStatus);
+            item.setStatus(newStatus); // <- Optional but useful if you need local update
+            Log.d("ToDoAdapter", "Updated task id " + item.getId() + " to status " + newStatus);
         });
     }
     public boolean toBoolean(int num){
@@ -81,9 +94,13 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.MyViewHolder> 
         Bundle bundle = new Bundle();
         bundle.putInt("ID", item.getId());
         bundle.putString("task", item.getTask());
+        bundle.putString("category", item.getCategory());
+        bundle.putString("date", item.getDate());
+        bundle.putString("time", item.getTime());
         Log.d("edit item",String.valueOf(item.getId()));
         AddNewTask task = new AddNewTask();
         task.setArguments(bundle);
+        task.show(home.getChildFragmentManager(), task.getTag());
     }
 
     @Override

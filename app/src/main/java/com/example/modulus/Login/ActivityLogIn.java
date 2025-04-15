@@ -22,6 +22,8 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.modulus.MainActivity;
 import com.example.modulus.R;
 
+import java.io.IOException;
+
 public class ActivityLogIn extends AppCompatActivity {
     private TextView forget;
     private EditText email, password;
@@ -59,6 +61,13 @@ public class ActivityLogIn extends AppCompatActivity {
 
 
         databasehelper = new DataBaseHelperLogin(this);
+        try {
+            databasehelper.createDatabase();
+            Log.e(TAG, "Database created");
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Database copy failed", e);
+        }
         SQLiteDatabase db = databasehelper.getReadableDatabase();
         Log.d(TAG, "Database opened: " + db.getPath());
 
