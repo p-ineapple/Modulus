@@ -10,17 +10,74 @@
     android:orientation="vertical"
     tools:context=".FragmentPlanner.PlannerFragment">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/plannercard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/purple_200"
+        android:backgroundTint="@color/white"
+        app:strokeColor="@color/calendar_purple"
+        app:strokeWidth="3dp"
         android:layout_margin="8dp"
         app:cardCornerRadius="20dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            >
 
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginVertical="8dp">
+
+                <TextView
+                    android:id="@+id/pillarText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:textSize="28sp"
+                    android:text="Pillar"
+                    android:textColor="@color/black"
+                    android:layout_marginVertical="4dp"
+                />
+
+
+
+                <TextView
+                    android:id="@+id/specializationText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:text="Specialization"
+                    android:maxLines="2"
+                    android:textColor="@color/black"
+                    android:layout_marginVertical="4dp"
+                    />
+
+
+
+                <TextView
+                    android:id="@+id/minorText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:text="Minor"
+                    android:maxLines="2"
+                    android:textColor="@color/black"
+                    android:layout_marginVertical="4dp"
+                     />
+            </LinearLayout>
             <ImageView
                 android:id="@+id/editButton"
                 android:layout_width="28dp"
@@ -31,78 +88,9 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <TextView
-                android:id="@+id/pillarText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:text="Pillar"
-                android:layout_marginStart="40sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/specializationText"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:text="|"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/specializationText"
-                app:layout_constraintStart_toEndOf="@id/pillarText"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/specializationText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxWidth="160dp"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:text="Specialization"
-                android:maxLines="2"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/minorText"
-                app:layout_constraintStart_toEndOf="@id/pillarText"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:text="|"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/minorText"
-                app:layout_constraintStart_toEndOf="@id/specializationText"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/minorText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxWidth="80dp"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:text="Minor"
-                android:maxLines="2"
-                android:layout_marginEnd="12dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/editButton"
-                app:layout_constraintStart_toEndOf="@id/specializationText"
-                app:layout_constraintTop_toTopOf="parent" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
     <LinearLayout
         android:id="@+id/editTab"

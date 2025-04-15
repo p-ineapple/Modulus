@@ -103,6 +103,7 @@ public class DataBaseHelperTracks extends DataBaseHelperInsights {
                 result.add(minor);
             }
         }
+
         c.close();
         db.close();
 

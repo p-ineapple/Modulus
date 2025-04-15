@@ -1,5 +1,6 @@
 package com.example.modulus.Adapter;
 
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +16,11 @@ import java.util.List;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder> {
     private List<ReviewModel> reviewList;
+    private int reviewScoreColor;
 
-    public ReviewAdapter(List<ReviewModel> reviewList) {
+    public ReviewAdapter(List<ReviewModel> reviewList, int reviewScoreColor) {
         this.reviewList = reviewList;
+        this.reviewScoreColor = reviewScoreColor;
     }
 
     public static class ReviewViewHolder extends RecyclerView.ViewHolder {
@@ -30,6 +33,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
             reviewDescription = itemView.findViewById(R.id.reviewDescription);
             reviewRatingBar = itemView.findViewById(R.id.reviewRatingBar);
             reviewScore = itemView.findViewById(R.id.reviewScore);
+
         }
     }
 
@@ -47,6 +51,12 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         holder.reviewDescription.setText(review.getComment());
         holder.reviewRatingBar.setRating(Float.valueOf(review.getRating()));
         holder.reviewScore.setText(review.getRating());
+
+        ColorStateList csl = ColorStateList.valueOf(reviewScoreColor);
+        holder.reviewRatingBar.setProgressTintList(csl);
+        holder.reviewRatingBar.setProgressBackgroundTintList(csl);
+        holder.reviewRatingBar.setSecondaryProgressTintList(csl);
+
     }
 
     @Override

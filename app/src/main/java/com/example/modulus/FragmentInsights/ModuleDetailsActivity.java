@@ -87,13 +87,19 @@ public class ModuleDetailsActivity extends AppCompatActivity implements OnDialog
             }
         });
         dbReview = new DataBaseHelperReviews(this);
-        //insertReviewsFromJson();
+//        insertReviewsFromJson();`
         float average = dbReview.getOverallRating(selectedModule.getId());
         Log.d("OverallRating", "Average Rating: " + average);
         overallScore = findViewById(R.id.overallScore);
         overallRating = findViewById(R.id.overallRating);
         overallScore.setText(String.format("%.1f", average));
         overallRating.setRating(average);
+        int star = ContextCompat.getColor(this, selectedModule.getColor());
+        ColorStateList csl = ColorStateList.valueOf(star);
+        overallRating.setProgressTintList(csl);
+        overallRating.setProgressBackgroundTintList(csl);
+        overallRating.setSecondaryProgressTintList(csl);
+        overallScore.setTextColor(star);
 
 
         reviewRecyclerView = findViewById(R.id.reviewRecyclerView);
@@ -105,7 +111,7 @@ public class ModuleDetailsActivity extends AppCompatActivity implements OnDialog
 
         Log.d("moduleactivity", selectedModule.getId());
 
-        reviewAdapter = new ReviewAdapter(reviewList);
+        reviewAdapter = new ReviewAdapter(reviewList,star);
         reviewRecyclerView.setAdapter(reviewAdapter);
 
         // SQLite helper

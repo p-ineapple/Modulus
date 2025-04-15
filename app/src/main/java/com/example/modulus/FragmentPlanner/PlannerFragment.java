@@ -11,6 +11,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -102,6 +103,7 @@ public class PlannerFragment extends Fragment {
 
         Button pillarButton = view.findViewById(R.id.pillarButton);
         TextView pillarText = view.findViewById(R.id.pillarText);
+
         String pillarPref = mPreferences.getString(KEY_DATA_PILLAR, "");
         if(!pillarPref.isEmpty()){
             pillarText.setText(pillarPref);
@@ -119,6 +121,8 @@ public class PlannerFragment extends Fragment {
             minorText.setText(minorPref);
             myMinor = minorPref;
         }
+        com.google.android.material.card.MaterialCardView plannercard = view.findViewById(R.id.plannercard);
+
         String[] pillars = new String[]{"ASD", "CSD", "DAI", "EPD", "ESD"};
         pillarButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,13 +134,18 @@ public class PlannerFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         pillarText.setText(pillars[which]);
                         myPillar = pillars[which];
+
+                        int colour = getColourR(myPillar);
+                        pillarText.setTextColor(ContextCompat.getColor(getContext(), colour));
+                        plannercard.setStrokeColor(ContextCompat.getColor(getContext(), colour));
                         basePlannerList = myDB.getPlanner(pillars[which]);
                         mPlannerList = myDB.getPlanner(pillars[which]);
+
                         recyclerView.setAdapter(adapter);
                         SharedPreferences.Editor prefsEditor = mPreferences.edit();
                         prefsEditor.putString(PlannerFragment.KEY_DATA_PILLAR, pillars[which]);
-                        trackText.setText("No Specialization");
-                        prefsEditor.putString(PlannerFragment.KEY_DATA_TRACK, "No Specialization");
+                        trackText.setText("No Specialisation");
+                        prefsEditor.putString(PlannerFragment.KEY_DATA_TRACK, "No Specialisation");
                         minorText.setText("No Minor");
                         prefsEditor.putString(PlannerFragment.KEY_DATA_MINOR, "No Minor");
                         prefsEditor.apply();
@@ -154,6 +163,12 @@ public class PlannerFragment extends Fragment {
             }
         });
 
+
+
+
+
+
+
         Button trackButton = view.findViewById(R.id.trackButton);
         trackButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,7 +180,7 @@ public class PlannerFragment extends Fragment {
                 }else {
                     String[] tracks = tracksDB.getTracks(myPillar);
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle("Select a Specialization");
+                    builder.setTitle("Select a Specialisation");
                     builder.setSingleChoiceItems(tracks, -1, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -384,5 +399,26 @@ public class PlannerFragment extends Fragment {
         }
         adapter = new PlannerAdapter(mPlannerList);
         recyclerView.setAdapter(adapter);
+    }
+
+    private int getColourR(String pillar) {
+        switch (pillar){
+            case "ASD":
+                return R.color.ASD;
+            case "EPD":
+                return R.color.EPD;
+            case "ESD":
+                return R.color.ESD;
+            case "DAI":
+                return R.color.DAI;
+            case "ISTD":
+                return R.color.ISTD;
+            case "HASS":
+                return R.color.HASS;
+            case "SMT":
+                return R.color.SMT;
+            default:
+                return R.color.OTHERS;
+        }
     }
 }
