@@ -1,21 +1,29 @@
 package com.example.modulus.FragmentInsights;
 
+import static com.example.modulus.R.id.backgroup;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.modulus.Model.ModuleModel;
 import com.example.modulus.R;
 import com.example.modulus.Utils.WebView;
+import com.google.android.material.divider.MaterialDivider;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,7 +46,7 @@ public class ModuleDetailsActivity extends AppCompatActivity{
         getSelectedModule();
         setValues();
 
-        ImageView backButton = findViewById(R.id.backButton);
+        RelativeLayout backButton = findViewById(backgroup);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,8 +82,27 @@ public class ModuleDetailsActivity extends AppCompatActivity{
     }
 
     private void setValues() {
-        TextView idName = findViewById(R.id.moduleDetailsIDName);
-        idName.setText(selectedModule.toString());
+
+
+
+        TextView Name = findViewById(R.id.moduleDetailsName);
+        Name.setText(selectedModule.getName());
+
+        TextView pillar = findViewById(R.id.moduleDetailsPillar);
+        pillar.setText(selectedModule.getPillar() + " " + selectedModule.getId());
+        int color = ContextCompat.getColor(this, selectedModule.getColor());
+        pillar.setTextColor(color);
+
+        RelativeLayout back = findViewById(R.id.backgroup);
+        back.setBackgroundColor(color);
+
+        TextView moreInfo = findViewById(R.id.moreInfo);
+
+        moreInfo.setCompoundDrawableTintList(ColorStateList.valueOf(color));
+
+
+
+
         TextView preReq = findViewById(R.id.prerequisites);
         List<String> modPreReq = selectedModule.getPrerequisites();
         List<String> output = new ArrayList<>();
@@ -95,13 +122,24 @@ public class ModuleDetailsActivity extends AppCompatActivity{
                         orString.append(module);
                     }
                     if(i < splitMods.length - 1){
-                        orString.append(" or ");
+                        orString.append(" <b>OR</b><br />");
                     }
                 }
                 output.add(orString.toString());
             }
+
+
         }
-        preReq.setText("Pre-Requisites: \n - " + String.join("\n - ", output));
+
+        if (!output.isEmpty()){
+            preReq.setText(Html.fromHtml(TextUtils.join("<br>", output), Html.FROM_HTML_MODE_LEGACY));
+
+        } else{
+            preReq.setText("No Pre-requisites");
+        }
+
+
+
     }
 
     private void openURL(){
