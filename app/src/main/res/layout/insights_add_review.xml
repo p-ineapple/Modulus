@@ -14,7 +14,8 @@
         android:layout_centerHorizontal="true"
         android:textAlignment="center"
         android:textSize="20sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:layout_marginVertical="10dp"/>
 
     <RatingBar
         android:id="@+id/ratingBar"
@@ -24,35 +25,40 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/reviewTitle"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="10dp"/>
 
-    <TextView
-        android:id="@+id/reviewText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Detailed Review"
-        android:layout_below="@id/ratingBar"/>
-
-    <EditText
-        android:id="@+id/commentInput"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/commentInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Leave a comment..."
-        app:hintTextColor="@color/dark_purple"
-        android:layout_below="@id/reviewText"
-        android:layout_marginTop="20dp"
-        app:boxStrokeColor="@color/dark_purple"
-        android:textColorHint="@color/dark_purple"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
-        android:layout_marginBottom="30dp"
-        />
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/box_stroke_color_selector"
+        app:hintTextColor="@color/dark_purple"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@id/ratingBar">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/commentInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/dark_purple"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:gravity="top|start"
+            android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
 
     <Button
         android:id="@+id/submitReviewBtn"
         android:text="Submit Review"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/commentInput"/>
+        android:textColorHighlight="@color/dark_purple"
+        android:layout_below="@id/commentInputLayout"
+        android:layout_marginBottom="30dp"/>
 
 </RelativeLayout>

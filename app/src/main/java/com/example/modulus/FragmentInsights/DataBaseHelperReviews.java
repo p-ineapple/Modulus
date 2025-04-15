@@ -112,4 +112,36 @@ public class DataBaseHelperReviews extends SQLiteOpenHelper {
         return modelList;
     }
 
+    public float getOverallRating(String moduleID) {
+        float overallRating = 0f;
+        SQLiteDatabase db = this.getReadableDatabase();
+        // Query: calculate the average rating by casting the TEXT rating to REAL.
+        String query = "SELECT AVG(CAST(" + col4 + " AS REAL)) AS avg_rating FROM "
+                + tableName + " WHERE " + col2 + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{ moduleID });
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                int colIndex = cursor.getColumnIndex("avg_rating");
+                if (colIndex == -1) {
+                    Log.d(TAG, "avg_rating column not found!");
+                } else if (cursor.isNull(colIndex)) {
+                    Log.d(TAG, "avg_rating value is null for moduleID: " + moduleID);
+                } else {
+                    overallRating = (float) cursor.getDouble(colIndex);
+                    Log.d(TAG, "Computed avg_rating: " + overallRating);
+                }
+            } else {
+                Log.d(TAG, "No rows returned for moduleID: " + moduleID);
+            }
+            cursor.close();
+        } else {
+            Log.d(TAG, "Cursor is null for moduleID: " + moduleID);
+        }
+
+        return overallRating;
+    }
+
+
+
 }

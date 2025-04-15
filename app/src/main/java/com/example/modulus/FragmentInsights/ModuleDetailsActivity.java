@@ -20,6 +20,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +54,8 @@ public class ModuleDetailsActivity extends AppCompatActivity implements OnDialog
     List<ReviewModel> reviewList;
     ReviewAdapter reviewAdapter;
     DataBaseHelperReviews dbReview;
+    TextView overallScore;
+    RatingBar overallRating;
     final String TAG = "Module Insights";
 
     @Override
@@ -85,6 +88,13 @@ public class ModuleDetailsActivity extends AppCompatActivity implements OnDialog
         });
         dbReview = new DataBaseHelperReviews(this);
         //insertReviewsFromJson();
+        float average = dbReview.getOverallRating(selectedModule.getId());
+        Log.d("OverallRating", "Average Rating: " + average);
+        overallScore = findViewById(R.id.overallScore);
+        overallRating = findViewById(R.id.overallRating);
+        overallScore.setText(String.format("%.1f", average));
+        overallRating.setRating(average);
+
 
         reviewRecyclerView = findViewById(R.id.reviewRecyclerView);
         // Setup RecyclerView
@@ -92,6 +102,7 @@ public class ModuleDetailsActivity extends AppCompatActivity implements OnDialog
 
         reviewList = new ArrayList<>();
         reviewList = dbReview.getModuleReviews(selectedModule.getId());
+
         Log.d("moduleactivity", selectedModule.getId());
 
         reviewAdapter = new ReviewAdapter(reviewList);

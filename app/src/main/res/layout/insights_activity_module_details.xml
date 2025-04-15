@@ -209,27 +209,43 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:id="@+id/overallText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Overall course rating"
+            android:textSize="12sp"
+            android:textAlignment="center"/>
+
+        <TextView
+            android:id="@+id/overallScore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="5.0"
+            android:textStyle="bold"
+            android:textSize="60sp"
+            android:textAlignment="center"
+            android:layout_below="@id/overallText"/>
+
         <RatingBar
-            android:id="@+id/ratingBar"
+            android:id="@+id/overallRating"
             android:numStars="5"
             android:stepSize="0.5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true"
+            style="@style/Widget.AppCompat.RatingBar.Small"
+            android:layout_below="@id/overallScore"/>
 
-        <TextView
-            android:id="@+id/reviewText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Overall course rating"
-            android:textAlignment="center"
-            android:layout_below="@id/ratingBar"/>
+
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/reviewText">
+            android:layout_below="@id/overallRating">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/reviewRecyclerView"
