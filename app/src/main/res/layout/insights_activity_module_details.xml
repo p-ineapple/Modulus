@@ -23,15 +23,17 @@
             android:id="@+id/backButton"
             android:layout_width="28sp"
             android:layout_height="28sp"
-            android:src="@drawable/arrow_back"
-            android:layout_centerVertical="true" />
+            android:src="@drawable/arrow_back2"
+            android:layout_centerVertical="true"
+            app:tint="@color/white" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/Back"
             android:text="Back"
-            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textColor="@color/white"
             android:textSize="20sp"
             android:layout_marginHorizontal="5dp"
             android:layout_toEndOf="@id/backButton" />

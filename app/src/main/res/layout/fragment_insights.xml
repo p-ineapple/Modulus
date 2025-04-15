@@ -17,7 +17,7 @@
         android:layout_marginHorizontal="10dp"
         android:layout_marginTop="10dp"
         android:orientation="horizontal"
-        android:backgroundTint="@color/light_purple"
+        android:backgroundTint="@color/white"
         app:cardCornerRadius="24dp">
 
         <LinearLayout
@@ -33,7 +33,7 @@
                 android:id="@+id/modulesListSearchView"
                 android:iconifiedByDefault="false"
                 android:layout_weight="1"
-                android:background="@color/light_purple"
+                android:background="@color/white"
                 android:queryHint="Search"/>
 
 

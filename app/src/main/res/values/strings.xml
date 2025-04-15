@@ -45,8 +45,29 @@
         <item name="chipIconTint">@color/chip_text_colour</item>
 
     </style>
+
+    <style name="Chip2" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/chip_background_colour2</item>
+        <item name="checkedIconVisible">false</item>
+        <item name="android:drawableTint">@color/chip_text_colour</item>
+        <item name="android:textAppearance">@style/Bold</item>
+        <item name="shapeAppearanceOverlay">@null</item>
+        <item name="chipIconTint">@color/chip_text_colour</item>
+        <item name="chipCornerRadius">20sp</item>
+
+    </style>
+
     <style name="Bold" parent="TextAppearance.MaterialComponents.Chip">
         <item name="android:textStyle">bold</item>
+
+    </style>
+
+    <style name="Toolbar" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+
+
+
+        <item name="android:textStyle">bold</item>
+
     </style>
 
 
