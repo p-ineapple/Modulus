@@ -1,6 +1,5 @@
 package com.example.modulus.Adapter;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import com.example.modulus.R;
 
 import java.time.LocalDate;
 import java.time.format.TextStyle;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -49,7 +47,7 @@ public class DateItemAdapter extends RecyclerView.Adapter<DateItemAdapter.MyView
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.date_item_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_date_item_layout, parent, false);
         return new MyViewHolder(view);
     }
 

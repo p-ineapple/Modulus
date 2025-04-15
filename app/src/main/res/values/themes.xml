@@ -23,7 +23,7 @@
 
     <style name="Theme.Login" parent="Base.Theme.Modulus" />
     <style name="Theme.Login.BackgroundImageStyle">
-        <item name="android:windowBackground">@drawable/lofi_crop</item>
+        <item name="android:windowBackground">@drawable/loginbg</item>
     </style>
 
 

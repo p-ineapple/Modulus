@@ -96,7 +96,7 @@ public class ActivityLogIn extends AppCompatActivity {
                     return;
                 }
 
-
+                Log.d("Logintest", emailText+passwordText);
 
                 if (databasehelper.checkEmailPasswordValid(emailText, passwordText)){
                     Toast.makeText(ActivityLogIn.this, "Login Successfully!", Toast.LENGTH_SHORT).show();
