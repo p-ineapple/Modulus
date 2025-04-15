@@ -5,7 +5,7 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="black">#121212</color>
+    <color name="black">#000000</color>
     <color name="dark_purple">#7009E0</color>
     <color name="purple">#AB94FF</color>
     <color name="light_purple">#E3DBFF</color>
@@ -33,6 +33,7 @@
     <color name="SMT">#4A90E2</color>
     <color name="OTHERS">#BFAEFF</color>
     <color name="dark_grey">#1F1F1F</color>
+    <color name="black_background">#121212</color>
     <color name="focused_grey">#2D2D2D</color>
 
 
