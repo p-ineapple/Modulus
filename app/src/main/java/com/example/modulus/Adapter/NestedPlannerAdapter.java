@@ -1,6 +1,7 @@
 package com.example.modulus.Adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.modulus.FragmentInsights.ModuleDetailsActivity;
 import com.example.modulus.Model.ModuleModel;
 import com.example.modulus.R;
 
@@ -41,6 +43,17 @@ public class NestedPlannerAdapter extends RecyclerView.Adapter<NestedPlannerAdap
             if (holder.modcard != null) {
                 holder.modcard.setCardBackgroundColor(holdercolour);
             }
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(view.getContext(), ModuleDetailsActivity.class);
+                    intent.putExtra("id", module.getId());
+                    view.getContext().startActivity(intent);
+                }
+            });
+
+
 //        holder.plannerCell.setBackgroundColor(R.color.dark_pink);
 //        if(Objects.equals(module.getName(), "Capstone")){
 //            holder.plannerCell.setBackgroundColor(R.color.light_pink);

@@ -294,4 +294,6 @@ public class ModuleDetailsActivity extends AppCompatActivity implements OnDialog
             Log.e("DB_INSERT", "Failed to insert reviews: " + e.getMessage());
         }
     }
+
+
 }
