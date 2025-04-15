@@ -4,10 +4,13 @@ import static com.example.modulus.R.id.backgroup;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.graphics.drawable.Drawable;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,28 +19,48 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.modulus.Adapter.ReviewAdapter;
+import com.example.modulus.Adapter.ToDoAdapter;
+import com.example.modulus.FragmentHome.AddNewTask;
+import com.example.modulus.FragmentHome.HomeFragment;
 import com.example.modulus.Model.ModuleModel;
+import com.example.modulus.Model.ReviewModel;
 import com.example.modulus.R;
+import com.example.modulus.Utils.OnDialogCloseListener;
 import com.example.modulus.Utils.WebView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ModuleDetailsActivity extends AppCompatActivity{
-    ModuleModel selectedModule;
+public class ModuleDetailsActivity extends AppCompatActivity implements OnDialogCloseListener {
+    public static ModuleModel selectedModule;
+    RecyclerView reviewRecyclerView;
+    FloatingActionButton addReview;
+    List<ReviewModel> reviewList;
+    ReviewAdapter reviewAdapter;
+    DataBaseHelperReviews dbReview;
     final String TAG = "Module Insights";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.insights_activity_module_details);
+
+
         getSelectedModule();
         setValues();
 
@@ -60,6 +83,46 @@ public class ModuleDetailsActivity extends AppCompatActivity{
                 }
             }
         });
+        dbReview = new DataBaseHelperReviews(this);
+        //insertReviewsFromJson();
+
+        reviewRecyclerView = findViewById(R.id.reviewRecyclerView);
+        // Setup RecyclerView
+
+
+        reviewList = new ArrayList<>();
+        reviewList = dbReview.getModuleReviews(selectedModule.getId());
+        Log.d("moduleactivity", selectedModule.getId());
+
+        reviewAdapter = new ReviewAdapter(reviewList);
+        reviewRecyclerView.setAdapter(reviewAdapter);
+
+        // SQLite helper
+        reviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        reviewAdapter.notifyDataSetChanged();
+
+
+        addReview = findViewById(R.id.addReviewButton);
+        addReview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddNewReview.newInstance().show(getSupportFragmentManager(), AddNewReview.TAG);
+                Log.d("addButton","AddNewReview instance");
+            }
+        });
+
+
+
+    }
+
+    // Listener callback from AddNewReview dialog
+    @Override
+    public void onDialogClose(DialogInterface dialog) {
+        // Clear the current list and fetch the new data from the database
+        reviewList.clear();
+        reviewList.addAll(dbReview.getModuleReviews(selectedModule.getId()));
+        reviewAdapter.notifyDataSetChanged();
+        Log.d(TAG, "Review list updated after dialog closed");
     }
 
     private void getSelectedModule() {
@@ -175,5 +238,35 @@ public class ModuleDetailsActivity extends AppCompatActivity{
                 }
             }
         });
+    }
+
+    private void insertReviewsFromJson() {
+        try {
+            InputStream is = getAssets().open("module_reviews_final.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            String jsonStr = new String(buffer, StandardCharsets.UTF_8);
+
+            JSONArray jsonArray = new JSONArray(jsonStr);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject reviewObj = jsonArray.getJSONObject(i);
+
+                ReviewModel model = new ReviewModel();
+                model.setModuleId(reviewObj.getString("MODULEID"));
+                model.setUsername(reviewObj.getString("USERNAME"));
+                model.setRating(reviewObj.getString("RATING"));
+                model.setComment(reviewObj.getString("REVIEW"));
+
+                dbReview.insertTask(model);
+            }
+
+            Log.d("DB_INSERT", "Inserted " + jsonArray.length() + " reviews");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("DB_INSERT", "Failed to insert reviews: " + e.getMessage());
+        }
     }
 }

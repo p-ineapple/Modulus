@@ -1,0 +1,7051 @@
+[
+    {
+        "ID": 1,
+        "MODULEID": "01.018",
+        "USERNAME": "Carlos",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 2,
+        "MODULEID": "01.018",
+        "USERNAME": "Victoria",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 3,
+        "MODULEID": "01.018",
+        "USERNAME": "Jessica",
+        "RATING": 2.0,
+        "REVIEW": "Too much workload for what it's worth."
+    },
+    {
+        "ID": 4,
+        "MODULEID": "01.018",
+        "USERNAME": "Kim",
+        "RATING": 2.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 5,
+        "MODULEID": "01.018",
+        "USERNAME": "Paul",
+        "RATING": 3.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 6,
+        "MODULEID": "01.018",
+        "USERNAME": "Michelle",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 7,
+        "MODULEID": "01.019",
+        "USERNAME": "Gregory",
+        "RATING": 3.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 8,
+        "MODULEID": "01.019",
+        "USERNAME": "Nicholas",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 9,
+        "MODULEID": "01.019",
+        "USERNAME": "Riley",
+        "RATING": 5.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 10,
+        "MODULEID": "01.019",
+        "USERNAME": "Troy",
+        "RATING": 3.0,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 11,
+        "MODULEID": "01.019",
+        "USERNAME": "Rebekah",
+        "RATING": 3.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 12,
+        "MODULEID": "01.019",
+        "USERNAME": "Amber",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 13,
+        "MODULEID": "01.020",
+        "USERNAME": "Michael",
+        "RATING": 5.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 14,
+        "MODULEID": "01.020",
+        "USERNAME": "Herbert",
+        "RATING": 1.5,
+        "REVIEW": "Too much workload for what it's worth."
+    },
+    {
+        "ID": 15,
+        "MODULEID": "01.020",
+        "USERNAME": "Brittany",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 16,
+        "MODULEID": "01.101",
+        "USERNAME": "Jeffrey",
+        "RATING": 2.0,
+        "REVIEW": "Lectures were dry and not engaging."
+    },
+    {
+        "ID": 17,
+        "MODULEID": "01.101",
+        "USERNAME": "Micheal",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 18,
+        "MODULEID": "01.101",
+        "USERNAME": "Phillip",
+        "RATING": 3.0,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 19,
+        "MODULEID": "01.101",
+        "USERNAME": "Megan",
+        "RATING": 3.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 20,
+        "MODULEID": "01.101",
+        "USERNAME": "Donald",
+        "RATING": 2.0,
+        "REVIEW": "Very difficult to follow and unclear expectations."
+    },
+    {
+        "ID": 21,
+        "MODULEID": "01.101",
+        "USERNAME": "Nicholas",
+        "RATING": 3.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 22,
+        "MODULEID": "01.101",
+        "USERNAME": "Elizabeth",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 23,
+        "MODULEID": "01.102",
+        "USERNAME": "Richard",
+        "RATING": 2.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 24,
+        "MODULEID": "01.102",
+        "USERNAME": "Gregory",
+        "RATING": 2.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 25,
+        "MODULEID": "01.102",
+        "USERNAME": "Virginia",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 26,
+        "MODULEID": "01.106",
+        "USERNAME": "Sherri",
+        "RATING": 3.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 27,
+        "MODULEID": "01.106",
+        "USERNAME": "Sarah",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 28,
+        "MODULEID": "01.106",
+        "USERNAME": "Laura",
+        "RATING": 1.5,
+        "REVIEW": "Very difficult to follow and unclear expectations."
+    },
+    {
+        "ID": 29,
+        "MODULEID": "01.106",
+        "USERNAME": "Lisa",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 30,
+        "MODULEID": "01.106",
+        "USERNAME": "Lisa",
+        "RATING": 3.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 31,
+        "MODULEID": "01.106",
+        "USERNAME": "Steven",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 32,
+        "MODULEID": "01.107",
+        "USERNAME": "Anthony",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 33,
+        "MODULEID": "01.107",
+        "USERNAME": "Stanley",
+        "RATING": 3.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 34,
+        "MODULEID": "01.107",
+        "USERNAME": "Michael",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 35,
+        "MODULEID": "01.107",
+        "USERNAME": "Meghan",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 36,
+        "MODULEID": "01.114",
+        "USERNAME": "William",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 37,
+        "MODULEID": "01.114",
+        "USERNAME": "Cynthia",
+        "RATING": 2.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 38,
+        "MODULEID": "01.114",
+        "USERNAME": "Nathan",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 39,
+        "MODULEID": "01.114",
+        "USERNAME": "Richard",
+        "RATING": 2.5,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 40,
+        "MODULEID": "01.115",
+        "USERNAME": "Ruth",
+        "RATING": 2.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 41,
+        "MODULEID": "01.115",
+        "USERNAME": "Christopher",
+        "RATING": 2.0,
+        "REVIEW": "Too much workload for what it's worth."
+    },
+    {
+        "ID": 42,
+        "MODULEID": "01.115",
+        "USERNAME": "Jonathan",
+        "RATING": 2.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 43,
+        "MODULEID": "01.115",
+        "USERNAME": "Brandon",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 44,
+        "MODULEID": "01.117",
+        "USERNAME": "Andrew",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 45,
+        "MODULEID": "01.117",
+        "USERNAME": "Anthony",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 46,
+        "MODULEID": "01.117",
+        "USERNAME": "Alex",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 47,
+        "MODULEID": "01.119",
+        "USERNAME": "Stephanie",
+        "RATING": 3.0,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 48,
+        "MODULEID": "01.119",
+        "USERNAME": "Amanda",
+        "RATING": 3.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 49,
+        "MODULEID": "01.119",
+        "USERNAME": "Christina",
+        "RATING": 2.5,
+        "REVIEW": "Grading seemed unfair or inconsistent."
+    },
+    {
+        "ID": 50,
+        "MODULEID": "01.119",
+        "USERNAME": "Hector",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 51,
+        "MODULEID": "01.119",
+        "USERNAME": "Timothy",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 52,
+        "MODULEID": "01.119",
+        "USERNAME": "Craig",
+        "RATING": 5.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 53,
+        "MODULEID": "01.119",
+        "USERNAME": "Alexander",
+        "RATING": 2.5,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 54,
+        "MODULEID": "01.400",
+        "USERNAME": "Raymond",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 55,
+        "MODULEID": "01.400",
+        "USERNAME": "Patrick",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 56,
+        "MODULEID": "01.400",
+        "USERNAME": "Mark",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 57,
+        "MODULEID": "01.400",
+        "USERNAME": "Terri",
+        "RATING": 2.5,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 58,
+        "MODULEID": "01.400",
+        "USERNAME": "Daniel",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 59,
+        "MODULEID": "01.400",
+        "USERNAME": "Frank",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 60,
+        "MODULEID": "01.401",
+        "USERNAME": "Renee",
+        "RATING": 3.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 61,
+        "MODULEID": "01.401",
+        "USERNAME": "Jason",
+        "RATING": 2.0,
+        "REVIEW": "Lectures were dry and not engaging."
+    },
+    {
+        "ID": 62,
+        "MODULEID": "01.401",
+        "USERNAME": "Eric",
+        "RATING": 3.0,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 63,
+        "MODULEID": "01.401",
+        "USERNAME": "Vanessa",
+        "RATING": 2.0,
+        "REVIEW": "Very difficult to follow and unclear expectations."
+    },
+    {
+        "ID": 64,
+        "MODULEID": "01.401",
+        "USERNAME": "Jacob",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 65,
+        "MODULEID": "01.401",
+        "USERNAME": "David",
+        "RATING": 3.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 66,
+        "MODULEID": "02.001",
+        "USERNAME": "Katrina",
+        "RATING": 3.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 67,
+        "MODULEID": "02.001",
+        "USERNAME": "Betty",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 68,
+        "MODULEID": "02.001",
+        "USERNAME": "Stephen",
+        "RATING": 1.5,
+        "REVIEW": "Grading seemed unfair or inconsistent."
+    },
+    {
+        "ID": 69,
+        "MODULEID": "02.001",
+        "USERNAME": "James",
+        "RATING": 3.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 70,
+        "MODULEID": "02.001",
+        "USERNAME": "William",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 71,
+        "MODULEID": "02.001",
+        "USERNAME": "Joe",
+        "RATING": 2.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 72,
+        "MODULEID": "02.003",
+        "USERNAME": "Benjamin",
+        "RATING": 2.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 73,
+        "MODULEID": "02.003",
+        "USERNAME": "Gabrielle",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 74,
+        "MODULEID": "02.003",
+        "USERNAME": "James",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 75,
+        "MODULEID": "02.102HT",
+        "USERNAME": "Brandon",
+        "RATING": 5.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 76,
+        "MODULEID": "02.102HT",
+        "USERNAME": "Kelly",
+        "RATING": 5.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 77,
+        "MODULEID": "02.102HT",
+        "USERNAME": "Maria",
+        "RATING": 2.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 78,
+        "MODULEID": "02.102HT",
+        "USERNAME": "Kara",
+        "RATING": 5.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 79,
+        "MODULEID": "02.102HT",
+        "USERNAME": "Stacy",
+        "RATING": 2.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 80,
+        "MODULEID": "02.104TS",
+        "USERNAME": "Donald",
+        "RATING": 3.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 81,
+        "MODULEID": "02.104TS",
+        "USERNAME": "Joanna",
+        "RATING": 3.0,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 82,
+        "MODULEID": "02.104TS",
+        "USERNAME": "Dylan",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 83,
+        "MODULEID": "02.104TS",
+        "USERNAME": "Eric",
+        "RATING": 2.0,
+        "REVIEW": "Lectures were dry and not engaging."
+    },
+    {
+        "ID": 84,
+        "MODULEID": "02.104TS",
+        "USERNAME": "Jessica",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 85,
+        "MODULEID": "02.108DH",
+        "USERNAME": "Matthew",
+        "RATING": 2.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 86,
+        "MODULEID": "02.108DH",
+        "USERNAME": "Rebecca",
+        "RATING": 3.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 87,
+        "MODULEID": "02.108DH",
+        "USERNAME": "Jerry",
+        "RATING": 3.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 88,
+        "MODULEID": "02.108DH",
+        "USERNAME": "Renee",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 89,
+        "MODULEID": "02.108DH",
+        "USERNAME": "Jamie",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 90,
+        "MODULEID": "02.108DH",
+        "USERNAME": "David",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 91,
+        "MODULEID": "02.110DH",
+        "USERNAME": "Rose",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 92,
+        "MODULEID": "02.110DH",
+        "USERNAME": "Lisa",
+        "RATING": 3.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 93,
+        "MODULEID": "02.110DH",
+        "USERNAME": "James",
+        "RATING": 3.0,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 94,
+        "MODULEID": "02.110DH",
+        "USERNAME": "Bobby",
+        "RATING": 3.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 95,
+        "MODULEID": "02.110DH",
+        "USERNAME": "Kimberly",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 96,
+        "MODULEID": "02.110DH",
+        "USERNAME": "Robert",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 97,
+        "MODULEID": "02.110DH",
+        "USERNAME": "Cynthia",
+        "RATING": 3.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 98,
+        "MODULEID": "02.120DH",
+        "USERNAME": "Amber",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 99,
+        "MODULEID": "02.120DH",
+        "USERNAME": "Tony",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 100,
+        "MODULEID": "02.120DH",
+        "USERNAME": "Brianna",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 101,
+        "MODULEID": "02.120DH",
+        "USERNAME": "Ashley",
+        "RATING": 3.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 102,
+        "MODULEID": "02.121DH",
+        "USERNAME": "Casey",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 103,
+        "MODULEID": "02.121DH",
+        "USERNAME": "Carol",
+        "RATING": 5.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 104,
+        "MODULEID": "02.121DH",
+        "USERNAME": "Nicole",
+        "RATING": 2.5,
+        "REVIEW": "Very difficult to follow and unclear expectations."
+    },
+    {
+        "ID": 105,
+        "MODULEID": "02.121DH",
+        "USERNAME": "Kelly",
+        "RATING": 3.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 106,
+        "MODULEID": "02.121DH",
+        "USERNAME": "Megan",
+        "RATING": 2.0,
+        "REVIEW": "Grading seemed unfair or inconsistent."
+    },
+    {
+        "ID": 107,
+        "MODULEID": "02.124DH",
+        "USERNAME": "Heather",
+        "RATING": 1.5,
+        "REVIEW": "Grading seemed unfair or inconsistent."
+    },
+    {
+        "ID": 108,
+        "MODULEID": "02.124DH",
+        "USERNAME": "Theresa",
+        "RATING": 3.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 109,
+        "MODULEID": "02.124DH",
+        "USERNAME": "Kevin",
+        "RATING": 5.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 110,
+        "MODULEID": "02.128DH",
+        "USERNAME": "Charlene",
+        "RATING": 2.5,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 111,
+        "MODULEID": "02.128DH",
+        "USERNAME": "Adrian",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 112,
+        "MODULEID": "02.128DH",
+        "USERNAME": "Jonathan",
+        "RATING": 2.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 113,
+        "MODULEID": "02.128DH",
+        "USERNAME": "William",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 114,
+        "MODULEID": "02.128DH",
+        "USERNAME": "Debbie",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 115,
+        "MODULEID": "02.128DH",
+        "USERNAME": "Carolyn",
+        "RATING": 1.0,
+        "REVIEW": "Very difficult to follow and unclear expectations."
+    },
+    {
+        "ID": 116,
+        "MODULEID": "02.128DH",
+        "USERNAME": "Travis",
+        "RATING": 3.0,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 117,
+        "MODULEID": "02.132DH",
+        "USERNAME": "Nicholas",
+        "RATING": 3.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 118,
+        "MODULEID": "02.132DH",
+        "USERNAME": "Brandon",
+        "RATING": 2.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 119,
+        "MODULEID": "02.132DH",
+        "USERNAME": "Lee",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 120,
+        "MODULEID": "02.132DH",
+        "USERNAME": "Chloe",
+        "RATING": 5.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 121,
+        "MODULEID": "02.132DH",
+        "USERNAME": "Lindsey",
+        "RATING": 3.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 122,
+        "MODULEID": "02.132DH",
+        "USERNAME": "Sheila",
+        "RATING": 2.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 123,
+        "MODULEID": "02.132DH",
+        "USERNAME": "Karen",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 124,
+        "MODULEID": "02.135HT",
+        "USERNAME": "Kylie",
+        "RATING": 3.5,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 125,
+        "MODULEID": "02.135HT",
+        "USERNAME": "Adam",
+        "RATING": 1.5,
+        "REVIEW": "Grading seemed unfair or inconsistent."
+    },
+    {
+        "ID": 126,
+        "MODULEID": "02.135HT",
+        "USERNAME": "Scott",
+        "RATING": 2.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 127,
+        "MODULEID": "02.135HT",
+        "USERNAME": "Courtney",
+        "RATING": 3.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 128,
+        "MODULEID": "02.137DH",
+        "USERNAME": "Christopher",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 129,
+        "MODULEID": "02.137DH",
+        "USERNAME": "Susan",
+        "RATING": 2.5,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 130,
+        "MODULEID": "02.137DH",
+        "USERNAME": "Crystal",
+        "RATING": 5.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 131,
+        "MODULEID": "02.137DH",
+        "USERNAME": "John",
+        "RATING": 3.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 132,
+        "MODULEID": "02.137DH",
+        "USERNAME": "Russell",
+        "RATING": 3.0,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 133,
+        "MODULEID": "02.137DH",
+        "USERNAME": "Lori",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 134,
+        "MODULEID": "02.137DH",
+        "USERNAME": "Melissa",
+        "RATING": 2.5,
+        "REVIEW": "Very difficult to follow and unclear expectations."
+    },
+    {
+        "ID": 135,
+        "MODULEID": "02.140TS",
+        "USERNAME": "Robert",
+        "RATING": 2.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 136,
+        "MODULEID": "02.140TS",
+        "USERNAME": "Jill",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 137,
+        "MODULEID": "02.140TS",
+        "USERNAME": "Stacey",
+        "RATING": 2.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 138,
+        "MODULEID": "02.140TS",
+        "USERNAME": "Christine",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 139,
+        "MODULEID": "02.140TS",
+        "USERNAME": "Lisa",
+        "RATING": 3.0,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 140,
+        "MODULEID": "02.143DH",
+        "USERNAME": "Marcus",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 141,
+        "MODULEID": "02.143DH",
+        "USERNAME": "Patricia",
+        "RATING": 2.0,
+        "REVIEW": "Lectures were dry and not engaging."
+    },
+    {
+        "ID": 142,
+        "MODULEID": "02.143DH",
+        "USERNAME": "Kayla",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 143,
+        "MODULEID": "02.143DH",
+        "USERNAME": "Shelby",
+        "RATING": 5.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 144,
+        "MODULEID": "02.143DH",
+        "USERNAME": "Kimberly",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 145,
+        "MODULEID": "02.144DH",
+        "USERNAME": "Scott",
+        "RATING": 2.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 146,
+        "MODULEID": "02.144DH",
+        "USERNAME": "Tammy",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 147,
+        "MODULEID": "02.144DH",
+        "USERNAME": "Jennifer",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 148,
+        "MODULEID": "02.144DH",
+        "USERNAME": "Christopher",
+        "RATING": 2.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 149,
+        "MODULEID": "02.146",
+        "USERNAME": "Christopher",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 150,
+        "MODULEID": "02.146",
+        "USERNAME": "Richard",
+        "RATING": 3.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 151,
+        "MODULEID": "02.146",
+        "USERNAME": "Patrick",
+        "RATING": 3.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 152,
+        "MODULEID": "02.147TS",
+        "USERNAME": "Samantha",
+        "RATING": 5.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 153,
+        "MODULEID": "02.147TS",
+        "USERNAME": "Jamie",
+        "RATING": 3.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 154,
+        "MODULEID": "02.147TS",
+        "USERNAME": "Kathryn",
+        "RATING": 3.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 155,
+        "MODULEID": "02.147TS",
+        "USERNAME": "Bianca",
+        "RATING": 1.0,
+        "REVIEW": "Very difficult to follow and unclear expectations."
+    },
+    {
+        "ID": 156,
+        "MODULEID": "02.147TS",
+        "USERNAME": "Garrett",
+        "RATING": 2.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 157,
+        "MODULEID": "02.147TS",
+        "USERNAME": "Jessica",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 158,
+        "MODULEID": "02.148HT",
+        "USERNAME": "Tamara",
+        "RATING": 3.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 159,
+        "MODULEID": "02.148HT",
+        "USERNAME": "Michelle",
+        "RATING": 3.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 160,
+        "MODULEID": "02.148HT",
+        "USERNAME": "Cheryl",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 161,
+        "MODULEID": "02.148HT",
+        "USERNAME": "Jessica",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 162,
+        "MODULEID": "02.148HT",
+        "USERNAME": "Rita",
+        "RATING": 3.0,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 163,
+        "MODULEID": "02.148HT",
+        "USERNAME": "Lisa",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 164,
+        "MODULEID": "02.148HT",
+        "USERNAME": "Nathan",
+        "RATING": 1.5,
+        "REVIEW": "Too much workload for what it's worth."
+    },
+    {
+        "ID": 165,
+        "MODULEID": "02.151HT",
+        "USERNAME": "Emily",
+        "RATING": 3.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 166,
+        "MODULEID": "02.151HT",
+        "USERNAME": "Debra",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 167,
+        "MODULEID": "02.151HT",
+        "USERNAME": "Ryan",
+        "RATING": 2.5,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 168,
+        "MODULEID": "02.151HT",
+        "USERNAME": "Madison",
+        "RATING": 2.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 169,
+        "MODULEID": "02.151HT",
+        "USERNAME": "James",
+        "RATING": 5.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 170,
+        "MODULEID": "02.151HT",
+        "USERNAME": "James",
+        "RATING": 5.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 171,
+        "MODULEID": "02.151HT",
+        "USERNAME": "Darrell",
+        "RATING": 3.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 172,
+        "MODULEID": "02.152HT",
+        "USERNAME": "David",
+        "RATING": 2.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 173,
+        "MODULEID": "02.152HT",
+        "USERNAME": "Curtis",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 174,
+        "MODULEID": "02.152HT",
+        "USERNAME": "Crystal",
+        "RATING": 3.0,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 175,
+        "MODULEID": "02.152HT",
+        "USERNAME": "Robert",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 176,
+        "MODULEID": "02.152HT",
+        "USERNAME": "Peter",
+        "RATING": 2.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 177,
+        "MODULEID": "02.152HT",
+        "USERNAME": "Kimberly",
+        "RATING": 2.5,
+        "REVIEW": "Lectures were dry and not engaging."
+    },
+    {
+        "ID": 178,
+        "MODULEID": "02.152HT",
+        "USERNAME": "Brittany",
+        "RATING": 2.0,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 179,
+        "MODULEID": "02.153TS",
+        "USERNAME": "Rhonda",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 180,
+        "MODULEID": "02.153TS",
+        "USERNAME": "Tiffany",
+        "RATING": 3.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 181,
+        "MODULEID": "02.153TS",
+        "USERNAME": "Rickey",
+        "RATING": 5.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 182,
+        "MODULEID": "02.156DH",
+        "USERNAME": "Jacob",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 183,
+        "MODULEID": "02.156DH",
+        "USERNAME": "Erin",
+        "RATING": 2.5,
+        "REVIEW": "Lectures were dry and not engaging."
+    },
+    {
+        "ID": 184,
+        "MODULEID": "02.156DH",
+        "USERNAME": "Jeremy",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 185,
+        "MODULEID": "02.156DH",
+        "USERNAME": "Karl",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 186,
+        "MODULEID": "02.156DH",
+        "USERNAME": "James",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 187,
+        "MODULEID": "02.156DH",
+        "USERNAME": "Jessica",
+        "RATING": 3.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 188,
+        "MODULEID": "02.156DH",
+        "USERNAME": "Amber",
+        "RATING": 2.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 189,
+        "MODULEID": "02.158DH",
+        "USERNAME": "Julie",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 190,
+        "MODULEID": "02.158DH",
+        "USERNAME": "Amy",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 191,
+        "MODULEID": "02.158DH",
+        "USERNAME": "Craig",
+        "RATING": 2.0,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 192,
+        "MODULEID": "02.158DH",
+        "USERNAME": "Daniel",
+        "RATING": 3.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 193,
+        "MODULEID": "02.158DH",
+        "USERNAME": "Sandra",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 194,
+        "MODULEID": "02.158DH",
+        "USERNAME": "Hannah",
+        "RATING": 5.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 195,
+        "MODULEID": "02.159HT",
+        "USERNAME": "Kristen",
+        "RATING": 1.5,
+        "REVIEW": "Grading seemed unfair or inconsistent."
+    },
+    {
+        "ID": 196,
+        "MODULEID": "02.159HT",
+        "USERNAME": "Katelyn",
+        "RATING": 3.5,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 197,
+        "MODULEID": "02.159HT",
+        "USERNAME": "Candice",
+        "RATING": 5.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 198,
+        "MODULEID": "02.159HT",
+        "USERNAME": "Jeremiah",
+        "RATING": 2.0,
+        "REVIEW": "Lectures were dry and not engaging."
+    },
+    {
+        "ID": 199,
+        "MODULEID": "02.163",
+        "USERNAME": "Seth",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 200,
+        "MODULEID": "02.163",
+        "USERNAME": "Kelly",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 201,
+        "MODULEID": "02.163",
+        "USERNAME": "Roy",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 202,
+        "MODULEID": "02.163",
+        "USERNAME": "Natalie",
+        "RATING": 2.0,
+        "REVIEW": "Lectures were dry and not engaging."
+    },
+    {
+        "ID": 203,
+        "MODULEID": "02.163",
+        "USERNAME": "Nancy",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 204,
+        "MODULEID": "02.163",
+        "USERNAME": "Terri",
+        "RATING": 3.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 205,
+        "MODULEID": "02.164DH",
+        "USERNAME": "Gregory",
+        "RATING": 3.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 206,
+        "MODULEID": "02.164DH",
+        "USERNAME": "Taylor",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 207,
+        "MODULEID": "02.164DH",
+        "USERNAME": "Jacob",
+        "RATING": 2.0,
+        "REVIEW": "Course description did not match actual content."
+    },
+    {
+        "ID": 208,
+        "MODULEID": "02.164DH",
+        "USERNAME": "Lorraine",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 209,
+        "MODULEID": "02.164DH",
+        "USERNAME": "Scott",
+        "RATING": 5.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 210,
+        "MODULEID": "02.164DH",
+        "USERNAME": "Tyler",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 211,
+        "MODULEID": "02.164DH",
+        "USERNAME": "Candace",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 212,
+        "MODULEID": "02.165TS",
+        "USERNAME": "Amber",
+        "RATING": 3.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 213,
+        "MODULEID": "02.165TS",
+        "USERNAME": "Kathryn",
+        "RATING": 3.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 214,
+        "MODULEID": "02.165TS",
+        "USERNAME": "Edward",
+        "RATING": 5.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 215,
+        "MODULEID": "02.165TS",
+        "USERNAME": "Susan",
+        "RATING": 5.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 216,
+        "MODULEID": "02.165TS",
+        "USERNAME": "Timothy",
+        "RATING": 2.0,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 217,
+        "MODULEID": "02.165TS",
+        "USERNAME": "Sara",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 218,
+        "MODULEID": "02.165TS",
+        "USERNAME": "Joseph",
+        "RATING": 2.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 219,
+        "MODULEID": "02.166TS",
+        "USERNAME": "Vanessa",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 220,
+        "MODULEID": "02.166TS",
+        "USERNAME": "Jenny",
+        "RATING": 3.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 221,
+        "MODULEID": "02.166TS",
+        "USERNAME": "Mary",
+        "RATING": 3.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 222,
+        "MODULEID": "02.166TS",
+        "USERNAME": "Paula",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 223,
+        "MODULEID": "02.166TS",
+        "USERNAME": "Jessica",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 224,
+        "MODULEID": "02.166TS",
+        "USERNAME": "Lynn",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 225,
+        "MODULEID": "02.166TS",
+        "USERNAME": "Andrew",
+        "RATING": 5.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 226,
+        "MODULEID": "02.167HT",
+        "USERNAME": "Lance",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 227,
+        "MODULEID": "02.167HT",
+        "USERNAME": "Tiffany",
+        "RATING": 5.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 228,
+        "MODULEID": "02.167HT",
+        "USERNAME": "John",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 229,
+        "MODULEID": "02.167HT",
+        "USERNAME": "Olivia",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 230,
+        "MODULEID": "02.167HT",
+        "USERNAME": "Eric",
+        "RATING": 2.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 231,
+        "MODULEID": "02.167HT",
+        "USERNAME": "Adam",
+        "RATING": 5.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 232,
+        "MODULEID": "02.167HT",
+        "USERNAME": "Jose",
+        "RATING": 3.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 233,
+        "MODULEID": "02.170HT",
+        "USERNAME": "Mark",
+        "RATING": 1.0,
+        "REVIEW": "Very difficult to follow and unclear expectations."
+    },
+    {
+        "ID": 234,
+        "MODULEID": "02.170HT",
+        "USERNAME": "Tracey",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 235,
+        "MODULEID": "02.170HT",
+        "USERNAME": "Michael",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 236,
+        "MODULEID": "02.170HT",
+        "USERNAME": "Dean",
+        "RATING": 3.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 237,
+        "MODULEID": "02.170HT",
+        "USERNAME": "Corey",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 238,
+        "MODULEID": "02.171",
+        "USERNAME": "Stacy",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 239,
+        "MODULEID": "02.171",
+        "USERNAME": "Logan",
+        "RATING": 5.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 240,
+        "MODULEID": "02.171",
+        "USERNAME": "Timothy",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 241,
+        "MODULEID": "02.172DH",
+        "USERNAME": "Bethany",
+        "RATING": 2.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 242,
+        "MODULEID": "02.172DH",
+        "USERNAME": "Rebecca",
+        "RATING": 5.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 243,
+        "MODULEID": "02.172DH",
+        "USERNAME": "Zachary",
+        "RATING": 3.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 244,
+        "MODULEID": "02.172DH",
+        "USERNAME": "Philip",
+        "RATING": 3.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 245,
+        "MODULEID": "02.172DH",
+        "USERNAME": "Erika",
+        "RATING": 2.0,
+        "REVIEW": "Lectures were dry and not engaging."
+    },
+    {
+        "ID": 246,
+        "MODULEID": "02.172DH",
+        "USERNAME": "Robert",
+        "RATING": 3.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 247,
+        "MODULEID": "02.172DH",
+        "USERNAME": "Shawn",
+        "RATING": 3.0,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 248,
+        "MODULEID": "02.173DH",
+        "USERNAME": "Brandi",
+        "RATING": 3.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 249,
+        "MODULEID": "02.173DH",
+        "USERNAME": "Eric",
+        "RATING": 2.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 250,
+        "MODULEID": "02.173DH",
+        "USERNAME": "Samuel",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 251,
+        "MODULEID": "02.174TS",
+        "USERNAME": "Kelly",
+        "RATING": 3.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 252,
+        "MODULEID": "02.174TS",
+        "USERNAME": "Latoya",
+        "RATING": 3.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 253,
+        "MODULEID": "02.174TS",
+        "USERNAME": "Paul",
+        "RATING": 5.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 254,
+        "MODULEID": "02.175DH",
+        "USERNAME": "Gabrielle",
+        "RATING": 1.5,
+        "REVIEW": "Grading seemed unfair or inconsistent."
+    },
+    {
+        "ID": 255,
+        "MODULEID": "02.175DH",
+        "USERNAME": "Jessica",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 256,
+        "MODULEID": "02.175DH",
+        "USERNAME": "Elizabeth",
+        "RATING": 5.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 257,
+        "MODULEID": "02.175DH",
+        "USERNAME": "Henry",
+        "RATING": 3.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 258,
+        "MODULEID": "02.175DH",
+        "USERNAME": "Marcus",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 259,
+        "MODULEID": "02.175DH",
+        "USERNAME": "Samuel",
+        "RATING": 1.0,
+        "REVIEW": "Grading seemed unfair or inconsistent."
+    },
+    {
+        "ID": 260,
+        "MODULEID": "02.176",
+        "USERNAME": "Amy",
+        "RATING": 2.5,
+        "REVIEW": "Lectures were dry and not engaging."
+    },
+    {
+        "ID": 261,
+        "MODULEID": "02.176",
+        "USERNAME": "Lisa",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 262,
+        "MODULEID": "02.176",
+        "USERNAME": "Wayne",
+        "RATING": 5.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 263,
+        "MODULEID": "02.176",
+        "USERNAME": "Kenneth",
+        "RATING": 2.0,
+        "REVIEW": "Too much workload for what it's worth."
+    },
+    {
+        "ID": 264,
+        "MODULEID": "02.176",
+        "USERNAME": "Jesse",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 265,
+        "MODULEID": "02.176",
+        "USERNAME": "Larry",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 266,
+        "MODULEID": "02.176",
+        "USERNAME": "Christopher",
+        "RATING": 3.0,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 267,
+        "MODULEID": "02.177",
+        "USERNAME": "Steven",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 268,
+        "MODULEID": "02.177",
+        "USERNAME": "Karen",
+        "RATING": 3.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 269,
+        "MODULEID": "02.177",
+        "USERNAME": "Brian",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 270,
+        "MODULEID": "02.177",
+        "USERNAME": "William",
+        "RATING": 2.0,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 271,
+        "MODULEID": "02.177",
+        "USERNAME": "Joshua",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 272,
+        "MODULEID": "02.177",
+        "USERNAME": "Brian",
+        "RATING": 2.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 273,
+        "MODULEID": "02.178HT",
+        "USERNAME": "Michael",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 274,
+        "MODULEID": "02.178HT",
+        "USERNAME": "Alyssa",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 275,
+        "MODULEID": "02.178HT",
+        "USERNAME": "Jordan",
+        "RATING": 5.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 276,
+        "MODULEID": "02.178HT",
+        "USERNAME": "Jeffery",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 277,
+        "MODULEID": "02.178HT",
+        "USERNAME": "Mary",
+        "RATING": 1.5,
+        "REVIEW": "Lectures were dry and not engaging."
+    },
+    {
+        "ID": 278,
+        "MODULEID": "02.178HT",
+        "USERNAME": "Seth",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 279,
+        "MODULEID": "02.201TS",
+        "USERNAME": "Sarah",
+        "RATING": 2.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 280,
+        "MODULEID": "02.201TS",
+        "USERNAME": "Derek",
+        "RATING": 2.0,
+        "REVIEW": "Lectures were dry and not engaging."
+    },
+    {
+        "ID": 281,
+        "MODULEID": "02.201TS",
+        "USERNAME": "Mary",
+        "RATING": 5.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 282,
+        "MODULEID": "02.201TS",
+        "USERNAME": "Phillip",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 283,
+        "MODULEID": "02.202",
+        "USERNAME": "Kim",
+        "RATING": 2.0,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 284,
+        "MODULEID": "02.202",
+        "USERNAME": "Joseph",
+        "RATING": 3.5,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 285,
+        "MODULEID": "02.202",
+        "USERNAME": "Levi",
+        "RATING": 2.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 286,
+        "MODULEID": "02.202",
+        "USERNAME": "Jason",
+        "RATING": 3.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 287,
+        "MODULEID": "02.202",
+        "USERNAME": "William",
+        "RATING": 1.5,
+        "REVIEW": "Course description did not match actual content."
+    },
+    {
+        "ID": 288,
+        "MODULEID": "02.202",
+        "USERNAME": "Gregory",
+        "RATING": 5.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 289,
+        "MODULEID": "02.202",
+        "USERNAME": "Cynthia",
+        "RATING": 5.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 290,
+        "MODULEID": "02.203",
+        "USERNAME": "Justin",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 291,
+        "MODULEID": "02.203",
+        "USERNAME": "Christina",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 292,
+        "MODULEID": "02.203",
+        "USERNAME": "Cheryl",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 293,
+        "MODULEID": "02.203",
+        "USERNAME": "Lauren",
+        "RATING": 5.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 294,
+        "MODULEID": "02.203",
+        "USERNAME": "Curtis",
+        "RATING": 2.5,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 295,
+        "MODULEID": "02.204",
+        "USERNAME": "Teresa",
+        "RATING": 3.0,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 296,
+        "MODULEID": "02.204",
+        "USERNAME": "Cynthia",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 297,
+        "MODULEID": "02.204",
+        "USERNAME": "Gina",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 298,
+        "MODULEID": "02.208",
+        "USERNAME": "Ryan",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 299,
+        "MODULEID": "02.208",
+        "USERNAME": "Christopher",
+        "RATING": 3.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 300,
+        "MODULEID": "02.208",
+        "USERNAME": "Daniel",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 301,
+        "MODULEID": "02.210TS",
+        "USERNAME": "Elizabeth",
+        "RATING": 2.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 302,
+        "MODULEID": "02.210TS",
+        "USERNAME": "Gina",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 303,
+        "MODULEID": "02.210TS",
+        "USERNAME": "David",
+        "RATING": 2.0,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 304,
+        "MODULEID": "02.210TS",
+        "USERNAME": "Jack",
+        "RATING": 5.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 305,
+        "MODULEID": "02.211",
+        "USERNAME": "Carla",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 306,
+        "MODULEID": "02.211",
+        "USERNAME": "Marc",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 307,
+        "MODULEID": "02.211",
+        "USERNAME": "Laura",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 308,
+        "MODULEID": "02.211",
+        "USERNAME": "Miguel",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 309,
+        "MODULEID": "02.211",
+        "USERNAME": "Michelle",
+        "RATING": 1.5,
+        "REVIEW": "Very difficult to follow and unclear expectations."
+    },
+    {
+        "ID": 310,
+        "MODULEID": "02.216TS",
+        "USERNAME": "Scott",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 311,
+        "MODULEID": "02.216TS",
+        "USERNAME": "Nicole",
+        "RATING": 3.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 312,
+        "MODULEID": "02.216TS",
+        "USERNAME": "Troy",
+        "RATING": 1.5,
+        "REVIEW": "Lectures were dry and not engaging."
+    },
+    {
+        "ID": 313,
+        "MODULEID": "02.217",
+        "USERNAME": "Jeremy",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 314,
+        "MODULEID": "02.217",
+        "USERNAME": "Julia",
+        "RATING": 3.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 315,
+        "MODULEID": "02.217",
+        "USERNAME": "Antonio",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 316,
+        "MODULEID": "02.217",
+        "USERNAME": "Edward",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 317,
+        "MODULEID": "02.218",
+        "USERNAME": "Craig",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 318,
+        "MODULEID": "02.218",
+        "USERNAME": "Jennifer",
+        "RATING": 5.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 319,
+        "MODULEID": "02.218",
+        "USERNAME": "Andrea",
+        "RATING": 3.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 320,
+        "MODULEID": "02.219TS",
+        "USERNAME": "Stephen",
+        "RATING": 2.0,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 321,
+        "MODULEID": "02.219TS",
+        "USERNAME": "John",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 322,
+        "MODULEID": "02.219TS",
+        "USERNAME": "Jillian",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 323,
+        "MODULEID": "02.219TS",
+        "USERNAME": "Todd",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 324,
+        "MODULEID": "02.219TS",
+        "USERNAME": "Victoria",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 325,
+        "MODULEID": "02.222TS",
+        "USERNAME": "Justin",
+        "RATING": 2.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 326,
+        "MODULEID": "02.222TS",
+        "USERNAME": "Kelly",
+        "RATING": 2.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 327,
+        "MODULEID": "02.222TS",
+        "USERNAME": "Amanda",
+        "RATING": 3.5,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 328,
+        "MODULEID": "02.222TS",
+        "USERNAME": "Raymond",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 329,
+        "MODULEID": "02.222TS",
+        "USERNAME": "Sabrina",
+        "RATING": 3.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 330,
+        "MODULEID": "02.222TS",
+        "USERNAME": "Angel",
+        "RATING": 1.5,
+        "REVIEW": "Grading seemed unfair or inconsistent."
+    },
+    {
+        "ID": 331,
+        "MODULEID": "02.222TS",
+        "USERNAME": "Douglas",
+        "RATING": 2.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 332,
+        "MODULEID": "02.226",
+        "USERNAME": "Harold",
+        "RATING": 1.5,
+        "REVIEW": "Lectures were dry and not engaging."
+    },
+    {
+        "ID": 333,
+        "MODULEID": "02.226",
+        "USERNAME": "Tammie",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 334,
+        "MODULEID": "02.226",
+        "USERNAME": "Nicole",
+        "RATING": 3.0,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 335,
+        "MODULEID": "02.228TS",
+        "USERNAME": "Joseph",
+        "RATING": 3.0,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 336,
+        "MODULEID": "02.228TS",
+        "USERNAME": "Scott",
+        "RATING": 3.0,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 337,
+        "MODULEID": "02.228TS",
+        "USERNAME": "Kevin",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 338,
+        "MODULEID": "02.228TS",
+        "USERNAME": "Samantha",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 339,
+        "MODULEID": "02.230TS",
+        "USERNAME": "Valerie",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 340,
+        "MODULEID": "02.230TS",
+        "USERNAME": "Scott",
+        "RATING": 1.5,
+        "REVIEW": "Too much workload for what it's worth."
+    },
+    {
+        "ID": 341,
+        "MODULEID": "02.230TS",
+        "USERNAME": "Michael",
+        "RATING": 5.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 342,
+        "MODULEID": "02.230TS",
+        "USERNAME": "Tiffany",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 343,
+        "MODULEID": "02.230TS",
+        "USERNAME": "Johnathan",
+        "RATING": 3.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 344,
+        "MODULEID": "02.230TS",
+        "USERNAME": "Matthew",
+        "RATING": 5.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 345,
+        "MODULEID": "02.230TS",
+        "USERNAME": "Jeffery",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 346,
+        "MODULEID": "02.231",
+        "USERNAME": "Michael",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 347,
+        "MODULEID": "02.231",
+        "USERNAME": "Alexis",
+        "RATING": 3.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 348,
+        "MODULEID": "02.231",
+        "USERNAME": "Steven",
+        "RATING": 3.0,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 349,
+        "MODULEID": "02.231",
+        "USERNAME": "Aaron",
+        "RATING": 5.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 350,
+        "MODULEID": "02.231",
+        "USERNAME": "Elizabeth",
+        "RATING": 2.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 351,
+        "MODULEID": "02.231",
+        "USERNAME": "Alexis",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 352,
+        "MODULEID": "02.231",
+        "USERNAME": "Jared",
+        "RATING": 3.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 353,
+        "MODULEID": "03.007",
+        "USERNAME": "Kevin",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 354,
+        "MODULEID": "03.007",
+        "USERNAME": "Alan",
+        "RATING": 3.0,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 355,
+        "MODULEID": "03.007",
+        "USERNAME": "Valerie",
+        "RATING": 3.0,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 356,
+        "MODULEID": "03.007",
+        "USERNAME": "Zachary",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 357,
+        "MODULEID": "03.007",
+        "USERNAME": "Christine",
+        "RATING": 2.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 358,
+        "MODULEID": "03.007",
+        "USERNAME": "Kristi",
+        "RATING": 5.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 359,
+        "MODULEID": "10.013",
+        "USERNAME": "Susan",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 360,
+        "MODULEID": "10.013",
+        "USERNAME": "Corey",
+        "RATING": 2.0,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 361,
+        "MODULEID": "10.013",
+        "USERNAME": "Jacob",
+        "RATING": 5.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 362,
+        "MODULEID": "10.013",
+        "USERNAME": "Terri",
+        "RATING": 3.5,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 363,
+        "MODULEID": "10.013",
+        "USERNAME": "Amanda",
+        "RATING": 5.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 364,
+        "MODULEID": "10.014",
+        "USERNAME": "Christopher",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 365,
+        "MODULEID": "10.014",
+        "USERNAME": "Lisa",
+        "RATING": 3.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 366,
+        "MODULEID": "10.014",
+        "USERNAME": "Zachary",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 367,
+        "MODULEID": "10.014",
+        "USERNAME": "Abigail",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 368,
+        "MODULEID": "10.014",
+        "USERNAME": "Brian",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 369,
+        "MODULEID": "10.015",
+        "USERNAME": "Lauren",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 370,
+        "MODULEID": "10.015",
+        "USERNAME": "Arthur",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 371,
+        "MODULEID": "10.015",
+        "USERNAME": "Teresa",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 372,
+        "MODULEID": "10.016",
+        "USERNAME": "Paul",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 373,
+        "MODULEID": "10.016",
+        "USERNAME": "Karen",
+        "RATING": 2.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 374,
+        "MODULEID": "10.016",
+        "USERNAME": "Amanda",
+        "RATING": 3.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 375,
+        "MODULEID": "10.016",
+        "USERNAME": "Tom",
+        "RATING": 2.5,
+        "REVIEW": "Very difficult to follow and unclear expectations."
+    },
+    {
+        "ID": 376,
+        "MODULEID": "10.016",
+        "USERNAME": "Mark",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 377,
+        "MODULEID": "10.017",
+        "USERNAME": "Andrea",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 378,
+        "MODULEID": "10.017",
+        "USERNAME": "Julie",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 379,
+        "MODULEID": "10.017",
+        "USERNAME": "Keith",
+        "RATING": 2.5,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 380,
+        "MODULEID": "10.017",
+        "USERNAME": "Kimberly",
+        "RATING": 2.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 381,
+        "MODULEID": "10.017",
+        "USERNAME": "Daniel",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 382,
+        "MODULEID": "10.017",
+        "USERNAME": "Dennis",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 383,
+        "MODULEID": "10.017",
+        "USERNAME": "Heidi",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 384,
+        "MODULEID": "10.018",
+        "USERNAME": "Anna",
+        "RATING": 5.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 385,
+        "MODULEID": "10.018",
+        "USERNAME": "Jennifer",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 386,
+        "MODULEID": "10.018",
+        "USERNAME": "Hector",
+        "RATING": 5.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 387,
+        "MODULEID": "10.018",
+        "USERNAME": "Melissa",
+        "RATING": 2.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 388,
+        "MODULEID": "10.018",
+        "USERNAME": "Elizabeth",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 389,
+        "MODULEID": "10.018",
+        "USERNAME": "Michael",
+        "RATING": 5.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 390,
+        "MODULEID": "10.018",
+        "USERNAME": "Alicia",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 391,
+        "MODULEID": "10.019",
+        "USERNAME": "Karen",
+        "RATING": 3.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 392,
+        "MODULEID": "10.019",
+        "USERNAME": "Matthew",
+        "RATING": 3.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 393,
+        "MODULEID": "10.019",
+        "USERNAME": "Keith",
+        "RATING": 5.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 394,
+        "MODULEID": "10.019",
+        "USERNAME": "Michael",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 395,
+        "MODULEID": "10.02",
+        "USERNAME": "Diana",
+        "RATING": 3.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 396,
+        "MODULEID": "10.02",
+        "USERNAME": "Samantha",
+        "RATING": 2.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 397,
+        "MODULEID": "10.02",
+        "USERNAME": "Andrew",
+        "RATING": 2.0,
+        "REVIEW": "Too much workload for what it's worth."
+    },
+    {
+        "ID": 398,
+        "MODULEID": "10.02",
+        "USERNAME": "Elizabeth",
+        "RATING": 2.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 399,
+        "MODULEID": "10.022",
+        "USERNAME": "Jonathan",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 400,
+        "MODULEID": "10.022",
+        "USERNAME": "Michael",
+        "RATING": 3.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 401,
+        "MODULEID": "10.022",
+        "USERNAME": "Corey",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 402,
+        "MODULEID": "10.022",
+        "USERNAME": "Andre",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 403,
+        "MODULEID": "10.022",
+        "USERNAME": "Adriana",
+        "RATING": 3.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 404,
+        "MODULEID": "10.022",
+        "USERNAME": "Jeffrey",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 405,
+        "MODULEID": "10.022",
+        "USERNAME": "Amy",
+        "RATING": 3.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 406,
+        "MODULEID": "10.023",
+        "USERNAME": "Richard",
+        "RATING": 3.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 407,
+        "MODULEID": "10.023",
+        "USERNAME": "Robert",
+        "RATING": 3.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 408,
+        "MODULEID": "10.023",
+        "USERNAME": "Raven",
+        "RATING": 2.0,
+        "REVIEW": "Very difficult to follow and unclear expectations."
+    },
+    {
+        "ID": 409,
+        "MODULEID": "10.024",
+        "USERNAME": "Jill",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 410,
+        "MODULEID": "10.024",
+        "USERNAME": "Hannah",
+        "RATING": 3.0,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 411,
+        "MODULEID": "10.024",
+        "USERNAME": "Carolyn",
+        "RATING": 2.0,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 412,
+        "MODULEID": "10.024",
+        "USERNAME": "Susan",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 413,
+        "MODULEID": "10.024",
+        "USERNAME": "Angela",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 414,
+        "MODULEID": "10.024",
+        "USERNAME": "Jacob",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 415,
+        "MODULEID": "20.099",
+        "USERNAME": "Cassandra",
+        "RATING": 2.5,
+        "REVIEW": "Grading seemed unfair or inconsistent."
+    },
+    {
+        "ID": 416,
+        "MODULEID": "20.099",
+        "USERNAME": "Carol",
+        "RATING": 1.0,
+        "REVIEW": "Very difficult to follow and unclear expectations."
+    },
+    {
+        "ID": 417,
+        "MODULEID": "20.099",
+        "USERNAME": "Kevin",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 418,
+        "MODULEID": "20.099",
+        "USERNAME": "Jenna",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 419,
+        "MODULEID": "20.099",
+        "USERNAME": "Joseph",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 420,
+        "MODULEID": "20.101",
+        "USERNAME": "Cynthia",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 421,
+        "MODULEID": "20.101",
+        "USERNAME": "Michelle",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 422,
+        "MODULEID": "20.101",
+        "USERNAME": "Robert",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 423,
+        "MODULEID": "20.101",
+        "USERNAME": "Steve",
+        "RATING": 3.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 424,
+        "MODULEID": "20.102",
+        "USERNAME": "Christopher",
+        "RATING": 3.0,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 425,
+        "MODULEID": "20.102",
+        "USERNAME": "Mark",
+        "RATING": 2.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 426,
+        "MODULEID": "20.102",
+        "USERNAME": "Melanie",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 427,
+        "MODULEID": "20.102",
+        "USERNAME": "Blake",
+        "RATING": 3.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 428,
+        "MODULEID": "20.102",
+        "USERNAME": "Erin",
+        "RATING": 5.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 429,
+        "MODULEID": "20.103",
+        "USERNAME": "Sierra",
+        "RATING": 2.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 430,
+        "MODULEID": "20.103",
+        "USERNAME": "Douglas",
+        "RATING": 3.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 431,
+        "MODULEID": "20.103",
+        "USERNAME": "Harold",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 432,
+        "MODULEID": "20.111",
+        "USERNAME": "Robin",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 433,
+        "MODULEID": "20.111",
+        "USERNAME": "Morgan",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 434,
+        "MODULEID": "20.111",
+        "USERNAME": "William",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 435,
+        "MODULEID": "20.111",
+        "USERNAME": "Deanna",
+        "RATING": 3.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 436,
+        "MODULEID": "20.112",
+        "USERNAME": "Barbara",
+        "RATING": 3.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 437,
+        "MODULEID": "20.112",
+        "USERNAME": "Darryl",
+        "RATING": 3.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 438,
+        "MODULEID": "20.112",
+        "USERNAME": "Crystal",
+        "RATING": 3.0,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 439,
+        "MODULEID": "20.112",
+        "USERNAME": "Hannah",
+        "RATING": 5.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 440,
+        "MODULEID": "20.201",
+        "USERNAME": "Dawn",
+        "RATING": 1.5,
+        "REVIEW": "Lectures were dry and not engaging."
+    },
+    {
+        "ID": 441,
+        "MODULEID": "20.201",
+        "USERNAME": "Lisa",
+        "RATING": 5.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 442,
+        "MODULEID": "20.201",
+        "USERNAME": "Anthony",
+        "RATING": 2.0,
+        "REVIEW": "Grading seemed unfair or inconsistent."
+    },
+    {
+        "ID": 443,
+        "MODULEID": "20.201",
+        "USERNAME": "Kelly",
+        "RATING": 2.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 444,
+        "MODULEID": "20.201",
+        "USERNAME": "Jeremy",
+        "RATING": 2.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 445,
+        "MODULEID": "20.202",
+        "USERNAME": "Robert",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 446,
+        "MODULEID": "20.202",
+        "USERNAME": "Jay",
+        "RATING": 2.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 447,
+        "MODULEID": "20.202",
+        "USERNAME": "Joel",
+        "RATING": 5.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 448,
+        "MODULEID": "20.202",
+        "USERNAME": "Amanda",
+        "RATING": 2.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 449,
+        "MODULEID": "20.203",
+        "USERNAME": "Paul",
+        "RATING": 2.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 450,
+        "MODULEID": "20.203",
+        "USERNAME": "Leslie",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 451,
+        "MODULEID": "20.203",
+        "USERNAME": "Ralph",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 452,
+        "MODULEID": "20.203",
+        "USERNAME": "Vanessa",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 453,
+        "MODULEID": "20.203",
+        "USERNAME": "David",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 454,
+        "MODULEID": "20.212",
+        "USERNAME": "Monica",
+        "RATING": 3.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 455,
+        "MODULEID": "20.212",
+        "USERNAME": "Heather",
+        "RATING": 5.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 456,
+        "MODULEID": "20.212",
+        "USERNAME": "Bryan",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 457,
+        "MODULEID": "20.213",
+        "USERNAME": "Erin",
+        "RATING": 3.0,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 458,
+        "MODULEID": "20.213",
+        "USERNAME": "Karen",
+        "RATING": 3.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 459,
+        "MODULEID": "20.213",
+        "USERNAME": "Victoria",
+        "RATING": 1.5,
+        "REVIEW": "Lectures were dry and not engaging."
+    },
+    {
+        "ID": 460,
+        "MODULEID": "20.213",
+        "USERNAME": "Bryan",
+        "RATING": 5.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 461,
+        "MODULEID": "20.213",
+        "USERNAME": "Lee",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 462,
+        "MODULEID": "20.221",
+        "USERNAME": "Larry",
+        "RATING": 2.0,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 463,
+        "MODULEID": "20.221",
+        "USERNAME": "William",
+        "RATING": 3.0,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 464,
+        "MODULEID": "20.221",
+        "USERNAME": "Brandon",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 465,
+        "MODULEID": "20.221",
+        "USERNAME": "Lisa",
+        "RATING": 3.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 466,
+        "MODULEID": "20.222",
+        "USERNAME": "Cindy",
+        "RATING": 2.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 467,
+        "MODULEID": "20.222",
+        "USERNAME": "Rodney",
+        "RATING": 2.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 468,
+        "MODULEID": "20.222",
+        "USERNAME": "Robin",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 469,
+        "MODULEID": "20.222",
+        "USERNAME": "Christian",
+        "RATING": 2.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 470,
+        "MODULEID": "20.222",
+        "USERNAME": "Michael",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 471,
+        "MODULEID": "20.223",
+        "USERNAME": "Jordan",
+        "RATING": 3.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 472,
+        "MODULEID": "20.223",
+        "USERNAME": "Stephanie",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 473,
+        "MODULEID": "20.223",
+        "USERNAME": "Jeffrey",
+        "RATING": 2.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 474,
+        "MODULEID": "20.223",
+        "USERNAME": "Anne",
+        "RATING": 5.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 475,
+        "MODULEID": "20.223",
+        "USERNAME": "Benjamin",
+        "RATING": 5.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 476,
+        "MODULEID": "20.223",
+        "USERNAME": "Bonnie",
+        "RATING": 3.0,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 477,
+        "MODULEID": "20.224",
+        "USERNAME": "Madeline",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 478,
+        "MODULEID": "20.224",
+        "USERNAME": "Michelle",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 479,
+        "MODULEID": "20.224",
+        "USERNAME": "Richard",
+        "RATING": 2.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 480,
+        "MODULEID": "20.224",
+        "USERNAME": "Christina",
+        "RATING": 5.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 481,
+        "MODULEID": "20.224",
+        "USERNAME": "Kurt",
+        "RATING": 5.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 482,
+        "MODULEID": "20.301",
+        "USERNAME": "Mark",
+        "RATING": 3.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 483,
+        "MODULEID": "20.301",
+        "USERNAME": "Andrea",
+        "RATING": 5.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 484,
+        "MODULEID": "20.301",
+        "USERNAME": "Timothy",
+        "RATING": 3.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 485,
+        "MODULEID": "20.301",
+        "USERNAME": "Brandi",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 486,
+        "MODULEID": "20.301",
+        "USERNAME": "Matthew",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 487,
+        "MODULEID": "20.301",
+        "USERNAME": "Brenda",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 488,
+        "MODULEID": "20.301",
+        "USERNAME": "Mitchell",
+        "RATING": 2.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 489,
+        "MODULEID": "20.302",
+        "USERNAME": "Brooke",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 490,
+        "MODULEID": "20.302",
+        "USERNAME": "James",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 491,
+        "MODULEID": "20.302",
+        "USERNAME": "Jimmy",
+        "RATING": 3.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 492,
+        "MODULEID": "20.302",
+        "USERNAME": "Rachel",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 493,
+        "MODULEID": "20.302",
+        "USERNAME": "Margaret",
+        "RATING": 3.0,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 494,
+        "MODULEID": "20.303",
+        "USERNAME": "Kaylee",
+        "RATING": 3.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 495,
+        "MODULEID": "20.303",
+        "USERNAME": "Anne",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 496,
+        "MODULEID": "20.303",
+        "USERNAME": "Pamela",
+        "RATING": 1.0,
+        "REVIEW": "Lectures were dry and not engaging."
+    },
+    {
+        "ID": 497,
+        "MODULEID": "20.303",
+        "USERNAME": "Glenn",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 498,
+        "MODULEID": "20.303",
+        "USERNAME": "Kylie",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 499,
+        "MODULEID": "20.304",
+        "USERNAME": "Cheryl",
+        "RATING": 3.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 500,
+        "MODULEID": "20.304",
+        "USERNAME": "William",
+        "RATING": 3.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 501,
+        "MODULEID": "20.304",
+        "USERNAME": "Eric",
+        "RATING": 2.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 502,
+        "MODULEID": "20.304",
+        "USERNAME": "Alisha",
+        "RATING": 3.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 503,
+        "MODULEID": "20.304",
+        "USERNAME": "Lynn",
+        "RATING": 3.0,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 504,
+        "MODULEID": "20.304",
+        "USERNAME": "Reginald",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 505,
+        "MODULEID": "20.304",
+        "USERNAME": "Belinda",
+        "RATING": 3.0,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 506,
+        "MODULEID": "20.305",
+        "USERNAME": "Emma",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 507,
+        "MODULEID": "20.305",
+        "USERNAME": "Lauren",
+        "RATING": 1.0,
+        "REVIEW": "Grading seemed unfair or inconsistent."
+    },
+    {
+        "ID": 508,
+        "MODULEID": "20.305",
+        "USERNAME": "Daniel",
+        "RATING": 3.5,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 509,
+        "MODULEID": "20.305",
+        "USERNAME": "Stacey",
+        "RATING": 1.5,
+        "REVIEW": "Lectures were dry and not engaging."
+    },
+    {
+        "ID": 510,
+        "MODULEID": "20.305",
+        "USERNAME": "Linda",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 511,
+        "MODULEID": "20.307",
+        "USERNAME": "Kimberly",
+        "RATING": 2.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 512,
+        "MODULEID": "20.307",
+        "USERNAME": "Robert",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 513,
+        "MODULEID": "20.307",
+        "USERNAME": "Ashley",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 514,
+        "MODULEID": "20.307",
+        "USERNAME": "Ashley",
+        "RATING": 3.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 515,
+        "MODULEID": "20.312",
+        "USERNAME": "David",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 516,
+        "MODULEID": "20.312",
+        "USERNAME": "Antonio",
+        "RATING": 3.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 517,
+        "MODULEID": "20.312",
+        "USERNAME": "Ian",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 518,
+        "MODULEID": "20.312",
+        "USERNAME": "Charles",
+        "RATING": 3.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 519,
+        "MODULEID": "20.312",
+        "USERNAME": "Jill",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 520,
+        "MODULEID": "20.312",
+        "USERNAME": "Bryan",
+        "RATING": 1.5,
+        "REVIEW": "Very difficult to follow and unclear expectations."
+    },
+    {
+        "ID": 521,
+        "MODULEID": "20.313",
+        "USERNAME": "Laura",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 522,
+        "MODULEID": "20.313",
+        "USERNAME": "Barry",
+        "RATING": 3.0,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 523,
+        "MODULEID": "20.313",
+        "USERNAME": "James",
+        "RATING": 3.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 524,
+        "MODULEID": "20.313",
+        "USERNAME": "Catherine",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 525,
+        "MODULEID": "20.313",
+        "USERNAME": "Erin",
+        "RATING": 3.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 526,
+        "MODULEID": "20.313",
+        "USERNAME": "Shelly",
+        "RATING": 3.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 527,
+        "MODULEID": "20.314",
+        "USERNAME": "Robert",
+        "RATING": 3.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 528,
+        "MODULEID": "20.314",
+        "USERNAME": "Daniel",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 529,
+        "MODULEID": "20.314",
+        "USERNAME": "Jodi",
+        "RATING": 2.0,
+        "REVIEW": "Too much workload for what it's worth."
+    },
+    {
+        "ID": 530,
+        "MODULEID": "20.314",
+        "USERNAME": "Anthony",
+        "RATING": 1.5,
+        "REVIEW": "Lectures were dry and not engaging."
+    },
+    {
+        "ID": 531,
+        "MODULEID": "20.316",
+        "USERNAME": "Christopher",
+        "RATING": 5.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 532,
+        "MODULEID": "20.316",
+        "USERNAME": "Kathy",
+        "RATING": 3.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 533,
+        "MODULEID": "20.316",
+        "USERNAME": "Pamela",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 534,
+        "MODULEID": "20.316",
+        "USERNAME": "Lisa",
+        "RATING": 3.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 535,
+        "MODULEID": "20.316",
+        "USERNAME": "Brenda",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 536,
+        "MODULEID": "20.316",
+        "USERNAME": "Heather",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 537,
+        "MODULEID": "20.316",
+        "USERNAME": "Matthew",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 538,
+        "MODULEID": "20.317",
+        "USERNAME": "Kristen",
+        "RATING": 3.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 539,
+        "MODULEID": "20.317",
+        "USERNAME": "Charles",
+        "RATING": 1.5,
+        "REVIEW": "Course description did not match actual content."
+    },
+    {
+        "ID": 540,
+        "MODULEID": "20.317",
+        "USERNAME": "Elizabeth",
+        "RATING": 2.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 541,
+        "MODULEID": "20.317",
+        "USERNAME": "Steven",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 542,
+        "MODULEID": "20.318",
+        "USERNAME": "Ryan",
+        "RATING": 3.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 543,
+        "MODULEID": "20.318",
+        "USERNAME": "Michael",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 544,
+        "MODULEID": "20.318",
+        "USERNAME": "Gregory",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 545,
+        "MODULEID": "20.318",
+        "USERNAME": "Louis",
+        "RATING": 3.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 546,
+        "MODULEID": "20.319",
+        "USERNAME": "Elizabeth",
+        "RATING": 3.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 547,
+        "MODULEID": "20.319",
+        "USERNAME": "Stacey",
+        "RATING": 2.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 548,
+        "MODULEID": "20.319",
+        "USERNAME": "Anthony",
+        "RATING": 5.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 549,
+        "MODULEID": "20.319",
+        "USERNAME": "Ann",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 550,
+        "MODULEID": "20.319",
+        "USERNAME": "Patricia",
+        "RATING": 5.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 551,
+        "MODULEID": "20.32",
+        "USERNAME": "James",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 552,
+        "MODULEID": "20.32",
+        "USERNAME": "Alyssa",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 553,
+        "MODULEID": "20.32",
+        "USERNAME": "Elizabeth",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 554,
+        "MODULEID": "20.32",
+        "USERNAME": "Denise",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 555,
+        "MODULEID": "20.32",
+        "USERNAME": "Melissa",
+        "RATING": 3.0,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 556,
+        "MODULEID": "20.32",
+        "USERNAME": "Stephen",
+        "RATING": 5.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 557,
+        "MODULEID": "20.32",
+        "USERNAME": "James",
+        "RATING": 5.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 558,
+        "MODULEID": "20.321",
+        "USERNAME": "David",
+        "RATING": 2.0,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 559,
+        "MODULEID": "20.321",
+        "USERNAME": "Stephen",
+        "RATING": 2.5,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 560,
+        "MODULEID": "20.321",
+        "USERNAME": "Gregory",
+        "RATING": 2.5,
+        "REVIEW": "Lectures were dry and not engaging."
+    },
+    {
+        "ID": 561,
+        "MODULEID": "20.321",
+        "USERNAME": "Ryan",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 562,
+        "MODULEID": "20.322",
+        "USERNAME": "Jorge",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 563,
+        "MODULEID": "20.322",
+        "USERNAME": "Andrea",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 564,
+        "MODULEID": "20.322",
+        "USERNAME": "Robin",
+        "RATING": 3.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 565,
+        "MODULEID": "20.322",
+        "USERNAME": "Evan",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 566,
+        "MODULEID": "20.322",
+        "USERNAME": "Susan",
+        "RATING": 5.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 567,
+        "MODULEID": "20.322",
+        "USERNAME": "Mary",
+        "RATING": 3.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 568,
+        "MODULEID": "20.323",
+        "USERNAME": "Robert",
+        "RATING": 2.5,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 569,
+        "MODULEID": "20.323",
+        "USERNAME": "Jennifer",
+        "RATING": 3.0,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 570,
+        "MODULEID": "20.323",
+        "USERNAME": "Karen",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 571,
+        "MODULEID": "20.323",
+        "USERNAME": "Bethany",
+        "RATING": 3.0,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 572,
+        "MODULEID": "20.323",
+        "USERNAME": "Charles",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 573,
+        "MODULEID": "20.323",
+        "USERNAME": "Chloe",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 574,
+        "MODULEID": "20.323",
+        "USERNAME": "Kaitlyn",
+        "RATING": 5.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 575,
+        "MODULEID": "30.001",
+        "USERNAME": "Patrick",
+        "RATING": 3.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 576,
+        "MODULEID": "30.001",
+        "USERNAME": "John",
+        "RATING": 5.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 577,
+        "MODULEID": "30.001",
+        "USERNAME": "Paul",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 578,
+        "MODULEID": "30.001",
+        "USERNAME": "Matthew",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 579,
+        "MODULEID": "30.001",
+        "USERNAME": "Natalie",
+        "RATING": 3.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 580,
+        "MODULEID": "30.001",
+        "USERNAME": "Aaron",
+        "RATING": 3.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 581,
+        "MODULEID": "30.001",
+        "USERNAME": "Jonathan",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 582,
+        "MODULEID": "30.002",
+        "USERNAME": "Andrea",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 583,
+        "MODULEID": "30.002",
+        "USERNAME": "Roberto",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 584,
+        "MODULEID": "30.002",
+        "USERNAME": "Kristen",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 585,
+        "MODULEID": "30.002",
+        "USERNAME": "Gregory",
+        "RATING": 2.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 586,
+        "MODULEID": "30.007",
+        "USERNAME": "Justin",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 587,
+        "MODULEID": "30.007",
+        "USERNAME": "Shawn",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 588,
+        "MODULEID": "30.007",
+        "USERNAME": "Audrey",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 589,
+        "MODULEID": "30.007",
+        "USERNAME": "Cassandra",
+        "RATING": 2.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 590,
+        "MODULEID": "30.007",
+        "USERNAME": "Michele",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 591,
+        "MODULEID": "30.007",
+        "USERNAME": "Thomas",
+        "RATING": 2.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 592,
+        "MODULEID": "30.1",
+        "USERNAME": "Jennifer",
+        "RATING": 3.0,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 593,
+        "MODULEID": "30.1",
+        "USERNAME": "Andrea",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 594,
+        "MODULEID": "30.1",
+        "USERNAME": "Robert",
+        "RATING": 2.5,
+        "REVIEW": "Grading seemed unfair or inconsistent."
+    },
+    {
+        "ID": 595,
+        "MODULEID": "30.1",
+        "USERNAME": "David",
+        "RATING": 3.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 596,
+        "MODULEID": "30.1",
+        "USERNAME": "Brian",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 597,
+        "MODULEID": "30.101",
+        "USERNAME": "John",
+        "RATING": 5.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 598,
+        "MODULEID": "30.101",
+        "USERNAME": "Lauren",
+        "RATING": 3.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 599,
+        "MODULEID": "30.101",
+        "USERNAME": "Scott",
+        "RATING": 5.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 600,
+        "MODULEID": "30.102",
+        "USERNAME": "Nancy",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 601,
+        "MODULEID": "30.102",
+        "USERNAME": "Andrew",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 602,
+        "MODULEID": "30.102",
+        "USERNAME": "Jared",
+        "RATING": 3.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 603,
+        "MODULEID": "30.103",
+        "USERNAME": "Joshua",
+        "RATING": 2.5,
+        "REVIEW": "Very difficult to follow and unclear expectations."
+    },
+    {
+        "ID": 604,
+        "MODULEID": "30.103",
+        "USERNAME": "Carol",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 605,
+        "MODULEID": "30.103",
+        "USERNAME": "Matthew",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 606,
+        "MODULEID": "30.104",
+        "USERNAME": "Ryan",
+        "RATING": 1.0,
+        "REVIEW": "Too much workload for what it's worth."
+    },
+    {
+        "ID": 607,
+        "MODULEID": "30.104",
+        "USERNAME": "Ann",
+        "RATING": 3.0,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 608,
+        "MODULEID": "30.104",
+        "USERNAME": "Katie",
+        "RATING": 5.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 609,
+        "MODULEID": "30.105",
+        "USERNAME": "Audrey",
+        "RATING": 3.0,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 610,
+        "MODULEID": "30.105",
+        "USERNAME": "Matthew",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 611,
+        "MODULEID": "30.105",
+        "USERNAME": "Susan",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 612,
+        "MODULEID": "30.105",
+        "USERNAME": "David",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 613,
+        "MODULEID": "30.105",
+        "USERNAME": "Jennifer",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 614,
+        "MODULEID": "30.106",
+        "USERNAME": "Jennifer",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 615,
+        "MODULEID": "30.106",
+        "USERNAME": "Rebecca",
+        "RATING": 2.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 616,
+        "MODULEID": "30.106",
+        "USERNAME": "Michelle",
+        "RATING": 3.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 617,
+        "MODULEID": "30.106",
+        "USERNAME": "Kelly",
+        "RATING": 3.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 618,
+        "MODULEID": "30.106",
+        "USERNAME": "Mark",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 619,
+        "MODULEID": "30.107",
+        "USERNAME": "Sandra",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 620,
+        "MODULEID": "30.107",
+        "USERNAME": "Jeffrey",
+        "RATING": 3.5,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 621,
+        "MODULEID": "30.107",
+        "USERNAME": "Nicholas",
+        "RATING": 2.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 622,
+        "MODULEID": "30.107",
+        "USERNAME": "Cheryl",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 623,
+        "MODULEID": "30.107",
+        "USERNAME": "Lori",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 624,
+        "MODULEID": "30.107",
+        "USERNAME": "Mark",
+        "RATING": 2.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 625,
+        "MODULEID": "30.108",
+        "USERNAME": "Robin",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 626,
+        "MODULEID": "30.108",
+        "USERNAME": "Carl",
+        "RATING": 3.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 627,
+        "MODULEID": "30.108",
+        "USERNAME": "Lawrence",
+        "RATING": 3.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 628,
+        "MODULEID": "30.108",
+        "USERNAME": "Christopher",
+        "RATING": 5.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 629,
+        "MODULEID": "30.109",
+        "USERNAME": "Ashley",
+        "RATING": 3.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 630,
+        "MODULEID": "30.109",
+        "USERNAME": "Michael",
+        "RATING": 3.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 631,
+        "MODULEID": "30.109",
+        "USERNAME": "Linda",
+        "RATING": 3.0,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 632,
+        "MODULEID": "30.11",
+        "USERNAME": "Jordan",
+        "RATING": 1.0,
+        "REVIEW": "Very difficult to follow and unclear expectations."
+    },
+    {
+        "ID": 633,
+        "MODULEID": "30.11",
+        "USERNAME": "Carol",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 634,
+        "MODULEID": "30.11",
+        "USERNAME": "Sue",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 635,
+        "MODULEID": "30.111",
+        "USERNAME": "Mary",
+        "RATING": 5.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 636,
+        "MODULEID": "30.111",
+        "USERNAME": "Taylor",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 637,
+        "MODULEID": "30.111",
+        "USERNAME": "Alicia",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 638,
+        "MODULEID": "30.111",
+        "USERNAME": "Breanna",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 639,
+        "MODULEID": "30.111",
+        "USERNAME": "Norman",
+        "RATING": 2.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 640,
+        "MODULEID": "30.111",
+        "USERNAME": "Courtney",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 641,
+        "MODULEID": "30.113",
+        "USERNAME": "Mary",
+        "RATING": 3.0,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 642,
+        "MODULEID": "30.113",
+        "USERNAME": "Jonathan",
+        "RATING": 3.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 643,
+        "MODULEID": "30.113",
+        "USERNAME": "Timothy",
+        "RATING": 2.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 644,
+        "MODULEID": "30.113",
+        "USERNAME": "Jacob",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 645,
+        "MODULEID": "30.113",
+        "USERNAME": "Nicole",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 646,
+        "MODULEID": "30.113",
+        "USERNAME": "Samantha",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 647,
+        "MODULEID": "30.113",
+        "USERNAME": "Justin",
+        "RATING": 5.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 648,
+        "MODULEID": "30.114",
+        "USERNAME": "Caroline",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 649,
+        "MODULEID": "30.114",
+        "USERNAME": "Cassidy",
+        "RATING": 2.0,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 650,
+        "MODULEID": "30.114",
+        "USERNAME": "Heather",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 651,
+        "MODULEID": "30.114",
+        "USERNAME": "Lisa",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 652,
+        "MODULEID": "30.114",
+        "USERNAME": "Leslie",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 653,
+        "MODULEID": "30.114",
+        "USERNAME": "Kristina",
+        "RATING": 3.0,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 654,
+        "MODULEID": "30.114",
+        "USERNAME": "Martha",
+        "RATING": 2.5,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 655,
+        "MODULEID": "30.115",
+        "USERNAME": "Diana",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 656,
+        "MODULEID": "30.115",
+        "USERNAME": "Christine",
+        "RATING": 1.0,
+        "REVIEW": "Too much workload for what it's worth."
+    },
+    {
+        "ID": 657,
+        "MODULEID": "30.115",
+        "USERNAME": "Terry",
+        "RATING": 2.5,
+        "REVIEW": "Grading seemed unfair or inconsistent."
+    },
+    {
+        "ID": 658,
+        "MODULEID": "30.117",
+        "USERNAME": "Robin",
+        "RATING": 5.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 659,
+        "MODULEID": "30.117",
+        "USERNAME": "Douglas",
+        "RATING": 5.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 660,
+        "MODULEID": "30.117",
+        "USERNAME": "Crystal",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 661,
+        "MODULEID": "30.119",
+        "USERNAME": "Tony",
+        "RATING": 2.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 662,
+        "MODULEID": "30.119",
+        "USERNAME": "Casey",
+        "RATING": 3.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 663,
+        "MODULEID": "30.119",
+        "USERNAME": "Michael",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 664,
+        "MODULEID": "30.119",
+        "USERNAME": "Heather",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 665,
+        "MODULEID": "30.119",
+        "USERNAME": "Meredith",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 666,
+        "MODULEID": "30.119",
+        "USERNAME": "Brittney",
+        "RATING": 3.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 667,
+        "MODULEID": "30.119",
+        "USERNAME": "Mark",
+        "RATING": 3.0,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 668,
+        "MODULEID": "30.12",
+        "USERNAME": "Jamie",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 669,
+        "MODULEID": "30.12",
+        "USERNAME": "Nancy",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 670,
+        "MODULEID": "30.12",
+        "USERNAME": "Heather",
+        "RATING": 5.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 671,
+        "MODULEID": "30.12",
+        "USERNAME": "Michelle",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 672,
+        "MODULEID": "30.12",
+        "USERNAME": "Juan",
+        "RATING": 2.5,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 673,
+        "MODULEID": "30.12",
+        "USERNAME": "Julie",
+        "RATING": 2.5,
+        "REVIEW": "Too much workload for what it's worth."
+    },
+    {
+        "ID": 674,
+        "MODULEID": "30.123",
+        "USERNAME": "Joshua",
+        "RATING": 2.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 675,
+        "MODULEID": "30.123",
+        "USERNAME": "Lonnie",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 676,
+        "MODULEID": "30.123",
+        "USERNAME": "Amanda",
+        "RATING": 2.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 677,
+        "MODULEID": "30.123",
+        "USERNAME": "Carl",
+        "RATING": 3.0,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 678,
+        "MODULEID": "30.2",
+        "USERNAME": "Matthew",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 679,
+        "MODULEID": "30.2",
+        "USERNAME": "Andrea",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 680,
+        "MODULEID": "30.2",
+        "USERNAME": "Catherine",
+        "RATING": 3.0,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 681,
+        "MODULEID": "30.2",
+        "USERNAME": "Eric",
+        "RATING": 1.5,
+        "REVIEW": "Course description did not match actual content."
+    },
+    {
+        "ID": 682,
+        "MODULEID": "30.2",
+        "USERNAME": "David",
+        "RATING": 5.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 683,
+        "MODULEID": "30.2",
+        "USERNAME": "Paul",
+        "RATING": 3.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 684,
+        "MODULEID": "30.2",
+        "USERNAME": "Curtis",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 685,
+        "MODULEID": "30.201",
+        "USERNAME": "Stacey",
+        "RATING": 3.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 686,
+        "MODULEID": "30.201",
+        "USERNAME": "Sean",
+        "RATING": 1.5,
+        "REVIEW": "Course description did not match actual content."
+    },
+    {
+        "ID": 687,
+        "MODULEID": "30.201",
+        "USERNAME": "Traci",
+        "RATING": 5.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 688,
+        "MODULEID": "30.201",
+        "USERNAME": "Gary",
+        "RATING": 2.0,
+        "REVIEW": "Course description did not match actual content."
+    },
+    {
+        "ID": 689,
+        "MODULEID": "30.201",
+        "USERNAME": "Lisa",
+        "RATING": 5.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 690,
+        "MODULEID": "30.201",
+        "USERNAME": "Stephanie",
+        "RATING": 3.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 691,
+        "MODULEID": "30.202",
+        "USERNAME": "Thomas",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 692,
+        "MODULEID": "30.202",
+        "USERNAME": "Christopher",
+        "RATING": 2.5,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 693,
+        "MODULEID": "30.202",
+        "USERNAME": "Kimberly",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 694,
+        "MODULEID": "30.202",
+        "USERNAME": "Luis",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 695,
+        "MODULEID": "30.202",
+        "USERNAME": "Lindsay",
+        "RATING": 2.5,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 696,
+        "MODULEID": "30.202",
+        "USERNAME": "Tiffany",
+        "RATING": 2.0,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 697,
+        "MODULEID": "30.202",
+        "USERNAME": "Donna",
+        "RATING": 3.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 698,
+        "MODULEID": "30.203",
+        "USERNAME": "Carol",
+        "RATING": 3.0,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 699,
+        "MODULEID": "30.203",
+        "USERNAME": "Jason",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 700,
+        "MODULEID": "30.203",
+        "USERNAME": "Ronald",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 701,
+        "MODULEID": "30.203",
+        "USERNAME": "Lacey",
+        "RATING": 3.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 702,
+        "MODULEID": "30.203",
+        "USERNAME": "Michael",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 703,
+        "MODULEID": "30.303",
+        "USERNAME": "Dawn",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 704,
+        "MODULEID": "30.303",
+        "USERNAME": "James",
+        "RATING": 2.0,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 705,
+        "MODULEID": "30.303",
+        "USERNAME": "Crystal",
+        "RATING": 1.5,
+        "REVIEW": "Lectures were dry and not engaging."
+    },
+    {
+        "ID": 706,
+        "MODULEID": "30.303",
+        "USERNAME": "Louis",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 707,
+        "MODULEID": "30.303",
+        "USERNAME": "Patrick",
+        "RATING": 3.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 708,
+        "MODULEID": "30.303",
+        "USERNAME": "Charles",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 709,
+        "MODULEID": "30.303",
+        "USERNAME": "Andrea",
+        "RATING": 1.5,
+        "REVIEW": "Grading seemed unfair or inconsistent."
+    },
+    {
+        "ID": 710,
+        "MODULEID": "30.316",
+        "USERNAME": "Caleb",
+        "RATING": 2.0,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 711,
+        "MODULEID": "30.316",
+        "USERNAME": "Stephen",
+        "RATING": 3.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 712,
+        "MODULEID": "30.316",
+        "USERNAME": "William",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 713,
+        "MODULEID": "30.316",
+        "USERNAME": "Barbara",
+        "RATING": 1.5,
+        "REVIEW": "Grading seemed unfair or inconsistent."
+    },
+    {
+        "ID": 714,
+        "MODULEID": "30.316",
+        "USERNAME": "Gloria",
+        "RATING": 3.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 715,
+        "MODULEID": "30.316",
+        "USERNAME": "Sarah",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 716,
+        "MODULEID": "40.002",
+        "USERNAME": "Tasha",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 717,
+        "MODULEID": "40.002",
+        "USERNAME": "Betty",
+        "RATING": 2.0,
+        "REVIEW": "Very difficult to follow and unclear expectations."
+    },
+    {
+        "ID": 718,
+        "MODULEID": "40.002",
+        "USERNAME": "Brandon",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 719,
+        "MODULEID": "40.011",
+        "USERNAME": "Valerie",
+        "RATING": 5.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 720,
+        "MODULEID": "40.011",
+        "USERNAME": "Colton",
+        "RATING": 2.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 721,
+        "MODULEID": "40.011",
+        "USERNAME": "Jennifer",
+        "RATING": 3.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 722,
+        "MODULEID": "40.012",
+        "USERNAME": "Kylie",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 723,
+        "MODULEID": "40.012",
+        "USERNAME": "Mary",
+        "RATING": 3.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 724,
+        "MODULEID": "40.012",
+        "USERNAME": "Marcus",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 725,
+        "MODULEID": "40.014",
+        "USERNAME": "John",
+        "RATING": 1.5,
+        "REVIEW": "Lectures were dry and not engaging."
+    },
+    {
+        "ID": 726,
+        "MODULEID": "40.014",
+        "USERNAME": "Blake",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 727,
+        "MODULEID": "40.014",
+        "USERNAME": "Nathan",
+        "RATING": 2.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 728,
+        "MODULEID": "40.014",
+        "USERNAME": "Cindy",
+        "RATING": 5.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 729,
+        "MODULEID": "40.014",
+        "USERNAME": "Felicia",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 730,
+        "MODULEID": "40.014",
+        "USERNAME": "Heather",
+        "RATING": 5.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 731,
+        "MODULEID": "40.015",
+        "USERNAME": "Nathan",
+        "RATING": 3.0,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 732,
+        "MODULEID": "40.015",
+        "USERNAME": "Hayley",
+        "RATING": 3.0,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 733,
+        "MODULEID": "40.015",
+        "USERNAME": "Christine",
+        "RATING": 2.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 734,
+        "MODULEID": "40.016",
+        "USERNAME": "Caleb",
+        "RATING": 3.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 735,
+        "MODULEID": "40.016",
+        "USERNAME": "Brian",
+        "RATING": 3.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 736,
+        "MODULEID": "40.016",
+        "USERNAME": "Brianna",
+        "RATING": 2.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 737,
+        "MODULEID": "40.016",
+        "USERNAME": "Samuel",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 738,
+        "MODULEID": "40.016",
+        "USERNAME": "Randall",
+        "RATING": 1.0,
+        "REVIEW": "Too much workload for what it's worth."
+    },
+    {
+        "ID": 739,
+        "MODULEID": "40.016",
+        "USERNAME": "Tammy",
+        "RATING": 2.0,
+        "REVIEW": "Course description did not match actual content."
+    },
+    {
+        "ID": 740,
+        "MODULEID": "40.016",
+        "USERNAME": "Michael",
+        "RATING": 3.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 741,
+        "MODULEID": "40.017",
+        "USERNAME": "Jennifer",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 742,
+        "MODULEID": "40.017",
+        "USERNAME": "Meredith",
+        "RATING": 3.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 743,
+        "MODULEID": "40.017",
+        "USERNAME": "Gerald",
+        "RATING": 3.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 744,
+        "MODULEID": "40.017",
+        "USERNAME": "Renee",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 745,
+        "MODULEID": "40.017",
+        "USERNAME": "Steven",
+        "RATING": 2.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 746,
+        "MODULEID": "40.017",
+        "USERNAME": "Martin",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 747,
+        "MODULEID": "40.018",
+        "USERNAME": "Jillian",
+        "RATING": 5.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 748,
+        "MODULEID": "40.018",
+        "USERNAME": "Brenda",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 749,
+        "MODULEID": "40.018",
+        "USERNAME": "Jason",
+        "RATING": 5.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 750,
+        "MODULEID": "40.018",
+        "USERNAME": "Jonathan",
+        "RATING": 3.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 751,
+        "MODULEID": "40.23",
+        "USERNAME": "Jill",
+        "RATING": 3.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 752,
+        "MODULEID": "40.23",
+        "USERNAME": "Helen",
+        "RATING": 2.0,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 753,
+        "MODULEID": "40.23",
+        "USERNAME": "Shawn",
+        "RATING": 2.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 754,
+        "MODULEID": "40.23",
+        "USERNAME": "Kathleen",
+        "RATING": 2.0,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 755,
+        "MODULEID": "40.23",
+        "USERNAME": "Glenn",
+        "RATING": 2.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 756,
+        "MODULEID": "40.24",
+        "USERNAME": "Sara",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 757,
+        "MODULEID": "40.24",
+        "USERNAME": "Joseph",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 758,
+        "MODULEID": "40.24",
+        "USERNAME": "Jennifer",
+        "RATING": 2.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 759,
+        "MODULEID": "40.24",
+        "USERNAME": "Erin",
+        "RATING": 2.0,
+        "REVIEW": "Very difficult to follow and unclear expectations."
+    },
+    {
+        "ID": 760,
+        "MODULEID": "40.24",
+        "USERNAME": "Lynn",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 761,
+        "MODULEID": "40.242",
+        "USERNAME": "Gina",
+        "RATING": 5.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 762,
+        "MODULEID": "40.242",
+        "USERNAME": "Jacob",
+        "RATING": 2.0,
+        "REVIEW": "Too much workload for what it's worth."
+    },
+    {
+        "ID": 763,
+        "MODULEID": "40.242",
+        "USERNAME": "Michael",
+        "RATING": 2.0,
+        "REVIEW": "Lectures were dry and not engaging."
+    },
+    {
+        "ID": 764,
+        "MODULEID": "40.26",
+        "USERNAME": "Tyler",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 765,
+        "MODULEID": "40.26",
+        "USERNAME": "William",
+        "RATING": 5.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 766,
+        "MODULEID": "40.26",
+        "USERNAME": "Kyle",
+        "RATING": 2.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 767,
+        "MODULEID": "40.26",
+        "USERNAME": "Dominic",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 768,
+        "MODULEID": "40.26",
+        "USERNAME": "Holly",
+        "RATING": 5.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 769,
+        "MODULEID": "40.26",
+        "USERNAME": "Nicole",
+        "RATING": 2.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 770,
+        "MODULEID": "40.302",
+        "USERNAME": "April",
+        "RATING": 2.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 771,
+        "MODULEID": "40.302",
+        "USERNAME": "Jonathan",
+        "RATING": 1.5,
+        "REVIEW": "Lectures were dry and not engaging."
+    },
+    {
+        "ID": 772,
+        "MODULEID": "40.302",
+        "USERNAME": "Joseph",
+        "RATING": 3.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 773,
+        "MODULEID": "40.302",
+        "USERNAME": "Teresa",
+        "RATING": 3.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 774,
+        "MODULEID": "40.305",
+        "USERNAME": "Desiree",
+        "RATING": 3.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 775,
+        "MODULEID": "40.305",
+        "USERNAME": "Matthew",
+        "RATING": 3.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 776,
+        "MODULEID": "40.305",
+        "USERNAME": "Alex",
+        "RATING": 2.0,
+        "REVIEW": "Very difficult to follow and unclear expectations."
+    },
+    {
+        "ID": 777,
+        "MODULEID": "40.305",
+        "USERNAME": "Monica",
+        "RATING": 3.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 778,
+        "MODULEID": "40.316",
+        "USERNAME": "Sandra",
+        "RATING": 3.0,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 779,
+        "MODULEID": "40.316",
+        "USERNAME": "Thomas",
+        "RATING": 3.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 780,
+        "MODULEID": "40.316",
+        "USERNAME": "Adriana",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 781,
+        "MODULEID": "40.316",
+        "USERNAME": "Christopher",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 782,
+        "MODULEID": "40.318",
+        "USERNAME": "Katherine",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 783,
+        "MODULEID": "40.318",
+        "USERNAME": "James",
+        "RATING": 5.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 784,
+        "MODULEID": "40.318",
+        "USERNAME": "Mark",
+        "RATING": 3.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 785,
+        "MODULEID": "40.318",
+        "USERNAME": "Lucas",
+        "RATING": 2.5,
+        "REVIEW": "Too much workload for what it's worth."
+    },
+    {
+        "ID": 786,
+        "MODULEID": "40.318",
+        "USERNAME": "Rachel",
+        "RATING": 2.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 787,
+        "MODULEID": "40.318",
+        "USERNAME": "Lori",
+        "RATING": 3.5,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 788,
+        "MODULEID": "40.318",
+        "USERNAME": "Amy",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 789,
+        "MODULEID": "40.319",
+        "USERNAME": "Andrew",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 790,
+        "MODULEID": "40.319",
+        "USERNAME": "Tanner",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 791,
+        "MODULEID": "40.319",
+        "USERNAME": "Tamara",
+        "RATING": 2.0,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 792,
+        "MODULEID": "40.319",
+        "USERNAME": "Antonio",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 793,
+        "MODULEID": "40.32",
+        "USERNAME": "Megan",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 794,
+        "MODULEID": "40.32",
+        "USERNAME": "Richard",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 795,
+        "MODULEID": "40.32",
+        "USERNAME": "Tiffany",
+        "RATING": 5.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 796,
+        "MODULEID": "40.32",
+        "USERNAME": "Timothy",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 797,
+        "MODULEID": "40.32",
+        "USERNAME": "James",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 798,
+        "MODULEID": "40.32",
+        "USERNAME": "Christopher",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 799,
+        "MODULEID": "40.321",
+        "USERNAME": "Shannon",
+        "RATING": 3.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 800,
+        "MODULEID": "40.321",
+        "USERNAME": "Sonya",
+        "RATING": 3.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 801,
+        "MODULEID": "40.321",
+        "USERNAME": "Carrie",
+        "RATING": 2.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 802,
+        "MODULEID": "40.323",
+        "USERNAME": "Heather",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 803,
+        "MODULEID": "40.323",
+        "USERNAME": "Darren",
+        "RATING": 2.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 804,
+        "MODULEID": "40.323",
+        "USERNAME": "Jay",
+        "RATING": 2.0,
+        "REVIEW": "Grading seemed unfair or inconsistent."
+    },
+    {
+        "ID": 805,
+        "MODULEID": "40.324",
+        "USERNAME": "William",
+        "RATING": 2.0,
+        "REVIEW": "Grading seemed unfair or inconsistent."
+    },
+    {
+        "ID": 806,
+        "MODULEID": "40.324",
+        "USERNAME": "Alyssa",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 807,
+        "MODULEID": "40.324",
+        "USERNAME": "Kayla",
+        "RATING": 2.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 808,
+        "MODULEID": "40.324",
+        "USERNAME": "Craig",
+        "RATING": 2.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 809,
+        "MODULEID": "40.324",
+        "USERNAME": "Dawn",
+        "RATING": 3.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 810,
+        "MODULEID": "40.324",
+        "USERNAME": "Thomas",
+        "RATING": 5.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 811,
+        "MODULEID": "40.324",
+        "USERNAME": "Lee",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 812,
+        "MODULEID": "50.001",
+        "USERNAME": "Jasmine",
+        "RATING": 3.0,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 813,
+        "MODULEID": "50.001",
+        "USERNAME": "Corey",
+        "RATING": 2.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 814,
+        "MODULEID": "50.001",
+        "USERNAME": "Elizabeth",
+        "RATING": 2.0,
+        "REVIEW": "Grading seemed unfair or inconsistent."
+    },
+    {
+        "ID": 815,
+        "MODULEID": "50.001",
+        "USERNAME": "Brandon",
+        "RATING": 2.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 816,
+        "MODULEID": "50.001",
+        "USERNAME": "Patricia",
+        "RATING": 5.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 817,
+        "MODULEID": "50.001",
+        "USERNAME": "Hannah",
+        "RATING": 2.5,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 818,
+        "MODULEID": "50.001",
+        "USERNAME": "William",
+        "RATING": 2.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 819,
+        "MODULEID": "50.002",
+        "USERNAME": "Yolanda",
+        "RATING": 3.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 820,
+        "MODULEID": "50.002",
+        "USERNAME": "David",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 821,
+        "MODULEID": "50.002",
+        "USERNAME": "Kathryn",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 822,
+        "MODULEID": "50.002",
+        "USERNAME": "Sandra",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 823,
+        "MODULEID": "50.002",
+        "USERNAME": "Lindsay",
+        "RATING": 2.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 824,
+        "MODULEID": "50.002",
+        "USERNAME": "Adam",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 825,
+        "MODULEID": "50.003",
+        "USERNAME": "Christopher",
+        "RATING": 2.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 826,
+        "MODULEID": "50.003",
+        "USERNAME": "Robert",
+        "RATING": 3.0,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 827,
+        "MODULEID": "50.003",
+        "USERNAME": "Nathan",
+        "RATING": 5.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 828,
+        "MODULEID": "50.003",
+        "USERNAME": "Kristina",
+        "RATING": 3.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 829,
+        "MODULEID": "50.003",
+        "USERNAME": "Natalie",
+        "RATING": 3.0,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 830,
+        "MODULEID": "50.004",
+        "USERNAME": "Sarah",
+        "RATING": 3.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 831,
+        "MODULEID": "50.004",
+        "USERNAME": "Tina",
+        "RATING": 2.5,
+        "REVIEW": "Lectures were dry and not engaging."
+    },
+    {
+        "ID": 832,
+        "MODULEID": "50.004",
+        "USERNAME": "Kathleen",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 833,
+        "MODULEID": "50.004",
+        "USERNAME": "Angela",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 834,
+        "MODULEID": "50.004",
+        "USERNAME": "Andrew",
+        "RATING": 5.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 835,
+        "MODULEID": "50.005",
+        "USERNAME": "Stephanie",
+        "RATING": 2.0,
+        "REVIEW": "Very difficult to follow and unclear expectations."
+    },
+    {
+        "ID": 836,
+        "MODULEID": "50.005",
+        "USERNAME": "Christine",
+        "RATING": 3.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 837,
+        "MODULEID": "50.005",
+        "USERNAME": "Vanessa",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 838,
+        "MODULEID": "50.005",
+        "USERNAME": "Alexandra",
+        "RATING": 3.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 839,
+        "MODULEID": "50.006",
+        "USERNAME": "Edward",
+        "RATING": 3.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 840,
+        "MODULEID": "50.006",
+        "USERNAME": "David",
+        "RATING": 2.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 841,
+        "MODULEID": "50.006",
+        "USERNAME": "Tyler",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 842,
+        "MODULEID": "50.006",
+        "USERNAME": "Jason",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 843,
+        "MODULEID": "50.006",
+        "USERNAME": "Sheila",
+        "RATING": 3.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 844,
+        "MODULEID": "50.006",
+        "USERNAME": "Emily",
+        "RATING": 1.0,
+        "REVIEW": "Course description did not match actual content."
+    },
+    {
+        "ID": 845,
+        "MODULEID": "50.007",
+        "USERNAME": "Annette",
+        "RATING": 2.0,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 846,
+        "MODULEID": "50.007",
+        "USERNAME": "Kerry",
+        "RATING": 5.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 847,
+        "MODULEID": "50.007",
+        "USERNAME": "Henry",
+        "RATING": 3.0,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 848,
+        "MODULEID": "50.007",
+        "USERNAME": "Eugene",
+        "RATING": 2.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 849,
+        "MODULEID": "50.012",
+        "USERNAME": "Bryan",
+        "RATING": 1.5,
+        "REVIEW": "Very difficult to follow and unclear expectations."
+    },
+    {
+        "ID": 850,
+        "MODULEID": "50.012",
+        "USERNAME": "Carla",
+        "RATING": 3.0,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 851,
+        "MODULEID": "50.012",
+        "USERNAME": "Melissa",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 852,
+        "MODULEID": "50.012",
+        "USERNAME": "Shannon",
+        "RATING": 1.0,
+        "REVIEW": "Too much workload for what it's worth."
+    },
+    {
+        "ID": 853,
+        "MODULEID": "50.012",
+        "USERNAME": "Michael",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 854,
+        "MODULEID": "50.017",
+        "USERNAME": "Summer",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 855,
+        "MODULEID": "50.017",
+        "USERNAME": "Lindsey",
+        "RATING": 3.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 856,
+        "MODULEID": "50.017",
+        "USERNAME": "Donna",
+        "RATING": 1.0,
+        "REVIEW": "Too much workload for what it's worth."
+    },
+    {
+        "ID": 857,
+        "MODULEID": "50.017",
+        "USERNAME": "Sarah",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 858,
+        "MODULEID": "50.02",
+        "USERNAME": "Michelle",
+        "RATING": 3.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 859,
+        "MODULEID": "50.02",
+        "USERNAME": "Taylor",
+        "RATING": 3.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 860,
+        "MODULEID": "50.02",
+        "USERNAME": "Joseph",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 861,
+        "MODULEID": "50.02",
+        "USERNAME": "Nicole",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 862,
+        "MODULEID": "50.02",
+        "USERNAME": "Keith",
+        "RATING": 2.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 863,
+        "MODULEID": "50.02",
+        "USERNAME": "Charles",
+        "RATING": 3.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 864,
+        "MODULEID": "50.021",
+        "USERNAME": "Christopher",
+        "RATING": 2.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 865,
+        "MODULEID": "50.021",
+        "USERNAME": "Ashley",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 866,
+        "MODULEID": "50.021",
+        "USERNAME": "Anthony",
+        "RATING": 2.0,
+        "REVIEW": "Lectures were dry and not engaging."
+    },
+    {
+        "ID": 867,
+        "MODULEID": "50.033",
+        "USERNAME": "Kelly",
+        "RATING": 1.5,
+        "REVIEW": "Course description did not match actual content."
+    },
+    {
+        "ID": 868,
+        "MODULEID": "50.033",
+        "USERNAME": "Sheila",
+        "RATING": 3.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 869,
+        "MODULEID": "50.033",
+        "USERNAME": "Brandon",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 870,
+        "MODULEID": "50.035",
+        "USERNAME": "Stephanie",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 871,
+        "MODULEID": "50.035",
+        "USERNAME": "Amanda",
+        "RATING": 1.0,
+        "REVIEW": "Very difficult to follow and unclear expectations."
+    },
+    {
+        "ID": 872,
+        "MODULEID": "50.035",
+        "USERNAME": "Denise",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 873,
+        "MODULEID": "50.035",
+        "USERNAME": "David",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 874,
+        "MODULEID": "50.035",
+        "USERNAME": "Alyssa",
+        "RATING": 2.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 875,
+        "MODULEID": "50.035",
+        "USERNAME": "Anthony",
+        "RATING": 3.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 876,
+        "MODULEID": "50.037",
+        "USERNAME": "Kelly",
+        "RATING": 3.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 877,
+        "MODULEID": "50.037",
+        "USERNAME": "Tara",
+        "RATING": 2.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 878,
+        "MODULEID": "50.037",
+        "USERNAME": "Judith",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 879,
+        "MODULEID": "50.037",
+        "USERNAME": "William",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 880,
+        "MODULEID": "50.037",
+        "USERNAME": "John",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 881,
+        "MODULEID": "50.037",
+        "USERNAME": "Kenneth",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 882,
+        "MODULEID": "50.037",
+        "USERNAME": "Michael",
+        "RATING": 2.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 883,
+        "MODULEID": "50.038",
+        "USERNAME": "Joshua",
+        "RATING": 3.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 884,
+        "MODULEID": "50.038",
+        "USERNAME": "Andrew",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 885,
+        "MODULEID": "50.038",
+        "USERNAME": "Meghan",
+        "RATING": 1.5,
+        "REVIEW": "Course description did not match actual content."
+    },
+    {
+        "ID": 886,
+        "MODULEID": "50.038",
+        "USERNAME": "John",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 887,
+        "MODULEID": "50.038",
+        "USERNAME": "Stephanie",
+        "RATING": 5.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 888,
+        "MODULEID": "50.038",
+        "USERNAME": "Sheila",
+        "RATING": 2.5,
+        "REVIEW": "Too much workload for what it's worth."
+    },
+    {
+        "ID": 889,
+        "MODULEID": "50.039",
+        "USERNAME": "Randy",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 890,
+        "MODULEID": "50.039",
+        "USERNAME": "Victoria",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 891,
+        "MODULEID": "50.039",
+        "USERNAME": "Donna",
+        "RATING": 2.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 892,
+        "MODULEID": "50.04",
+        "USERNAME": "Michael",
+        "RATING": 5.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 893,
+        "MODULEID": "50.04",
+        "USERNAME": "Dana",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 894,
+        "MODULEID": "50.04",
+        "USERNAME": "Seth",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 895,
+        "MODULEID": "50.04",
+        "USERNAME": "Kelsey",
+        "RATING": 5.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 896,
+        "MODULEID": "50.04",
+        "USERNAME": "Jennifer",
+        "RATING": 3.0,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 897,
+        "MODULEID": "50.04",
+        "USERNAME": "Kimberly",
+        "RATING": 3.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 898,
+        "MODULEID": "50.041",
+        "USERNAME": "Derek",
+        "RATING": 3.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 899,
+        "MODULEID": "50.041",
+        "USERNAME": "Linda",
+        "RATING": 2.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 900,
+        "MODULEID": "50.041",
+        "USERNAME": "Jennifer",
+        "RATING": 3.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 901,
+        "MODULEID": "50.041",
+        "USERNAME": "John",
+        "RATING": 3.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 902,
+        "MODULEID": "50.042",
+        "USERNAME": "Gabrielle",
+        "RATING": 3.0,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 903,
+        "MODULEID": "50.042",
+        "USERNAME": "Amanda",
+        "RATING": 5.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 904,
+        "MODULEID": "50.042",
+        "USERNAME": "William",
+        "RATING": 3.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 905,
+        "MODULEID": "50.042",
+        "USERNAME": "Laura",
+        "RATING": 3.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 906,
+        "MODULEID": "50.042",
+        "USERNAME": "Gregory",
+        "RATING": 2.0,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 907,
+        "MODULEID": "50.043",
+        "USERNAME": "Jesse",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 908,
+        "MODULEID": "50.043",
+        "USERNAME": "Sarah",
+        "RATING": 2.0,
+        "REVIEW": "Too much workload for what it's worth."
+    },
+    {
+        "ID": 909,
+        "MODULEID": "50.043",
+        "USERNAME": "Phillip",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 910,
+        "MODULEID": "50.043",
+        "USERNAME": "Alexis",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 911,
+        "MODULEID": "50.043",
+        "USERNAME": "Stephanie",
+        "RATING": 5.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 912,
+        "MODULEID": "50.044",
+        "USERNAME": "Krystal",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 913,
+        "MODULEID": "50.044",
+        "USERNAME": "Jaclyn",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 914,
+        "MODULEID": "50.044",
+        "USERNAME": "Daniel",
+        "RATING": 1.5,
+        "REVIEW": "Too much workload for what it's worth."
+    },
+    {
+        "ID": 915,
+        "MODULEID": "50.044",
+        "USERNAME": "Emma",
+        "RATING": 3.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 916,
+        "MODULEID": "50.044",
+        "USERNAME": "Lisa",
+        "RATING": 5.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 917,
+        "MODULEID": "50.045",
+        "USERNAME": "Sophia",
+        "RATING": 3.0,
+        "REVIEW": "The course was okay, nothing special."
+    },
+    {
+        "ID": 918,
+        "MODULEID": "50.045",
+        "USERNAME": "Jason",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 919,
+        "MODULEID": "50.045",
+        "USERNAME": "Megan",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 920,
+        "MODULEID": "50.045",
+        "USERNAME": "Jessica",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 921,
+        "MODULEID": "50.046",
+        "USERNAME": "Steven",
+        "RATING": 3.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 922,
+        "MODULEID": "50.046",
+        "USERNAME": "Thomas",
+        "RATING": 1.5,
+        "REVIEW": "Lectures were dry and not engaging."
+    },
+    {
+        "ID": 923,
+        "MODULEID": "50.046",
+        "USERNAME": "Alicia",
+        "RATING": 2.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 924,
+        "MODULEID": "50.046",
+        "USERNAME": "Jennifer",
+        "RATING": 3.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 925,
+        "MODULEID": "50.046",
+        "USERNAME": "Elizabeth",
+        "RATING": 3.0,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 926,
+        "MODULEID": "50.046",
+        "USERNAME": "Mary",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 927,
+        "MODULEID": "50.046",
+        "USERNAME": "Brian",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 928,
+        "MODULEID": "50.047",
+        "USERNAME": "Robert",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 929,
+        "MODULEID": "50.047",
+        "USERNAME": "Karla",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 930,
+        "MODULEID": "50.047",
+        "USERNAME": "Emma",
+        "RATING": 2.0,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 931,
+        "MODULEID": "50.047",
+        "USERNAME": "Dylan",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 932,
+        "MODULEID": "50.047",
+        "USERNAME": "Jason",
+        "RATING": 3.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 933,
+        "MODULEID": "50.05",
+        "USERNAME": "Daniel",
+        "RATING": 2.5,
+        "REVIEW": "Grading seemed unfair or inconsistent."
+    },
+    {
+        "ID": 934,
+        "MODULEID": "50.05",
+        "USERNAME": "Tammy",
+        "RATING": 3.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 935,
+        "MODULEID": "50.05",
+        "USERNAME": "Teresa",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 936,
+        "MODULEID": "50.05",
+        "USERNAME": "Jenna",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 937,
+        "MODULEID": "50.05",
+        "USERNAME": "Jason",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 938,
+        "MODULEID": "50.05",
+        "USERNAME": "Katie",
+        "RATING": 2.0,
+        "REVIEW": "Course description did not match actual content."
+    },
+    {
+        "ID": 939,
+        "MODULEID": "50.05",
+        "USERNAME": "Laura",
+        "RATING": 2.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 940,
+        "MODULEID": "50.051",
+        "USERNAME": "Cory",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 941,
+        "MODULEID": "50.051",
+        "USERNAME": "Morgan",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 942,
+        "MODULEID": "50.051",
+        "USERNAME": "Desiree",
+        "RATING": 4.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 943,
+        "MODULEID": "50.051",
+        "USERNAME": "Stephanie",
+        "RATING": 5.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 944,
+        "MODULEID": "50.051",
+        "USERNAME": "Brittany",
+        "RATING": 3.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 945,
+        "MODULEID": "50.051",
+        "USERNAME": "Deborah",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 946,
+        "MODULEID": "50.052",
+        "USERNAME": "Stephen",
+        "RATING": 5.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 947,
+        "MODULEID": "50.052",
+        "USERNAME": "David",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 948,
+        "MODULEID": "50.052",
+        "USERNAME": "Michaela",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 949,
+        "MODULEID": "50.052",
+        "USERNAME": "Ryan",
+        "RATING": 2.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 950,
+        "MODULEID": "50.052",
+        "USERNAME": "Jessica",
+        "RATING": 3.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 951,
+        "MODULEID": "50.052",
+        "USERNAME": "James",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 952,
+        "MODULEID": "50.053",
+        "USERNAME": "Wendy",
+        "RATING": 3.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 953,
+        "MODULEID": "50.053",
+        "USERNAME": "John",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 954,
+        "MODULEID": "50.053",
+        "USERNAME": "Kelsey",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 955,
+        "MODULEID": "50.053",
+        "USERNAME": "Christie",
+        "RATING": 3.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 956,
+        "MODULEID": "50.053",
+        "USERNAME": "Robert",
+        "RATING": 3.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 957,
+        "MODULEID": "50.053",
+        "USERNAME": "Susan",
+        "RATING": 2.5,
+        "REVIEW": "Grading seemed unfair or inconsistent."
+    },
+    {
+        "ID": 958,
+        "MODULEID": "50.053",
+        "USERNAME": "Jonathan",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 959,
+        "MODULEID": "50.054",
+        "USERNAME": "Danielle",
+        "RATING": 3.0,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 960,
+        "MODULEID": "50.054",
+        "USERNAME": "Dylan",
+        "RATING": 3.0,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 961,
+        "MODULEID": "50.054",
+        "USERNAME": "Stephanie",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 962,
+        "MODULEID": "50.054",
+        "USERNAME": "Stephanie",
+        "RATING": 5.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 963,
+        "MODULEID": "50.054",
+        "USERNAME": "Brandon",
+        "RATING": 3.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 964,
+        "MODULEID": "50.054",
+        "USERNAME": "Jason",
+        "RATING": 3.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 965,
+        "MODULEID": "50.055",
+        "USERNAME": "Brent",
+        "RATING": 4.0,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 966,
+        "MODULEID": "50.055",
+        "USERNAME": "Megan",
+        "RATING": 2.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 967,
+        "MODULEID": "50.055",
+        "USERNAME": "Daniel",
+        "RATING": 2.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 968,
+        "MODULEID": "50.055",
+        "USERNAME": "Brian",
+        "RATING": 3.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 969,
+        "MODULEID": "50.056",
+        "USERNAME": "Michael",
+        "RATING": 2.0,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 970,
+        "MODULEID": "50.056",
+        "USERNAME": "Brad",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 971,
+        "MODULEID": "50.056",
+        "USERNAME": "Beth",
+        "RATING": 3.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 972,
+        "MODULEID": "50.056",
+        "USERNAME": "Brandi",
+        "RATING": 2.5,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 973,
+        "MODULEID": "60.001",
+        "USERNAME": "Jeremy",
+        "RATING": 3.0,
+        "REVIEW": "Could use more examples or clearer explanations."
+    },
+    {
+        "ID": 974,
+        "MODULEID": "60.001",
+        "USERNAME": "Henry",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 975,
+        "MODULEID": "60.001",
+        "USERNAME": "Alexa",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 976,
+        "MODULEID": "60.001",
+        "USERNAME": "Lori",
+        "RATING": 4.5,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 977,
+        "MODULEID": "60.001",
+        "USERNAME": "Andrew",
+        "RATING": 2.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 978,
+        "MODULEID": "60.001",
+        "USERNAME": "Stuart",
+        "RATING": 3.0,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 979,
+        "MODULEID": "60.001",
+        "USERNAME": "Tiffany",
+        "RATING": 3.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 980,
+        "MODULEID": "60.002",
+        "USERNAME": "David",
+        "RATING": 5.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 981,
+        "MODULEID": "60.002",
+        "USERNAME": "Andrew",
+        "RATING": 5.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 982,
+        "MODULEID": "60.002",
+        "USERNAME": "Douglas",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 983,
+        "MODULEID": "60.002",
+        "USERNAME": "Brian",
+        "RATING": 3.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 984,
+        "MODULEID": "60.003",
+        "USERNAME": "Mark",
+        "RATING": 3.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 985,
+        "MODULEID": "60.003",
+        "USERNAME": "Steven",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 986,
+        "MODULEID": "60.003",
+        "USERNAME": "Shelly",
+        "RATING": 1.5,
+        "REVIEW": "Very difficult to follow and unclear expectations."
+    },
+    {
+        "ID": 987,
+        "MODULEID": "60.003",
+        "USERNAME": "Amanda",
+        "RATING": 3.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 988,
+        "MODULEID": "60.003",
+        "USERNAME": "Marc",
+        "RATING": 3.5,
+        "REVIEW": "Some modules were useful, others not so much."
+    },
+    {
+        "ID": 989,
+        "MODULEID": "60.003",
+        "USERNAME": "Erin",
+        "RATING": 4.0,
+        "REVIEW": "The course was well-structured and engaging."
+    },
+    {
+        "ID": 990,
+        "MODULEID": "60.004",
+        "USERNAME": "Timothy",
+        "RATING": 1.5,
+        "REVIEW": "Lectures were dry and not engaging."
+    },
+    {
+        "ID": 991,
+        "MODULEID": "60.004",
+        "USERNAME": "Joseph",
+        "RATING": 2.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 992,
+        "MODULEID": "60.004",
+        "USERNAME": "Steven",
+        "RATING": 4.0,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 993,
+        "MODULEID": "60.004",
+        "USERNAME": "Ashley",
+        "RATING": 5.0,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 994,
+        "MODULEID": "60.005",
+        "USERNAME": "Jeremy",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 995,
+        "MODULEID": "60.005",
+        "USERNAME": "Anthony",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 996,
+        "MODULEID": "60.005",
+        "USERNAME": "Teresa",
+        "RATING": 3.5,
+        "REVIEW": "Some parts were interesting, others less so."
+    },
+    {
+        "ID": 997,
+        "MODULEID": "60.005",
+        "USERNAME": "Craig",
+        "RATING": 1.5,
+        "REVIEW": "Course description did not match actual content."
+    },
+    {
+        "ID": 998,
+        "MODULEID": "60.006",
+        "USERNAME": "Lindsey",
+        "RATING": 3.5,
+        "REVIEW": "Average experience, met expectations."
+    },
+    {
+        "ID": 999,
+        "MODULEID": "60.006",
+        "USERNAME": "Kenneth",
+        "RATING": 4.5,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 1000,
+        "MODULEID": "60.006",
+        "USERNAME": "Sarah",
+        "RATING": 4.0,
+        "REVIEW": "Clear content and good pacing overall."
+    },
+    {
+        "ID": 1001,
+        "MODULEID": "60.006",
+        "USERNAME": "Justin",
+        "RATING": 4.5,
+        "REVIEW": "I really enjoyed the assignments and lectures."
+    },
+    {
+        "ID": 1002,
+        "MODULEID": "60.008",
+        "USERNAME": "Lorraine",
+        "RATING": 3.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 1003,
+        "MODULEID": "60.008",
+        "USERNAME": "Shawn",
+        "RATING": 4.5,
+        "REVIEW": "Interesting and insightful material."
+    },
+    {
+        "ID": 1004,
+        "MODULEID": "60.008",
+        "USERNAME": "Leslie",
+        "RATING": 2.0,
+        "REVIEW": "Very difficult to follow and unclear expectations."
+    },
+    {
+        "ID": 1005,
+        "MODULEID": "60.008",
+        "USERNAME": "Gabriella",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 1006,
+        "MODULEID": "60.008",
+        "USERNAME": "John",
+        "RATING": 4.5,
+        "REVIEW": "Helpful profs and TAs! Learned a lot."
+    },
+    {
+        "ID": 1007,
+        "MODULEID": "60.008",
+        "USERNAME": "Thomas",
+        "RATING": 2.0,
+        "REVIEW": "Very difficult to follow and unclear expectations."
+    }
+]

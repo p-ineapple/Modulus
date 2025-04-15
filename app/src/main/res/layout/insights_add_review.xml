@@ -33,7 +33,7 @@
         android:text="Detailed Review"
         android:layout_below="@id/ratingBar"/>
 
-    <com.google.android.material.textfield.TextInputLayout
+    <EditText
         android:id="@+id/commentInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
