@@ -31,6 +31,7 @@ public class DataBaseHelperLogin extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        Log.d("database login", "ajsd");
         String createTableStatement = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME +" (" +
                 COL_EMAIL + " TEXT, " +
                 COL_PASSWORD + " TEXT)";
