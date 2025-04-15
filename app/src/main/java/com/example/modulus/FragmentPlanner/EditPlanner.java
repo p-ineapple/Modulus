@@ -29,7 +29,7 @@
 //import java.util.List;
 //
 //public class EditPlanner extends AppCompatActivity {
-//    List<PlannerModel> editPlannerList = PlannerFragment.plannerList;
+//    List<PlannerModel> basePlannerList = PlannerFragment.basePlannerList;
 //    ImageView backButton;
 //    Button confirmButton;
 //    RecyclerView editRecyclerView;
@@ -57,7 +57,7 @@
 //                        // Get the data and insert it into datasource
 //                        Log.d("TAG", "Back to Edit");
 //                        Bundle b = result.getData().getExtras();
-//                        String newModules = b.getString(EditPlannerMenu.KEY_NAME);
+//                        String newModules = b.getString(EditPlannerMenu.KEY_ELECTIVES);
 //                        String term = b.getString(EditPlannerMenu.KEY_PATH);
 //                        System.out.println(term);
 //                        String[] updatedModules = newModules.split("\n");
@@ -69,7 +69,7 @@
 //                                }
 //                            }
 //                        }
-////                        for(PlannerModel planner: editPlannerList){
+////                        for(PlannerModel planner: basePlannerList){
 ////                            String t = planner.getTerm();
 ////                            if(t.equals(term)){
 ////                                if(t.contains("7") || t.contains("8")){
@@ -78,7 +78,7 @@
 ////                                planner.setModules(newPlannerModules);
 ////                            }
 ////                        }
-//                        for(PlannerModel planner: editPlannerList) {
+//                        for(PlannerModel planner: basePlannerList) {
 //                            System.out.println(planner.getModules().toString());
 //                        }
 //                        System.out.println(newPlannerModules.toString());
@@ -95,7 +95,7 @@
 //                launcher.launch(intent);
 //            }
 //        };
-//        EditPlannerAdapter termButtonsAdapter = new EditPlannerAdapter(PlannerFragment.plannerList, listener);
+//        EditPlannerAdapter termButtonsAdapter = new EditPlannerAdapter(PlannerFragment.basePlannerList, listener);
 //        editRecyclerView = findViewById(R.id.editRecyclerView);
 //        editRecyclerView.setAdapter(termButtonsAdapter);
 //        editRecyclerView.setLayoutManager(new GridLayoutManager(EditPlanner.this, 2));
@@ -109,7 +109,7 @@
 //                Gson gson = new Gson();
 //                ArrayList<String> terms = new ArrayList<>();
 //                ArrayList<String> plannerModules = new ArrayList<>();
-//                for (PlannerModel planner: editPlannerList) {
+//                for (PlannerModel planner: basePlannerList) {
 //                    terms.add(planner.getTerm());
 //                    if (planner.getModules() != null){
 //                        for(ModuleModel module: planner.getModules()){

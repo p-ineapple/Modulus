@@ -108,11 +108,7 @@ public class ModuleModel {
         if(s.contains(" - ")){
             String[] module = s.split(" - ");
             return new ModuleModel(module[0], module[1]);
-        }else if(s.contains("Capstone")){
-            return new ModuleModel("", "Capstone");
-        }else{
-            return null;
-        }
+        }return null;
     }
     public static Comparator<ModuleModel> idCompare = new Comparator<ModuleModel>() {
         @Override

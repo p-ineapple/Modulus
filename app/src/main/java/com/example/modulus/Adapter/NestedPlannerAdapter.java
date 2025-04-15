@@ -49,7 +49,10 @@ public class NestedPlannerAdapter extends RecyclerView.Adapter<NestedPlannerAdap
 
     @Override
     public int getItemCount() {
-        return moduleList.size();
+        if(moduleList != null){
+            return moduleList.size();
+        }
+        return 0;
     }
     public class NestedModuleViewHolder extends RecyclerView.ViewHolder{
         TextView plannerModule;

@@ -37,10 +37,11 @@ public class DataBaseHelperPlanner extends DataBaseHelperInsights {
             int colIndex = c.getColumnIndex(pillar);
             String id = c.getString(colIndex);
             if (id != null) {
-                ModuleModel module = moduleList.stream().filter(m -> id.equals(m.getId())).findFirst().orElse(null);
+                ModuleModel moduleToAdd = moduleList.stream().filter(m -> id.equals(m.getId())).findFirst().orElse(null);
+                System.out.println(moduleToAdd);
                 PlannerModel cPlanner = result.get(index - 1);
                 ArrayList<ModuleModel> newMods = (ArrayList<ModuleModel>) cPlanner.getModules();
-                newMods.add(module);
+                newMods.add(moduleToAdd);
                 cPlanner.setModules(newMods);
                 result.set(index - 1, cPlanner);
             }

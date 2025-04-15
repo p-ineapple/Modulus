@@ -31,13 +31,15 @@ import com.example.modulus.Model.PlannerModel;
 import com.example.modulus.FragmentInsights.InsightsFragment;
 import com.example.modulus.Model.TrackModel;
 import com.example.modulus.R;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class PlannerFragment extends Fragment {
-    public static List<PlannerModel> plannerList;
+    public static List<PlannerModel> basePlannerList;
+    public static List<PlannerModel> mPlannerList;
     public static String myPillar;
     public static String myTrack;
     public static String myMinor;
@@ -68,8 +70,9 @@ public class PlannerFragment extends Fragment {
         mPreferences = this.getActivity().getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
         if(mPreferences.getString(KEY_DATA_TERMS, "").equals("")){
             Log.d(TAG, "New Account");
-            plannerList = myDB.getPlanner("Default");
-            System.out.println(plannerList);
+            basePlannerList = myDB.getPlanner("Default");
+            mPlannerList = myDB.getPlanner("Default");
+            System.out.println(basePlannerList);
         }else{
             onResume();
             Log.d(TAG, "Refresh");
@@ -78,7 +81,8 @@ public class PlannerFragment extends Fragment {
             myDB = new DataBaseHelperPlanner(getContext());
             InsightsFragment.moduleList = myDB.getAllModules();
         }
-        adapter = new PlannerAdapter(plannerList);
+
+        adapter = new PlannerAdapter(mPlannerList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setAdapter(adapter);
 
@@ -112,7 +116,7 @@ public class PlannerFragment extends Fragment {
         TextView minorText = view.findViewById(R.id.minorText);
         String minorPref = mPreferences.getString(KEY_DATA_MINOR, "");
         if(!minorPref.isEmpty()){
-            minorText.setText(trackPref);
+            minorText.setText(minorPref);
             myMinor = minorPref;
         }
         String[] pillars = new String[]{"ASD", "CSD", "DAI", "EPD", "ESD"};
@@ -126,7 +130,8 @@ public class PlannerFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         pillarText.setText(pillars[which]);
                         myPillar = pillars[which];
-                        plannerList = myDB.getPlanner(pillars[which]);
+                        basePlannerList = myDB.getPlanner(pillars[which]);
+                        mPlannerList = myDB.getPlanner(pillars[which]);
                         recyclerView.setAdapter(adapter);
                         SharedPreferences.Editor prefsEditor = mPreferences.edit();
                         prefsEditor.putString(PlannerFragment.KEY_DATA_PILLAR, pillars[which]);
@@ -212,11 +217,11 @@ public class PlannerFragment extends Fragment {
                             myMinor = availableMinors[which];
                             if(!myMinor.equals("No Minor")){
                                 minorModel = tracksDB.getTrackModel(availableMinors[which], pillarPref);
-                                SharedPreferences.Editor prefsEditor = mPreferences.edit();
-                                prefsEditor.putString(PlannerFragment.KEY_DATA_MINOR, availableMinors[which]);
-                                prefsEditor.apply();
-                                dialog.dismiss();
                             }
+                            SharedPreferences.Editor prefsEditor = mPreferences.edit();
+                            prefsEditor.putString(PlannerFragment.KEY_DATA_MINOR, availableMinors[which]);
+                            prefsEditor.apply();
+                            dialog.dismiss();
                         }
                     });
                     mBuilder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
@@ -252,17 +257,33 @@ public class PlannerFragment extends Fragment {
                                     }
                                 }
                             }
-//                        for(PlannerModel planner: editPlannerList){
-//                            String t = planner.getTerm();
-//                            if(t.equals(term)){
-//                                if(t.contains("7") || t.contains("8")){
-//                                    newPlannerModules.add(new ModuleModel("", "Capstone"));
-//                                }
-//                                planner.setModules(newPlannerModules);
-//                            }
-//                        }
-                            System.out.println(newPlannerModules.toString());
-                            Log.d(TAG, "Planners Updated");
+                        for(PlannerModel planner: mPlannerList){
+                            if(planner.getTerm().equals(term)){
+                                planner.setModules(newPlannerModules);
+                            }
+                        }
+                        System.out.println(newPlannerModules.toString());
+                        Log.d(TAG, "Planners Updated");
+                        SharedPreferences.Editor prefsEditor = mPreferences.edit();
+                        Gson gson = new Gson();
+                        ArrayList<String> terms = new ArrayList<>();
+                        ArrayList<String> plannerModules = new ArrayList<>();
+                        for (PlannerModel planner: mPlannerList) {
+                            terms.add(planner.getTerm());
+                            if (planner.getModules() != null){
+                                for(ModuleModel module: planner.getModules()){
+                                    plannerModules.add(module.toString());
+                                }
+                                plannerModules.add("?");
+                            }else{
+                                plannerModules.add("NIL");
+                            }
+                        }
+                        String jsonTerms = gson.toJson(terms);
+                        String jsonMods = gson.toJson( plannerModules );
+                        prefsEditor.putString(KEY_DATA_TERMS, jsonTerms);
+                        prefsEditor.putString(KEY_DATA_MODS, jsonMods);
+                        prefsEditor.apply();
                         }else{
                             Log.d(TAG, "Nothing to Update");
                         }
@@ -285,74 +306,83 @@ public class PlannerFragment extends Fragment {
         return view;
     }
 
-//    @Override
-//    public void onPause(){
-//        super.onPause();
-//        SharedPreferences.Editor prefsEditor = mPreferences.edit();
-//        Gson gson = new Gson();
-//        ArrayList<String> terms = new ArrayList<>();
-//        ArrayList<String> plannerModules = new ArrayList<>();
-//        for (PlannerModel planner: plannerList) {
-//            terms.add(planner.getTerm());
-//            if (planner.getModules() != null){
-//                for(ModuleModel module: planner.getModules()){
-//                    plannerModules.add(module.toString());
-//                }
-//                plannerModules.add("?");
-//            }else{
-//                plannerModules.add("NIL");
-//            }
-//        }
-//        String jsonTerms = gson.toJson(terms);
-//        String jsonMods = gson.toJson( plannerModules );
-//        prefsEditor.putString(KEY_DATA_TERMS, jsonTerms);
-//        prefsEditor.putString(KEY_DATA_MODS, jsonMods);
-//        prefsEditor.apply();
-//    }
+    @Override
+    public void onPause(){
+        super.onPause();
+        SharedPreferences.Editor prefsEditor = mPreferences.edit();
+        Gson gson = new Gson();
+        ArrayList<String> terms = new ArrayList<>();
+        ArrayList<String> plannerModules = new ArrayList<>();
+        for (PlannerModel planner: mPlannerList) {
+            terms.add(planner.getTerm());
+            if (planner.getModules() != null){
+                for(ModuleModel module: planner.getModules()){
+                    plannerModules.add(module.toString());
+                }
+                plannerModules.add("?");
+            }else{
+                plannerModules.add("NIL");
+            }
+        }
+        String jsonTerms = gson.toJson(terms);
+        String jsonMods = gson.toJson( plannerModules );
+        prefsEditor.putString(KEY_DATA_TERMS, jsonTerms);
+        prefsEditor.putString(KEY_DATA_MODS, jsonMods);
+        prefsEditor.apply();
+    }
 
     @Override
     public void onResume(){
         super.onResume();
         Log.d(TAG, "Resume");
-//        Gson gson = new Gson();
-//        String jsonTerms = mPreferences.getString(KEY_DATA_TERMS, "");
-//        String jsonMods = mPreferences.getString(KEY_DATA_MODS, "");
-//        ArrayList<String> terms = gson.fromJson(jsonTerms, ArrayList.class);
-//        ArrayList<String> mods = gson.fromJson(jsonMods, ArrayList.class);
-//        System.out.println(terms);
-//        System.out.println(mods);
-//        if(terms != null && mods != null){
-//            plannerList = new ArrayList<>();
-//            int modsPointer = 0;
-//            for (int i = 0; i< terms.size(); i++) {
-//                PlannerModel planner = new PlannerModel(terms.get(i));
-//                List<ModuleModel> plannerModules = new ArrayList<ModuleModel>();
-//                for(int j = modsPointer; j < mods.size(); j++){
-//                    if(mods.get(j).equals("?")){
-//                        planner.setModules(plannerModules);
-//                        plannerList.add(planner);
-//                        modsPointer++;
-//                        break;
-//                    }else if(mods.get(j).equals("NIL")){
-//                        plannerList.add(planner);
-//                        modsPointer++;
-//                        break;
-//                    }else {
-//                        plannerModules.add(ModuleModel.getModuleFromString(mods.get(j)));
-//                        modsPointer++;
-//                    }
-//                }
-//            }
-//            Log.d(TAG, "Updated");
-//        }
-
+        if(InsightsFragment.moduleList == null){
+            myDB = new DataBaseHelperPlanner(getContext());
+            InsightsFragment.moduleList = myDB.getAllModules();
+        }
         String pillarPref = mPreferences.getString(KEY_DATA_PILLAR, "");
-        if(!pillarPref.isEmpty()) {
-            plannerList = myDB.getPlanner(pillarPref);
-            adapter = new PlannerAdapter(plannerList);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        };
-
+        if(!pillarPref.isEmpty()){
+            myPillar = pillarPref;
+        }
+        if(basePlannerList == null){
+            myDB = new DataBaseHelperPlanner(getContext());
+            basePlannerList = myDB.getPlanner(myPillar);
+        }
+        Gson gson = new Gson();
+        String jsonTerms = mPreferences.getString(KEY_DATA_TERMS, "");
+        String jsonMods = mPreferences.getString(KEY_DATA_MODS, "");
+        ArrayList<String> terms = gson.fromJson(jsonTerms, ArrayList.class);
+        ArrayList<String> mods = gson.fromJson(jsonMods, ArrayList.class);
+        System.out.println(terms);
+        System.out.println(mods);
+        if(terms != null && mods != null){
+            mPlannerList = new ArrayList<>();
+            int modsPointer = 0;
+            for (int i = 0; i< terms.size(); i++) {
+                PlannerModel planner = new PlannerModel(terms.get(i));
+                List<ModuleModel> plannerModules = new ArrayList<ModuleModel>();
+                for(int j = modsPointer; j < mods.size(); j++){
+                    if(mods.get(j).equals("?")){
+                        planner.setModules(plannerModules);
+                        mPlannerList.add(planner);
+                        modsPointer++;
+                        break;
+                    }else if(mods.get(j).equals("NIL")){
+                        mPlannerList.add(planner);
+                        modsPointer++;
+                        break;
+                    }else {
+                        for(ModuleModel module: InsightsFragment.moduleList){
+                            if(mods.get(j).contains(module.getId())){
+                                plannerModules.add(module);
+                            }
+                        }
+                        modsPointer++;
+                    }
+                }
+            }
+            Log.d(TAG, "Updated");
+        }
+        adapter = new PlannerAdapter(mPlannerList);
         recyclerView.setAdapter(adapter);
     }
 }

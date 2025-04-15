@@ -77,7 +77,7 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/capstoneCard"
+        android:id="@+id/coreCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
@@ -89,11 +89,11 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/tvCapstone"
+                android:id="@+id/tvCore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="Capstone"
+                android:textAlignment="viewStart"
+                android:text="Core"
                 android:textSize="20sp"
                 android:layout_margin="4dp"/>
 
@@ -115,8 +115,8 @@
                 android:id="@+id/tvElectives"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
                 android:hint="Select Elective(s)"
+                android:textAlignment="viewStart"
                 android:textSize="20sp"
                 android:layout_margin="4dp" />
 
@@ -126,6 +126,30 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerInParent="true"
                 android:src="@drawable/arrow2_down" />
+
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/term3HASS"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        app:cardCornerRadius="16dp"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tvTerm3HASS"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="viewStart"
+                android:text="Term 3 HASS"
+                android:textSize="20sp"
+                android:layout_margin="4dp"/>
 
         </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>
@@ -145,8 +169,8 @@
                 android:id="@+id/tvHASS"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
                 android:hint="Select HASS"
+                android:textAlignment="textStart"
                 android:textSize="20sp"
                 android:layout_margin="4dp" />
 
@@ -166,20 +190,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"/>
-
-    <!--    <com.google.android.material.textfield.TextInputLayout-->
-    <!--        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_margin="8dp">-->
-
-    <!--        <AutoCompleteTextView-->
-    <!--            android:id="@+id/autoCompleteTextView"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:inputType="none"-->
-    <!--            android:text="Choose ModuleModel" />-->
-
-    <!--    </com.google.android.material.textfield.TextInputLayout>-->
 
 </LinearLayout>

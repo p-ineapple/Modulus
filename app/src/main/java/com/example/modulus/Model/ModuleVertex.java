@@ -4,6 +4,7 @@ import java.util.List;
 
 public class ModuleVertex {
     String type;
+    boolean preRequisite;
     List<String> hard = null;
     List<String> soft = null;
     int soft_count = 0;
@@ -14,7 +15,8 @@ public class ModuleVertex {
             this.type = "Pillar";
         }
         List<String> preReq = module.getPrerequisites();
-        if(!preReq.isEmpty()){
+        if(!preReq.equals("NIL")){
+            preRequisite = true;
             if(module.getCost().equals("Hard")){
                 this.hard = preReq;
             }else{
@@ -27,6 +29,8 @@ public class ModuleVertex {
                     }
                 }
             }
+        }else{
+            preRequisite = false;
         }
     }
 
