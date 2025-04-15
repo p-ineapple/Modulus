@@ -24,12 +24,7 @@ import android.widget.Toast;
 import com.example.modulus.Model.ModuleModel;
 import com.example.modulus.R;
 import com.example.modulus.Utils.WebView;
-import com.google.android.material.divider.MaterialDivider;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +38,7 @@ public class ModuleDetailsActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_module_details);
+        setContentView(R.layout.insights_activity_module_details);
         getSelectedModule();
         setValues();
 
@@ -55,7 +50,7 @@ public class ModuleDetailsActivity extends AppCompatActivity{
             }
         });
 
-        TextView info = findViewById(R.id.moreInfo);
+        TextView info = findViewById(R.id.moduleDetailsPillar);
         info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,17 +88,24 @@ public class ModuleDetailsActivity extends AppCompatActivity{
         pillar.setText(selectedModule.getPillar() + " " + selectedModule.getId());
         int color = ContextCompat.getColor(this, selectedModule.getColor());
         pillar.setTextColor(color);
+        pillar.setCompoundDrawableTintList(ColorStateList.valueOf(color));
 
 
         TextView tags = findViewById(R.id.tags);
-        tags.setText(String.join(", ", selectedModule.getTags()));
+        tags.setText( selectedModule.getType());
+        tags.setTextColor(color);
+
+        TextView prof = findViewById(R.id.termProf);
+        prof.setText(String.join(", ", selectedModule.getProf()));
+        prof.setTextColor(color);
 
 
         RelativeLayout back = findViewById(R.id.backgroup);
         back.setBackgroundColor(color);
 
-        TextView moreInfo = findViewById(R.id.moreInfo);
-        moreInfo.setCompoundDrawableTintList(ColorStateList.valueOf(color));
+        TextView term = findViewById(R.id.terms);
+        term.setText(String.join(", ", selectedModule.getTerm()));
+        term.setTextColor(color);
 
         ImageView imageMod = findViewById(R.id.imageMod);
         imageMod.setImageDrawable(selectedModule.getImage());
@@ -142,11 +144,12 @@ public class ModuleDetailsActivity extends AppCompatActivity{
         if (!output.isEmpty()){
             preReq.setText(Html.fromHtml(TextUtils.join("<br>", output), Html.FROM_HTML_MODE_LEGACY));
 
+
         } else{
             preReq.setText("No Pre-requisites");
         }
 
-
+        preReq.setTextColor(color);
 
     }
 

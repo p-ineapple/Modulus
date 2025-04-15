@@ -132,6 +132,7 @@ public class DataBaseHelperInsights extends SQLiteOpenHelper {
             module.setDescription(c.getString(8));
             module.setColor(getColourR(c.getString(0)));
             module.setImage(getImage(mContext,c.getString(0)));
+            module.setType(c.getString(9));
             result.add(module);
 
         }
