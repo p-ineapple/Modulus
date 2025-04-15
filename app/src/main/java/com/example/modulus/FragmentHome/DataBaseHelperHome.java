@@ -55,11 +55,13 @@ public class DataBaseHelperHome extends SQLiteOpenHelper {
         Log.d(TAG, "Insert task");
     }
 
-    public void updateTask(int id, String task){
+    public void updateTask(int id, String task, String date, String category,String time){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_2, task);
-
+        contentValues.put(COL_4, date);
+        contentValues.put(COL_5, time);
+        contentValues.put(COL_6, category);
         db.update(TABLE_NAME, contentValues, "ID=?", new String[]{String.valueOf(id)});
         Log.d(TAG, "Update task");
     }
@@ -163,5 +165,38 @@ public class DataBaseHelperHome extends SQLiteOpenHelper {
         Log.d(TAG, "Retrieved all tasks");
         return modelList;
     }
+
+    @SuppressLint("Range")
+    public List<ToDoModel> getStatustask(int status, String date) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        List<ToDoModel> modelList = new ArrayList<>();
+
+        try {
+            // Combined WHERE clause for both status and date
+            String selection = COL_3 + " = ? AND " + COL_4 + " = ?";
+            String[] selectionArgs = {String.valueOf(status), date};
+
+            cursor = db.query(TABLE_NAME, null, selection, selectionArgs, null, null, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    ToDoModel toDoModel = new ToDoModel();
+                    toDoModel.setId(cursor.getInt(cursor.getColumnIndex(COL_1)));
+                    toDoModel.setTask(cursor.getString(cursor.getColumnIndex(COL_2)));
+                    toDoModel.setStatus(cursor.getInt(cursor.getColumnIndex(COL_3)));
+                    toDoModel.setDate(cursor.getString(cursor.getColumnIndex(COL_4)));
+                    toDoModel.setTime(cursor.getString(cursor.getColumnIndex(COL_5)));
+                    toDoModel.setCategory(cursor.getString(cursor.getColumnIndex(COL_6)));
+                    modelList.add(toDoModel);
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+
+        return modelList;
+    }
+
 
 }

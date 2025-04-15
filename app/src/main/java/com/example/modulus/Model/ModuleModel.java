@@ -1,12 +1,12 @@
 package com.example.modulus.Model;
 
-import java.util.Comparator;
 import java.util.List;
 
 public class ModuleModel {
     private String id;
     private String name;
     private String pillar;
+    private int color;
     private List<String> tags;
     private List<String> term;
     private List<String> prof;
@@ -101,6 +101,14 @@ public class ModuleModel {
         }else{
             return null;
         }
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 
 //    public static Comparator<ModuleModel> idAscending = new Comparator<ModuleModel>() {
