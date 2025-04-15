@@ -1,13 +1,15 @@
 package com.example.modulus.Model;
 
+import com.example.modulus.FragmentInsights.InsightsFragment;
+
+import java.util.ArrayList;
 import java.util.List;
 
-public class ModuleVertex {
+public class ModuleVertex extends ModuleModel{
     String type;
     boolean preRequisite;
-    List<String> hard = null;
-    List<String> soft = null;
-    int soft_count = 0;
+    List<ModuleVertex> hard = null;
+    List<ModuleVertex> soft = null;
     public ModuleVertex(ModuleModel module){
         if(module.getTags().contains("HASS")){
             this.type = "HASS";
@@ -16,18 +18,36 @@ public class ModuleVertex {
         }
         List<String> preReq = module.getPrerequisites();
         if(!preReq.equals("NIL")){
-            preRequisite = true;
+            this.preRequisite = true;
+            List<ModuleVertex> preReqList = new ArrayList<>();
             if(module.getCost().equals("Hard")){
-                this.hard = preReq;
-            }else{
-                this.soft = preReq;
-                for(String preReqMod: preReq){
-                    if(preReqMod.contains("/")){
-                        this.soft_count = 1;
+                for(String mod: preReq){
+                    if(mod.contains("/")){
+                        String[] split = mod.split("/");
+                        for(String mm: split){
+                            ModuleModel moduleToAdd = InsightsFragment.moduleList.stream().filter(m -> mm.equals(m.getId())).findFirst().orElse(null);
+                            preReqList.add(new ModuleVertex(moduleToAdd));
+                        }
                     }else{
-                        this.soft_count = 0;
+                        ModuleModel moduleToAdd = InsightsFragment.moduleList.stream().filter(m -> mod.equals(m.getId())).findFirst().orElse(null);
+                        preReqList.add(new ModuleVertex(moduleToAdd));
                     }
                 }
+                this.hard = preReqList;
+            }else{
+                for(String mod: preReq){
+                    if(mod.contains("/")){
+                        String[] split = mod.split("/");
+                        for(String mm: split){
+                            ModuleModel moduleToAdd = InsightsFragment.moduleList.stream().filter(m -> mm.equals(m.getId())).findFirst().orElse(null);
+                            preReqList.add(new ModuleVertex(moduleToAdd));
+                        }
+                    }else{
+                        ModuleModel moduleToAdd = InsightsFragment.moduleList.stream().filter(m -> mod.equals(m.getId())).findFirst().orElse(null);
+                        preReqList.add(new ModuleVertex(moduleToAdd));
+                    }
+                }
+                this.soft = preReqList;
             }
         }else{
             preRequisite = false;

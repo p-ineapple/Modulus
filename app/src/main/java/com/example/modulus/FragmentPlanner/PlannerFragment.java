@@ -363,6 +363,8 @@ public class PlannerFragment extends Fragment {
         String pillarPref = mPreferences.getString(KEY_DATA_PILLAR, "");
         if(!pillarPref.isEmpty()){
             myPillar = pillarPref;
+        }else{
+            myPillar = "Default";
         }
         if(basePlannerList == null){
             myDB = new DataBaseHelperPlanner(getContext());
