@@ -83,10 +83,7 @@ public class PlannerFragment extends Fragment {
             myDB = new DataBaseHelperPlanner(getContext());
             InsightsFragment.moduleList = myDB.getAllModules();
         }
-        int color = getColourR(myPillar);
-        adapter = new PlannerAdapter(mPlannerList,color);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        recyclerView.setAdapter(adapter);
+
 
         LinearLayout editTab = view.findViewById(R.id.editTab);
         editTab.setVisibility(View.GONE);
@@ -109,7 +106,15 @@ public class PlannerFragment extends Fragment {
         if(!pillarPref.isEmpty()){
             pillarText.setText(pillarPref);
             myPillar = pillarPref;
+        }else{
+            myPillar = "Pillar";
         }
+
+        int color = getColourR(myPillar);
+        adapter = new PlannerAdapter(mPlannerList,color);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        recyclerView.setAdapter(adapter);
+
         TextView trackText = view.findViewById(R.id.specializationText);
         String trackPref = mPreferences.getString(KEY_DATA_TRACK, "");
         if(!trackPref.isEmpty()){
@@ -168,12 +173,6 @@ public class PlannerFragment extends Fragment {
                 mDialog.show();
             }
         });
-
-
-
-
-
-
 
         Button trackButton = view.findViewById(R.id.trackButton);
         trackButton.setOnClickListener(new View.OnClickListener() {
@@ -366,6 +365,15 @@ public class PlannerFragment extends Fragment {
         }else{
             myPillar = "Default";
         }
+        String trackPref = mPreferences.getString(KEY_DATA_TRACK, "");
+        if(!trackPref.isEmpty()){
+            myTrack = trackPref;
+        }
+        String minorPref = mPreferences.getString(KEY_DATA_MINOR, "");
+        if(!minorPref.isEmpty()){
+            myMinor = minorPref;
+        }
+
         if(basePlannerList == null){
             myDB = new DataBaseHelperPlanner(getContext());
             basePlannerList = myDB.getPlanner(myPillar);
