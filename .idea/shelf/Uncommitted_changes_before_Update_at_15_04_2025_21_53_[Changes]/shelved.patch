@@ -1,0 +1,79 @@
+Index: app/src/main/res/layout/insights_activity_module_details.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n\r\n<LinearLayout\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    tools:ignore=\"HardcodedText\"\r\n    android:orientation=\"vertical\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:background=\"@color/white\"\r\n    >\r\n\r\n    <RelativeLayout\r\n        android:id=\"@+id/backgroup\"\r\n        android:paddingVertical=\"12sp\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:gravity=\"center_vertical\"\r\n        android:background=\"@color/white\">\r\n\r\n        <ImageView\r\n            android:id=\"@+id/backButton\"\r\n            android:layout_width=\"28sp\"\r\n            android:layout_height=\"28sp\"\r\n            android:src=\"@drawable/arrow_back\"\r\n            android:layout_centerVertical=\"true\" />\r\n\r\n        <TextView\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:id=\"@+id/Back\"\r\n            android:text=\"Back\"\r\n            android:textColor=\"@color/black\"\r\n            android:textSize=\"20sp\"\r\n            android:layout_marginHorizontal=\"5dp\"\r\n            android:layout_toEndOf=\"@id/backButton\" />\r\n\r\n    </RelativeLayout>\r\n\r\n    <androidx.constraintlayout.widget.ConstraintLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\">\r\n        <ImageView\r\n            android:id=\"@+id/imageMod\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"match_parent\"\r\n            android:src=\"@drawable/asd\"\r\n            android:adjustViewBounds=\"true\">\r\n\r\n        </ImageView>\r\n\r\n        <TextView\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:id=\"@+id/moduleDetailsPillar\"\r\n            android:text=\"Pillar\"\r\n            android:textSize=\"28sp\"\r\n            android:textStyle=\"bold\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/imageMod\"\r\n            app:layout_constraintWidth=\"match_parent\"\r\n            android:layout_marginHorizontal=\"14dp\"\r\n            android:layout_marginVertical=\"10dp\"/>\r\n\r\n\r\n        <TextView\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:id=\"@+id/moduleDetailsName\"\r\n            android:text=\"Module Name\"\r\n            android:textSize=\"24sp\"\r\n            android:textStyle=\"bold\"\r\n            android:textColor=\"@color/black\"\r\n            android:maxLines=\"4\"\r\n            android:gravity=\"center_vertical\"\r\n            android:layout_marginHorizontal=\"14dp\"\r\n            app:layout_constraintVertical_bias=\"0.5\"\r\n            app:layout_constraintWidth=\"match_parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/moduleDetailsPillar\"\r\n            />\r\n\r\n        <TextView\r\n            android:id=\"@+id/tags\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"Course Tags\"\r\n            android:textSize=\"16sp\"\r\n            android:textColor=\"@color/black\"\r\n            android:layout_marginHorizontal=\"14dp\"\r\n            android:layout_marginVertical=\"8dp\"\r\n            android:clickable=\"true\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/moduleDetailsName\"\r\n            />\r\n\r\n\r\n        <com.google.android.material.divider.MaterialDivider\r\n            android:id=\"@+id/underModuleName\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginTop=\"8dp\"\r\n            app:dividerColor = \"@color/black\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/tags\"\r\n            />\r\n\r\n        <TextView\r\n            android:id=\"@+id/moreInfo\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"Course Description\"\r\n            android:textSize=\"16sp\"\r\n            android:textStyle=\"bold\"\r\n            android:textColor=\"@color/black\"\r\n            android:layout_marginHorizontal=\"14dp\"\r\n            android:layout_marginVertical=\"8dp\"\r\n            android:clickable=\"true\"\r\n            app:drawableRightCompat=\"@drawable/arrow_right\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/underModuleName\"\r\n            />\r\n\r\n\r\n        <TextView\r\n            android:id=\"@+id/termProf\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"Course Prfs\"\r\n            android:textSize=\"16sp\"\r\n            android:textColor=\"@color/black\"\r\n            android:layout_marginHorizontal=\"14dp\"\r\n            android:layout_marginVertical=\"8dp\"\r\n            android:clickable=\"true\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/moreInfo\"\r\n            />\r\n\r\n        <com.google.android.material.divider.MaterialDivider\r\n            android:id=\"@+id/underInfo\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginTop=\"8dp\"\r\n            app:dividerColor = \"@color/black\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/termProf\"\r\n\r\n            />\r\n\r\n        <TextView\r\n            android:id=\"@+id/prerequisites_title\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"Pre-requisites\"\r\n            android:textSize=\"16sp\"\r\n            android:textStyle=\"bold\"\r\n            android:textColor=\"@color/black\"\r\n            android:layout_marginHorizontal=\"14dp\"\r\n            android:layout_marginVertical=\"8dp\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/underInfo\"/>\r\n\r\n\r\n        <TextView\r\n            android:id=\"@+id/prerequisites\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"Prerequisites_added\"\r\n            android:textSize=\"16sp\"\r\n            android:lineSpacingExtra=\"2dp\"\r\n            android:layout_marginHorizontal=\"14dp\"\r\n            android:layout_marginVertical=\"8dp\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/prerequisites_title\"/>\r\n\r\n        <com.google.android.material.divider.MaterialDivider\r\n            android:id=\"@+id/underprereq\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginVertical=\"8dp\"\r\n            app:dividerColor = \"@color/black\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/prerequisites\"\r\n            />\r\n    </androidx.constraintlayout.widget.ConstraintLayout>\r\n\r\n    <RelativeLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\">\r\n        <RatingBar\r\n            android:id=\"@+id/ratingBar\"\r\n            android:numStars=\"5\"\r\n            android:stepSize=\"0.5\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_centerHorizontal=\"true\"/>\r\n\r\n        <TextView\r\n            android:id=\"@+id/reviewText\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"Overall course rating\"\r\n            android:textAlignment=\"center\"\r\n            android:layout_below=\"@id/ratingBar\"/>\r\n\r\n        <RelativeLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"match_parent\"\r\n            android:layout_below=\"@id/reviewText\">\r\n\r\n        <!-- Existing Reviews List -->\r\n        <androidx.recyclerview.widget.RecyclerView\r\n            android:id=\"@+id/reviewRecyclerView\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"match_parent\">\r\n\r\n        </androidx.recyclerview.widget.RecyclerView>\r\n\r\n            <com.google.android.material.floatingactionbutton.FloatingActionButton\r\n                android:id=\"@+id/addReviewButton\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_alignParentEnd=\"true\"\r\n                android:layout_alignParentBottom=\"true\"\r\n                android:layout_marginRight=\"20dp\"\r\n                android:layout_marginBottom=\"20dp\"\r\n                android:src=\"@drawable/baseline_add_24\"/>\r\n        </RelativeLayout>\r\n\r\n    </RelativeLayout>\r\n\r\n</LinearLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/insights_activity_module_details.xml b/app/src/main/res/layout/insights_activity_module_details.xml
+--- a/app/src/main/res/layout/insights_activity_module_details.xml	(revision 3f3052a10d4af74c39ba610a2d3c9435fccdb29f)
++++ b/app/src/main/res/layout/insights_activity_module_details.xml	(date 1744725151607)
+@@ -178,26 +178,53 @@
+     <RelativeLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content">
+-        <RatingBar
+-            android:id="@+id/ratingBar"
+-            android:numStars="5"
+-            android:stepSize="0.5"
+-            android:layout_width="wrap_content"
+-            android:layout_height="wrap_content"
+-            android:layout_centerHorizontal="true"/>
++        <RelativeLayout
++            android:id="@+id/overallDisplay"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content">
++            <TextView
++                android:id="@+id/overallText"
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:text="Overall course\n rating"
++                android:textStyle="bold"
++                android:textSize="20sp"
++                android:textAlignment="center"/>
++            <RelativeLayout
++                android:id="@+id/overallRating"
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_toRightOf="@id/overallText">
++                <TextView
++                    android:id="@+id/overallScore"
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:text="5.0"
++                    android:textStyle="bold"
++                    android:textSize="20sp"
++                    android:textAlignment="center"/>
++
++                <RatingBar
++                    android:id="@+id/ratingBar"
++                    android:numStars="5"
++                    android:stepSize="0.5"
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
++                    android:layout_centerHorizontal="true"
++                    style="@style/Widget.AppCompat.RatingBar.Small"
++                    android:layout_below="@id/overallScore"/>
++
++            </RelativeLayout>
++
++
++        </RelativeLayout>
+ 
+-        <TextView
+-            android:id="@+id/reviewText"
+-            android:layout_width="match_parent"
+-            android:layout_height="wrap_content"
+-            android:text="Overall course rating"
+-            android:textAlignment="center"
+-            android:layout_below="@id/ratingBar"/>
++
+ 
+         <RelativeLayout
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+-            android:layout_below="@id/reviewText">
++            android:layout_below="@id/overallDisplay">
+ 
+         <!-- Existing Reviews List -->
+         <androidx.recyclerview.widget.RecyclerView
