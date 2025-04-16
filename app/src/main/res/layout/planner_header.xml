@@ -10,9 +10,13 @@
     android:id="@+id/plannerTerm"
     tools:ignore="HardcodedText">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/termcard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:strokeColor="@color/calendar_purple"
+        app:cardBackgroundColor="@color/white"
+        app:strokeWidth="3dp"
         app:cardCornerRadius="20dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,10 +31,10 @@
                 android:text="Term"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:layout_marginStart="20sp"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <ImageView
                 android:id="@+id/arrow"
@@ -44,13 +48,8 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/divider2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="8dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
