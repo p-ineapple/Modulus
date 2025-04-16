@@ -87,7 +87,8 @@ public class ModuleDetailsActivity extends AppCompatActivity implements OnDialog
             }
         });
         dbReview = new DataBaseHelperReviews(this);
-//        insertReviewsFromJson();`
+        //insertReviewsFromJson();
+//        insertReviewsFromJson();
         float average = dbReview.getOverallRating(selectedModule.getId());
         Log.d("OverallRating", "Average Rating: " + average);
         overallScore = findViewById(R.id.overallScore);
@@ -267,7 +268,7 @@ public class ModuleDetailsActivity extends AppCompatActivity implements OnDialog
 
     private void insertReviewsFromJson() {
         try {
-            InputStream is = getAssets().open("module_reviews_final.json");
+            InputStream is = getAssets().open("generated_module_reviews_v2.json");
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);

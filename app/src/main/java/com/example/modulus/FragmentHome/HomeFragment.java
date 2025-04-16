@@ -70,7 +70,7 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //insertTasksFromJson(this.getContext());
+//        insertTasksFromJson(this.getContext());
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.homeMain), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -265,7 +265,7 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
         List<ToDoModel> status1 = new ArrayList<>();
         List<ToDoModel> status2 = new ArrayList<>();
         for(ToDoModel task: list){
-            if(task.getStatus() == 1){
+            if(task.getStatus() == 0 ){
                 status1.add(task);
             }else{
                 status2.add(task);
