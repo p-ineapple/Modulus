@@ -39,11 +39,9 @@ public class CalendarFragment extends Fragment {
     private CalendarDayView hourlyDayView;
     private TextView selectedDateText;
 
-    //Data
+    //Module Data List
     private ArrayList<Popup> allPops;
     private final String TAG = "Calendar";
-
-
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

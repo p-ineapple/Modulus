@@ -30,7 +30,7 @@ public class DataBaseHelperCalendar extends SQLiteOpenHelper {
     private SQLiteDatabase db;
     private final Context mContext;
 
-    private final String TAG = "Database";
+    private final String TAG = "DatabaseCalendar";
 
     //Column names
     private static final String COL_COLOR_ID = "colorId";
@@ -128,7 +128,6 @@ public class DataBaseHelperCalendar extends SQLiteOpenHelper {
             }
         }
     }
-
 
     //Close Database
     @Override
