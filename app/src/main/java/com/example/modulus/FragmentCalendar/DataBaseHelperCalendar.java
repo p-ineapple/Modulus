@@ -1,6 +1,5 @@
 package com.example.modulus.FragmentCalendar;
 
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
@@ -12,20 +11,28 @@ import android.util.Log;
 import com.example.modulus.R;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+@SuppressLint({"Range", "SdCardPath"})
 
 public class DataBaseHelperCalendar extends SQLiteOpenHelper {
     private static final String dbName = "sutdModules.db";
     private static final String TABLE_NAME = "timetable";
+
     private static final String dbPath = "/data/data/com.example.modulus/databases/";
+
     private SQLiteDatabase db;
     private final Context mContext;
+
+    private final String TAG = "Database";
+
+    //Column names
     private static final String COL_COLOR_ID = "colorId";
     private static final String COL_ID = "_id";
     private static final String COL_START_YEAR = "startTime_YEAR";
@@ -38,12 +45,13 @@ public class DataBaseHelperCalendar extends SQLiteOpenHelper {
     private static final String COL_NAME = "name";
     private static final String COL_LOCATION = "location";
 
-
+    //Constructor
     public DataBaseHelperCalendar(Context context) {
         super(context, dbName, null, 1);
         this.mContext = context;
     }
 
+    //Call when database is first created
     @Override
     public void onCreate(SQLiteDatabase db) {
         String createTableStatement = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME +" (" +
@@ -59,18 +67,21 @@ public class DataBaseHelperCalendar extends SQLiteOpenHelper {
                 COL_END_MINUTE + " INTEGER, " +
                 COL_COLOR_ID + " INTEGER)";
         db.execSQL(createTableStatement);
-        Log.d("Database", "Table " + TABLE_NAME + " created");
+        Log.i(TAG, "Table " + TABLE_NAME + " created");
     }
+
+    //Call when database needs to upgrade
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_NAME);
         onCreate(db);
     }
 
+    //Check if database file exists
     private boolean checkDatabase() {
         try {
             final String mPath = dbPath + dbName;
-            Log.d("check", "check");
+            Log.i(TAG, "Checking Database");
             final File file = new File(mPath);
             return file.exists();
         } catch (SQLiteException e) {
@@ -79,12 +90,13 @@ public class DataBaseHelperCalendar extends SQLiteOpenHelper {
         }
     }
 
+    //Copies database to device local storage
     private void copyDatabase() throws IOException {
         try {
             InputStream mInputStream = mContext.getAssets().open(dbName);
-            Log.d("DB", "Copying Database");
+            Log.d(TAG, "Copying Database");
             String outFileName = dbPath + dbName;
-            OutputStream mOutputStream = new FileOutputStream(outFileName);
+            OutputStream mOutputStream = Files.newOutputStream(Paths.get(outFileName));
 
             byte[] buffer = new byte[2048];
             int length;
@@ -99,9 +111,10 @@ public class DataBaseHelperCalendar extends SQLiteOpenHelper {
         }
     }
 
+    //Create database
     public void createDatabase() throws IOException {
         boolean mDatabaseExists = checkDatabase();
-        Log.d("create", "create");
+        Log.d(TAG, "Create Database");
         if (mDatabaseExists) {
             this.getReadableDatabase();
             this.close();
@@ -117,71 +130,7 @@ public class DataBaseHelperCalendar extends SQLiteOpenHelper {
     }
 
 
-
-    @SuppressLint("Range")
-    public List<Event> getAllEvents(){
-        try {
-            createDatabase();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = null;
-        List<Event> events = new ArrayList<>();
-
-        db.beginTransaction();
-        try{
-            c = db.query(TABLE_NAME,null,null,null,null,null, null);
-            if(c != null){
-                int idcount = 1;
-                if(c.moveToFirst()){
-                    do{
-
-                        int colorId = c.getInt(c.getColumnIndex(COL_COLOR_ID));
-                        int colorR = getColourR(colorId);
-
-                        //Create calendar for specific date
-                        Calendar eventDate = Calendar.getInstance();
-                        int startYear = c.getInt(c.getColumnIndex(COL_START_YEAR));
-                        int startMonth = c.getInt(c.getColumnIndex(COL_START_MONTH));
-                        int startDay = c.getInt(c.getColumnIndex(COL_START_DAY));
-                        eventDate.set(startYear,startMonth,startDay);
-
-
-                        //Create calendar for start
-                        Calendar startTime = (Calendar)eventDate.clone();
-                        int startHour = c.getInt(c.getColumnIndex(COL_START_HOUR));
-                        int startMinute = c.getInt(c.getColumnIndex(COL_START_MINUTE));
-                        startTime.set(Calendar.HOUR_OF_DAY,startHour);
-                        startTime.set(Calendar.MINUTE,startMinute);
-
-
-                        //Create calendar for end
-                        Calendar endTime = (Calendar)eventDate.clone();
-                        int endHour = c.getInt(c.getColumnIndex(COL_END_HOUR));
-                        int endMinute = c.getInt(c.getColumnIndex(COL_END_MINUTE));
-                        endTime.set(Calendar.HOUR_OF_DAY,endHour);
-                        endTime.set(Calendar.MINUTE,endMinute);
-
-                        String name = c.getString(c.getColumnIndex(COL_NAME));
-                        String location = c.getString(c.getColumnIndex(COL_LOCATION));
-
-                        Event event = new Event(idcount++,eventDate,startTime,endTime,name,location,colorR);
-                        events.add(event);
-
-                    }while (c.moveToNext());
-                }
-            }
-            db.setTransactionSuccessful();
-        }finally {
-            db.endTransaction();
-            if (c!= null) {
-                c.close();
-            }
-        }
-        return events;
-    }
-
+    //Close Database
     @Override
     public synchronized void close(){
         if (db != null) {
@@ -192,6 +141,7 @@ public class DataBaseHelperCalendar extends SQLiteOpenHelper {
 
     }
 
+    //Maps Database colorId to actual Android colour resource
     private int getColourR(int colorId){
         switch (colorId){
             case 2:
@@ -207,55 +157,57 @@ public class DataBaseHelperCalendar extends SQLiteOpenHelper {
         }
     }
 
-
-    @SuppressLint("Range")
+    //Retrieve all Popup objects from database
     public List<Popup> getAllPop(){
         try {
             createDatabase();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        //Get readable instance of database
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = null;
         List<Popup> popups = new ArrayList<>();
 
         db.beginTransaction();
         try{
+            //Query all rows from timetable table
             c = db.query(TABLE_NAME,null,null,null,null,null, null);
             if(c != null){
                 int idcount = 1;
                 if(c.moveToFirst()){
                     do{
-
+                        //Get colourID and assign to android colour resource
                         int colorId = c.getInt(c.getColumnIndex(COL_COLOR_ID));
                         int colorR = getColourR(colorId);
 
-                        //Create calendar for specific date
+                        //Create calendar for event's date
                         Calendar eventDate = Calendar.getInstance();
                         int startYear = c.getInt(c.getColumnIndex(COL_START_YEAR));
                         int startMonth = c.getInt(c.getColumnIndex(COL_START_MONTH));
                         int startDay = c.getInt(c.getColumnIndex(COL_START_DAY));
                         eventDate.set(startYear,startMonth,startDay);
 
-
-                        //Create calendar for start
+                        //Clone eventDate to set startTime
                         Calendar startTime = (Calendar)eventDate.clone();
                         int startHour = c.getInt(c.getColumnIndex(COL_START_HOUR));
                         int startMinute = c.getInt(c.getColumnIndex(COL_START_MINUTE));
                         startTime.set(Calendar.HOUR_OF_DAY,startHour);
                         startTime.set(Calendar.MINUTE,startMinute);
 
-
-                        //Create calendar for end
+                        //Clone eventDate to set endTime
                         Calendar endTime = (Calendar)eventDate.clone();
                         int endHour = c.getInt(c.getColumnIndex(COL_END_HOUR));
                         int endMinute = c.getInt(c.getColumnIndex(COL_END_MINUTE));
                         endTime.set(Calendar.HOUR_OF_DAY,endHour);
                         endTime.set(Calendar.MINUTE,endMinute);
 
+                        //Retrieve class name and time
                         String name = c.getString(c.getColumnIndex(COL_NAME));
                         String location = c.getString(c.getColumnIndex(COL_LOCATION));
 
+                        //Create new Popup object and add to list
                         Popup popup = new Popup(idcount++,eventDate,startTime,endTime,name,location,colorR);
                         popups.add(popup);
 
