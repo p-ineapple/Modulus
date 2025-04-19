@@ -1,0 +1,263 @@
+Index: app/src/main/res/layout/planner_cell.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<androidx.cardview.widget.CardView\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"wrap_content\"\n    android:layout_centerHorizontal=\"true\"\n    android:layout_marginTop=\"8dp\"\n    android:orientation=\"horizontal\"\n    app:cardCornerRadius=\"12dp\"\n    tools:ignore=\"HardcodedText\">\n    <LinearLayout\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"match_parent\">\n        <TextView\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"match_parent\"\n            android:id=\"@+id/plannerModule\"\n            android:gravity=\"center_vertical\"\n            android:text=\"Name\"\n            android:textSize=\"16sp\"\n            android:singleLine=\"true\"\n            android:layout_marginHorizontal=\"12dp\"\n            android:layout_marginVertical=\"6dp\" />\n    </LinearLayout>\n\n</androidx.cardview.widget.CardView>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/planner_cell.xml b/app/src/main/res/layout/planner_cell.xml
+--- a/app/src/main/res/layout/planner_cell.xml	(revision cfce5b17e13013489b7cefcce23222a7028c36d8)
++++ b/app/src/main/res/layout/planner_cell.xml	(date 1744740666908)
+@@ -1,15 +1,24 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<androidx.cardview.widget.CardView
++<com.google.android.material.card.MaterialCardView
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
++    xmlns:card_view="http://schemas.android.com/apk/res-auto"
++    android:id="@+id/plannerCellCard"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:layout_centerHorizontal="true"
+     android:layout_marginTop="8dp"
+     android:orientation="horizontal"
+     app:cardCornerRadius="12dp"
+-    tools:ignore="HardcodedText">
++    tools:ignore="HardcodedText"
++    app:cardBackgroundColor="@color/white"
++    app:strokeColor="@color/calendar_purple"
++    app:strokeWidth="3dp"
++    card_view:cardCornerRadius="30dp"
++    card_view:cardElevation="6dp"
++    android:layout_margin="8dp">
++
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">
+@@ -25,4 +34,4 @@
+             android:layout_marginVertical="6dp" />
+     </LinearLayout>
+ 
+-</androidx.cardview.widget.CardView>
+\ No newline at end of file
++</com.google.android.material.card.MaterialCardView>
+\ No newline at end of file
+Index: app/src/main/java/com/example/modulus/Model/Kahn.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>//package com.example.modulus.Model;\n//\n//import com.example.modulus.FragmentInsights.InsightsFragment;\n//\n//import java.util.ArrayList;\n//import java.util.HashSet;\n//import java.util.List;\n//\n//public class Kahn {\n//    List<ModuleVertex> adjList;\n//    List<ModuleVertex> requiredList;\n//    public void setUpGraph() {\n//        for (ModuleModel mod : InsightsFragment.moduleList) {\n//            adjList.add(new ModuleVertex(mod));\n//        }\n//\n//    }\n//\n//    public List<ModuleVertex> RestrictedSet(TrackModel trackModel) {\n//        ArrayList<ModuleModel> required = new ArrayList<>();\n//        required.addAll(trackModel.getCore());\n//        required.addAll(trackModel.getElectives());\n////        if (minorModel != null) {\n////            required.addAll(minorModel.getCore());\n////            required.addAll(minorModel.getElectives());\n////        }\n//        ArrayList<ModuleVertex> requiredGraph = new ArrayList<>();\n//        for(ModuleModel m: required){\n//            requiredGraph.add(new ModuleVertex(m));\n//        }\n//        for(ModuleVertex v: adjList){\n//            if(isPreReqRequired(v, requiredGraph)){\n//                requiredGraph.add(v);\n//            }\n//        }\n//        requiredList = requiredGraph;\n//        return requiredGraph;\n//    }\n//\n//    public boolean isPreReqRequired(ModuleVertex moduleModel, List<ModuleVertex> list) {\n//        for (ModuleVertex u: list){\n//            List<ModuleVertex> preReq = u.hard;\n//            for(ModuleVertex m: preReq){\n//                if(m.getId().equals(u.getId())){\n//                    return true;\n//                }\n//            }\n//        }return false;\n//    }\n//\n//    public List<List<ModuleModel>> plan(){\n//        List<List<ModuleModel>> all = new ArrayList<>();\n//        List<PlannerModel> schedule = new ArrayList<>();\n//        boolean HASSFlag = false;\n//        int currentTerm = 0;\n//        List<ModuleModel> order = new ArrayList<>();\n//        //inDeg\n//        permute();\n//\n//    }\n//\n//    public void permute(TrackModel trackModel, List<List<ModuleModel>> all, List<PlannerModel> schedule, boolean hassFlag, List<ModuleModel> order, int currentTerm){\n//        if(currentTerm > 4){\n//            if(new HashSet<>(order).containsAll(trackModel.getCore())){\n//                all.add(order);\n//                return;\n//            }\n//        }\n//        List<ModuleModel> tempPlannerMods = new ArrayList<>();\n//        schedule.get(currentTerm).setModules(tempPlannerMods);\n//        fill(trackModel, all, schedule, hassFlag, order, currentTerm, 0);\n//    }\n//\n//    public void fill(TrackModel trackModel, List<List<ModuleModel>> all, List<PlannerModel> schedule, boolean hassFlag, List<ModuleModel> order, int currentTerm, int count){\n//        if(count == 4){\n//            boolean hasHASS = false;\n//            for(ModuleModel m: schedule.get(currentTerm).getModules()){\n//                if(m.getTags().contains(\"HASS\")){\n//                    hasHASS = true;\n//                }\n//            }\n//            order.addAll(schedule.get(currentTerm).getModules());\n//            permute(trackModel, all, schedule, hasHASS, order, currentTerm);\n//        }\n//        for(ModuleVertex v: requiredList){\n//            if(!order.toString().contains(v.toString())){\n//\n//            }\n//        }\n//    }\n//\n//    public boolean preReqCheck(){}\n//}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/Model/Kahn.java b/app/src/main/java/com/example/modulus/Model/Kahn.java
+--- a/app/src/main/java/com/example/modulus/Model/Kahn.java	(revision cfce5b17e13013489b7cefcce23222a7028c36d8)
++++ b/app/src/main/java/com/example/modulus/Model/Kahn.java	(date 1744745206850)
+@@ -37,11 +37,11 @@
+ //        return requiredGraph;
+ //    }
+ //
+-//    public boolean isPreReqRequired(ModuleVertex moduleModel, List<ModuleVertex> list) {
++//    public boolean isPreReqRequired(ModuleVertex v, List<ModuleVertex> list) {
+ //        for (ModuleVertex u: list){
+ //            List<ModuleVertex> preReq = u.hard;
+ //            for(ModuleVertex m: preReq){
+-//                if(m.getId().equals(u.getId())){
++//                if(m.getId().equals(v.getId())){
+ //                    return true;
+ //                }
+ //            }
+@@ -89,5 +89,20 @@
+ //        }
+ //    }
+ //
+-//    public boolean preReqCheck(){}
++//    public boolean preReqCheck(ModuleVertex v, List<ModuleModel> order){
++//        if(v.hard != null){
++//            for(ModuleVertex u: v.hard){
++//                if(!order.toString().contains(u.toString())){
++//                    return false;
++//                }
++//            }
++//        } else if(v.soft != null){
++//            for(ModuleVertex u: v.soft){
++//                if(!order.toString().contains(u.toString())){
++//                    return false;
++//                }
++//            }
++//        }
++//        return true;
++//    }
+ //}
+\ No newline at end of file
+Index: app/src/main/java/com/example/modulus/FragmentPlanner/PlannerFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.FragmentPlanner;\n\nimport android.app.AlertDialog;\nimport android.content.Context;\nimport android.content.DialogInterface;\nimport android.content.Intent;\nimport android.content.SharedPreferences;\nimport android.os.Bundle;\n\nimport androidx.activity.result.ActivityResult;\nimport androidx.activity.result.ActivityResultCallback;\nimport androidx.activity.result.ActivityResultLauncher;\nimport androidx.activity.result.contract.ActivityResultContracts;\nimport androidx.core.content.ContextCompat;\nimport androidx.fragment.app.Fragment;\nimport androidx.recyclerview.widget.LinearLayoutManager;\nimport androidx.recyclerview.widget.RecyclerView;\n\nimport android.util.Log;\nimport android.view.LayoutInflater;\nimport android.view.View;\nimport android.view.ViewGroup;\nimport android.widget.Button;\nimport android.widget.ImageView;\nimport android.widget.LinearLayout;\nimport android.widget.TextView;\nimport android.widget.Toast;\n\nimport com.example.modulus.Adapter.PlannerAdapter;\nimport com.example.modulus.Model.ModuleModel;\nimport com.example.modulus.Model.PlannerModel;\nimport com.example.modulus.FragmentInsights.InsightsFragment;\nimport com.example.modulus.Model.TrackModel;\nimport com.example.modulus.R;\nimport com.google.gson.Gson;\n\nimport java.util.ArrayList;\nimport java.util.Arrays;\nimport java.util.List;\n\npublic class PlannerFragment extends Fragment {\n    public static List<PlannerModel> basePlannerList;\n    public static List<PlannerModel> mPlannerList;\n    public static String myPillar;\n    public static String myTrack;\n    public static String myMinor;\n    public static TrackModel trackModel;\n    public static TrackModel minorModel;\n    PlannerAdapter adapter;\n    RecyclerView recyclerView;\n    DataBaseHelperPlanner myDB;\n    DataBaseHelperTracks tracksDB;\n    ImageView editButton;\n    SharedPreferences mPreferences;\n    static final String KEY_DATA_PILLAR = \"SHARED_PREF_DATA_PILLAR\";\n    static final String KEY_DATA_TRACK = \"SHARED_PREF_DATA_TRACK\";\n    static final String KEY_DATA_MINOR = \"SHARED_PREF_DATA_MINOR\";\n    static final String KEY_DATA_TERMS = \"SHARED_PREF_DATA_TERMS\";\n    static final String KEY_DATA_MODS = \"SHARED_PREF_DATA_MODS\";\n    static final String PREF_FILE = \"mainsharedpref\";\n    private final String TAG = \"PlannerModel\";\n    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {\n        // Inflate the layout for this fragment\n        View view = inflater.inflate(R.layout.fragment_planner, container, false);\n\n        recyclerView = view.findViewById(R.id.plannerRecyclerView);\n\n        myDB = new DataBaseHelperPlanner(getContext());\n        tracksDB = new DataBaseHelperTracks(getContext());\n\n        mPreferences = this.getActivity().getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);\n        if(mPreferences.getString(KEY_DATA_TERMS, \"\").equals(\"\")){\n            Log.d(TAG, \"New Account\");\n            basePlannerList = myDB.getPlanner(\"Default\");\n            mPlannerList = myDB.getPlanner(\"Default\");\n            System.out.println(basePlannerList);\n        }else{\n            onResume();\n            Log.d(TAG, \"Refresh\");\n        }\n        if(InsightsFragment.moduleList == null){\n            myDB = new DataBaseHelperPlanner(getContext());\n            InsightsFragment.moduleList = myDB.getAllModules();\n        }\n\n        adapter = new PlannerAdapter(mPlannerList);\n        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));\n        recyclerView.setAdapter(adapter);\n\n        LinearLayout editTab = view.findViewById(R.id.editTab);\n        editTab.setVisibility(View.GONE);\n        editButton = view.findViewById(R.id.editButton);\n        editButton.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                if(editTab.getVisibility() == View.VISIBLE){\n                    editTab.setVisibility(View.GONE);\n                }else{\n                    editTab.setVisibility(View.VISIBLE);\n                }\n            }\n        });\n\n        Button pillarButton = view.findViewById(R.id.pillarButton);\n        TextView pillarText = view.findViewById(R.id.pillarText);\n\n        String pillarPref = mPreferences.getString(KEY_DATA_PILLAR, \"\");\n        if(!pillarPref.isEmpty()){\n            pillarText.setText(pillarPref);\n            myPillar = pillarPref;\n        }\n        TextView trackText = view.findViewById(R.id.specializationText);\n        String trackPref = mPreferences.getString(KEY_DATA_TRACK, \"\");\n        if(!trackPref.isEmpty()){\n            trackText.setText(trackPref);\n            myTrack = trackPref;\n        }\n        TextView minorText = view.findViewById(R.id.minorText);\n        String minorPref = mPreferences.getString(KEY_DATA_MINOR, \"\");\n        if(!minorPref.isEmpty()){\n            minorText.setText(minorPref);\n            myMinor = minorPref;\n        }\n        com.google.android.material.card.MaterialCardView plannercard = view.findViewById(R.id.plannercard);\n\n        String[] pillars = new String[]{\"ASD\", \"CSD\", \"DAI\", \"EPD\", \"ESD\"};\n        pillarButton.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());\n                mBuilder.setTitle(\"Select a Pillar\");\n                mBuilder.setSingleChoiceItems(pillars, -1, new DialogInterface.OnClickListener() {\n                    @Override\n                    public void onClick(DialogInterface dialog, int which) {\n                        pillarText.setText(pillars[which]);\n                        myPillar = pillars[which];\n\n                        int colour = getColourR(myPillar);\n                        pillarText.setTextColor(ContextCompat.getColor(getContext(), colour));\n                        plannercard.setStrokeColor(ContextCompat.getColor(getContext(), colour));\n                        basePlannerList = myDB.getPlanner(pillars[which]);\n                        mPlannerList = myDB.getPlanner(pillars[which]);\n\n                        recyclerView.setAdapter(adapter);\n                        SharedPreferences.Editor prefsEditor = mPreferences.edit();\n                        prefsEditor.putString(PlannerFragment.KEY_DATA_PILLAR, pillars[which]);\n                        trackText.setText(\"No Specialisation\");\n                        prefsEditor.putString(PlannerFragment.KEY_DATA_TRACK, \"No Specialisation\");\n                        minorText.setText(\"No Minor\");\n                        prefsEditor.putString(PlannerFragment.KEY_DATA_MINOR, \"No Minor\");\n                        prefsEditor.apply();\n                        dialog.dismiss();\n                    }\n                });\n                mBuilder.setNeutralButton(\"Cancel\", new DialogInterface.OnClickListener() {\n                    @Override\n                    public void onClick(DialogInterface dialog, int which) {\n\n                    }\n                });\n                AlertDialog mDialog = mBuilder.create();\n                mDialog.show();\n            }\n        });\n\n\n\n\n\n\n\n        Button trackButton = view.findViewById(R.id.trackButton);\n        trackButton.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                if(myPillar == null){\n                    Toast.makeText(getContext(), \"Select Pillar First!\", Toast.LENGTH_SHORT).show();\n                }else if(myPillar.equals(\"ASD\") || myPillar.equals(\"DAI\")){\n                    Toast.makeText(getContext(), \"No Tracks Available\", Toast.LENGTH_SHORT).show();\n                }else {\n                    String[] tracks = tracksDB.getTracks(myPillar);\n                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());\n                    builder.setTitle(\"Select a Specialisation\");\n                    builder.setSingleChoiceItems(tracks, -1, new DialogInterface.OnClickListener() {\n                        @Override\n                        public void onClick(DialogInterface dialog, int which) {\n                            trackText.setText(tracks[which]);\n                            myTrack = tracks[which];\n                            trackModel = tracksDB.getTrackModel(tracks[which], pillarPref);\n                            SharedPreferences.Editor prefsEditor = mPreferences.edit();\n                            prefsEditor.putString(PlannerFragment.KEY_DATA_TRACK, tracks[which]);\n                            prefsEditor.apply();\n                            dialog.dismiss();\n                        }\n                    }).setNeutralButton(\"Cancel\", new DialogInterface.OnClickListener() {\n                        @Override\n                        public void onClick(DialogInterface dialog, int which) {\n                        }\n                    });\n                    AlertDialog mDialog = builder.create();\n                    mDialog.show();\n                }\n            }\n        });\n\n        Button minorButton = view.findViewById(R.id.minorButton);\n        minorButton.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                if(myPillar == null){\n                    Toast.makeText(getContext(), \"Select Pillar First!\", Toast.LENGTH_SHORT).show();\n                }else {\n                    String[] allMinors = tracksDB.getMinors();\n                    ArrayList<String[]> allMinorsEligibility = tracksDB.getMinorsEligibility();\n                    List<String> availableMinorsList = new ArrayList<>();\n\n                    for(int i = 0; i < allMinorsEligibility.size(); i++){\n                        List<String> eligibility = Arrays.asList(allMinorsEligibility.get(i));\n                        if(eligibility.contains(myPillar)){\n                            availableMinorsList.add(allMinors[i]);\n                        }\n                    }\n                    availableMinorsList.add(\"No Minor\");\n                    String[] availableMinors = availableMinorsList.toArray(new String[0]);\n\n                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());\n                    mBuilder.setTitle(\"Select a Minor\");\n                    mBuilder.setSingleChoiceItems(availableMinors, -1, new DialogInterface.OnClickListener() {\n                        @Override\n                        public void onClick(DialogInterface dialog, int which) {\n                            minorText.setText(availableMinors[which]);\n                            myMinor = availableMinors[which];\n                            if(!myMinor.equals(\"No Minor\")){\n                                minorModel = tracksDB.getTrackModel(availableMinors[which], pillarPref);\n                            }\n                            SharedPreferences.Editor prefsEditor = mPreferences.edit();\n                            prefsEditor.putString(PlannerFragment.KEY_DATA_MINOR, availableMinors[which]);\n                            prefsEditor.apply();\n                            dialog.dismiss();\n                        }\n                    });\n                    mBuilder.setNeutralButton(\"Cancel\", new DialogInterface.OnClickListener() {\n                        @Override\n                        public void onClick(DialogInterface dialog, int which) {\n                        }\n                    });\n                    AlertDialog mDialog = mBuilder.create();\n                    mDialog.show();\n                }\n            }\n        });\n\n        final ActivityResultLauncher<Intent> launcher = registerForActivityResult(\n                new ActivityResultContracts.StartActivityForResult(),\n                new ActivityResultCallback<ActivityResult>() {\n                    @Override\n                    public void onActivityResult(ActivityResult result) {\n                        // Result from DataEntryActivity is obtained\n                        // Get the data and insert it into datasource\n                        Log.d(\"TAG\", \"Back to Planner\");\n                        Bundle b = result.getData().getExtras();\n                        if(b != null){\n                            String newModules = b.getString(EditPlannerMenu.KEY_NAME);\n                            String term = b.getString(EditPlannerMenu.KEY_PATH);\n                            System.out.println(term);\n                            String[] updatedModules = newModules.split(\"\\n\");\n                            List<ModuleModel> newPlannerModules = new ArrayList<ModuleModel>();\n                            for(String moduleString: updatedModules){\n                                for(ModuleModel module: InsightsFragment.moduleList){\n                                    if(moduleString.contains(module.getId())){\n                                        newPlannerModules.add(module);\n                                    }\n                                }\n                            }\n                        for(PlannerModel planner: mPlannerList){\n                            if(planner.getTerm().equals(term)){\n                                planner.setModules(newPlannerModules);\n                            }\n                        }\n                        System.out.println(newPlannerModules.toString());\n                        Log.d(TAG, \"Planners Updated\");\n                        SharedPreferences.Editor prefsEditor = mPreferences.edit();\n                        Gson gson = new Gson();\n                        ArrayList<String> terms = new ArrayList<>();\n                        ArrayList<String> plannerModules = new ArrayList<>();\n                        for (PlannerModel planner: mPlannerList) {\n                            terms.add(planner.getTerm());\n                            if (planner.getModules() != null){\n                                for(ModuleModel module: planner.getModules()){\n                                    plannerModules.add(module.toString());\n                                }\n                                plannerModules.add(\"?\");\n                            }else{\n                                plannerModules.add(\"NIL\");\n                            }\n                        }\n                        String jsonTerms = gson.toJson(terms);\n                        String jsonMods = gson.toJson( plannerModules );\n                        prefsEditor.putString(KEY_DATA_TERMS, jsonTerms);\n                        prefsEditor.putString(KEY_DATA_MODS, jsonMods);\n                        prefsEditor.apply();\n                        }else{\n                            Log.d(TAG, \"Nothing to Update\");\n                        }\n                    }\n                }\n\n        );\n\n        Button edit = view.findViewById(R.id.planTermButton);\n        edit.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                Log.d(TAG, \"Edit\");\n                System.out.println(trackModel);\n                Intent intent = new Intent(getContext(), EditPlannerMenu.class);\n                launcher.launch(intent);\n            }\n        });\n\n        return view;\n    }\n\n    @Override\n    public void onPause(){\n        super.onPause();\n        SharedPreferences.Editor prefsEditor = mPreferences.edit();\n        Gson gson = new Gson();\n        ArrayList<String> terms = new ArrayList<>();\n        ArrayList<String> plannerModules = new ArrayList<>();\n        for (PlannerModel planner: mPlannerList) {\n            terms.add(planner.getTerm());\n            if (planner.getModules() != null){\n                for(ModuleModel module: planner.getModules()){\n                    plannerModules.add(module.toString());\n                }\n                plannerModules.add(\"?\");\n            }else{\n                plannerModules.add(\"NIL\");\n            }\n        }\n        String jsonTerms = gson.toJson(terms);\n        String jsonMods = gson.toJson( plannerModules );\n        prefsEditor.putString(KEY_DATA_TERMS, jsonTerms);\n        prefsEditor.putString(KEY_DATA_MODS, jsonMods);\n        prefsEditor.apply();\n    }\n\n    @Override\n    public void onResume(){\n        super.onResume();\n        Log.d(TAG, \"Resume\");\n        if(InsightsFragment.moduleList == null){\n            myDB = new DataBaseHelperPlanner(getContext());\n            InsightsFragment.moduleList = myDB.getAllModules();\n        }\n        String pillarPref = mPreferences.getString(KEY_DATA_PILLAR, \"\");\n        if(!pillarPref.isEmpty()){\n            myPillar = pillarPref;\n        }else{\n            myPillar = \"Default\";\n        }\n        if(basePlannerList == null){\n            myDB = new DataBaseHelperPlanner(getContext());\n            basePlannerList = myDB.getPlanner(myPillar);\n        }\n        Gson gson = new Gson();\n        String jsonTerms = mPreferences.getString(KEY_DATA_TERMS, \"\");\n        String jsonMods = mPreferences.getString(KEY_DATA_MODS, \"\");\n        ArrayList<String> terms = gson.fromJson(jsonTerms, ArrayList.class);\n        ArrayList<String> mods = gson.fromJson(jsonMods, ArrayList.class);\n        System.out.println(terms);\n        System.out.println(mods);\n        if(terms != null && mods != null){\n            mPlannerList = new ArrayList<>();\n            int modsPointer = 0;\n            for (int i = 0; i< terms.size(); i++) {\n                PlannerModel planner = new PlannerModel(terms.get(i));\n                List<ModuleModel> plannerModules = new ArrayList<ModuleModel>();\n                for(int j = modsPointer; j < mods.size(); j++){\n                    if(mods.get(j).equals(\"?\")){\n                        planner.setModules(plannerModules);\n                        mPlannerList.add(planner);\n                        modsPointer++;\n                        break;\n                    }else if(mods.get(j).equals(\"NIL\")){\n                        mPlannerList.add(planner);\n                        modsPointer++;\n                        break;\n                    }else {\n                        for(ModuleModel module: InsightsFragment.moduleList){\n                            if(mods.get(j).contains(module.getId())){\n                                plannerModules.add(module);\n                            }\n                        }\n                        modsPointer++;\n                    }\n                }\n            }\n            Log.d(TAG, \"Updated\");\n        }\n        adapter = new PlannerAdapter(mPlannerList);\n        recyclerView.setAdapter(adapter);\n    }\n\n    private int getColourR(String pillar) {\n        switch (pillar){\n            case \"ASD\":\n                return R.color.ASD;\n            case \"EPD\":\n                return R.color.EPD;\n            case \"ESD\":\n                return R.color.ESD;\n            case \"DAI\":\n                return R.color.DAI;\n            case \"ISTD\":\n                return R.color.ISTD;\n            case \"HASS\":\n                return R.color.HASS;\n            case \"SMT\":\n                return R.color.SMT;\n            default:\n                return R.color.OTHERS;\n        }\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/FragmentPlanner/PlannerFragment.java b/app/src/main/java/com/example/modulus/FragmentPlanner/PlannerFragment.java
+--- a/app/src/main/java/com/example/modulus/FragmentPlanner/PlannerFragment.java	(revision cfce5b17e13013489b7cefcce23222a7028c36d8)
++++ b/app/src/main/java/com/example/modulus/FragmentPlanner/PlannerFragment.java	(date 1744738072747)
+@@ -46,6 +46,7 @@
+     public static String myMinor;
+     public static TrackModel trackModel;
+     public static TrackModel minorModel;
++    com.google.android.material.card.MaterialCardView plannerCard;
+     PlannerAdapter adapter;
+     RecyclerView recyclerView;
+     DataBaseHelperPlanner myDB;
+@@ -67,6 +68,7 @@
+ 
+         myDB = new DataBaseHelperPlanner(getContext());
+         tracksDB = new DataBaseHelperTracks(getContext());
++        plannerCard = view.findViewById(R.id.plannercard);
+ 
+         mPreferences = this.getActivity().getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
+         if(mPreferences.getString(KEY_DATA_TERMS, "").equals("")){
+@@ -121,7 +123,6 @@
+             minorText.setText(minorPref);
+             myMinor = minorPref;
+         }
+-        com.google.android.material.card.MaterialCardView plannercard = view.findViewById(R.id.plannercard);
+ 
+         String[] pillars = new String[]{"ASD", "CSD", "DAI", "EPD", "ESD"};
+         pillarButton.setOnClickListener(new View.OnClickListener() {
+@@ -137,7 +138,7 @@
+ 
+                         int colour = getColourR(myPillar);
+                         pillarText.setTextColor(ContextCompat.getColor(getContext(), colour));
+-                        plannercard.setStrokeColor(ContextCompat.getColor(getContext(), colour));
++                        plannerCard.setStrokeColor(ContextCompat.getColor(getContext(), colour));
+                         basePlannerList = myDB.getPlanner(pillars[which]);
+                         mPlannerList = myDB.getPlanner(pillars[which]);
+ 
+@@ -163,12 +164,6 @@
+             }
+         });
+ 
+-
+-
+-
+-
+-
+-
+         Button trackButton = view.findViewById(R.id.trackButton);
+         trackButton.setOnClickListener(new View.OnClickListener() {
+             @Override
+Index: app/src/main/java/com/example/modulus/Adapter/NestedPlannerAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.Adapter;\n\nimport android.annotation.SuppressLint;\nimport android.view.LayoutInflater;\nimport android.view.View;\nimport android.view.ViewGroup;\nimport android.widget.TextView;\n\nimport androidx.recyclerview.widget.RecyclerView;\n\nimport com.example.modulus.Model.ModuleModel;\nimport com.example.modulus.R;\n\nimport java.util.List;\n\npublic class NestedPlannerAdapter extends RecyclerView.Adapter<NestedPlannerAdapter.NestedModuleViewHolder> {\n    private List<ModuleModel> moduleList;\n\n    public NestedPlannerAdapter(List<ModuleModel> moduleList){\n        this.moduleList = moduleList;\n    }\n    @Override\n    public NestedModuleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {\n        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.planner_cell , parent , false);\n        return new NestedModuleViewHolder(view);\n    }\n\n    @SuppressLint(\"ResourceAsColor\")\n    @Override\n    public void onBindViewHolder(NestedModuleViewHolder holder, int position) {\n        if(moduleList.get(position) != null){\n            ModuleModel module = moduleList.get(position);\n            if (module.getName() == \"Capstone\"){\n                holder.plannerModule.setText(\"Capstone\");\n            } else{\n                holder.plannerModule.setText(module.toString());\n            }\n//        holder.plannerCell.setBackgroundColor(R.color.dark_pink);\n//        if(Objects.equals(module.getName(), \"Capstone\")){\n//            holder.plannerCell.setBackgroundColor(R.color.light_pink);\n//        }\n//        if(module.getTags() != null) {\n//            if (module.getTags().contains(\"HASS\")) {\n//                holder.plannerCell.setBackgroundColor(R.color.light_blue);\n//            }\n//        }\n        }\n    }\n\n    @Override\n    public int getItemCount() {\n        if(moduleList != null){\n            return moduleList.size();\n        }\n        return 0;\n    }\n    public class NestedModuleViewHolder extends RecyclerView.ViewHolder{\n        TextView plannerModule;\n        public NestedModuleViewHolder(View itemView) {\n            super(itemView);\n            plannerModule = itemView.findViewById(R.id.plannerModule);\n        }\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/Adapter/NestedPlannerAdapter.java b/app/src/main/java/com/example/modulus/Adapter/NestedPlannerAdapter.java
+--- a/app/src/main/java/com/example/modulus/Adapter/NestedPlannerAdapter.java	(revision cfce5b17e13013489b7cefcce23222a7028c36d8)
++++ b/app/src/main/java/com/example/modulus/Adapter/NestedPlannerAdapter.java	(date 1744745394340)
+@@ -30,20 +30,8 @@
+     public void onBindViewHolder(NestedModuleViewHolder holder, int position) {
+         if(moduleList.get(position) != null){
+             ModuleModel module = moduleList.get(position);
+-            if (module.getName() == "Capstone"){
+-                holder.plannerModule.setText("Capstone");
+-            } else{
+-                holder.plannerModule.setText(module.toString());
+-            }
+-//        holder.plannerCell.setBackgroundColor(R.color.dark_pink);
+-//        if(Objects.equals(module.getName(), "Capstone")){
+-//            holder.plannerCell.setBackgroundColor(R.color.light_pink);
+-//        }
+-//        if(module.getTags() != null) {
+-//            if (module.getTags().contains("HASS")) {
+-//                holder.plannerCell.setBackgroundColor(R.color.light_blue);
+-//            }
+-//        }
++            holder.plannerModule.setText(module.toString());
++
+         }
+     }
+ 
+@@ -56,9 +44,32 @@
+     }
+     public class NestedModuleViewHolder extends RecyclerView.ViewHolder{
+         TextView plannerModule;
++        com.google.android.material.card.MaterialCardView plannerCard;
+         public NestedModuleViewHolder(View itemView) {
+             super(itemView);
+             plannerModule = itemView.findViewById(R.id.plannerModule);
++            plannerCard = itemView.findViewById(R.id.plannerCellCard);
++        }
++    }
++
++    private int getColourR(String pillar) {
++        switch (pillar){
++            case "ASD":
++                return R.color.ASD;
++            case "EPD":
++                return R.color.EPD;
++            case "ESD":
++                return R.color.ESD;
++            case "DAI":
++                return R.color.DAI;
++            case "ISTD":
++                return R.color.ISTD;
++            case "HASS":
++                return R.color.HASS;
++            case "SMT":
++                return R.color.SMT;
++            default:
++                return R.color.OTHERS;
+         }
+     }
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/modulus/FragmentPlanner/EditPlannerMenu.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.FragmentPlanner;\n\nimport android.app.Activity;\nimport android.content.Context;\nimport android.content.DialogInterface;\nimport android.content.Intent;\nimport android.content.SharedPreferences;\nimport android.os.Bundle;\nimport android.util.Log;\nimport android.view.View;\nimport android.widget.Button;\nimport android.widget.ImageView;\nimport android.widget.TextView;\nimport android.widget.Toast;\n\nimport androidx.appcompat.app.AlertDialog;\nimport androidx.appcompat.app.AppCompatActivity;\nimport androidx.cardview.widget.CardView;\n\nimport com.example.modulus.Model.ModuleModel;\nimport com.example.modulus.Model.PlannerModel;\nimport com.example.modulus.FragmentInsights.InsightsFragment;\nimport com.example.modulus.R;\nimport com.google.android.material.card.MaterialCardView;\n\nimport java.util.ArrayList;\nimport java.util.List;\n\n\npublic class EditPlannerMenu extends AppCompatActivity {\n    List<PlannerModel> basePlannerList = PlannerFragment.basePlannerList;\n    PlannerModel selectedPlanner;\n    MaterialCardView selectTermCard; TextView tvTerm;\n    int electiveLimit;\n    CardView coreCard; TextView tvCore;\n    MaterialCardView selectElectivesCard; TextView tvElectives; String[] electivesList;\n    CardView term3HASSCard; TextView tvTerm3HASS;\n    MaterialCardView selectHASSCard; TextView tvHASS; String[] HASSList;\n    boolean[] selectedElectives;\n    boolean changed;\n    ArrayList<String> selectedModulesIndex = new ArrayList<>();\n    String[] filteredModulesList;\n    ImageView backButton;\n    Button confirmButton;\n    SharedPreferences mPreferences;\n    final static String KEY_NAME = \"Electives\";\n    final static String KEY_PATH = \"Term\";\n    final String TAG = \"Edit Planner\";\n    @Override\n    protected void onCreate(Bundle savedInstanceState){\n        super.onCreate(savedInstanceState);\n        setContentView(R.layout.dropdown_menu);\n        changed = false;\n\n        selectTermCard = findViewById(R.id.selectTermCard);\n        tvTerm = findViewById(R.id.tvTerm);\n        selectTermCard.setOnClickListener(v -> {\n            showTermDialog();\n        });\n\n\n        coreCard = findViewById(R.id.coreCard);\n        tvCore = findViewById(R.id.tvCore);\n        selectElectivesCard = findViewById(R.id.selectElectivesCard);\n        tvElectives = findViewById(R.id.tvElectives);\n        selectElectivesCard.setOnClickListener(v -> {\n            showElectivesDialog();\n        });\n\n        term3HASSCard = findViewById(R.id.term3HASS);\n        tvTerm3HASS = findViewById(R.id.tvTerm3HASS);\n        selectHASSCard = findViewById(R.id.selectHASSCard);\n        tvHASS = findViewById(R.id.tvHASS);\n        selectHASSCard.setOnClickListener(v -> {\n            showHASSDialog();\n        });\n\n        backButton = findViewById(R.id.backButton);\n        backButton.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                Intent resultIntent = new Intent();\n                setResult( Activity.RESULT_OK, resultIntent);\n                finish();\n            }\n        });\n\n        mPreferences = this.getSharedPreferences(PlannerFragment.PREF_FILE, Context.MODE_PRIVATE);\n        confirmButton = findViewById(R.id.confirmButton);\n        confirmButton.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                if(!changed){\n                    Toast.makeText(EditPlannerMenu.this, \"No Changes Detected\", Toast.LENGTH_SHORT).show();;\n                }\n                else{\n                    StringBuilder updatedModules = new StringBuilder();\n                    if(coreCard.getVisibility() == View.VISIBLE){\n                        updatedModules.append(tvCore.getText().toString()).append(\"\\n\");\n                        System.out.println(\"HELP\" + updatedModules);\n                        Log.d(TAG, \"core\");\n                    }\n                    if(selectElectivesCard.getVisibility() == View.VISIBLE){\n                        updatedModules.append(tvElectives.getText().toString()).append(\"\\n\");\n                        System.out.println(\"HELP\" + updatedModules);\n                        Log.d(TAG, \"elective\");\n                    }\n                    if(term3HASSCard.getVisibility() == View.VISIBLE){\n                        updatedModules.append(tvTerm3HASS.getText().toString()).append(\"\\n\");\n                        System.out.println(\"HELP\" + updatedModules);\n                        Log.d(TAG, \"term3\");\n                    }\n                    if(selectHASSCard.getVisibility() == View.VISIBLE){\n                        updatedModules.append(tvHASS.getText().toString()).append(\"\\n\");\n                        System.out.println(\"HELP\" + updatedModules);\n                        Log.d(TAG, \"hass\");\n                    }\n                    System.out.println(updatedModules);\n                    Intent resultIntent = new Intent();\n                    resultIntent.putExtra(KEY_NAME, updatedModules.toString());\n                    resultIntent.putExtra(KEY_PATH, selectedPlanner.getTerm());\n\n                    setResult( Activity.RESULT_OK, resultIntent);\n                    finish();\n                }\n            }\n        });\n    }\n\n    private void showTermDialog(){\n        tvTerm = findViewById(R.id.tvTerm);\n        AlertDialog.Builder builder = new AlertDialog.Builder(EditPlannerMenu.this);\n\n        builder.setTitle(\"Select Term\");\n        builder.setCancelable(false);\n\n        String[] terms = new String[]{\"Term 3\", \"Term 4\", \"Term 5\", \"Term 6\", \"Term 7\", \"Term 8\"};\n        builder.setSingleChoiceItems(terms, -1, new DialogInterface.OnClickListener() {\n            @Override\n            public void onClick(DialogInterface dialog, int which) {\n                tvTerm.setText(terms[which]);\n                selectedPlanner = getSelectedPlanner(terms[which]);\n                setValues();\n                dialog.dismiss();\n            }\n        }).setNeutralButton(\"Cancel\", new DialogInterface.OnClickListener() {\n            @Override\n            public void onClick(DialogInterface dialog, int which) {\n            }\n        });\n        AlertDialog mDialog = builder.create();\n        mDialog.show();\n    }\n    private void showElectivesDialog(){\n        if(selectedPlanner == null){\n            Toast.makeText(this, \"Select a Term first!\", Toast.LENGTH_SHORT).show();\n        }else{\n            selectedElectives = new boolean[electivesList.length];\n\n            AlertDialog.Builder builder = new AlertDialog.Builder(EditPlannerMenu.this);\n\n            builder.setTitle(\"Select Electives\");\n            builder.setCancelable(false);\n\n            builder.setMultiChoiceItems(electivesList, selectedElectives, new DialogInterface.OnMultiChoiceClickListener() {\n                int count = 0;\n                @Override\n                public void onClick(DialogInterface dialog, int which, boolean isChecked) {\n                    if(isChecked){\n                        selectedModulesIndex.add(String.valueOf(which));\n                    }else{\n                        selectedModulesIndex.remove(String.valueOf(which));\n                    }\n                    count += isChecked ? 1 : -1;\n                    int term = selectedPlanner.getTermInt();\n                    if(count > electiveLimit) {\n                        Toast.makeText(EditPlannerMenu.this, \"Limit Reached!.\", Toast.LENGTH_SHORT).show();\n                        selectedElectives[which] = false;\n                        selectedModulesIndex.remove(String.valueOf(which));\n                        count--;\n                        ((AlertDialog) dialog).getListView().setItemChecked(which, false);\n                    }\n                }\n            }).setPositiveButton(\"Select\", new DialogInterface.OnClickListener() {\n                @Override\n                public void onClick(DialogInterface dialog, int which) {\n                    tvElectives.setText(\"\");\n                    StringBuilder s = new StringBuilder();\n                    for(int i = 0; i < selectedModulesIndex.size(); i++){\n                        s.append(electivesList[Integer.parseInt(selectedModulesIndex.get(i))]);\n                        if(i != selectedModulesIndex.size() - 1){\n                            s.append(\"\\n\");\n                        }\n                    }\n                    tvElectives.setText(s.toString());\n                    changed = true;\n                }\n            }).setNegativeButton(\"Cancel\", new DialogInterface.OnClickListener() {\n                @Override\n                public void onClick(DialogInterface dialog, int which) {\n                    dialog.dismiss();\n                }\n            }).setNeutralButton(\"Clear All\", new DialogInterface.OnClickListener() {\n                @Override\n                public void onClick(DialogInterface dialog, int which) {\n                    for(int i = 0; i < selectedElectives.length; i++){\n                        selectedElectives[i] = false;\n                    }\n                    selectedModulesIndex.clear();\n                    tvElectives.setText(\"\");\n                }\n            });\n            AlertDialog mDialog = builder.create();\n            mDialog.show();\n        }\n    }\n\n    private void showHASSDialog(){\n        if(selectedPlanner == null){\n            Toast.makeText(this, \"Select a Term first!\", Toast.LENGTH_SHORT).show();\n        }else{\n            tvHASS = findViewById(R.id.tvHASS);\n            AlertDialog.Builder builder = new AlertDialog.Builder(EditPlannerMenu.this);\n\n            builder.setTitle(\"Select HASS\");\n            builder.setCancelable(false);\n\n            builder.setSingleChoiceItems(HASSList, -1, new DialogInterface.OnClickListener() {\n                @Override\n                public void onClick(DialogInterface dialog, int which) {\n                    tvHASS.setText(HASSList[which]);\n                    changed = true;\n                    dialog.dismiss();\n                }\n            }).setNeutralButton(\"Cancel\", new DialogInterface.OnClickListener() {\n                @Override\n                public void onClick(DialogInterface dialog, int which) {\n                }\n            });\n            AlertDialog mDialog = builder.create();\n            mDialog.show();\n        }\n    }\n\n    private PlannerModel getSelectedPlanner(String term) {\n        for (PlannerModel planner : basePlannerList) {\n            if(planner.getTerm().equals(term))\n                return planner;\n        }\n        Log.d(\"Edit\", \"No Planner\");\n        return null;\n    }\n\n    private void setValues() {\n        TextView tv = findViewById(R.id.tvTerm);\n        tv.setText(selectedPlanner.getTerm());\n\n        //filter available\n        List<String> stringFilteredModulesList = new ArrayList<String>();\n        List<String> stringHASSList = new ArrayList<String>();\n        List<String> stringElectivesList = new ArrayList<String>();\n        for(ModuleModel module: InsightsFragment.moduleList){\n            if(!selectedPlanner.getModules().toString().contains(module.toString())){\n                if( module.getTerm().contains(String.valueOf(selectedPlanner.getTermInt())) ){\n                    stringFilteredModulesList.add(module.toString());\n                    if(module.getTags().contains(\"HASS\")){\n                        stringHASSList.add(module.toString());\n                    }else{\n                        stringElectivesList.add(module.toString());\n                    }\n                }\n            }\n        }\n        filteredModulesList = stringFilteredModulesList.toArray(new String[0]);\n        HASSList = stringHASSList.toArray(new String[0]);\n        electivesList = stringElectivesList.toArray(new String[0]);\n\n        //set values\n        electiveLimit = 3;\n        List<ModuleModel> plannerModulesList = selectedPlanner.getModules();\n        if(plannerModulesList != null) {\n            StringBuilder setTvCore = new StringBuilder();\n            StringBuilder setHASSCore = new StringBuilder();\n            for (ModuleModel module : plannerModulesList) {\n                if (module.getTags().contains(\"HASS\")) {\n                    setHASSCore.append(module.toString());\n                } else{\n                    setTvCore.append(module.toString()).append(\"\\n\");\n                    electiveLimit -= 1;\n                }\n            }\n            if (setTvCore.length() > 0) {\n                coreCard.setVisibility(View.VISIBLE);\n                tvCore.setText(setTvCore.toString().substring(0, setTvCore.length()-1));\n                if(electiveLimit == 0){\n                    selectElectivesCard.setVisibility(View.GONE);\n                }else{\n                    selectElectivesCard.setVisibility(View.VISIBLE);\n                }\n            }else{\n                coreCard.setVisibility(View.GONE);\n                tvCore.setText(\"Core\");\n            }\n\n            if (setHASSCore.length() > 0) {\n                term3HASSCard.setVisibility(View.VISIBLE);\n                tvTerm3HASS.setText(setHASSCore.toString());\n                selectHASSCard.setVisibility(View.GONE);\n            }else{\n                term3HASSCard.setVisibility(View.GONE);\n                tvTerm3HASS.setText(\"Term 3 HASS\");\n                selectHASSCard.setVisibility(View.VISIBLE);\n            }\n\n        }\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/FragmentPlanner/EditPlannerMenu.java b/app/src/main/java/com/example/modulus/FragmentPlanner/EditPlannerMenu.java
+--- a/app/src/main/java/com/example/modulus/FragmentPlanner/EditPlannerMenu.java	(revision cfce5b17e13013489b7cefcce23222a7028c36d8)
++++ b/app/src/main/java/com/example/modulus/FragmentPlanner/EditPlannerMenu.java	(date 1744745206858)
+@@ -255,9 +255,17 @@
+         TextView tv = findViewById(R.id.tvTerm);
+         tv.setText(selectedPlanner.getTerm());
+ 
++        List<ModuleModel> core = new ArrayList<>();
++        List<ModuleModel> rec = new ArrayList<>();
++        if(PlannerFragment.trackModel != null){
++            core = PlannerFragment.trackModel.getCore();
++            rec = PlannerFragment.trackModel.getRecMods();
++        }
++
+         //filter available
+         List<String> stringFilteredModulesList = new ArrayList<String>();
+         List<String> stringHASSList = new ArrayList<String>();
++        List<String> stringCoreList = new ArrayList<String>();
+         List<String> stringElectivesList = new ArrayList<String>();
+         for(ModuleModel module: InsightsFragment.moduleList){
+             if(!selectedPlanner.getModules().toString().contains(module.toString())){
+@@ -265,6 +273,9 @@
+                     stringFilteredModulesList.add(module.toString());
+                     if(module.getTags().contains("HASS")){
+                         stringHASSList.add(module.toString());
++                    }else if( (!core.isEmpty() && core.toString().contains(module.toString())) ||
++                            (!rec.isEmpty() && rec.toString().contains(module.toString()))){
++                        stringCoreList.add(module.toString());
+                     }else{
+                         stringElectivesList.add(module.toString());
+                     }
+@@ -273,7 +284,8 @@
+         }
+         filteredModulesList = stringFilteredModulesList.toArray(new String[0]);
+         HASSList = stringHASSList.toArray(new String[0]);
+-        electivesList = stringElectivesList.toArray(new String[0]);
++        stringCoreList.addAll(stringElectivesList);
++        electivesList = stringCoreList.toArray(new String[0]);
+ 
+         //set values
+         electiveLimit = 3;

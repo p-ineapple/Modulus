@@ -7,16 +7,17 @@ import android.view.ViewGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.modulus.Model.ReviewModel;
 import com.example.modulus.R;
 
 import java.util.List;
-
+// RecyclerView Adapter for reviews in ModulesDetailsActivity
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder> {
-    private List<ReviewModel> reviewList;
-    private int reviewScoreColor;
+    private final List<ReviewModel> reviewList;
+    private final int reviewScoreColor;
 
     public ReviewAdapter(List<ReviewModel> reviewList, int reviewScoreColor) {
         this.reviewList = reviewList;
@@ -37,6 +38,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         }
     }
 
+    @NonNull
     @Override
     public ReviewViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -49,7 +51,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         ReviewModel review = reviewList.get(position);
         holder.reviewUser.setText(review.getUsername());
         holder.reviewDescription.setText(review.getComment());
-        holder.reviewRatingBar.setRating(Float.valueOf(review.getRating()));
+        holder.reviewRatingBar.setRating(Float.parseFloat(review.getRating()));
         holder.reviewScore.setText(review.getRating());
 
         ColorStateList csl = ColorStateList.valueOf(reviewScoreColor);

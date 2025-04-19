@@ -1,4 +1,4 @@
-package com.example.modulus.Model;
+package com.example.modulus.Utils;
 
 import java.util.ArrayList;
 import java.util.Comparator;

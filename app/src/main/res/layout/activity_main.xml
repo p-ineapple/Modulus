@@ -34,18 +34,6 @@
 
     </LinearLayout>
 
-    <com.google.android.material.navigation.NavigationView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:id="@+id/nav_view"
-        android:layout_gravity="start"
-        app:headerLayout="@layout/nav_header"
-        app:menu="@menu/nav_menu"
-        android:backgroundTint="@color/light_purple"
-        app:itemIconTint="@color/dark_purple"
-        app:itemTextColor="@color/dark_purple" />
-
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout
 
         android:layout_width="match_parent"
@@ -69,4 +57,16 @@
         </com.google.android.material.bottomappbar.BottomAppBar>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/home_nav_header"
+        app:menu="@menu/nav_menu"
+        android:backgroundTint="@color/light_purple"
+        app:itemIconTint="@color/dark_purple"
+        app:itemTextColor="@color/dark_purple" />
+
 </androidx.drawerlayout.widget.DrawerLayout>

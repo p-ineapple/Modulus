@@ -75,7 +75,7 @@ public class DataBaseHelperReviews extends SQLiteOpenHelper {
 
 
         db.insert(tableName, null, contentValues);
-        Log.d(TAG, "Insert task");
+        Log.d(TAG, "Insert review");
     }
 
     @SuppressLint("Range")
@@ -108,7 +108,7 @@ public class DataBaseHelperReviews extends SQLiteOpenHelper {
             db.endTransaction();
             cursor.close();
         }
-        Log.d(TAG, "Retrieved all tasks");
+        Log.d(TAG, "Retrieved all reviews");
         return modelList;
     }
 

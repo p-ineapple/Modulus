@@ -33,11 +33,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import java.util.Calendar;
 
 public class AddNewReview extends BottomSheetDialogFragment {
-    public static final String TAG = "AddNewReview";
     private RatingBar ratingBar;
     private EditText reviewInput;
-    private Button submitReviewBtn;
     private DataBaseHelperReviews db;
+    public static final String TAG = "AddNewReview";
     public static com.example.modulus.FragmentInsights.AddNewReview newInstance(){
         Log.d(TAG,"reviewInstance");
         return new com.example.modulus.FragmentInsights.AddNewReview();
@@ -47,7 +46,7 @@ public class AddNewReview extends BottomSheetDialogFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.insights_add_review, container, false);
-        Log.d(TAG, "New task");
+        Log.d(TAG, "New review");
         return v;
     }
 
@@ -57,7 +56,7 @@ public class AddNewReview extends BottomSheetDialogFragment {
 
         ratingBar = view.findViewById(R.id.ratingBar);
         reviewInput = view.findViewById(R.id.commentInput);
-        submitReviewBtn = view.findViewById(R.id.submitReviewBtn);
+        Button submitReviewBtn = view.findViewById(R.id.submitReviewBtn);
 
         db = new DataBaseHelperReviews(getActivity());
 
@@ -68,7 +67,7 @@ public class AddNewReview extends BottomSheetDialogFragment {
                 ReviewModel item = new ReviewModel();
                 item.setRating(String.valueOf(ratingBar.getRating()));
                 item.setComment(reviewInput.getText().toString());
-                item.setUsername("Bob");
+                item.setUsername("Bob"); // Hard coded account name
                 item.setModuleId(ModuleDetailsActivity.selectedModule.getId());
                 db.insertTask(item);
 
@@ -82,7 +81,7 @@ public class AddNewReview extends BottomSheetDialogFragment {
 
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {
-        Log.d("Dismiss", "dismissed");
+        Log.d(TAG, "Dismiss");
         super.onDismiss(dialog);
         Activity activity = getActivity();
         if (getParentFragment() instanceof OnDialogCloseListener) {

@@ -19,6 +19,7 @@ import com.example.modulus.R;
 import com.example.modulus.FragmentHome.DataBaseHelperHome;
 
 import java.util.List;
+// RecyclerView Adapter for to do list in HomeFragment
 public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.MyViewHolder> {
     private List<ToDoModel> mList;
     private HomeFragment home;
@@ -104,7 +105,10 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.MyViewHolder> 
 
     @Override
     public int getItemCount() {
-        return mList.size();
+        if(mList != null){
+            return mList.size();
+        }
+        return 0;
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{

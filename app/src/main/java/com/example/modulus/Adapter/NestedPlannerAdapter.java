@@ -14,7 +14,7 @@ import com.example.modulus.Model.ModuleModel;
 import com.example.modulus.R;
 
 import java.util.List;
-
+// RecyclerView Adapter for nested modules per term in PlannerFragment
 public class NestedPlannerAdapter extends RecyclerView.Adapter<NestedPlannerAdapter.NestedModuleViewHolder> {
     private List<ModuleModel> moduleList;
 
@@ -29,16 +29,11 @@ public class NestedPlannerAdapter extends RecyclerView.Adapter<NestedPlannerAdap
         return new NestedModuleViewHolder(view);
     }
 
-    @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(NestedModuleViewHolder holder, int position) {
         if(moduleList.get(position) != null){
             ModuleModel module = moduleList.get(position);
-            if (module.getName() == "Capstone"){
-                holder.plannerModule.setText("Capstone");
-            } else{
-                holder.plannerModule.setText(module.toString());
-            }
+            holder.plannerModule.setText(module.toString());
 
             if (holder.modcard != null) {
                 holder.modcard.setCardBackgroundColor(holdercolour);
@@ -52,17 +47,6 @@ public class NestedPlannerAdapter extends RecyclerView.Adapter<NestedPlannerAdap
                     view.getContext().startActivity(intent);
                 }
             });
-
-
-//        holder.plannerCell.setBackgroundColor(R.color.dark_pink);
-//        if(Objects.equals(module.getName(), "Capstone")){
-//            holder.plannerCell.setBackgroundColor(R.color.light_pink);
-//        }
-//        if(module.getTags() != null) {
-//            if (module.getTags().contains("HASS")) {
-//                holder.plannerCell.setBackgroundColor(R.color.light_blue);
-//            }
-//        }
         }
     }
 

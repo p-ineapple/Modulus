@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.example.modulus.R;
+import com.example.modulus.Utils.DataBaseHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,15 +22,8 @@ import java.util.Calendar;
 import java.util.List;
 @SuppressLint({"Range", "SdCardPath"})
 
-public class DataBaseHelperCalendar extends SQLiteOpenHelper {
-    private static final String dbName = "sutdModules.db";
+public class DataBaseHelperCalendar extends DataBaseHelper {
     private static final String TABLE_NAME = "timetable";
-
-    private static final String dbPath = "/data/data/com.example.modulus/databases/";
-
-    private SQLiteDatabase db;
-    private final Context mContext;
-
     private final String TAG = "DatabaseCalendar";
 
     //Column names
@@ -47,8 +41,7 @@ public class DataBaseHelperCalendar extends SQLiteOpenHelper {
 
     //Constructor
     public DataBaseHelperCalendar(Context context) {
-        super(context, dbName, null, 1);
-        this.mContext = context;
+        super(context);
     }
 
     //Call when database is first created
@@ -75,85 +68,6 @@ public class DataBaseHelperCalendar extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_NAME);
         onCreate(db);
-    }
-
-    //Check if database file exists
-    private boolean checkDatabase() {
-        try {
-            final String mPath = dbPath + dbName;
-            Log.i(TAG, "Checking Database");
-            final File file = new File(mPath);
-            return file.exists();
-        } catch (SQLiteException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    //Copies database to device local storage
-    private void copyDatabase() throws IOException {
-        try {
-            InputStream mInputStream = mContext.getAssets().open(dbName);
-            Log.d(TAG, "Copying Database");
-            String outFileName = dbPath + dbName;
-            OutputStream mOutputStream = Files.newOutputStream(Paths.get(outFileName));
-
-            byte[] buffer = new byte[2048];
-            int length;
-            while ((length = mInputStream.read(buffer)) > 0) {
-                mOutputStream.write(buffer, 0, length);
-            }
-            mOutputStream.flush();
-            mOutputStream.close();
-            mInputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    //Create database
-    public void createDatabase() throws IOException {
-        boolean mDatabaseExists = checkDatabase();
-        Log.d(TAG, "Create Database");
-        if (mDatabaseExists) {
-            this.getReadableDatabase();
-            this.close();
-            try {
-                copyDatabase();
-            } catch (IOException mIOException) {
-                mIOException.printStackTrace();
-                throw new Error("Error copying Database");
-            } finally {
-                this.close();
-            }
-        }
-    }
-
-    //Close Database
-    @Override
-    public synchronized void close(){
-        if (db != null) {
-            db.close();
-        }
-        SQLiteDatabase.releaseMemory();
-        super.close();
-
-    }
-
-    //Maps Database colorId to actual Android colour resource
-    private int getColourR(int colorId){
-        switch (colorId){
-            case 2:
-                return R.color.calendar_green;
-            case 3:
-                return R.color.calendar_purple;
-            case 5:
-                return R.color.calendar_yellow;
-            case 11:
-                return R.color.calendar_red;
-            default:
-                return R.color.calendar_blue;
-        }
     }
 
     //Retrieve all Popup objects from database
@@ -221,6 +135,22 @@ public class DataBaseHelperCalendar extends SQLiteOpenHelper {
             }
         }
         return popups;
+    }
+
+    //Maps Database colorId to actual Android colour resource
+    private int getColourR(int colorId){
+        switch (colorId){
+            case 2:
+                return R.color.calendar_green;
+            case 3:
+                return R.color.calendar_purple;
+            case 5:
+                return R.color.calendar_yellow;
+            case 11:
+                return R.color.calendar_red;
+            default:
+                return R.color.calendar_blue;
+        }
     }
 }
 

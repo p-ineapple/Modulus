@@ -1,0 +1,1659 @@
+Index: app/src/main/java/com/example/modulus/FragmentInsights/ModuleDetailsActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.FragmentInsights;\n\nimport static com.example.modulus.R.id.backgroup;\n\nimport androidx.appcompat.app.AppCompatActivity;\nimport androidx.core.content.ContextCompat;\nimport androidx.recyclerview.widget.LinearLayoutManager;\nimport androidx.recyclerview.widget.RecyclerView;\n\nimport android.content.DialogInterface;\nimport android.content.Intent;\nimport android.content.res.ColorStateList;\nimport android.database.sqlite.SQLiteDatabase;\nimport android.net.Uri;\nimport android.os.Bundle;\nimport android.os.Handler;\nimport android.os.Looper;\nimport android.text.Html;\nimport android.text.TextUtils;\nimport android.util.Log;\nimport android.view.View;\nimport android.widget.ImageView;\nimport android.widget.RatingBar;\nimport android.widget.RelativeLayout;\nimport android.widget.TextView;\nimport android.widget.Toast;\n\nimport com.example.modulus.Adapter.ReviewAdapter;\nimport com.example.modulus.Adapter.ToDoAdapter;\nimport com.example.modulus.FragmentHome.AddNewTask;\nimport com.example.modulus.FragmentHome.HomeFragment;\nimport com.example.modulus.Model.ModuleModel;\nimport com.example.modulus.Model.ReviewModel;\nimport com.example.modulus.R;\nimport com.example.modulus.Utils.OnDialogCloseListener;\nimport com.example.modulus.Utils.WebView;\nimport com.google.android.material.floatingactionbutton.FloatingActionButton;\n\nimport org.json.JSONArray;\nimport org.json.JSONObject;\n\nimport java.io.InputStream;\nimport java.net.URL;\nimport java.nio.charset.StandardCharsets;\nimport java.util.ArrayList;\nimport java.util.List;\nimport java.util.concurrent.ExecutorService;\nimport java.util.concurrent.Executors;\n\npublic class ModuleDetailsActivity extends AppCompatActivity implements OnDialogCloseListener {\n    public static ModuleModel selectedModule;\n    RecyclerView reviewRecyclerView;\n    FloatingActionButton addReview;\n    List<ReviewModel> reviewList;\n    ReviewAdapter reviewAdapter;\n    DataBaseHelperReviews dbReview;\n    TextView overallScore;\n    RatingBar overallRating;\n    final String TAG = \"Module Insights\";\n\n    @Override\n    protected void onCreate(Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n        setContentView(R.layout.insights_activity_module_details);\n\n\n        getSelectedModule();\n        setValues();\n\n        RelativeLayout backButton = findViewById(backgroup);\n        backButton.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                finish();\n            }\n        });\n\n        TextView info = findViewById(R.id.moduleDetailsPillar);\n        info.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                if (WebView.isNetworkAvailable(ModuleDetailsActivity.this)) {\n                    openURL();\n                } else {\n                    Toast.makeText(ModuleDetailsActivity.this, \"No Network\", Toast.LENGTH_SHORT).show();\n                }\n            }\n        });\n        dbReview = new DataBaseHelperReviews(this);\n        //insertReviewsFromJson();\n//        insertReviewsFromJson();\n        float average = dbReview.getOverallRating(selectedModule.getId());\n        Log.d(\"OverallRating\", \"Average Rating: \" + average);\n        overallScore = findViewById(R.id.overallScore);\n        overallRating = findViewById(R.id.overallRating);\n        overallScore.setText(String.format(\"%.1f\", average));\n        overallRating.setRating(average);\n        int star = ContextCompat.getColor(this, selectedModule.getColor());\n        ColorStateList csl = ColorStateList.valueOf(star);\n        overallRating.setProgressTintList(csl);\n        overallRating.setProgressBackgroundTintList(csl);\n        overallRating.setSecondaryProgressTintList(csl);\n        overallScore.setTextColor(star);\n\n\n        reviewRecyclerView = findViewById(R.id.reviewRecyclerView);\n        // Setup RecyclerView\n\n\n        reviewList = new ArrayList<>();\n        reviewList = dbReview.getModuleReviews(selectedModule.getId());\n\n        Log.d(\"moduleactivity\", selectedModule.getId());\n\n        reviewAdapter = new ReviewAdapter(reviewList,star);\n        reviewRecyclerView.setAdapter(reviewAdapter);\n\n        // SQLite helper\n        reviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));\n        reviewAdapter.notifyDataSetChanged();\n\n\n        addReview = findViewById(R.id.addReviewButton);\n        addReview.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                AddNewReview.newInstance().show(getSupportFragmentManager(), AddNewReview.TAG);\n                Log.d(\"addButton\",\"AddNewReview instance\");\n            }\n        });\n\n\n\n    }\n\n    // Listener callback from AddNewReview dialog\n    @Override\n    public void onDialogClose(DialogInterface dialog) {\n        // Clear the current list and fetch the new data from the database\n        reviewList.clear();\n        reviewList.addAll(dbReview.getModuleReviews(selectedModule.getId()));\n        reviewAdapter.notifyDataSetChanged();\n        Log.d(TAG, \"Review list updated after dialog closed\");\n    }\n\n    private void getSelectedModule() {\n        Intent previousIntent = getIntent();\n        String parsedStringID = previousIntent.getStringExtra(\"id\");\n        selectedModule = getParsedModule(parsedStringID);\n    }\n\n    private ModuleModel getParsedModule(String parsedID) {\n        for (ModuleModel module : InsightsFragment.moduleList) {\n            if(module.getId().equals(parsedID))\n                return module;\n        }\n        return null;\n    }\n\n    private void setValues() {\n\n\n\n        TextView Name = findViewById(R.id.moduleDetailsName);\n        Name.setText(selectedModule.getName());\n\n        TextView pillar = findViewById(R.id.moduleDetailsPillar);\n        pillar.setText(selectedModule.getPillar() + \" \" + selectedModule.getId());\n        int color = ContextCompat.getColor(this, selectedModule.getColor());\n        pillar.setTextColor(color);\n        pillar.setCompoundDrawableTintList(ColorStateList.valueOf(color));\n\n\n        TextView tags = findViewById(R.id.tags);\n        tags.setText( selectedModule.getType());\n        tags.setTextColor(color);\n\n        TextView prof = findViewById(R.id.termProf);\n        prof.setText(String.join(\", \", selectedModule.getProf()));\n        prof.setTextColor(color);\n\n\n        RelativeLayout back = findViewById(R.id.backgroup);\n        back.setBackgroundColor(color);\n\n        TextView term = findViewById(R.id.terms);\n        term.setText(String.join(\", \", selectedModule.getTerm()));\n        term.setTextColor(color);\n\n        ImageView imageMod = findViewById(R.id.imageMod);\n        imageMod.setImageDrawable(selectedModule.getImage());\n\n\n\n\n        TextView preReq = findViewById(R.id.prerequisites);\n        List<String> modPreReq = selectedModule.getPrerequisites();\n        List<String> output = new ArrayList<>();\n        for(String id: modPreReq){\n            if(!id.contains(\"/\")){\n                ModuleModel module = InsightsFragment.moduleList.stream().filter(m -> id.contains(m.getId())).findFirst().orElse(null);\n                if(module != null){\n                    output.add(module.toString());\n                }\n            }else{\n                String[] splitMods = id.split(\"/\");\n                StringBuilder orString = new StringBuilder();\n                for(int i = 0; i < splitMods.length; i++){\n                    String innerId = splitMods[i];\n                    ModuleModel module = InsightsFragment.moduleList.stream().filter(m -> innerId.contains(m.getId())).findFirst().orElse(null);\n                    if(module != null) {\n                        orString.append(module);\n                    }\n                    if(i < splitMods.length - 1){\n                        orString.append(\" <b>OR</b><br />\");\n                    }\n                }\n                output.add(orString.toString());\n            }\n\n\n        }\n\n        if (!output.isEmpty()){\n            preReq.setText(Html.fromHtml(TextUtils.join(\"<br>\", output), Html.FROM_HTML_MODE_LEGACY));\n\n\n        } else{\n            preReq.setText(\"No Pre-requisites\");\n        }\n\n        preReq.setTextColor(color);\n\n    }\n\n    private void openURL(){\n        ExecutorService executorService = Executors.newSingleThreadExecutor();\n        Looper uiLooper = Looper.getMainLooper();\n        final Handler handler = new Handler(uiLooper);\n\n        executorService.execute(new Runnable() {\n            @Override\n            public void run() { // Background thread\n                URL url = WebView.getURLFromDesc(selectedModule);\n                String response = WebView.getJson(url);\n                if (response == null) {\n                    handler.post(new Runnable() { // Main thread\n                        @Override\n                        public void run() {\n                            // main thread\n                            Log.i(\"UI Thread\", \"Invalid URL\");\n                            Toast.makeText(ModuleDetailsActivity.this, \"Invalid URL\", Toast.LENGTH_SHORT).show();\n                        }\n                    });\n                } else {\n                    handler.post(new Runnable() {\n                        // main thread\n                        @Override\n                        public void run() {\n                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(selectedModule.getDescription()));\n                            startActivity(browserIntent);\n                        }\n                    });\n                }\n            }\n        });\n    }\n\n    private void insertReviewsFromJson() {\n        try {\n            InputStream is = getAssets().open(\"generated_module_reviews_v2.json\");\n            int size = is.available();\n            byte[] buffer = new byte[size];\n            is.read(buffer);\n            is.close();\n            String jsonStr = new String(buffer, StandardCharsets.UTF_8);\n\n            JSONArray jsonArray = new JSONArray(jsonStr);\n            for (int i = 0; i < jsonArray.length(); i++) {\n                JSONObject reviewObj = jsonArray.getJSONObject(i);\n\n                ReviewModel model = new ReviewModel();\n                model.setModuleId(reviewObj.getString(\"MODULEID\"));\n                model.setUsername(reviewObj.getString(\"USERNAME\"));\n                model.setRating(reviewObj.getString(\"RATING\"));\n                model.setComment(reviewObj.getString(\"REVIEW\"));\n\n                dbReview.insertTask(model);\n            }\n\n            Log.d(\"DB_INSERT\", \"Inserted \" + jsonArray.length() + \" reviews\");\n\n        } catch (Exception e) {\n            e.printStackTrace();\n            Log.e(\"DB_INSERT\", \"Failed to insert reviews: \" + e.getMessage());\n        }\n    }\n\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/FragmentInsights/ModuleDetailsActivity.java b/app/src/main/java/com/example/modulus/FragmentInsights/ModuleDetailsActivity.java
+--- a/app/src/main/java/com/example/modulus/FragmentInsights/ModuleDetailsActivity.java	(revision 3a7e97c62744d5c459f4d3a15ae742675a1b6319)
++++ b/app/src/main/java/com/example/modulus/FragmentInsights/ModuleDetailsActivity.java	(date 1744769760117)
+@@ -87,8 +87,7 @@
+             }
+         });
+         dbReview = new DataBaseHelperReviews(this);
+-        //insertReviewsFromJson();
+-//        insertReviewsFromJson();
++        insertReviewsFromJson();
+         float average = dbReview.getOverallRating(selectedModule.getId());
+         Log.d("OverallRating", "Average Rating: " + average);
+         overallScore = findViewById(R.id.overallScore);
+Index: app/src/main/java/com/example/modulus/Model/Kahn.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>//package com.example.modulus.Model;\n//\n//import com.example.modulus.FragmentInsights.InsightsFragment;\n//\n//import java.util.ArrayList;\n//import java.util.HashSet;\n//import java.util.List;\n//\n//public class Kahn {\n//    List<ModuleVertex> adjList;\n//    List<ModuleVertex> requiredList;\n//    public void setUpGraph() {\n//        for (ModuleModel mod : InsightsFragment.moduleList) {\n//            adjList.add(new ModuleVertex(mod));\n//        }\n//\n//    }\n//\n//    public List<ModuleVertex> RestrictedSet(TrackModel trackModel) {\n//        ArrayList<ModuleModel> required = new ArrayList<>();\n//        required.addAll(trackModel.getCore());\n//        required.addAll(trackModel.getElectives());\n////        if (minorModel != null) {\n////            required.addAll(minorModel.getCore());\n////            required.addAll(minorModel.getElectives());\n////        }\n//        ArrayList<ModuleVertex> requiredGraph = new ArrayList<>();\n//        for(ModuleModel m: required){\n//            requiredGraph.add(new ModuleVertex(m));\n//        }\n//        for(ModuleVertex v: adjList){\n//            if(isPreReqRequired(v, requiredGraph)){\n//                requiredGraph.add(v);\n//            }\n//        }\n//        requiredList = requiredGraph;\n//        return requiredGraph;\n//    }\n//\n//    public boolean isPreReqRequired(ModuleVertex moduleModel, List<ModuleVertex> list) {\n//        for (ModuleVertex u: list){\n//            List<ModuleVertex> preReq = u.hard;\n//            for(ModuleVertex m: preReq){\n//                if(m.getId().equals(u.getId())){\n//                    return true;\n//                }\n//            }\n//        }return false;\n//    }\n//\n//    public List<List<ModuleModel>> plan(){\n//        List<List<ModuleModel>> all = new ArrayList<>();\n//        List<PlannerModel> schedule = new ArrayList<>();\n//        boolean HASSFlag = false;\n//        int currentTerm = 0;\n//        List<ModuleModel> order = new ArrayList<>();\n//        //inDeg\n//        permute();\n//\n//    }\n//\n//    public void permute(TrackModel trackModel, List<List<ModuleModel>> all, List<PlannerModel> schedule, boolean hassFlag, List<ModuleModel> order, int currentTerm){\n//        if(currentTerm > 4){\n//            if(new HashSet<>(order).containsAll(trackModel.getCore())){\n//                all.add(order);\n//                return;\n//            }\n//        }\n//        List<ModuleModel> tempPlannerMods = new ArrayList<>();\n//        schedule.get(currentTerm).setModules(tempPlannerMods);\n//        fill(trackModel, all, schedule, hassFlag, order, currentTerm, 0);\n//    }\n//\n//    public void fill(TrackModel trackModel, List<List<ModuleModel>> all, List<PlannerModel> schedule, boolean hassFlag, List<ModuleModel> order, int currentTerm, int count){\n//        if(count == 4){\n//            boolean hasHASS = false;\n//            for(ModuleModel m: schedule.get(currentTerm).getModules()){\n//                if(m.getTags().contains(\"HASS\")){\n//                    hasHASS = true;\n//                }\n//            }\n//            order.addAll(schedule.get(currentTerm).getModules());\n//            permute(trackModel, all, schedule, hasHASS, order, currentTerm);\n//        }\n//        for(ModuleVertex v: requiredList){\n//            if(!order.toString().contains(v.toString())){\n//\n//            }\n//        }\n//    }\n//\n//    public boolean preReqCheck(){}\n//}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/Model/Kahn.java b/app/src/main/java/com/example/modulus/Model/Kahn.java
+--- a/app/src/main/java/com/example/modulus/Model/Kahn.java	(revision 3a7e97c62744d5c459f4d3a15ae742675a1b6319)
++++ b/app/src/main/java/com/example/modulus/Model/Kahn.java	(date 1744769760125)
+@@ -37,11 +37,11 @@
+ //        return requiredGraph;
+ //    }
+ //
+-//    public boolean isPreReqRequired(ModuleVertex moduleModel, List<ModuleVertex> list) {
++//    public boolean isPreReqRequired(ModuleVertex v, List<ModuleVertex> list) {
+ //        for (ModuleVertex u: list){
+ //            List<ModuleVertex> preReq = u.hard;
+ //            for(ModuleVertex m: preReq){
+-//                if(m.getId().equals(u.getId())){
++//                if(m.getId().equals(v.getId())){
+ //                    return true;
+ //                }
+ //            }
+@@ -89,5 +89,20 @@
+ //        }
+ //    }
+ //
+-//    public boolean preReqCheck(){}
++//    public boolean preReqCheck(ModuleVertex v, List<ModuleModel> order){
++//        if(v.hard != null){
++//            for(ModuleVertex u: v.hard){
++//                if(!order.toString().contains(u.toString())){
++//                    return false;
++//                }
++//            }
++//        } else if(v.soft != null){
++//            for(ModuleVertex u: v.soft){
++//                if(!order.toString().contains(u.toString())){
++//                    return false;
++//                }
++//            }
++//        }
++//        return true;
++//    }
+ //}
+\ No newline at end of file
+Index: app/src/main/java/com/example/modulus/FragmentHome/HomeFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.FragmentHome;\n\nimport android.annotation.SuppressLint;\nimport android.content.Context;\nimport android.os.Bundle;\n\nimport androidx.core.content.ContextCompat;\nimport androidx.fragment.app.Fragment;\n\nimport android.util.Log;\nimport android.view.LayoutInflater;\nimport android.view.View;\nimport android.view.ViewGroup;\n\nimport android.content.DialogInterface;\nimport android.widget.Button;\nimport android.widget.TextView;\n\nimport androidx.core.graphics.Insets;\nimport androidx.core.view.ViewCompat;\nimport androidx.core.view.WindowInsetsCompat;\nimport androidx.recyclerview.widget.ItemTouchHelper;\nimport androidx.recyclerview.widget.LinearLayoutManager;\nimport androidx.recyclerview.widget.RecyclerView;\n\nimport com.example.modulus.Adapter.DateItemAdapter;\nimport com.example.modulus.Adapter.ToDoAdapter;\nimport com.example.modulus.Model.MergeSort;\nimport com.example.modulus.Model.ToDoModel;\nimport com.example.modulus.R;\nimport com.example.modulus.Utils.OnDialogCloseListener;\nimport com.google.android.material.floatingactionbutton.FloatingActionButton;\n\nimport org.json.JSONArray;\nimport org.json.JSONException;\nimport org.json.JSONObject;\n\nimport java.io.IOException;\nimport java.io.InputStream;\nimport java.nio.charset.StandardCharsets;\nimport java.time.DayOfWeek;\nimport java.time.LocalDate;\nimport java.time.format.DateTimeFormatter;\nimport java.time.format.TextStyle;\nimport java.util.ArrayList;\nimport java.util.Calendar;\nimport java.util.Collections;\nimport java.util.List;\nimport java.util.Locale;\n\npublic class HomeFragment extends Fragment implements OnDialogCloseListener {\n    RecyclerView taskRecyclerView, dateItemRecycler;\n    FloatingActionButton addButton;\n    DataBaseHelperHome myDB;\n    Button allButton, toDoButton, completedButton;\n    TextView homeTitle;\n\n    MergeSort sortTime = new MergeSort(ToDoModel.timeCompare);\n    private List<ToDoModel> mList;\n    private ToDoAdapter toDoAdapter;\n    final Calendar calendar = Calendar.getInstance();\n    final int year = calendar.get(Calendar.YEAR);\n    final int month = calendar.get(Calendar.MONTH) + 1;\n    final int day = calendar.get(Calendar.DAY_OF_MONTH);\n    String currentDate = day + \"/\" + month + \"/\" + year;\n\n    public String clickedDate = currentDate;\n\n    @SuppressLint(\"MissingInflatedId\")\n    @Override\n    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n//        insertTasksFromJson(this.getContext());\n        View view = inflater.inflate(R.layout.fragment_home, container, false);\n        ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.homeMain), (v, insets) -> {\n            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());\n            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);\n            return insets;\n        });\n\n        // Set Title to current date\n        homeTitle = view.findViewById(R.id.homeTitle);\n        // Convert your currentDate string to a LocalDate\n        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern(\"d/M/yyyy\");\n        LocalDate todayDate = LocalDate.parse(currentDate, inputFormatter);\n\n        // Extract day of week, day of month, and month name\n        DayOfWeek dayOfWeek = todayDate.getDayOfWeek();\n        int dayOfMonth = todayDate.getDayOfMonth();\n        String monthName = todayDate.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH); // \"April\"\n\n        // Format the display text\n        String displayText = String.format(\"Welcome! It's %s %d %s\", dayOfWeek.getDisplayName(TextStyle.FULL, Locale.ENGLISH), dayOfMonth, monthName);\n\n        // Set the formatted text to your TextView\n        homeTitle.setText(displayText);\n\n\n        //Date Items Recycler\n        dateItemRecycler = view.findViewById(R.id.dateItemRecycler);\n        //LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false);\n        ScaleCenterItemManager layoutManager = new ScaleCenterItemManager(this.getContext(),LinearLayoutManager.HORIZONTAL,false);\n        dateItemRecycler.setLayoutManager(layoutManager);\n        generateData();\n\n\n        //Task Recycler\n        taskRecyclerView = view.findViewById(R.id.recyclerView);\n        myDB = new DataBaseHelperHome(this.getContext());\n        toDoAdapter = new ToDoAdapter(myDB, this);\n        taskRecyclerView.setHasFixedSize(true);\n        taskRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));\n        taskRecyclerView.setAdapter(HomeFragment.this.toDoAdapter);\n        mList = sort(myDB.getDateTask(currentDate)); // Adjust format if needed\n//        Collections.reverse(mList);\n        HomeFragment.this.toDoAdapter.setTasks(mList);\n        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new RecyclerViewTouchHelper(toDoAdapter));\n        itemTouchHelper.attachToRecyclerView(taskRecyclerView);\n\n\n\n        //Add Button\n        addButton = view.findViewById(R.id.addButton);\n        addButton.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                AddNewTask.newInstance().show(getChildFragmentManager(), AddNewTask.TAG);\n                Log.d(\"addButton\",\"AddNewTask instance\");\n            }\n        });\n\n        //Buttons\n        //String clickedDate = currentDate;\n        allButton = view.findViewById(R.id.AllButton);\n        allButton.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                mList = sort(myDB.getDateTask(clickedDate)); // Adjust format if needed\n//                Collections.reverse(mList);\n                HomeFragment.this.toDoAdapter.setTasks(mList);\n                highlightSelectedButton(allButton, toDoButton, completedButton);\n            }\n        });\n\n        toDoButton = view.findViewById(R.id.ToDoButton);\n        toDoButton.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                mList = sort(myDB.getStatustask(0,clickedDate)); // Adjust format if needed\n//                Collections.reverse(mList);\n                HomeFragment.this.toDoAdapter.setTasks(mList);\n                highlightSelectedButton(toDoButton, allButton, completedButton);\n            }\n        });\n\n        completedButton = view.findViewById(R.id.CompletedButton);\n        completedButton.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                mList = sort(myDB.getStatustask(1, clickedDate)); // Adjust format if needed\n//                Collections.reverse(mList);\n                HomeFragment.this.toDoAdapter.setTasks(mList);\n                highlightSelectedButton(completedButton, allButton, toDoButton);\n            }\n        });\n\n        highlightSelectedButton(allButton, toDoButton, completedButton);\n\n        // Inflate the layout for this fragment\n        return view;\n    }\n\n    private void generateData() {\n        List<LocalDate> dateList = new ArrayList<>();\n        LocalDate today = LocalDate.now();\n        int currentYear = today.getYear();\n        int currentMonth = today.getMonthValue();\n        LocalDate firstDayOfMonth = LocalDate.of(currentYear, currentMonth, 1);\n        int daysInMonth = firstDayOfMonth.lengthOfMonth();\n\n        // Add all dates of the current month\n        for (int i = 1; i <= daysInMonth; i++) {\n            dateList.add(LocalDate.of(currentYear, currentMonth, i));\n        }\n\n        DateItemAdapter adapter = new DateItemAdapter(dateList, new DateItemAdapter.OnItemClickListener() {\n            @Override\n            public void onItemClick(LocalDate date) {\n                // Handle the click event (same logic as testButton)\n                //System.out.println(\"Selected date: \" + date.toString());\n                String getDate = date.format(DateTimeFormatter.ofPattern(\"d/M/yyyy\"));\n                clickedDate = getDate;\n                taskRecyclerView.setAdapter(HomeFragment.this.toDoAdapter);\n                mList = sort(myDB.getDateTask(getDate)); // Adjust format if needed\n//                Collections.reverse(mList);\n                HomeFragment.this.toDoAdapter.setTasks(mList);\n            }\n        });\n\n        dateItemRecycler.setAdapter(adapter);\n\n        // Scroll to current date when opening\n        int todayPosition = today.getDayOfMonth() - 1;\n        dateItemRecycler.scrollToPosition(todayPosition-2);\n    }\n\n    @Override\n    public void onDialogClose(DialogInterface dialogInterface) {\n        Log.d(\"Home\", \"onDialogClose\");\n        mList = sort(myDB.getAllTasks());\n//        Collections.reverse(mList);\n        toDoAdapter.setTasks(mList);\n        toDoAdapter.notifyDataSetChanged();\n\n    }\n\n    private void highlightSelectedButton(Button selected, Button... others) {\n        selected.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.dark_purple));\n        selected.setTextColor(ContextCompat.getColor(getContext(), R.color.white));\n\n        for (Button btn : others) {\n            btn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.light_purple));\n            btn.setTextColor(ContextCompat.getColor(getContext(), R.color.black));\n        }\n    }\n\n\n    private void insertTasksFromJson(Context context) {\n        DataBaseHelperHome dbHelper = new DataBaseHelperHome(context);\n        try {\n            // Load JSON from assets\n            InputStream is = context.getAssets().open(\"school_tasks.json\");\n            int size = is.available();\n            byte[] buffer = new byte[size];\n            is.read(buffer);\n            is.close();\n\n            // Convert to JSON string\n            String json = new String(buffer, StandardCharsets.UTF_8);\n\n            // Parse JSON array\n            JSONArray jsonArray = new JSONArray(json);\n            for (int i = 0; i < jsonArray.length(); i++) {\n                JSONObject taskObject = jsonArray.getJSONObject(i);\n\n                ToDoModel model = new ToDoModel();\n                model.setTask(taskObject.getString(\"task\"));\n                model.setStatus(taskObject.getInt(\"status\"));\n                model.setDate(taskObject.getString(\"date\"));\n                model.setTime(taskObject.getString(\"time\"));\n                model.setCategory(taskObject.getString(\"category\"));\n\n                dbHelper.insertTask(model);\n            }\n\n            Log.d(\"DB_INSERT\", \"All tasks inserted successfully\");\n\n        } catch (IOException | JSONException e) {\n            e.printStackTrace();\n            Log.e(\"DB_INSERT\", \"Error inserting tasks: \" + e.getMessage());\n        }\n    }\n\n    private List<ToDoModel> sort(List<ToDoModel> list){\n        List<ToDoModel> status1 = new ArrayList<>();\n        List<ToDoModel> status2 = new ArrayList<>();\n        for(ToDoModel task: list){\n            if(task.getStatus() == 0 ){\n                status1.add(task);\n            }else{\n                status2.add(task);\n            }\n        }\n        sortTime.mergeSort(status1, status1.size());\n        sortTime.mergeSort(status2, status2.size());\n        status1.addAll(status2);\n        return status1;\n    }\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/FragmentHome/HomeFragment.java b/app/src/main/java/com/example/modulus/FragmentHome/HomeFragment.java
+--- a/app/src/main/java/com/example/modulus/FragmentHome/HomeFragment.java	(revision 3a7e97c62744d5c459f4d3a15ae742675a1b6319)
++++ b/app/src/main/java/com/example/modulus/FragmentHome/HomeFragment.java	(date 1744769760383)
+@@ -70,7 +70,7 @@
+     @Override
+     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+-//        insertTasksFromJson(this.getContext());
++        insertTasksFromJson(this.getContext());
+         View view = inflater.inflate(R.layout.fragment_home, container, false);
+         ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.homeMain), (v, insets) -> {
+             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_8_4_25,_8_36 pm_[Changes]/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_8_4_25,_8_36 pm_[Changes]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Update_at_8_4_25,_8_36 pm_[Changes]/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_8_4_25,_8_36 pm_[Changes]/shelved.patch	(revision 3a7e97c62744d5c459f4d3a15ae742675a1b6319)
++++ /dev/null	(revision 3a7e97c62744d5c459f4d3a15ae742675a1b6319)
+@@ -1,1467 +0,0 @@
+-Index: app/src/main/AndroidManifest.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:tools=\"http://schemas.android.com/tools\">\n    <uses-permission android:name=\"android.permission.INTERNET\"/>\n    <application\n        android:allowBackup=\"true\"\n        android:dataExtractionRules=\"@xml/data_extraction_rules\"\n        android:fullBackupContent=\"@xml/backup_rules\"\n        android:icon=\"@mipmap/ic_launcher\"\n        android:label=\"@string/app_name\"\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\n        android:supportsRtl=\"true\"\n        android:theme=\"@style/Theme.Modulus\"\n        tools:targetApi=\"31\">\n        <activity\n            android:name=\".ActivityLogIn\"\n            android:exported=\"true\"\n            android:theme=\"@style/Theme.Login.BackgroundImageStyle\">\n            <intent-filter>\n                <action android:name=\"android.intent.action.MAIN\" />\n                <category android:name=\"android.intent.category.LAUNCHER\" />\n            </intent-filter>\n        </activity>\n        <activity android:name=\".MainActivity\"\n            android:parentActivityName=\".ActivityLogIn\"/>\n\n        <activity android:name=\".Insights.ModuleDetailsActivity\"\n            android:parentActivityName=\".MainActivity\">\n        </activity>\n\n        <activity android:name=\".Planner.EditPlanner\"\n            android:parentActivityName=\".MainActivity\">\n        </activity>\n\n        <activity android:name=\".Planner.EditPlannerMenu\"\n            android:parentActivityName=\".Planner.EditPlanner\">\n        </activity>\n    </application>\n\n</manifest>
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+---- a/app/src/main/AndroidManifest.xml	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/AndroidManifest.xml	(date 1744115786909)
+-@@ -24,16 +24,16 @@
+-         <activity android:name=".MainActivity"
+-             android:parentActivityName=".ActivityLogIn"/>
+- 
+--        <activity android:name=".Insights.ModuleDetailsActivity"
+-+        <activity android:name=".FragmentInsights.ModuleDetailsActivity"
+-             android:parentActivityName=".MainActivity">
+-         </activity>
+- 
+--        <activity android:name=".Planner.EditPlanner"
+-+        <activity android:name=".FragmentPlanner.EditPlanner"
+-             android:parentActivityName=".MainActivity">
+-         </activity>
+- 
+--        <activity android:name=".Planner.EditPlannerMenu"
+--            android:parentActivityName=".Planner.EditPlanner">
+-+        <activity android:name=".FragmentPlanner.EditPlannerMenu"
+-+            android:parentActivityName=".FragmentPlanner.EditPlanner">
+-         </activity>
+-     </application>
+- 
+-Index: app/src/main/java/com/example/modulus/Class/MergeSort.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/modulus/Class/MergeSort.java b/app/src/main/java/com/example/modulus/Model/MergeSort.java
+-rename from app/src/main/java/com/example/modulus/Class/MergeSort.java
+-rename to app/src/main/java/com/example/modulus/Model/MergeSort.java
+---- a/app/src/main/java/com/example/modulus/Class/MergeSort.java	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/java/com/example/modulus/Model/MergeSort.java	(date 1744115786915)
+-@@ -1,13 +1,13 @@
+--package com.example.modulus.Class;
+-+package com.example.modulus.Model;
+- 
+- import java.util.ArrayList;
+- import java.util.Comparator;
+- import java.util.List;
+- 
+- public class MergeSort {
+--    public static Comparator<Module> idCompare = new Comparator<Module>() {
+-+    public static Comparator<ModuleModel> idCompare = new Comparator<ModuleModel>() {
+-         @Override
+--        public int compare(Module mod1, Module mod2) {
+-+        public int compare(ModuleModel mod1, ModuleModel mod2) {
+-             String id1 = mod1.getId();
+-             String id2 = mod2.getId();
+- 
+-@@ -19,9 +19,9 @@
+-             return false;
+-         }
+-     };
+--    public static Comparator<Module> nameCompare = new Comparator<Module>() {
+-+    public static Comparator<ModuleModel> nameCompare = new Comparator<ModuleModel>() {
+-         @Override
+--        public int compare(Module mod1, Module mod2) {
+-+        public int compare(ModuleModel mod1, ModuleModel mod2) {
+-             String name1 = mod1.getName();
+-             String name2 = mod2.getName();
+-             name1 = name1.toLowerCase();
+-@@ -35,13 +35,13 @@
+-         }
+-     };
+- 
+--    public static void mergeSortID(List<Module> a, int n) {
+-+    public static void mergeSortID(List<ModuleModel> a, int n) {
+-         if (n < 2) {
+-             return;
+-         }
+-         int mid = n / 2;
+--        List<Module> l = new ArrayList<Module>(mid);
+--        List<Module> r = new ArrayList<Module>(n - mid);
+-+        List<ModuleModel> l = new ArrayList<ModuleModel>(mid);
+-+        List<ModuleModel> r = new ArrayList<ModuleModel>(n - mid);
+- 
+-         for (int i = 0; i < mid; i++) {
+-             l.set(i, a.get(i));
+-@@ -54,7 +54,7 @@
+- 
+-         mergeID(a, l, r, mid, n - mid);
+-     }
+--    public static void mergeID(List<Module> a, List<Module> l, List<Module> r, int left, int right) {
+-+    public static void mergeID(List<ModuleModel> a, List<ModuleModel> l, List<ModuleModel> r, int left, int right) {
+- 
+-         int i = 0, j = 0, k = 0;
+-         while (i < left && j < right) {
+-@@ -73,13 +73,13 @@
+-         }
+-     }
+- 
+--    public static void mergeSortName(List<Module> a, int n) {
+-+    public static void mergeSortName(List<ModuleModel> a, int n) {
+-         if (n < 2) {
+-             return;
+-         }
+-         int mid = n / 2;
+--        List<Module> l = new ArrayList<Module>(mid);
+--        List<Module> r = new ArrayList<Module>(n - mid);
+-+        List<ModuleModel> l = new ArrayList<ModuleModel>(mid);
+-+        List<ModuleModel> r = new ArrayList<ModuleModel>(n - mid);
+- 
+-         for (int i = 0; i < mid; i++) {
+-             l.set(i, a.get(i));
+-@@ -92,7 +92,7 @@
+- 
+-         mergeName(a, l, r, mid, n - mid);
+-     }
+--    public static void mergeName(List<Module> a, List<Module> l, List<Module> r, int left, int right) {
+-+    public static void mergeName(List<ModuleModel> a, List<ModuleModel> l, List<ModuleModel> r, int left, int right) {
+- 
+-         int i = 0, j = 0, k = 0;
+-         while (i < left && j < right) {
+-Index: app/src/main/java/com/example/modulus/Insights/ModuleDetailsActivity.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/modulus/Insights/ModuleDetailsActivity.java b/app/src/main/java/com/example/modulus/FragmentInsights/ModuleDetailsActivity.java
+-rename from app/src/main/java/com/example/modulus/Insights/ModuleDetailsActivity.java
+-rename to app/src/main/java/com/example/modulus/FragmentInsights/ModuleDetailsActivity.java
+---- a/app/src/main/java/com/example/modulus/Insights/ModuleDetailsActivity.java	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/java/com/example/modulus/FragmentInsights/ModuleDetailsActivity.java	(date 1744115786901)
+-@@ -1,4 +1,4 @@
+--package com.example.modulus.Insights;
+-+package com.example.modulus.FragmentInsights;
+- 
+- import androidx.appcompat.app.AppCompatActivity;
+- 
+-@@ -6,11 +6,11 @@
+- import android.os.Bundle;
+- import android.widget.TextView;
+- 
+--import com.example.modulus.Class.Module;
+-+import com.example.modulus.Model.ModuleModel;
+- import com.example.modulus.R;
+- 
+- public class ModuleDetailsActivity extends AppCompatActivity{
+--    Module selectedModule;
+-+    ModuleModel selectedModule;
+- 
+-     @Override
+-     protected void onCreate(Bundle savedInstanceState) {
+-@@ -26,8 +26,8 @@
+-         selectedModule = getParsedModule(parsedStringID);
+-     }
+- 
+--    private Module getParsedModule(String parsedID) {
+--        for (Module module : InsightsFragment.moduleList) {
+-+    private ModuleModel getParsedModule(String parsedID) {
+-+        for (ModuleModel module : InsightsFragment.moduleList) {
+-             if(module.getId().equals(parsedID))
+-                 return module;
+-         }
+-Index: app/src/main/java/com/example/modulus/Calendar/CalendarFragment.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/modulus/Calendar/CalendarFragment.java b/app/src/main/java/com/example/modulus/FragmentCalendar/CalendarFragment.java
+-rename from app/src/main/java/com/example/modulus/Calendar/CalendarFragment.java
+-rename to app/src/main/java/com/example/modulus/FragmentCalendar/CalendarFragment.java
+---- a/app/src/main/java/com/example/modulus/Calendar/CalendarFragment.java	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/java/com/example/modulus/FragmentCalendar/CalendarFragment.java	(date 1744115786895)
+-@@ -1,4 +1,4 @@
+--package com.example.modulus.Calendar;
+-+package com.example.modulus.FragmentCalendar;
+- 
+- import static com.example.modulus.R.id.dayView;
+- 
+-Index: app/src/main/java/com/example/modulus/Home/DataBaseHelper.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/modulus/Home/DataBaseHelper.java b/app/src/main/java/com/example/modulus/FragmentHome/DataBaseHelper.java
+-rename from app/src/main/java/com/example/modulus/Home/DataBaseHelper.java
+-rename to app/src/main/java/com/example/modulus/FragmentHome/DataBaseHelper.java
+---- a/app/src/main/java/com/example/modulus/Home/DataBaseHelper.java	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/java/com/example/modulus/FragmentHome/DataBaseHelper.java	(date 1744115786908)
+-@@ -1,4 +1,4 @@
+--package com.example.modulus.Home;
+-+package com.example.modulus.FragmentHome;
+- 
+- import android.annotation.SuppressLint;
+- import android.content.ContentValues;
+-@@ -8,7 +8,7 @@
+- import android.database.sqlite.SQLiteOpenHelper;
+- import android.util.Log;
+- 
+--import com.example.modulus.Class.ToDoModel;
+-+import com.example.modulus.Model.ToDoModel;
+- 
+- import java.util.ArrayList;
+- import java.util.List;
+-Index: app/src/main/java/com/example/modulus/Planner/EditPlannerMenu.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/modulus/Planner/EditPlannerMenu.java b/app/src/main/java/com/example/modulus/FragmentPlanner/EditPlannerMenu.java
+-rename from app/src/main/java/com/example/modulus/Planner/EditPlannerMenu.java
+-rename to app/src/main/java/com/example/modulus/FragmentPlanner/EditPlannerMenu.java
+---- a/app/src/main/java/com/example/modulus/Planner/EditPlannerMenu.java	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/java/com/example/modulus/FragmentPlanner/EditPlannerMenu.java	(date 1744115786883)
+-@@ -1,10 +1,9 @@
+--package com.example.modulus.Planner;
+-+package com.example.modulus.FragmentPlanner;
+- 
+- import android.app.Activity;
+- import android.content.DialogInterface;
+- import android.content.Intent;
+- import android.os.Bundle;
+--import android.util.Log;
+- import android.view.View;
+- import android.widget.Button;
+- import android.widget.TextView;
+-@@ -13,9 +12,9 @@
+- import androidx.appcompat.app.AlertDialog;
+- import androidx.appcompat.app.AppCompatActivity;
+- 
+--import com.example.modulus.Class.Module;
+--import com.example.modulus.Class.Planner;
+--import com.example.modulus.Insights.InsightsFragment;
+-+import com.example.modulus.Model.ModuleModel;
+-+import com.example.modulus.Model.PlannerModel;
+-+import com.example.modulus.FragmentInsights.InsightsFragment;
+- import com.example.modulus.R;
+- import com.google.android.material.card.MaterialCardView;
+- 
+-@@ -24,7 +23,7 @@
+- 
+- 
+- public class EditPlannerMenu extends AppCompatActivity {
+--    Planner selectedPlanner;
+-+    PlannerModel selectedPlanner;
+-     MaterialCardView selectCard;
+-     TextView tvModules;
+-     boolean[] selectedModules;
+-@@ -133,8 +132,8 @@
+-         selectedPlanner = getParsedPlanner(parsedStringID);
+-     }
+- 
+--    private Planner getParsedPlanner(String parsedID) {
+--        for (Planner planner : PlannerFragment.plannerList) {
+-+    private PlannerModel getParsedPlanner(String parsedID) {
+-+        for (PlannerModel planner : PlannerFragment.plannerList) {
+-             if(planner.getTerm().equals(parsedID))
+-                 return planner;
+-         }
+-@@ -145,7 +144,7 @@
+-         TextView tv = findViewById(R.id.term);
+-         tv.setText(selectedPlanner.getTerm());
+-         List<String> stringFilteredModulesList = new ArrayList<String>();
+--        for(Module module: InsightsFragment.moduleList){
+-+        for(ModuleModel module: InsightsFragment.moduleList){
+-             if( module.getTerm().contains(String.valueOf(selectedPlanner.getTermInt())) ){
+-                 stringFilteredModulesList.add(module.toString());
+-             }
+-Index: app/src/main/java/com/example/modulus/Adapter/ModuleAdapter.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.modulus.Adapter;\n\nimport android.view.LayoutInflater;\nimport android.view.View;\nimport android.view.ViewGroup;\nimport android.widget.TextView;\n\nimport androidx.annotation.NonNull;\nimport androidx.recyclerview.widget.RecyclerView;\n\nimport com.example.modulus.Class.Module;\nimport com.example.modulus.R;\n\nimport java.util.ArrayList;\n\npublic class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.moduleCellViewHolder> {\n    public interface OnItemClickListener {\n        void onItemClick(Module module);\n    }\n    ArrayList<Module> moduleList;\n    OnItemClickListener listener;\n    public ModuleAdapter(ArrayList<Module> moduleList, OnItemClickListener listener) {\n        this.moduleList = moduleList;\n        this.listener = listener;\n    }\n\n    @NonNull\n    @Override\n    public moduleCellViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {\n        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.module_cell, parent, false);\n        return new moduleCellViewHolder(view);\n    }\n\n    @Override\n    public void onBindViewHolder(@NonNull moduleCellViewHolder holder, int position) {\n        Module module = moduleList.get(position);\n        holder.moduleName.setText(module.toString());\n        holder.moduleTermProf.setText(\"Term(s): \" + String.join(\", \", module.getTerm())\n                + \" | \" + String.join(\", \", module.getProf()));\n        holder.moduleTags.setText(String.join(\", \", module.getTags()));\n        holder.bind(module, listener);\n    }\n\n    @Override\n    public int getItemCount() {\n        return moduleList.size();\n    }\n\n    static class moduleCellViewHolder extends RecyclerView.ViewHolder{\n        TextView moduleName;\n        TextView moduleTermProf;\n        TextView moduleTags;\n        public moduleCellViewHolder(View itemView){\n            super(itemView);\n            moduleName = itemView.findViewById(R.id.moduleName);\n            moduleTermProf = itemView.findViewById(R.id.moduleTermProf);\n            moduleTags = itemView.findViewById(R.id.moduleTags);\n        }\n\n        public void bind(Module item, final OnItemClickListener listener) {\n            itemView.setOnClickListener(new View.OnClickListener() {\n                @Override public void onClick(View v) {\n                    listener.onItemClick(item);\n                }\n            });\n        }\n    }\n}
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/modulus/Adapter/ModuleAdapter.java b/app/src/main/java/com/example/modulus/Adapter/ModuleAdapter.java
+---- a/app/src/main/java/com/example/modulus/Adapter/ModuleAdapter.java	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/java/com/example/modulus/Adapter/ModuleAdapter.java	(date 1744115786881)
+-@@ -8,18 +8,18 @@
+- import androidx.annotation.NonNull;
+- import androidx.recyclerview.widget.RecyclerView;
+- 
+--import com.example.modulus.Class.Module;
+-+import com.example.modulus.Model.ModuleModel;
+- import com.example.modulus.R;
+- 
+- import java.util.ArrayList;
+- 
+- public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.moduleCellViewHolder> {
+-     public interface OnItemClickListener {
+--        void onItemClick(Module module);
+-+        void onItemClick(ModuleModel module);
+-     }
+--    ArrayList<Module> moduleList;
+-+    ArrayList<ModuleModel> moduleList;
+-     OnItemClickListener listener;
+--    public ModuleAdapter(ArrayList<Module> moduleList, OnItemClickListener listener) {
+-+    public ModuleAdapter(ArrayList<ModuleModel> moduleList, OnItemClickListener listener) {
+-         this.moduleList = moduleList;
+-         this.listener = listener;
+-     }
+-@@ -33,7 +33,7 @@
+- 
+-     @Override
+-     public void onBindViewHolder(@NonNull moduleCellViewHolder holder, int position) {
+--        Module module = moduleList.get(position);
+-+        ModuleModel module = moduleList.get(position);
+-         holder.moduleName.setText(module.toString());
+-         holder.moduleTermProf.setText("Term(s): " + String.join(", ", module.getTerm())
+-                 + " | " + String.join(", ", module.getProf()));
+-@@ -57,7 +57,7 @@
+-             moduleTags = itemView.findViewById(R.id.moduleTags);
+-         }
+- 
+--        public void bind(Module item, final OnItemClickListener listener) {
+-+        public void bind(ModuleModel item, final OnItemClickListener listener) {
+-             itemView.setOnClickListener(new View.OnClickListener() {
+-                 @Override public void onClick(View v) {
+-                     listener.onItemClick(item);
+-Index: app/src/main/java/com/example/modulus/Adapter/ToDoAdapter.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.modulus.Adapter;\n\nimport android.content.Context;\nimport android.os.Bundle;\nimport android.util.Log;\nimport android.view.LayoutInflater;\nimport android.view.View;\nimport android.view.ViewGroup;\nimport android.widget.CheckBox;\nimport android.widget.CompoundButton;\n\nimport androidx.annotation.NonNull;\nimport androidx.recyclerview.widget.RecyclerView;\n\nimport com.example.modulus.Class.ToDoModel;\nimport com.example.modulus.Home.HomeFragment;\nimport com.example.modulus.Home.AddNewTask;\nimport com.example.modulus.R;\nimport com.example.modulus.Home.DataBaseHelper;\n\nimport java.util.List;\npublic class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.MyViewHolder> {\n    private List<ToDoModel> mList;\n    private HomeFragment home;\n    private DataBaseHelper myDB;\n\n    public ToDoAdapter(DataBaseHelper myDB, HomeFragment home){\n        this.home = home;\n        this.myDB = myDB;\n    }\n\n    @NonNull\n    @Override\n    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {\n        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.task_layout, parent, false);\n\n        return new MyViewHolder(v);\n    }\n\n    @Override\n    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {\n        final ToDoModel item = mList.get(position);\n        holder.checkBox.setText(item.getTask());//ToDo: edit her to add timing i think\n        holder.checkBox.setChecked(toBoolean(item.getStatus()));\n        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {\n            @Override\n            public void onCheckedChanged(CompoundButton buttonView, boolean b) {\n                if (buttonView.isChecked()){\n                    myDB.updateStatus(item.getId(), 1); // tutorial said it put int 1 part 3, 29:27\n                }else{\n                    myDB.updateStatus(item.getId(), 0);\n                }\n            }\n        });\n    }\n    public boolean toBoolean(int num){\n        return num != 0;\n    }\n    public Context getContext(){\n        return home.getContext();\n    }\n\n    public void setTasks(List<ToDoModel> mList){\n        this.mList = mList;\n        notifyDataSetChanged();\n    }\n\n    public void deleteTask(int position){\n        ToDoModel item = mList.get(position);\n        myDB.deleteTask(item.getId());\n\n        mList.remove(position);\n        notifyItemRemoved(position);\n    }\n\n    public void editItems(int position){\n        ToDoModel item = mList.get(position);\n        Bundle bundle = new Bundle();\n        bundle.putInt(\"ID\", item.getId());\n        bundle.putString(\"task\", item.getTask());\n        Log.d(\"edit item\",String.valueOf(item.getId()));\n        AddNewTask task = new AddNewTask();\n        task.setArguments(bundle);\n    }\n\n    @Override\n    public int getItemCount() {\n        return mList.size();\n    }\n\n    public static class MyViewHolder extends RecyclerView.ViewHolder{\n        CheckBox checkBox;\n        public MyViewHolder(@NonNull View itemView) {\n            super(itemView);\n            checkBox = itemView.findViewById(R.id.checkbox);\n        }\n\n    }\n}
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/modulus/Adapter/ToDoAdapter.java b/app/src/main/java/com/example/modulus/Adapter/ToDoAdapter.java
+---- a/app/src/main/java/com/example/modulus/Adapter/ToDoAdapter.java	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/java/com/example/modulus/Adapter/ToDoAdapter.java	(date 1744115786877)
+-@@ -12,11 +12,11 @@
+- import androidx.annotation.NonNull;
+- import androidx.recyclerview.widget.RecyclerView;
+- 
+--import com.example.modulus.Class.ToDoModel;
+--import com.example.modulus.Home.HomeFragment;
+--import com.example.modulus.Home.AddNewTask;
+-+import com.example.modulus.Model.ToDoModel;
+-+import com.example.modulus.FragmentHome.HomeFragment;
+-+import com.example.modulus.FragmentHome.AddNewTask;
+- import com.example.modulus.R;
+--import com.example.modulus.Home.DataBaseHelper;
+-+import com.example.modulus.FragmentHome.DataBaseHelper;
+- 
+- import java.util.List;
+- public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.MyViewHolder> {
+-Index: app/src/main/java/com/example/modulus/Calendar/Event.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/modulus/Calendar/Event.java b/app/src/main/java/com/example/modulus/FragmentCalendar/Event.java
+-rename from app/src/main/java/com/example/modulus/Calendar/Event.java
+-rename to app/src/main/java/com/example/modulus/FragmentCalendar/Event.java
+---- a/app/src/main/java/com/example/modulus/Calendar/Event.java	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/java/com/example/modulus/FragmentCalendar/Event.java	(date 1744115786892)
+-@@ -1,4 +1,4 @@
+--package com.example.modulus.Calendar;
+-+package com.example.modulus.FragmentCalendar;
+- 
+- import com.framgia.library.calendardayview.data.IEvent;
+- 
+-Index: app/src/main/res/layout/fragment_planner.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<LinearLayout\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    android:orientation=\"vertical\"\n    tools:context=\".Planner.PlannerFragment\">\n\n    <androidx.cardview.widget.CardView\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:backgroundTint=\"@color/purple_200\"\n        android:layout_margin=\"8dp\"\n        app:cardCornerRadius=\"20dp\">\n\n        <androidx.constraintlayout.widget.ConstraintLayout\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"match_parent\">\n\n            <ImageView\n                android:id=\"@+id/editButton\"\n                android:layout_width=\"28dp\"\n                android:layout_height=\"28dp\"\n                android:layout_marginEnd=\"8dp\"\n                android:src=\"@drawable/edit\"\n                app:layout_constraintEnd_toEndOf=\"parent\"\n                app:layout_constraintTop_toTopOf=\"parent\"\n                app:layout_constraintBottom_toBottomOf=\"parent\"/>\n\n            <TextView\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"40dp\"\n                android:layout_gravity=\"center\"\n                android:gravity=\"center\"\n                android:textStyle=\"bold\"\n                android:textSize=\"20dp\"\n                android:text=\"Bob | Term 4 | CSD\"\n                app:layout_constraintBottom_toBottomOf=\"parent\"\n                app:layout_constraintEnd_toEndOf=\"parent\"\n                app:layout_constraintStart_toStartOf=\"parent\"\n                app:layout_constraintTop_toTopOf=\"parent\" />\n\n        </androidx.constraintlayout.widget.ConstraintLayout>\n\n    </androidx.cardview.widget.CardView>\n\n    <com.google.android.material.divider.MaterialDivider\n        android:id=\"@+id/divider1\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginBottom=\"8dp\"/>\n\n    <androidx.recyclerview.widget.RecyclerView\n        android:id=\"@+id/plannerRecyclerView\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:scrollbars=\"vertical\"\n        android:layout_marginHorizontal=\"15dp\">\n\n    </androidx.recyclerview.widget.RecyclerView>\n\n\n\n<!--    <androidx.cardview.widget.CardView-->\n<!--        android:id=\"@+id/planner1\"-->\n<!--        android:layout_width=\"match_parent\"-->\n<!--        android:layout_height=\"wrap_content\"-->\n<!--        android:layout_marginHorizontal=\"16dp\"-->\n<!--        android:orientation=\"horizontal\"-->\n<!--        android:backgroundTint=\"@color/purple_200\"-->\n<!--        app:cardCornerRadius=\"24dp\">-->\n\n<!--        <TextView-->\n<!--            android:layout_width=\"match_parent\"-->\n<!--            android:layout_height=\"match_parent\"-->\n<!--            android:paddingVertical=\"4dp\"-->\n<!--            android:textAlignment=\"center\"-->\n<!--            android:textStyle=\"bold\"-->\n<!--            android:textSize=\"16dp\"-->\n<!--            android:text=\"Term 1\">-->\n<!--        </TextView>-->\n\n<!--    </androidx.cardview.widget.CardView>-->\n\n<!--    <ListView-->\n<!--        android:layout_width=\"match_parent\"-->\n<!--        android:layout_height=\"match_parent\"-->\n<!--        android:id=\"@+id/plannerList1\"-->\n<!--        android:layout_marginVertical=\"4dp\"-->\n<!--        android:layout_marginHorizontal=\"24dp\"-->\n<!--        android:divider=\"@android:color/transparent\"-->\n<!--        android:dividerHeight=\"4dp\"/>-->\n\n<!--    <com.google.android.material.divider.MaterialDivider-->\n<!--        android:id=\"@+id/divider2\"-->\n<!--        android:layout_width=\"match_parent\"-->\n<!--        android:layout_height=\"wrap_content\"-->\n<!--        android:layout_marginTop=\"8dp\"-->\n<!--        android:layout_marginBottom=\"8dp\"/>-->\n\n<!--    <androidx.cardview.widget.CardView-->\n<!--        android:id=\"@+id/planner2\"-->\n<!--        android:layout_width=\"match_parent\"-->\n<!--        android:layout_height=\"wrap_content\"-->\n<!--        android:layout_marginHorizontal=\"16dp\"-->\n<!--        android:orientation=\"horizontal\"-->\n<!--        android:backgroundTint=\"@color/purple_200\"-->\n<!--        app:cardCornerRadius=\"24dp\">-->\n\n<!--        <TextView-->\n<!--            android:layout_width=\"match_parent\"-->\n<!--            android:layout_height=\"match_parent\"-->\n<!--            android:paddingVertical=\"4dp\"-->\n<!--            android:textAlignment=\"center\"-->\n<!--            android:textStyle=\"bold\"-->\n<!--            android:textSize=\"16dp\"-->\n<!--            android:text=\"Term 2\">-->\n<!--        </TextView>-->\n\n<!--    </androidx.cardview.widget.CardView>-->\n\n<!--    <ListView-->\n<!--        android:layout_width=\"match_parent\"-->\n<!--        android:layout_height=\"match_parent\"-->\n<!--        android:id=\"@+id/plannerList2\"-->\n<!--        android:layout_marginVertical=\"4dp\"-->\n<!--        android:layout_marginHorizontal=\"24dp\"-->\n<!--        android:divider=\"@android:color/transparent\"-->\n<!--        android:dividerHeight=\"4dp\"/>-->\n\n<!--    <com.google.android.material.divider.MaterialDivider-->\n<!--        android:id=\"@+id/divider3\"-->\n<!--        android:layout_width=\"match_parent\"-->\n<!--        android:layout_height=\"wrap_content\"-->\n<!--        android:layout_marginTop=\"8dp\"-->\n<!--        android:layout_marginBottom=\"8dp\"/>-->\n\n<!--    <androidx.cardview.widget.CardView-->\n<!--        android:id=\"@+id/planner3\"-->\n<!--        android:layout_width=\"match_parent\"-->\n<!--        android:layout_height=\"wrap_content\"-->\n<!--        android:layout_marginHorizontal=\"16dp\"-->\n<!--        android:orientation=\"horizontal\"-->\n<!--        android:backgroundTint=\"@color/purple_200\"-->\n<!--        app:cardCornerRadius=\"24dp\">-->\n\n<!--        <TextView-->\n<!--            android:layout_width=\"match_parent\"-->\n<!--            android:layout_height=\"match_parent\"-->\n<!--            android:paddingVertical=\"4dp\"-->\n<!--            android:textAlignment=\"center\"-->\n<!--            android:textStyle=\"bold\"-->\n<!--            android:textSize=\"16dp\"-->\n<!--            android:text=\"Term 3\">-->\n<!--        </TextView>-->\n\n<!--    </androidx.cardview.widget.CardView>-->\n\n<!--    <ListView-->\n<!--        android:layout_width=\"match_parent\"-->\n<!--        android:layout_height=\"match_parent\"-->\n<!--        android:id=\"@+id/plannerList3\"-->\n<!--        android:layout_marginVertical=\"4dp\"-->\n<!--        android:layout_marginHorizontal=\"24dp\"-->\n<!--        android:divider=\"@android:color/transparent\"-->\n<!--        android:dividerHeight=\"4dp\"/>-->\n\n<!--    <com.google.android.material.divider.MaterialDivider-->\n<!--        android:id=\"@+id/divider4\"-->\n<!--        android:layout_width=\"match_parent\"-->\n<!--        android:layout_height=\"wrap_content\"-->\n<!--        android:layout_marginTop=\"8dp\"-->\n<!--        android:layout_marginBottom=\"8dp\"/>-->\n\n<!--    <androidx.cardview.widget.CardView-->\n<!--        android:id=\"@+id/planner4\"-->\n<!--        android:layout_width=\"match_parent\"-->\n<!--        android:layout_height=\"wrap_content\"-->\n<!--        android:layout_marginHorizontal=\"16dp\"-->\n<!--        android:orientation=\"horizontal\"-->\n<!--        android:backgroundTint=\"@color/purple_200\"-->\n<!--        app:cardCornerRadius=\"24dp\">-->\n\n<!--        <TextView-->\n<!--            android:layout_width=\"match_parent\"-->\n<!--            android:layout_height=\"match_parent\"-->\n<!--            android:paddingVertical=\"4dp\"-->\n<!--            android:textAlignment=\"center\"-->\n<!--            android:textStyle=\"bold\"-->\n<!--            android:textSize=\"16dp\"-->\n<!--            android:text=\"Term 4\">-->\n<!--        </TextView>-->\n\n<!--    </androidx.cardview.widget.CardView>-->\n\n<!--    <ListView-->\n<!--        android:layout_width=\"match_parent\"-->\n<!--        android:layout_height=\"match_parent\"-->\n<!--        android:id=\"@+id/plannerList4\"-->\n<!--        android:layout_marginVertical=\"4dp\"-->\n<!--        android:layout_marginHorizontal=\"24dp\"-->\n<!--        android:divider=\"@android:color/transparent\"-->\n<!--        android:dividerHeight=\"4dp\"/>-->\n\n<!--    <com.google.android.material.divider.MaterialDivider-->\n<!--        android:id=\"@+id/divider5\"-->\n<!--        android:layout_width=\"match_parent\"-->\n<!--        android:layout_height=\"wrap_content\"-->\n<!--        android:layout_marginTop=\"8dp\"-->\n<!--        android:layout_marginBottom=\"8dp\"/>-->\n\n<!--    <androidx.cardview.widget.CardView-->\n<!--        android:id=\"@+id/planner5\"-->\n<!--        android:layout_width=\"match_parent\"-->\n<!--        android:layout_height=\"wrap_content\"-->\n<!--        android:layout_marginHorizontal=\"16dp\"-->\n<!--        android:orientation=\"horizontal\"-->\n<!--        android:backgroundTint=\"@color/purple_200\"-->\n<!--        app:cardCornerRadius=\"24dp\">-->\n\n<!--        <TextView-->\n<!--            android:layout_width=\"match_parent\"-->\n<!--            android:layout_height=\"match_parent\"-->\n<!--            android:paddingVertical=\"4dp\"-->\n<!--            android:textAlignment=\"center\"-->\n<!--            android:textStyle=\"bold\"-->\n<!--            android:textSize=\"16dp\"-->\n<!--            android:text=\"Term 5\">-->\n<!--        </TextView>-->\n\n<!--    </androidx.cardview.widget.CardView>-->\n\n<!--    <ListView-->\n<!--        android:layout_width=\"match_parent\"-->\n<!--        android:layout_height=\"match_parent\"-->\n<!--        android:id=\"@+id/plannerList5\"-->\n<!--        android:layout_marginVertical=\"4dp\"-->\n<!--        android:layout_marginHorizontal=\"24dp\"-->\n<!--        android:divider=\"@android:color/transparent\"-->\n<!--        android:dividerHeight=\"4dp\"/>-->\n\n<!--    <com.google.android.material.divider.MaterialDivider-->\n<!--        android:id=\"@+id/divider6\"-->\n<!--        android:layout_width=\"match_parent\"-->\n<!--        android:layout_height=\"wrap_content\"-->\n<!--        android:layout_marginTop=\"8dp\"-->\n<!--        android:layout_marginBottom=\"8dp\"/>-->\n\n<!--    <androidx.cardview.widget.CardView-->\n<!--        android:id=\"@+id/planner6\"-->\n<!--        android:layout_width=\"match_parent\"-->\n<!--        android:layout_height=\"wrap_content\"-->\n<!--        android:layout_marginHorizontal=\"16dp\"-->\n<!--        android:orientation=\"horizontal\"-->\n<!--        android:backgroundTint=\"@color/purple_200\"-->\n<!--        app:cardCornerRadius=\"24dp\">-->\n\n<!--        <TextView-->\n<!--            android:layout_width=\"match_parent\"-->\n<!--            android:layout_height=\"match_parent\"-->\n<!--            android:paddingVertical=\"4dp\"-->\n<!--            android:textAlignment=\"center\"-->\n<!--            android:textStyle=\"bold\"-->\n<!--            android:textSize=\"16dp\"-->\n<!--            android:text=\"Term 6\">-->\n<!--        </TextView>-->\n\n<!--    </androidx.cardview.widget.CardView>-->\n\n<!--    <ListView-->\n<!--        android:layout_width=\"match_parent\"-->\n<!--        android:layout_height=\"match_parent\"-->\n<!--        android:id=\"@+id/plannerList6\"-->\n<!--        android:layout_marginVertical=\"4dp\"-->\n<!--        android:layout_marginHorizontal=\"24dp\"-->\n<!--        android:divider=\"@android:color/transparent\"-->\n<!--        android:dividerHeight=\"4dp\"/>-->\n\n<!--    <com.google.android.material.divider.MaterialDivider-->\n<!--        android:id=\"@+id/divider7\"-->\n<!--        android:layout_width=\"match_parent\"-->\n<!--        android:layout_height=\"wrap_content\"-->\n<!--        android:layout_marginTop=\"8dp\"-->\n<!--        android:layout_marginBottom=\"8dp\"/>-->\n\n<!--    <androidx.cardview.widget.CardView-->\n<!--        android:id=\"@+id/planner7\"-->\n<!--        android:layout_width=\"match_parent\"-->\n<!--        android:layout_height=\"wrap_content\"-->\n<!--        android:layout_marginHorizontal=\"16dp\"-->\n<!--        android:orientation=\"horizontal\"-->\n<!--        android:backgroundTint=\"@color/purple_200\"-->\n<!--        app:cardCornerRadius=\"24dp\">-->\n\n<!--        <TextView-->\n<!--            android:layout_width=\"match_parent\"-->\n<!--            android:layout_height=\"match_parent\"-->\n<!--            android:paddingVertical=\"4dp\"-->\n<!--            android:textAlignment=\"center\"-->\n<!--            android:textStyle=\"bold\"-->\n<!--            android:textSize=\"16dp\"-->\n<!--            android:text=\"Term 7\">-->\n<!--        </TextView>-->\n\n<!--    </androidx.cardview.widget.CardView>-->\n\n<!--    <ListView-->\n<!--        android:layout_width=\"match_parent\"-->\n<!--        android:layout_height=\"match_parent\"-->\n<!--        android:id=\"@+id/plannerList7\"-->\n<!--        android:layout_marginVertical=\"4dp\"-->\n<!--        android:layout_marginHorizontal=\"24dp\"-->\n<!--        android:divider=\"@android:color/transparent\"-->\n<!--        android:dividerHeight=\"4dp\"/>-->\n\n<!--    <com.google.android.material.divider.MaterialDivider-->\n<!--        android:id=\"@+id/divider8\"-->\n<!--        android:layout_width=\"match_parent\"-->\n<!--        android:layout_height=\"wrap_content\"-->\n<!--        android:layout_marginTop=\"8dp\"-->\n<!--        android:layout_marginBottom=\"8dp\"/>-->\n\n<!--    <androidx.cardview.widget.CardView-->\n<!--        android:id=\"@+id/planner8\"-->\n<!--        android:layout_width=\"match_parent\"-->\n<!--        android:layout_height=\"wrap_content\"-->\n<!--        android:layout_marginHorizontal=\"16dp\"-->\n<!--        android:orientation=\"horizontal\"-->\n<!--        android:backgroundTint=\"@color/purple_200\"-->\n<!--        app:cardCornerRadius=\"24dp\">-->\n\n<!--        <TextView-->\n<!--            android:layout_width=\"match_parent\"-->\n<!--            android:layout_height=\"match_parent\"-->\n<!--            android:paddingVertical=\"4dp\"-->\n<!--            android:textAlignment=\"center\"-->\n<!--            android:textStyle=\"bold\"-->\n<!--            android:textSize=\"16dp\"-->\n<!--            android:text=\"Term 8\">-->\n<!--        </TextView>-->\n\n<!--    </androidx.cardview.widget.CardView>-->\n\n<!--    <ListView-->\n<!--        android:layout_width=\"match_parent\"-->\n<!--        android:layout_height=\"match_parent\"-->\n<!--        android:id=\"@+id/plannerList8\"-->\n<!--        android:layout_marginVertical=\"4dp\"-->\n<!--        android:layout_marginHorizontal=\"24dp\"-->\n<!--        android:divider=\"@android:color/transparent\"-->\n<!--        android:dividerHeight=\"4dp\"/>-->\n\n<!--    <com.google.android.material.divider.MaterialDivider-->\n<!--        android:id=\"@+id/divider9\"-->\n<!--        android:layout_width=\"match_parent\"-->\n<!--        android:layout_height=\"wrap_content\"-->\n<!--        android:layout_marginTop=\"8dp\"-->\n<!--        android:layout_marginBottom=\"8dp\"/>-->\n\n</LinearLayout>
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/res/layout/fragment_planner.xml b/app/src/main/res/layout/fragment_planner.xml
+---- a/app/src/main/res/layout/fragment_planner.xml	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/res/layout/fragment_planner.xml	(date 1744115786866)
+-@@ -6,7 +6,7 @@
+-     android:layout_width="match_parent"
+-     android:layout_height="match_parent"
+-     android:orientation="vertical"
+--    tools:context=".Planner.PlannerFragment">
+-+    tools:context=".FragmentPlanner.PlannerFragment">
+- 
+-     <androidx.cardview.widget.CardView
+-         android:layout_width="match_parent"
+-Index: app/src/main/java/com/example/modulus/Home/ScaleCenterItemManager.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/modulus/Home/ScaleCenterItemManager.java b/app/src/main/java/com/example/modulus/FragmentHome/ScaleCenterItemManager.java
+-rename from app/src/main/java/com/example/modulus/Home/ScaleCenterItemManager.java
+-rename to app/src/main/java/com/example/modulus/FragmentHome/ScaleCenterItemManager.java
+---- a/app/src/main/java/com/example/modulus/Home/ScaleCenterItemManager.java	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/java/com/example/modulus/FragmentHome/ScaleCenterItemManager.java	(date 1744115786911)
+-@@ -1,4 +1,4 @@
+--package com.example.modulus.Home;
+-+package com.example.modulus.FragmentHome;
+- 
+- import android.content.Context;
+- import android.view.View;
+-Index: app/src/main/java/com/example/modulus/Planner/PlannerFragment.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/modulus/Planner/PlannerFragment.java b/app/src/main/java/com/example/modulus/FragmentPlanner/PlannerFragment.java
+-rename from app/src/main/java/com/example/modulus/Planner/PlannerFragment.java
+-rename to app/src/main/java/com/example/modulus/FragmentPlanner/PlannerFragment.java
+---- a/app/src/main/java/com/example/modulus/Planner/PlannerFragment.java	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/java/com/example/modulus/FragmentPlanner/PlannerFragment.java	(date 1744115786870)
+-@@ -1,4 +1,4 @@
+--package com.example.modulus.Planner;
+-+package com.example.modulus.FragmentPlanner;
+- 
+- import android.content.Context;
+- import android.content.Intent;
+-@@ -16,10 +16,10 @@
+- import android.widget.ImageView;
+- 
+- import com.example.modulus.Adapter.PlannerAdapter;
+--import com.example.modulus.Class.Module;
+--import com.example.modulus.Class.Planner;
+--import com.example.modulus.Insights.DataBaseHelperInsights;
+--import com.example.modulus.Insights.InsightsFragment;
+-+import com.example.modulus.Model.ModuleModel;
+-+import com.example.modulus.Model.PlannerModel;
+-+import com.example.modulus.FragmentInsights.DataBaseHelperInsights;
+-+import com.example.modulus.FragmentInsights.InsightsFragment;
+- import com.example.modulus.R;
+- import com.google.gson.Gson;
+- 
+-@@ -27,7 +27,7 @@
+- import java.util.List;
+- 
+- public class PlannerFragment extends Fragment {
+--    public static List<Planner> plannerList;
+-+    public static List<PlannerModel> plannerList;
+-     RecyclerView recyclerView;
+-     DataBaseHelperInsights myDB;
+-     ImageView editButton;
+-@@ -35,7 +35,7 @@
+-     static final String KEY_DATA_TERMS = "SHARED_PREF_DATA_TERMS";
+-     static final String KEY_DATA_MODS = "SHARED_PREF_DATA_MODS";
+-     static final String PREF_FILE = "mainsharedpref";
+--    private final String TAG = "Planner";
+-+    private final String TAG = "PlannerModel";
+-     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+-         // Inflate the layout for this fragment
+-         View view = inflater.inflate(R.layout.fragment_planner, container, false);
+-@@ -79,10 +79,10 @@
+- //        Gson gson = new Gson();
+- //        ArrayList<String> terms = new ArrayList<>();
+- //        ArrayList<String> plannerModules = new ArrayList<>();
+--//        for (Planner planner: plannerList) {
+-+//        for (PlannerModel planner: plannerList) {
+- //            terms.add(planner.getTerm());
+- //            if (planner.getModules() != null){
+--//                for(Module module: planner.getModules()){
+-+//                for(ModuleModel module: planner.getModules()){
+- //                    plannerModules.add(module.toString());
+- //                }
+- //                plannerModules.add("?");
+-@@ -112,8 +112,8 @@
+-             System.out.println(mods);
+-             int modsPointer = 0;
+-             for (int i = 0; i< terms.size(); i++) {
+--                Planner planner = new Planner(terms.get(i));
+--                List<Module> plannerModules = new ArrayList<Module>();
+-+                PlannerModel planner = new PlannerModel(terms.get(i));
+-+                List<ModuleModel> plannerModules = new ArrayList<ModuleModel>();
+-                 for(int j = modsPointer; j < mods.size(); j++){
+-                     if(mods.get(j).equals("?")){
+-                         planner.setModules(plannerModules);
+-@@ -125,7 +125,7 @@
+-                         modsPointer++;
+-                         break;
+-                     }else {
+--                        plannerModules.add(Module.getModuleFromString(mods.get(j)));
+-+                        plannerModules.add(ModuleModel.getModuleFromString(mods.get(j)));
+-                         modsPointer++;
+-                     }
+-                 }
+-Index: app/src/main/java/com/example/modulus/Adapter/PlannerAdapter.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.modulus.Adapter;\n\nimport android.util.Log;\nimport android.view.LayoutInflater;\nimport android.view.View;\nimport android.view.ViewGroup;\nimport android.widget.ImageView;\nimport android.widget.LinearLayout;\nimport android.widget.TextView;\n\nimport androidx.annotation.NonNull;\nimport androidx.recyclerview.widget.LinearLayoutManager;\nimport androidx.recyclerview.widget.RecyclerView;\n\nimport com.example.modulus.Class.Module;\nimport com.example.modulus.Class.Planner;\nimport com.example.modulus.R;\n\nimport java.util.List;\n\npublic class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.plannerViewHolder> {\n    List<Planner> plannerList;\n    List<Module> moduleList;\n    public PlannerAdapter(List<Planner> plannerList) {\n        this.plannerList = plannerList;\n    }\n\n    @NonNull\n    @Override\n    public plannerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {\n        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.planner_header, parent, false);\n        return new plannerViewHolder(view);\n    }\n\n    @Override\n    public void onBindViewHolder(@NonNull plannerViewHolder holder, int position) {\n        Planner planner = plannerList.get(position);\n        moduleList = planner.getModules();\n        holder.term.setText(planner.getTerm());\n\n        NestedPlannerAdapter adapter = new NestedPlannerAdapter(moduleList);\n        holder.nestedRecyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));\n        holder.nestedRecyclerView.setAdapter(adapter);\n        holder.layout.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                Log.d(\"Click\", \"CLICKKKKK\");\n                planner.setExpandable(!planner.isExpandable());\n                if (planner.isExpandable()){\n                    holder.arrow.setImageResource(R.drawable.arrow_up);\n                    holder.expandableLayout.setVisibility(View.VISIBLE);\n\n                }else{\n                    holder.arrow.setImageResource(R.drawable.arrow_down);\n                    holder.expandableLayout.setVisibility(View.GONE);\n                }\n            }\n        });\n    }\n\n    @Override\n    public int getItemCount() {\n        return plannerList.size();\n    }\n\n    static class plannerViewHolder extends RecyclerView.ViewHolder {\n        TextView term;\n        ImageView arrow;\n        LinearLayout layout;\n        RecyclerView nestedRecyclerView;\n        LinearLayout expandableLayout;\n\n        public plannerViewHolder(View itemView) {\n            super(itemView);\n            term = itemView.findViewById(R.id.term);\n            arrow = itemView.findViewById(R.id.arrow);\n            layout = itemView.findViewById(R.id.plannerTerm);\n            nestedRecyclerView = itemView.findViewById(R.id.plannerNestedRecyclerView);\n            expandableLayout = itemView.findViewById(R.id.expandableLayout);\n        }\n    }\n}\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/modulus/Adapter/PlannerAdapter.java b/app/src/main/java/com/example/modulus/Adapter/PlannerAdapter.java
+---- a/app/src/main/java/com/example/modulus/Adapter/PlannerAdapter.java	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/java/com/example/modulus/Adapter/PlannerAdapter.java	(date 1744115786912)
+-@@ -12,16 +12,16 @@
+- import androidx.recyclerview.widget.LinearLayoutManager;
+- import androidx.recyclerview.widget.RecyclerView;
+- 
+--import com.example.modulus.Class.Module;
+--import com.example.modulus.Class.Planner;
+-+import com.example.modulus.Model.ModuleModel;
+-+import com.example.modulus.Model.PlannerModel;
+- import com.example.modulus.R;
+- 
+- import java.util.List;
+- 
+- public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.plannerViewHolder> {
+--    List<Planner> plannerList;
+--    List<Module> moduleList;
+--    public PlannerAdapter(List<Planner> plannerList) {
+-+    List<PlannerModel> plannerList;
+-+    List<ModuleModel> moduleList;
+-+    public PlannerAdapter(List<PlannerModel> plannerList) {
+-         this.plannerList = plannerList;
+-     }
+- 
+-@@ -34,7 +34,7 @@
+- 
+-     @Override
+-     public void onBindViewHolder(@NonNull plannerViewHolder holder, int position) {
+--        Planner planner = plannerList.get(position);
+-+        PlannerModel planner = plannerList.get(position);
+-         moduleList = planner.getModules();
+-         holder.term.setText(planner.getTerm());
+- 
+-Index: app/src/main/java/com/example/modulus/Insights/Filter.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/modulus/Insights/Filter.java b/app/src/main/java/com/example/modulus/FragmentInsights/Filter.java
+-rename from app/src/main/java/com/example/modulus/Insights/Filter.java
+-rename to app/src/main/java/com/example/modulus/FragmentInsights/Filter.java
+---- a/app/src/main/java/com/example/modulus/Insights/Filter.java	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/java/com/example/modulus/FragmentInsights/Filter.java	(date 1744115786874)
+-@@ -1,6 +1,6 @@
+--package com.example.modulus.Insights;
+-+package com.example.modulus.FragmentInsights;
+- 
+--import com.example.modulus.Class.Module;
+-+import com.example.modulus.Model.ModuleModel;
+- 
+- import java.util.ArrayList;
+- import java.util.Arrays;
+-@@ -20,13 +20,13 @@
+-         }
+-     }
+- 
+--    static ArrayList<Module> applySelectedFilter(List<Module> moduleList, List<String> selectedFilters) {
+--        ArrayList<Module> filteredModules = new ArrayList<Module>();
+-+    static ArrayList<ModuleModel> applySelectedFilter(List<ModuleModel> moduleList, List<String> selectedFilters) {
+-+        ArrayList<ModuleModel> filteredModules = new ArrayList<ModuleModel>();
+-         List<String> pillars = Arrays.asList(("ASD,ESD,EPD,DAI,ISTD,HASS,SMT").split(","));
+-         List<String> terms = Arrays.asList(("Term 1,Term 2,Term 3,Term 4,Term 5,Term 6,Term 7,Term 8").split(","));
+-         List<String> courses = Arrays.asList(("Core,Core Elective,Elective / Technical Elective,Freshmore Core,Freshmore Elective").split(","));
+-         if(new HashSet<>(pillars).containsAll(selectedFilters) || new HashSet<>(terms).containsAll(selectedFilters) || new HashSet<>(courses).containsAll(selectedFilters)){
+--            for (Module module : moduleList) {
+-+            for (ModuleModel module : moduleList) {
+-                 for (String filter : selectedFilters) {
+-                     if (module.getTags().contains(filter) || module.getTerm().contains(filter.substring(filter.length() - 1))) {
+-                         filteredModules.add(module);
+-@@ -34,7 +34,7 @@
+-                 }
+-             }
+-         }else{
+--            for (Module module : moduleList) {
+-+            for (ModuleModel module : moduleList) {
+-                 List<String> moduleTagsTerm = new ArrayList<String>(module.getTags());
+-                 for(String term: module.getTerm()){
+-                     moduleTagsTerm.add("Term " + term);
+-@@ -46,16 +46,16 @@
+-         }
+-         return filteredModules;
+-     }
+--    static List<Module> applySearchText(List<Module> moduleList, String currentSearchText){
+--        List<Module> searchModules = new ArrayList<Module>();
+--        for (Module module : moduleList) {
+-+    static List<ModuleModel> applySearchText(List<ModuleModel> moduleList, String currentSearchText){
+-+        List<ModuleModel> searchModules = new ArrayList<ModuleModel>();
+-+        for (ModuleModel module : moduleList) {
+-             if (module.getName().toLowerCase().contains(currentSearchText.toLowerCase()) || module.getId().contains(currentSearchText)) {
+-                 searchModules.add(module);
+-             }
+-         }
+-         return searchModules;
+-     }
+--    static List<Module> checkForFilter(List<Module> moduleList, List<String> selectedFilters, String currentSearchText) {
+-+    static List<ModuleModel> checkForFilter(List<ModuleModel> moduleList, List<String> selectedFilters, String currentSearchText) {
+-         if (selectedFilters.isEmpty()) {
+-             if (currentSearchText.isEmpty()) {
+-                 return moduleList;
+-Index: app/src/main/java/com/example/modulus/Insights/InsightsFragment.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/modulus/Insights/InsightsFragment.java b/app/src/main/java/com/example/modulus/FragmentInsights/InsightsFragment.java
+-rename from app/src/main/java/com/example/modulus/Insights/InsightsFragment.java
+-rename to app/src/main/java/com/example/modulus/FragmentInsights/InsightsFragment.java
+---- a/app/src/main/java/com/example/modulus/Insights/InsightsFragment.java	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/java/com/example/modulus/FragmentInsights/InsightsFragment.java	(date 1744115786900)
+-@@ -1,4 +1,4 @@
+--package com.example.modulus.Insights;
+-+package com.example.modulus.FragmentInsights;
+- 
+- import android.app.Dialog;
+- import android.graphics.Color;
+-@@ -23,8 +23,8 @@
+- import android.widget.ImageView;
+- import android.widget.SearchView;
+- 
+--import com.example.modulus.Class.FilterChip;
+--import com.example.modulus.Class.Module;
+-+import com.example.modulus.Model.FilterChipModel;
+-+import com.example.modulus.Model.ModuleModel;
+- import com.example.modulus.Adapter.ModuleAdapter;
+- import com.example.modulus.R;
+- import com.google.android.material.chip.Chip;
+-@@ -37,7 +37,7 @@
+- import java.util.List;
+- 
+- public class InsightsFragment extends Fragment {
+--    public static ArrayList<Module> moduleList;
+-+    public static ArrayList<ModuleModel> moduleList;
+-     ArrayList<String> selectedFilters = new ArrayList<String>();
+-     SearchView search;
+-     String currentSearchText = "";
+-@@ -46,7 +46,7 @@
+-     ImageButton filterButton;
+-     ImageButton sortButton;
+-     ConstraintLayout sortTab;
+--    ArrayList<FilterChip> filterChips = new ArrayList<FilterChip>();
+-+    ArrayList<FilterChipModel> filterChips = new ArrayList<FilterChipModel>();
+-     final String TAG = "Browser";
+- 
+-     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+-@@ -60,7 +60,7 @@
+-         modulesRecyclerView = view.findViewById(R.id.recyclerView);
+-         listener = new ModuleAdapter.OnItemClickListener() {
+-             @Override
+--            public void onItemClick(Module module) {
+-+            public void onItemClick(ModuleModel module) {
+-                 Intent showDetail = new Intent(getContext(), ModuleDetailsActivity.class);
+-                 showDetail.putExtra("id", module.getId());
+-                 startActivity(showDetail);
+-@@ -80,8 +80,8 @@
+-             @Override
+-             public boolean onQueryTextChange(String s) {
+-                 currentSearchText = s;
+--                List<Module> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
+--                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<Module>) filteredModules, listener));
+-+                List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
+-+                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));
+-                 return false;
+-             }
+-         });
+-@@ -113,53 +113,53 @@
+-         id.setOnClickListener(new View.OnClickListener() {
+-             @Override
+-             public void onClick(View v) {
+--                List<Module> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
+-+                List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
+-                 if (id.isChecked() && asc.isChecked()) {
+--                    filteredModules.sort(Module.idAscending);
+-+                    filteredModules.sort(ModuleModel.idAscending);
+-                 } else if (id.isChecked() && des.isChecked()) {
+--                    filteredModules.sort(Module.idAscending);
+-+                    filteredModules.sort(ModuleModel.idAscending);
+-                     Collections.reverse(filteredModules);
+-                 }
+--                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<Module>) filteredModules, listener));
+-+                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));
+-             }
+-         });
+-         name.setOnClickListener(new View.OnClickListener() {
+-             @Override
+-             public void onClick(View v) {
+--                List<Module> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
+-+                List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
+-                 if (name.isChecked() && asc.isChecked()) {
+--                    filteredModules.sort(Module.nameAscending);
+-+                    filteredModules.sort(ModuleModel.nameAscending);
+-                 } else if (name.isChecked() && des.isChecked()) {
+--                    filteredModules.sort(Module.nameAscending);
+-+                    filteredModules.sort(ModuleModel.nameAscending);
+-                     Collections.reverse(filteredModules);
+-                 }
+--                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<Module>) filteredModules, listener));
+-+                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));
+-             }
+-         });
+-         asc.setOnClickListener(new View.OnClickListener() {
+-             @Override
+-             public void onClick(View v) {
+--                List<Module> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
+-+                List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
+-                 if (id.isChecked() && asc.isChecked()) {
+--                    filteredModules.sort(Module.idAscending);
+-+                    filteredModules.sort(ModuleModel.idAscending);
+-                 } else if (name.isChecked() && asc.isChecked()) {
+--                    filteredModules.sort(Module.nameAscending);
+-+                    filteredModules.sort(ModuleModel.nameAscending);
+-                 }
+--                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<Module>) filteredModules, listener));
+-+                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));
+-             }
+-         });
+-         des.setOnClickListener(new View.OnClickListener() {
+-             @Override
+-             public void onClick(View v) {
+--                List<Module> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
+-+                List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
+-                 if (id.isChecked() && des.isChecked()) {
+--                    filteredModules.sort(Module.idAscending);
+-+                    filteredModules.sort(ModuleModel.idAscending);
+-                     Collections.reverse(filteredModules);
+-                 } else if (name.isChecked() && des.isChecked()) {
+--                    filteredModules.sort(Module.nameAscending);
+-+                    filteredModules.sort(ModuleModel.nameAscending);
+-                     Collections.reverse(filteredModules);
+-                 }
+--                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<Module>) filteredModules, listener));
+-+                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));
+-             }
+-         });
+-         return view;
+-@@ -171,7 +171,7 @@
+-         filterDialog.setContentView(R.layout.filterlayout);
+- 
+-         setUpFilterChips(filterDialog);
+--        for (FilterChip chipItem : filterChips) {
+-+        for (FilterChipModel chipItem : filterChips) {
+-             Chip chip = chipItem.getChip();
+-             chip.setOnClickListener(new View.OnClickListener() {
+-                 @Override
+-@@ -192,8 +192,8 @@
+-         applyButton.setOnClickListener(new View.OnClickListener() {
+-             @Override
+-             public void onClick(View v) {
+--                List<Module> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
+--                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<Module>) filteredModules, listener));
+-+                List<ModuleModel> filteredModules = Filter.checkForFilter(moduleList, selectedFilters, currentSearchText);
+-+                modulesRecyclerView.setAdapter(new ModuleAdapter((ArrayList<ModuleModel>) filteredModules, listener));
+-                 filterDialog.dismiss();
+-             }
+-         });
+-@@ -203,7 +203,7 @@
+-             @Override
+-             public void onClick(View v) {
+-                 selectedFilters.clear();
+--                for (FilterChip chip : filterChips) {
+-+                for (FilterChipModel chip : filterChips) {
+-                     chip.setChipCheck(false);
+-                     chip.getChip().setChecked(false);
+-                 }
+-@@ -236,7 +236,7 @@
+-         ChipGroup courseChips = filterDialog.findViewById(R.id.courseChips);
+-         if (filterChips.isEmpty()) {
+-             for (int i = 0; i < filterChipNames.size(); i++) {
+--                FilterChip filterChip = new FilterChip(filterChipNames.get(i), false);
+-+                FilterChipModel filterChip = new FilterChipModel(filterChipNames.get(i), false);
+-                 filterChips.add(filterChip);
+-             }
+-         }
+-@@ -255,7 +255,7 @@
+-             }
+-             filterChips.get(i).setChip(chip);
+-         }
+--        moduleList.sort(Module.idAscending);
+-+        moduleList.sort(ModuleModel.idAscending);
+-     }
+- }
+- 
+-Index: app/src/main/java/com/example/modulus/Adapter/EditPlannerAdapter.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.modulus.Adapter;\n\nimport android.annotation.SuppressLint;\nimport android.content.Context;\nimport android.util.Log;\nimport android.view.LayoutInflater;\nimport android.view.View;\nimport android.view.ViewGroup;\nimport android.widget.AdapterView;\nimport android.widget.ArrayAdapter;\nimport android.widget.AutoCompleteTextView;\nimport android.widget.ImageView;\nimport android.widget.LinearLayout;\nimport android.widget.TextView;\n\nimport androidx.annotation.NonNull;\nimport androidx.recyclerview.widget.LinearLayoutManager;\nimport androidx.recyclerview.widget.RecyclerView;\n\nimport com.example.modulus.Class.Module;\nimport com.example.modulus.Class.Planner;\nimport com.example.modulus.Planner.EditPlanner;\nimport com.example.modulus.R;\n\nimport java.util.ArrayList;\nimport java.util.List;\nimport java.util.Objects;\n\npublic class EditPlannerAdapter extends RecyclerView.Adapter<EditPlannerAdapter.EditPlannerViewHolder> {\n    public interface OnItemClickListener {\n        void onItemClick(Planner planner);\n    }\n    List<Planner> plannerList;\n    OnItemClickListener listener;\n    public EditPlannerAdapter(List<Planner> plannerList, OnItemClickListener listener) {\n        this.plannerList = plannerList;\n        this.listener = listener;\n    }\n\n    @Override\n    public EditPlannerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {\n        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.term_button, parent, false);\n        return new EditPlannerViewHolder(view);\n    }\n\n    @SuppressLint(\"ResourceAsColor\")\n    @Override\n    public void onBindViewHolder(EditPlannerAdapter.EditPlannerViewHolder holder, @SuppressLint(\"RecyclerView\") int position) {\n        Planner planner = plannerList.get(position);\n        holder.tv.setText(planner.getTerm());\n        holder.bind(planner, listener);\n    }\n\n    @Override\n    public int getItemCount() {\n        return plannerList.size();\n    }\n\n    public class EditPlannerViewHolder extends RecyclerView.ViewHolder {\n        TextView tv;\n\n        public EditPlannerViewHolder(View itemView) {\n            super(itemView);\n            tv = itemView.findViewById(R.id.term);\n        }\n        public void bind(Planner item, final OnItemClickListener listener) {\n            itemView.setOnClickListener(new View.OnClickListener() {\n                @Override public void onClick(View v) {\n                    listener.onItemClick(item);\n                }\n            });\n        }\n    }\n}\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/modulus/Adapter/EditPlannerAdapter.java b/app/src/main/java/com/example/modulus/Adapter/EditPlannerAdapter.java
+---- a/app/src/main/java/com/example/modulus/Adapter/EditPlannerAdapter.java	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/java/com/example/modulus/Adapter/EditPlannerAdapter.java	(date 1744115786890)
+-@@ -1,38 +1,25 @@
+- package com.example.modulus.Adapter;
+- 
+- import android.annotation.SuppressLint;
+--import android.content.Context;
+--import android.util.Log;
+- import android.view.LayoutInflater;
+- import android.view.View;
+- import android.view.ViewGroup;
+--import android.widget.AdapterView;
+--import android.widget.ArrayAdapter;
+--import android.widget.AutoCompleteTextView;
+--import android.widget.ImageView;
+--import android.widget.LinearLayout;
+- import android.widget.TextView;
+- 
+--import androidx.annotation.NonNull;
+--import androidx.recyclerview.widget.LinearLayoutManager;
+- import androidx.recyclerview.widget.RecyclerView;
+- 
+--import com.example.modulus.Class.Module;
+--import com.example.modulus.Class.Planner;
+--import com.example.modulus.Planner.EditPlanner;
+-+import com.example.modulus.Model.PlannerModel;
+- import com.example.modulus.R;
+- 
+--import java.util.ArrayList;
+- import java.util.List;
+--import java.util.Objects;
+- 
+- public class EditPlannerAdapter extends RecyclerView.Adapter<EditPlannerAdapter.EditPlannerViewHolder> {
+-     public interface OnItemClickListener {
+--        void onItemClick(Planner planner);
+-+        void onItemClick(PlannerModel planner);
+-     }
+--    List<Planner> plannerList;
+-+    List<PlannerModel> plannerList;
+-     OnItemClickListener listener;
+--    public EditPlannerAdapter(List<Planner> plannerList, OnItemClickListener listener) {
+-+    public EditPlannerAdapter(List<PlannerModel> plannerList, OnItemClickListener listener) {
+-         this.plannerList = plannerList;
+-         this.listener = listener;
+-     }
+-@@ -46,7 +33,7 @@
+-     @SuppressLint("ResourceAsColor")
+-     @Override
+-     public void onBindViewHolder(EditPlannerAdapter.EditPlannerViewHolder holder, @SuppressLint("RecyclerView") int position) {
+--        Planner planner = plannerList.get(position);
+-+        PlannerModel planner = plannerList.get(position);
+-         holder.tv.setText(planner.getTerm());
+-         holder.bind(planner, listener);
+-     }
+-@@ -63,7 +50,7 @@
+-             super(itemView);
+-             tv = itemView.findViewById(R.id.term);
+-         }
+--        public void bind(Planner item, final OnItemClickListener listener) {
+-+        public void bind(PlannerModel item, final OnItemClickListener listener) {
+-             itemView.setOnClickListener(new View.OnClickListener() {
+-                 @Override public void onClick(View v) {
+-                     listener.onItemClick(item);
+-Index: app/src/main/java/com/example/modulus/Class/Planner.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/modulus/Class/Planner.java b/app/src/main/java/com/example/modulus/Model/PlannerModel.java
+-rename from app/src/main/java/com/example/modulus/Class/Planner.java
+-rename to app/src/main/java/com/example/modulus/Model/PlannerModel.java
+---- a/app/src/main/java/com/example/modulus/Class/Planner.java	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/java/com/example/modulus/Model/PlannerModel.java	(date 1744115786904)
+-@@ -1,14 +1,14 @@
+--package com.example.modulus.Class;
+-+package com.example.modulus.Model;
+- 
+- import java.util.ArrayList;
+- import java.util.List;
+- 
+--public class Planner {
+-+public class PlannerModel {
+-     private String term;
+-     private int termInt;
+--    private List<Module> modules = new ArrayList<Module>();
+-+    private List<ModuleModel> modules = new ArrayList<ModuleModel>();
+-     boolean expandable;
+--    public Planner(String term){
+-+    public PlannerModel(String term){
+-         this.term = term;
+-         this.expandable = true;
+-         this.termInt = Integer.parseInt(term.substring(term.length()-1));
+-@@ -24,11 +24,11 @@
+-         this.termInt = termInt;
+-     }
+- 
+--    public List<Module> getModules() {
+-+    public List<ModuleModel> getModules() {
+-         return modules;
+-     }
+- 
+--    public void setModules(List<Module> modules) {
+-+    public void setModules(List<ModuleModel> modules) {
+-         this.modules = modules;
+-     }
+-     public boolean isExpandable() {
+-Index: app/src/main/java/com/example/modulus/Class/Module.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/modulus/Class/Module.java b/app/src/main/java/com/example/modulus/Model/ModuleModel.java
+-rename from app/src/main/java/com/example/modulus/Class/Module.java
+-rename to app/src/main/java/com/example/modulus/Model/ModuleModel.java
+---- a/app/src/main/java/com/example/modulus/Class/Module.java	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/java/com/example/modulus/Model/ModuleModel.java	(date 1744115786873)
+-@@ -1,9 +1,9 @@
+--package com.example.modulus.Class;
+-+package com.example.modulus.Model;
+- 
+- import java.util.Comparator;
+- import java.util.List;
+- 
+--public class Module {
+-+public class ModuleModel {
+-     private String id;
+-     private String name;
+-     private List<String> prof;
+-@@ -11,9 +11,9 @@
+-     private List<String> term;
+-     private List<String> prerequisites;
+-     private String description;
+--    public Module(){
+-+    public ModuleModel(){
+-     }
+--    public Module(String id, String name) {
+-+    public ModuleModel(String id, String name) {
+-         this.id = id;
+-         this.name = name;
+-     }
+-@@ -85,20 +85,20 @@
+-     public String toString(){
+-         return getId() + " - " + getName();
+-     }
+--    public static Module getModuleFromString(String s){
+-+    public static ModuleModel getModuleFromString(String s){
+-         if(s.contains(" - ")){
+-             String[] module = s.split(" - ");
+--            return new Module(module[0], module[1]);
+-+            return new ModuleModel(module[0], module[1]);
+-         }else if(s.contains("Capstone")){
+--            return new Module("", "Capstone");
+-+            return new ModuleModel("", "Capstone");
+-         }else{
+-             return null;
+-         }
+-     }
+- 
+--    public static Comparator<Module> idAscending = new Comparator<Module>() {
+-+    public static Comparator<ModuleModel> idAscending = new Comparator<ModuleModel>() {
+-         @Override
+--        public int compare(Module mod1, Module mod2) {
+-+        public int compare(ModuleModel mod1, ModuleModel mod2) {
+-             String id1 = mod1.getId();
+-             String id2 = mod2.getId();
+- 
+-@@ -106,9 +106,9 @@
+-         }
+-     };
+- 
+--    public static Comparator<Module> nameAscending = new Comparator<Module>() {
+-+    public static Comparator<ModuleModel> nameAscending = new Comparator<ModuleModel>() {
+-         @Override
+--        public int compare(Module mod1, Module mod2){
+-+        public int compare(ModuleModel mod1, ModuleModel mod2){
+-             String name1 = mod1.getName();
+-             String name2 = mod2.getName();
+-             name1 = name1.toLowerCase();
+-Index: app/src/main/java/com/example/modulus/Home/RecyclerViewTouchHelper.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/modulus/Home/RecyclerViewTouchHelper.java b/app/src/main/java/com/example/modulus/FragmentHome/RecyclerViewTouchHelper.java
+-rename from app/src/main/java/com/example/modulus/Home/RecyclerViewTouchHelper.java
+-rename to app/src/main/java/com/example/modulus/FragmentHome/RecyclerViewTouchHelper.java
+---- a/app/src/main/java/com/example/modulus/Home/RecyclerViewTouchHelper.java	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/java/com/example/modulus/FragmentHome/RecyclerViewTouchHelper.java	(date 1744115786896)
+-@@ -1,4 +1,4 @@
+--package com.example.modulus.Home;
+-+package com.example.modulus.FragmentHome;
+- 
+- import android.app.AlertDialog;
+- import android.content.DialogInterface;
+-Index: app/src/main/java/com/example/modulus/Calendar/DataBaseHelperCalendar.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/modulus/Calendar/DataBaseHelperCalendar.java b/app/src/main/java/com/example/modulus/FragmentCalendar/DataBaseHelperCalendar.java
+-rename from app/src/main/java/com/example/modulus/Calendar/DataBaseHelperCalendar.java
+-rename to app/src/main/java/com/example/modulus/FragmentCalendar/DataBaseHelperCalendar.java
+---- a/app/src/main/java/com/example/modulus/Calendar/DataBaseHelperCalendar.java	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/java/com/example/modulus/FragmentCalendar/DataBaseHelperCalendar.java	(date 1744115786916)
+-@@ -1,4 +1,4 @@
+--package com.example.modulus.Calendar;
+-+package com.example.modulus.FragmentCalendar;
+- 
+- 
+- import android.annotation.SuppressLint;
+-@@ -8,7 +8,6 @@
+- import android.database.sqlite.SQLiteException;
+- import android.database.sqlite.SQLiteOpenHelper;
+- import android.util.Log;
+--import android.content.ContentValues;
+- 
+- import com.example.modulus.R;
+- 
+-@@ -19,7 +18,6 @@
+- import java.io.OutputStream;
+- import java.util.ArrayList;
+- import java.util.Calendar;
+--import java.util.Arrays;
+- import java.util.List;
+- 
+- public class DataBaseHelperCalendar extends SQLiteOpenHelper {
+-Index: app/src/main/java/com/example/modulus/Class/ToDoModel.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/modulus/Class/ToDoModel.java b/app/src/main/java/com/example/modulus/Model/ToDoModel.java
+-rename from app/src/main/java/com/example/modulus/Class/ToDoModel.java
+-rename to app/src/main/java/com/example/modulus/Model/ToDoModel.java
+---- a/app/src/main/java/com/example/modulus/Class/ToDoModel.java	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/java/com/example/modulus/Model/ToDoModel.java	(date 1744115786897)
+-@@ -1,6 +1,4 @@
+--package com.example.modulus.Class;
+--
+--import java.time.LocalDate;
+-+package com.example.modulus.Model;
+- 
+- public class ToDoModel {
+-     private String task,date;
+-Index: app/src/main/java/com/example/modulus/Home/AddNewTask.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/modulus/Home/AddNewTask.java b/app/src/main/java/com/example/modulus/FragmentHome/AddNewTask.java
+-rename from app/src/main/java/com/example/modulus/Home/AddNewTask.java
+-rename to app/src/main/java/com/example/modulus/FragmentHome/AddNewTask.java
+---- a/app/src/main/java/com/example/modulus/Home/AddNewTask.java	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/java/com/example/modulus/FragmentHome/AddNewTask.java	(date 1744115786891)
+-@@ -1,4 +1,4 @@
+--package com.example.modulus.Home;
+-+package com.example.modulus.FragmentHome;
+- 
+- import android.app.Activity;
+- import android.app.DatePickerDialog;
+-@@ -18,7 +18,7 @@
+- import androidx.annotation.NonNull;
+- import androidx.annotation.Nullable;
+- 
+--import com.example.modulus.Class.ToDoModel;
+-+import com.example.modulus.Model.ToDoModel;
+- import com.example.modulus.R;
+- import com.example.modulus.Utils.OnDialogCloseListener;
+- import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+-Index: app/src/main/java/com/example/modulus/Home/HomeFragment.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/modulus/Home/HomeFragment.java b/app/src/main/java/com/example/modulus/FragmentHome/HomeFragment.java
+-rename from app/src/main/java/com/example/modulus/Home/HomeFragment.java
+-rename to app/src/main/java/com/example/modulus/FragmentHome/HomeFragment.java
+---- a/app/src/main/java/com/example/modulus/Home/HomeFragment.java	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/java/com/example/modulus/FragmentHome/HomeFragment.java	(date 1744115786879)
+-@@ -1,4 +1,4 @@
+--package com.example.modulus.Home;
+-+package com.example.modulus.FragmentHome;
+- 
+- import android.annotation.SuppressLint;
+- import android.os.Bundle;
+-@@ -21,7 +21,7 @@
+- 
+- import com.example.modulus.Adapter.DateItemAdapter;
+- import com.example.modulus.Adapter.ToDoAdapter;
+--import com.example.modulus.Class.ToDoModel;
+-+import com.example.modulus.Model.ToDoModel;
+- import com.example.modulus.R;
+- import com.example.modulus.Utils.OnDialogCloseListener;
+- import com.google.android.material.floatingactionbutton.FloatingActionButton;
+-Index: app/src/main/res/layout/dropdown_menu.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"wrap_content\"\n    android:layout_gravity=\"center\"\n    android:orientation=\"vertical\">\n\n    <androidx.cardview.widget.CardView\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:backgroundTint=\"@color/purple_200\"\n        android:layout_margin=\"8dp\"\n        app:cardCornerRadius=\"20dp\">\n\n        <androidx.constraintlayout.widget.ConstraintLayout\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"match_parent\">\n\n            <ImageView\n                android:id=\"@+id/backButton\"\n                android:layout_width=\"28dp\"\n                android:layout_height=\"28dp\"\n                android:layout_marginStart=\"8dp\"\n                android:src=\"@drawable/arrow_back\"\n                app:layout_constraintStart_toStartOf=\"parent\"\n                app:layout_constraintTop_toTopOf=\"parent\"\n                app:layout_constraintBottom_toBottomOf=\"parent\"/>\n\n            <TextView\n                android:id=\"@+id/term\"\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"40dp\"\n                android:layout_gravity=\"center\"\n                android:gravity=\"center\"\n                android:text=\"Term\"\n                android:textColor=\"@color/purple_700\"\n                android:textSize=\"20dp\"\n                android:textStyle=\"bold\"\n                app:layout_constraintBottom_toBottomOf=\"parent\"\n                app:layout_constraintEnd_toEndOf=\"parent\"\n                app:layout_constraintStart_toStartOf=\"parent\"\n                app:layout_constraintTop_toTopOf=\"parent\" />\n\n        </androidx.constraintlayout.widget.ConstraintLayout>\n\n    </androidx.cardview.widget.CardView>\n\n    <com.google.android.material.card.MaterialCardView\n        android:id=\"@+id/selectCard\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        app:cardCornerRadius=\"16dp\">\n\n        <RelativeLayout\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"match_parent\">\n\n            <TextView\n                android:id=\"@+id/tvModules\"\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"wrap_content\"\n                android:layout_centerInParent=\"true\"\n                android:hint=\"Select Modules\"\n                android:textSize=\"20dp\" />\n\n            <ImageView\n                android:layout_width=\"42dp\"\n                android:layout_height=\"42dp\"\n                android:layout_alignParentEnd=\"true\"\n                android:layout_centerInParent=\"true\"\n                android:src=\"@drawable/arrow_down\" />\n\n        </RelativeLayout>\n    </com.google.android.material.card.MaterialCardView>\n\n    <Button\n        android:id=\"@+id/confirmButton\"\n        android:text=\"CONFIRM\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:layout_margin=\"8dp\"/>\n\n    <!--    <com.google.android.material.textfield.TextInputLayout-->\n    <!--        style=\"@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu\"-->\n    <!--        android:layout_width=\"match_parent\"-->\n    <!--        android:layout_height=\"wrap_content\"-->\n    <!--        android:layout_margin=\"8dp\">-->\n\n    <!--        <AutoCompleteTextView-->\n    <!--            android:id=\"@+id/autoCompleteTextView\"-->\n    <!--            android:layout_width=\"match_parent\"-->\n    <!--            android:layout_height=\"match_parent\"-->\n    <!--            android:inputType=\"none\"-->\n    <!--            android:text=\"Choose Module\" />-->\n\n    <!--    </com.google.android.material.textfield.TextInputLayout>-->\n\n</LinearLayout>\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/res/layout/dropdown_menu.xml b/app/src/main/res/layout/dropdown_menu.xml
+---- a/app/src/main/res/layout/dropdown_menu.xml	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/res/layout/dropdown_menu.xml	(date 1744115786903)
+-@@ -92,7 +92,7 @@
+-     <!--            android:layout_width="match_parent"-->
+-     <!--            android:layout_height="match_parent"-->
+-     <!--            android:inputType="none"-->
+--    <!--            android:text="Choose Module" />-->
+-+    <!--            android:text="Choose ModuleModel" />-->
+- 
+-     <!--    </com.google.android.material.textfield.TextInputLayout>-->
+- 
+-Index: app/src/main/java/com/example/modulus/MainActivity.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.modulus;\n\nimport static com.example.modulus.R.id.nav_home;\n\nimport android.app.Dialog;\nimport android.content.Intent;\nimport android.graphics.Color;\nimport android.graphics.drawable.ColorDrawable;\nimport android.os.Bundle;\nimport android.util.Log;\nimport android.view.Gravity;\nimport android.view.MenuItem;\nimport android.view.View;\nimport android.view.ViewGroup;\nimport android.view.Window;\nimport android.widget.ImageView;\nimport android.widget.LinearLayout;\nimport android.widget.Toast;\n\n\nimport androidx.annotation.NonNull;\nimport androidx.appcompat.app.ActionBarDrawerToggle;\nimport androidx.appcompat.app.AppCompatActivity;\nimport androidx.appcompat.widget.Toolbar;\nimport androidx.drawerlayout.widget.DrawerLayout;\nimport androidx.fragment.app.Fragment;\nimport androidx.fragment.app.FragmentManager;\nimport androidx.fragment.app.FragmentTransaction;\n\nimport com.example.modulus.Calendar.CalendarFragment;\nimport com.example.modulus.Home.AddNewTask;\nimport com.example.modulus.Home.HomeFragment;\nimport com.example.modulus.Insights.InsightsFragment;\nimport com.example.modulus.Planner.PlannerFragment;\nimport com.google.android.material.bottomnavigation.BottomNavigationView;\nimport com.google.android.material.floatingactionbutton.FloatingActionButton;\nimport com.google.android.material.navigation.NavigationBarView;\nimport com.google.android.material.navigation.NavigationView;\n\npublic class MainActivity extends AppCompatActivity {\n\n    DrawerLayout drawerLayout;\n    BottomNavigationView bottomNavigationView;\n    NavigationView navigationView;\n    ActionBarDrawerToggle toggle;\n    Toolbar toolbar;\n    private final String TAG = \"MAIN\";\n    @Override\n    protected void onCreate(Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n        //EdgeToEdge.enable(this);\n        setContentView(R.layout.activity_main);\n\n        bottomNavigationView = findViewById(R.id.bottomNavigationView);\n        bottomNavigationView.setBackground(null);\n        drawerLayout = findViewById(R.id.drawer_layout);\n        navigationView = findViewById(R.id.nav_view);\n        toolbar = findViewById(R.id.toolbar);\n        setSupportActionBar(toolbar);\n        toggle = new ActionBarDrawerToggle(this, drawerLayout,toolbar, R.string.open_nav, R.string.close_nav);\n        drawerLayout.addDrawerListener(toggle);\n        toggle.syncState();\n\n        //bottomNavigationView.setOnNavigationItemSelectedListener(navListener);\n        /*if(savedInstanceState == null){\n            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, new HomeFragment()).commit();\n            navigationView.setCheckedItem(nav_home);\n        }*/\n\n        bottomNavigationView.setSelectedItemId(nav_home);\n        bottomNavigationView.setOnItemSelectedListener(navListener);\n        Fragment selectedFragment = new HomeFragment();\n        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,selectedFragment).commit();\n\n        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {\n            // Called when an item in the NavigationView is selected.\n            @Override\n            public boolean onNavigationItemSelected(@NonNull MenuItem item) {\n                // Handle the selected item based on its ID\n                if (item.getItemId() == R.id.nav_home) {\n                    // Show a Toast message for the Account item\n                    Toast.makeText(MainActivity.this, \"Account Details\", Toast.LENGTH_SHORT).show();\n                }\n                if (item.getItemId() == R.id.nav_settings) {\n                    // Show a Toast message for the Settings item\n                    Toast.makeText(MainActivity.this, \"Settings Opened\", Toast.LENGTH_SHORT).show();\n                }\n                if (item.getItemId() == R.id.nav_about) {\n                    // Show a Toast message for the Settings item\n                    Toast.makeText(MainActivity.this, \"About Us\", Toast.LENGTH_SHORT).show();\n                }\n                if (item.getItemId() == R.id.nav_logout) {\n                    // Show a Toast message for the Logout item\n                    Toast.makeText(MainActivity.this, \"You are Logged Out\", Toast.LENGTH_SHORT).show();\n                    Log.d(TAG, \"Logging out\");\n                    Intent intent = new Intent(MainActivity.this, ActivityLogIn.class);\n                    startActivity(intent);\n                }\n\n                // Close the drawer after selection\n                //drawerLayout.closeDrawers();\n                // Indicate that the item selection has been handled\n                return true;\n            }\n        });\n\n        /*// Add a callback to handle the back button press\n        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {\n            // Called when the back button is pressed.\n            @Override\n            public void handleOnBackPressed() {\n                // Check if the drawer is open\n                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {\n                    // Close the drawer if it's open\n                    drawerLayout.closeDrawer(GravityCompat.START);\n                } else {\n                    // Finish the activity if the drawer is closed\n                    finish();\n                }\n            }\n        });*/\n    }\n\n    //outside onCreate\n    @Override\n    public boolean onOptionsItemSelected(@NonNull MenuItem item) {\n        if (toggle.onOptionsItemSelected(item)) {\n            return true;\n        }\n        return super.onOptionsItemSelected(item);\n    }\n\n    private NavigationBarView.OnItemSelectedListener navListener = item -> {\n        int itemId = item.getItemId();\n        if (itemId == R.id.home) {\n            Log.d(TAG, \"Opening Home fragment\");\n            replaceFragment(new HomeFragment());\n        } else if (itemId == R.id.calendar) {\n            Log.d(TAG, \"Opening Calendar fragment\");\n            replaceFragment(new CalendarFragment());\n        } else if (itemId == R.id.planner) {\n            Log.d(TAG, \"Opening Planner fragment\");\n            replaceFragment(new PlannerFragment());\n        } else if (itemId == R.id.insights) {\n            Log.d(TAG, \"Opening Insights fragment\");\n            replaceFragment(new InsightsFragment());\n        }\n        return true;\n    };\n    private void replaceFragment(Fragment fragment) {\n        FragmentManager fragmentManager = getSupportFragmentManager();\n        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();\n        fragmentTransaction.replace(R.id.frame_layout, fragment);\n        fragmentTransaction.commit();\n    }\n\n//    private void showBottomDialog() {\n//        final Dialog dialog = new Dialog(this);\n//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);\n//        dialog.setContentView(R.layout.bottomsheetlayout);\n//        LinearLayout eventLayout = dialog.findViewById(R.id.layoutEvent);\n//        LinearLayout taskLayout = dialog.findViewById(R.id.layoutTask);\n//        ImageView cancelButton = dialog.findViewById(R.id.cancelButton);\n//        eventLayout.setOnClickListener(new View.OnClickListener() {\n//            @Override\n//            public void onClick(View v) {\n//                dialog.dismiss();\n//                Toast.makeText(MainActivity.this,\"Upload event lmao\",Toast.LENGTH_SHORT).show();\n//\n//            }\n//        });\n//        taskLayout.setOnClickListener(new View.OnClickListener() {\n//            @Override\n//            public void onClick(View v) {\n//                dialog.dismiss();\n//                Toast.makeText(MainActivity.this,\"task task atsdk aajfkwbjkav\",Toast.LENGTH_SHORT).show();\n//\n//            }\n//        });\n//        cancelButton.setOnClickListener(new View.OnClickListener() {\n//            @Override\n//            public void onClick(View view) {\n//                dialog.dismiss();\n//            }\n//        });\n//        dialog.show();\n//        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);\n//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));\n//        //dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;\n//        dialog.getWindow().setGravity(Gravity.BOTTOM);\n//    }\n}
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/modulus/MainActivity.java b/app/src/main/java/com/example/modulus/MainActivity.java
+---- a/app/src/main/java/com/example/modulus/MainActivity.java	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/java/com/example/modulus/MainActivity.java	(date 1744115786907)
+-@@ -2,19 +2,10 @@
+- 
+- import static com.example.modulus.R.id.nav_home;
+- 
+--import android.app.Dialog;
+- import android.content.Intent;
+--import android.graphics.Color;
+--import android.graphics.drawable.ColorDrawable;
+- import android.os.Bundle;
+- import android.util.Log;
+--import android.view.Gravity;
+- import android.view.MenuItem;
+--import android.view.View;
+--import android.view.ViewGroup;
+--import android.view.Window;
+--import android.widget.ImageView;
+--import android.widget.LinearLayout;
+- import android.widget.Toast;
+- 
+- 
+-@@ -27,13 +18,11 @@
+- import androidx.fragment.app.FragmentManager;
+- import androidx.fragment.app.FragmentTransaction;
+- 
+--import com.example.modulus.Calendar.CalendarFragment;
+--import com.example.modulus.Home.AddNewTask;
+--import com.example.modulus.Home.HomeFragment;
+--import com.example.modulus.Insights.InsightsFragment;
+--import com.example.modulus.Planner.PlannerFragment;
+-+import com.example.modulus.FragmentCalendar.CalendarFragment;
+-+import com.example.modulus.FragmentHome.HomeFragment;
+-+import com.example.modulus.FragmentInsights.InsightsFragment;
+-+import com.example.modulus.FragmentPlanner.PlannerFragment;
+- import com.google.android.material.bottomnavigation.BottomNavigationView;
+--import com.google.android.material.floatingactionbutton.FloatingActionButton;
+- import com.google.android.material.navigation.NavigationBarView;
+- import com.google.android.material.navigation.NavigationView;
+- 
+-@@ -139,7 +128,7 @@
+-             Log.d(TAG, "Opening Calendar fragment");
+-             replaceFragment(new CalendarFragment());
+-         } else if (itemId == R.id.planner) {
+--            Log.d(TAG, "Opening Planner fragment");
+-+            Log.d(TAG, "Opening PlannerModel fragment");
+-             replaceFragment(new PlannerFragment());
+-         } else if (itemId == R.id.insights) {
+-             Log.d(TAG, "Opening Insights fragment");
+-Index: app/src/main/java/com/example/modulus/Planner/EditPlanner.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/modulus/Planner/EditPlanner.java b/app/src/main/java/com/example/modulus/FragmentPlanner/EditPlanner.java
+-rename from app/src/main/java/com/example/modulus/Planner/EditPlanner.java
+-rename to app/src/main/java/com/example/modulus/FragmentPlanner/EditPlanner.java
+---- a/app/src/main/java/com/example/modulus/Planner/EditPlanner.java	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/java/com/example/modulus/FragmentPlanner/EditPlanner.java	(date 1744115786894)
+-@@ -1,4 +1,4 @@
+--package com.example.modulus.Planner;
+-+package com.example.modulus.FragmentPlanner;
+- 
+- import android.app.Activity;
+- import android.content.Context;
+-@@ -19,9 +19,9 @@
+- import androidx.recyclerview.widget.RecyclerView;
+- 
+- import com.example.modulus.Adapter.EditPlannerAdapter;
+--import com.example.modulus.Class.Module;
+--import com.example.modulus.Class.Planner;
+--import com.example.modulus.Insights.InsightsFragment;
+-+import com.example.modulus.Model.ModuleModel;
+-+import com.example.modulus.Model.PlannerModel;
+-+import com.example.modulus.FragmentInsights.InsightsFragment;
+- import com.example.modulus.R;
+- import com.google.gson.Gson;
+- 
+-@@ -29,12 +29,12 @@
+- import java.util.List;
+- 
+- public class EditPlanner extends AppCompatActivity {
+--    List<Planner> editPlannerList = PlannerFragment.plannerList;
+-+    List<PlannerModel> editPlannerList = PlannerFragment.plannerList;
+-     ImageView backButton;
+-     Button confirmButton;
+-     RecyclerView editRecyclerView;
+-     SharedPreferences mPreferences;
+--    private final String TAG = "Edit Planner";
+-+    private final String TAG = "Edit PlannerModel";
+-     @Override
+-     protected void onCreate(Bundle savedInstanceState) {
+-         super.onCreate(savedInstanceState);
+-@@ -61,25 +61,25 @@
+-                         String term = b.getString(EditPlannerMenu.KEY_PATH);
+-                         System.out.println(term);
+-                         String[] updatedModules = newModules.split("\n");
+--                        List<Module> newPlannerModules = new ArrayList<Module>();
+-+                        List<ModuleModel> newPlannerModules = new ArrayList<ModuleModel>();
+-                         for(String moduleString: updatedModules){
+--                            for(Module module: InsightsFragment.moduleList){
+-+                            for(ModuleModel module: InsightsFragment.moduleList){
+-                                 if(moduleString.contains(module.getId())){
+-                                     newPlannerModules.add(module);
+-                                 }
+-                             }
+-                         }
+--                        for(Planner planner: editPlannerList){
+-+                        for(PlannerModel planner: editPlannerList){
+-                             String t = planner.getTerm();
+-                             if(t.equals(term)){
+-                                 if(t.contains("7") || t.contains("8")){
+--                                    newPlannerModules.add(new Module("", "Capstone"));
+-+                                    newPlannerModules.add(new ModuleModel("", "Capstone"));
+-                                 }
+-                                 planner.setModules(newPlannerModules);
+-                                 break;
+-                             }
+-                         }
+--                        for(Planner planner: editPlannerList) {
+-+                        for(PlannerModel planner: editPlannerList) {
+-                             System.out.println(planner.getModules().toString());
+-                         }
+-                         System.out.println(newPlannerModules.toString());
+-@@ -90,7 +90,7 @@
+-         );
+-         EditPlannerAdapter.OnItemClickListener listener = new EditPlannerAdapter.OnItemClickListener() {
+-             @Override
+--            public void onItemClick(Planner planner) {
+-+            public void onItemClick(PlannerModel planner) {
+-                 Intent intent = new Intent(EditPlanner.this, EditPlannerMenu.class);
+-                 intent.putExtra("id", planner.getTerm());
+-                 launcher.launch(intent);
+-@@ -110,10 +110,10 @@
+-                 Gson gson = new Gson();
+-                 ArrayList<String> terms = new ArrayList<>();
+-                 ArrayList<String> plannerModules = new ArrayList<>();
+--                for (Planner planner: editPlannerList) {
+-+                for (PlannerModel planner: editPlannerList) {
+-                     terms.add(planner.getTerm());
+-                     if (planner.getModules() != null){
+--                        for(Module module: planner.getModules()){
+-+                        for(ModuleModel module: planner.getModules()){
+-                             plannerModules.add(module.toString());
+-                         }
+-                         plannerModules.add("?");
+-Index: app/src/main/java/com/example/modulus/Insights/DataBaseHelperInsights.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/modulus/Insights/DataBaseHelperInsights.java b/app/src/main/java/com/example/modulus/FragmentInsights/DataBaseHelperInsights.java
+-rename from app/src/main/java/com/example/modulus/Insights/DataBaseHelperInsights.java
+-rename to app/src/main/java/com/example/modulus/FragmentInsights/DataBaseHelperInsights.java
+---- a/app/src/main/java/com/example/modulus/Insights/DataBaseHelperInsights.java	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/java/com/example/modulus/FragmentInsights/DataBaseHelperInsights.java	(date 1744115786886)
+-@@ -1,6 +1,5 @@
+--package com.example.modulus.Insights;
+-+package com.example.modulus.FragmentInsights;
+- 
+--import android.content.ContentValues;
+- import android.content.Context;
+- import android.database.Cursor;
+- import android.database.sqlite.SQLiteDatabase;
+-@@ -8,9 +7,8 @@
+- import android.database.sqlite.SQLiteException;
+- import android.util.Log;
+- 
+--import com.example.modulus.Class.Module;
+--import com.example.modulus.Class.Planner;
+--import com.example.modulus.Class.ToDoModel;
+-+import com.example.modulus.Model.ModuleModel;
+-+import com.example.modulus.Model.PlannerModel;
+- 
+- import java.io.File;
+- import java.io.FileOutputStream;
+-@@ -106,13 +104,13 @@
+-         super.close();
+-     }
+- 
+--    public ArrayList<Module> getAllModules() {
+-+    public ArrayList<ModuleModel> getAllModules() {
+-         try {
+-             createDatabase();
+-         } catch (IOException e) {
+-             e.printStackTrace();
+-         }
+--        ArrayList<Module> result = new ArrayList<>();
+-+        ArrayList<ModuleModel> result = new ArrayList<>();
+-         SQLiteDatabase db = this.getReadableDatabase();
+- 
+-         Cursor c = db.query(tableName, null, null, null, null, null, null);
+-@@ -120,7 +118,7 @@
+-         while (c.moveToNext()) {
+-             String id = c.getString(2);
+-             String name = c.getString(3);
+--            Module module = new Module(id, name);
+-+            ModuleModel module = new ModuleModel(id, name);
+-             module.setTags(Arrays.asList(c.getString(0).split(",")));
+-             module.setTerm(Arrays.asList(c.getString(1).split(",")));
+-             module.setProf(Arrays.asList(c.getString(4).split(",")));
+-@@ -133,36 +131,36 @@
+-         return result;
+-     }
+- 
+--    public ArrayList<Planner> getPlanner() {
+-+    public ArrayList<PlannerModel> getPlanner() {
+-         try {
+-             createDatabase();
+-         } catch (IOException e) {
+-             e.printStackTrace();
+-         }
+--        ArrayList<Module> moduleList = this.getAllModules();
+--        ArrayList<Planner> result = new ArrayList<Planner>();
+-+        ArrayList<ModuleModel> moduleList = this.getAllModules();
+-+        ArrayList<PlannerModel> result = new ArrayList<PlannerModel>();
+-         SQLiteDatabase db = this.getReadableDatabase();
+- 
+-         Cursor c = db.query(plannerTable, null, null, null, null, null, null);
+- 
+-         for (int i = 1; i <= 8; i++) {
+--            Planner planner = new Planner("Term " + i);
+-+            PlannerModel planner = new PlannerModel("Term " + i);
+-             result.add(planner);
+-         }
+-         while (c.moveToNext()) {
+-             int index = c.getInt(1);
+-             String name = c.getString(3);
+-             if (Objects.equals(name, "Capstone")) {
+--                Module module = new Module(" ", "Capstone");
+--                Planner cPlanner = result.get(index - 1);
+--                ArrayList<Module> newMods = (ArrayList<Module>) cPlanner.getModules();
+-+                ModuleModel module = new ModuleModel(" ", "Capstone");
+-+                PlannerModel cPlanner = result.get(index - 1);
+-+                ArrayList<ModuleModel> newMods = (ArrayList<ModuleModel>) cPlanner.getModules();
+-                 newMods.add(module);
+-                 cPlanner.setModules(newMods);
+-                 result.set(index - 1, cPlanner);
+-             } else if (name != null) {
+--                Module module = moduleList.stream().filter(m -> name.equals(m.getName())).findFirst().orElse(null);
+--                Planner cPlanner = result.get(index - 1);
+--                ArrayList<Module> newMods = (ArrayList<Module>) cPlanner.getModules();
+-+                ModuleModel module = moduleList.stream().filter(m -> name.equals(m.getName())).findFirst().orElse(null);
+-+                PlannerModel cPlanner = result.get(index - 1);
+-+                ArrayList<ModuleModel> newMods = (ArrayList<ModuleModel>) cPlanner.getModules();
+-                 newMods.add(module);
+-                 cPlanner.setModules(newMods);
+-                 result.set(index - 1, cPlanner);
+-Index: app/src/main/res/layout/fragment_calendar.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    android:id=\"@+id/calendarFragmentRoot\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    android:orientation=\"vertical\"\n    tools:context=\".Calendar.CalendarFragment\">\n\n    <CalendarView\n        android:id=\"@+id/calendar\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:background=\"@color/black\"\n        android:dateTextAppearance=\"@style/CalendarDateTextAppearance\"\n        android:theme=\"@style/CalendarTheme\"\n        android:weekDayTextAppearance=\"@style/CalendarWeekDayAppearance\" />\n\n    <RelativeLayout\n        android:id=\"@+id/dateBar\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"48dp\"\n        android:background=\"@color/black\"\n        android:padding=\"8dp\">\n\n        <TextView\n            android:id=\"@+id/selectedDateText\"\n            android:layout_width=\"wrap_content\"\n            android:layout_height=\"wrap_content\"\n            android:text=\"Selected Date\"\n            android:textColor=\"@color/white\"\n            android:layout_centerInParent=\"true\"\n            android:textSize=\"20sp\" />\n\n        <ImageButton\n            android:id=\"@+id/addEventButton\"\n            android:layout_width=\"48dp\"\n            android:layout_height=\"48dp\"\n            android:layout_gravity=\"center\"\n            android:layout_alignParentEnd=\"true\"\n            android:background=\"@color/black\"\n            android:src=\"@drawable/addevent\" />\n    </RelativeLayout>\n\n    <ScrollView\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"0dp\"\n        android:layout_weight=\"1\"\n        android:fillViewport=\"true\">\n\n        <com.framgia.library.calendardayview.CalendarDayView\n            android:id=\"@+id/dayView\"\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"0dp\"\n            android:layout_weight=\"1\"\n            android:paddingLeft=\"10dp\"\n            app:textHourSize=\"12sp\"\n            app:dayHeight=\"@dimen/dayHeight\"\n            app:startHour=\"0\"\n            app:endHour=\"23\"/>\n\n    </ScrollView>\n</LinearLayout>\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/res/layout/fragment_calendar.xml b/app/src/main/res/layout/fragment_calendar.xml
+---- a/app/src/main/res/layout/fragment_calendar.xml	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/res/layout/fragment_calendar.xml	(date 1744115786885)
+-@@ -6,7 +6,7 @@
+-     android:layout_width="match_parent"
+-     android:layout_height="match_parent"
+-     android:orientation="vertical"
+--    tools:context=".Calendar.CalendarFragment">
+-+    tools:context=".FragmentCalendar.CalendarFragment">
+- 
+-     <CalendarView
+-         android:id="@+id/calendar"
+-Index: app/src/main/res/layout/fragment_insights.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<LinearLayout\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"wrap_content\">\n\n    <LinearLayout\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"match_parent\"\n        android:orientation=\"vertical\"\n        tools:context=\".Insights.InsightsFragment\"\n        tools:ignore=\"HardcodedText\">\n\n        <androidx.cardview.widget.CardView\n            android:id=\"@+id/searchBar\"\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"wrap_content\"\n            android:layout_marginHorizontal=\"10dp\"\n            android:layout_marginTop=\"10dp\"\n            android:orientation=\"horizontal\"\n            android:backgroundTint=\"@color/purple_200\"\n            app:cardCornerRadius=\"24dp\">\n\n            <SearchView\n                android:layout_width=\"match_parent\"\n                android:layout_height=\"wrap_content\"\n                android:id=\"@+id/modulesListSearchView\"\n                android:iconifiedByDefault=\"false\"\n                android:background=\"@color/purple_200\"\n                android:queryHint=\"Search...\"/>\n        </androidx.cardview.widget.CardView>\n\n        <androidx.cardview.widget.CardView\n            android:id=\"@+id/belowSearchBar\"\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"wrap_content\"\n            android:layout_marginHorizontal=\"10dp\"\n            android:layout_marginTop=\"10dp\"\n            android:orientation=\"horizontal\"\n            android:backgroundTint=\"@android:color/transparent\"\n            app:cardCornerRadius=\"24dp\">\n\n            <com.google.android.material.chip.ChipGroup\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"wrap_content\"\n                android:id=\"@+id/filteredChips\">\n\n            </com.google.android.material.chip.ChipGroup>\n\n            <ImageButton\n                android:layout_width=\"28dp\"\n                android:layout_height=\"28dp\"\n                android:layout_marginVertical=\"4dp\"\n                android:layout_marginEnd=\"38dp\"\n                android:id=\"@+id/sortButton\"\n                android:background=\"@drawable/sort\"\n                android:backgroundTint=\"@color/dark_purple\"\n                android:layout_gravity=\"end\">\n            </ImageButton>\n\n            <ImageButton\n                android:layout_width=\"28dp\"\n                android:layout_height=\"28dp\"\n                android:layout_marginVertical=\"4dp\"\n                android:layout_marginEnd=\"8dp\"\n                android:id=\"@+id/filterButton\"\n                android:background=\"@drawable/filter_icon\"\n                android:backgroundTint=\"@color/dark_purple\"\n                android:layout_gravity=\"end\">\n            </ImageButton>\n        </androidx.cardview.widget.CardView>\n\n        <androidx.constraintlayout.widget.ConstraintLayout\n            android:id=\"@+id/sortTab\"\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"wrap_content\"\n            android:orientation=\"horizontal\"\n            android:layout_marginHorizontal=\"10dp\">\n\n            <com.google.android.material.chip.ChipGroup\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"wrap_content\"\n                app:singleSelection=\"true\"\n                app:selectionRequired=\"true\"\n                app:layout_constraintStart_toStartOf=\"@id/sortTab\"\n                app:layout_constraintTop_toTopOf=\"@id/sortTab\">\n\n                <com.google.android.material.chip.Chip\n                    style=\"@style/Widget.MaterialComponents.Chip.Choice\"\n                    android:id=\"@+id/id\"\n                    android:layout_width=\"wrap_content\"\n                    android:layout_height=\"wrap_content\"\n                    android:text=\"Subject Code\"\n                    android:checkable=\"true\"\n                    android:checked=\"true\"/>\n\n                <com.google.android.material.chip.Chip\n                    style=\"@style/Widget.MaterialComponents.Chip.Choice\"\n                    android:id=\"@+id/name\"\n                    android:layout_width=\"wrap_content\"\n                    android:layout_height=\"wrap_content\"\n                    android:text=\"Name\"\n                    android:checkable=\"true\"/>\n\n            </com.google.android.material.chip.ChipGroup>\n\n            <com.google.android.material.chip.ChipGroup\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"wrap_content\"\n                app:singleSelection=\"true\"\n                app:selectionRequired=\"true\"\n                app:layout_constraintEnd_toEndOf=\"@id/sortTab\"\n                app:layout_constraintTop_toTopOf=\"@id/sortTab\">\n\n                <com.google.android.material.chip.Chip\n                    style=\"@style/Widget.MaterialComponents.Chip.Choice\"\n                    android:id=\"@+id/ascending\"\n                    android:layout_width=\"wrap_content\"\n                    android:layout_height=\"wrap_content\"\n                    android:text=\"Ascending\"\n                    android:checkable=\"true\"\n                    android:checked=\"true\"/>\n\n                <com.google.android.material.chip.Chip\n                    style=\"@style/Widget.MaterialComponents.Chip.Choice\"\n                    android:id=\"@+id/descending\"\n                    android:layout_width=\"wrap_content\"\n                    android:layout_height=\"wrap_content\"\n                    android:text=\"Descending\"\n                    android:checkable=\"true\"/>\n\n            </com.google.android.material.chip.ChipGroup>\n\n        </androidx.constraintlayout.widget.ConstraintLayout>\n\n        <androidx.recyclerview.widget.RecyclerView\n            android:id=\"@+id/recyclerView\"\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"wrap_content\"\n            android:scrollbars=\"vertical\"\n            android:layout_marginHorizontal=\"15dp\">\n\n        </androidx.recyclerview.widget.RecyclerView>\n\n    </LinearLayout>\n</LinearLayout>
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/res/layout/fragment_insights.xml b/app/src/main/res/layout/fragment_insights.xml
+---- a/app/src/main/res/layout/fragment_insights.xml	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/res/layout/fragment_insights.xml	(date 1744115786898)
+-@@ -10,7 +10,7 @@
+-         android:layout_width="match_parent"
+-         android:layout_height="match_parent"
+-         android:orientation="vertical"
+--        tools:context=".Insights.InsightsFragment"
+-+        tools:context=".FragmentInsights.InsightsFragment"
+-         tools:ignore="HardcodedText">
+- 
+-         <androidx.cardview.widget.CardView
+-Index: app/src/main/java/com/example/modulus/Class/FilterChip.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/modulus/Class/FilterChip.java b/app/src/main/java/com/example/modulus/Model/FilterChipModel.java
+-rename from app/src/main/java/com/example/modulus/Class/FilterChip.java
+-rename to app/src/main/java/com/example/modulus/Model/FilterChipModel.java
+---- a/app/src/main/java/com/example/modulus/Class/FilterChip.java	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/java/com/example/modulus/Model/FilterChipModel.java	(date 1744115786905)
+-@@ -1,14 +1,14 @@
+--package com.example.modulus.Class;
+-+package com.example.modulus.Model;
+- 
+- import androidx.annotation.NonNull;
+- 
+- import com.google.android.material.chip.Chip;
+- 
+--public class FilterChip {
+-+public class FilterChipModel {
+-     String name;
+-     Chip chip;
+-     boolean chipCheck;
+--    public FilterChip(String name, boolean chipCheck){
+-+    public FilterChipModel(String name, boolean chipCheck){
+-         this.name = name;
+-         this.chipCheck = chipCheck;
+-     }
+-Index: app/src/main/res/layout/fragment_home.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<RelativeLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:orientation=\"vertical\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    android:layout_marginBottom=\"60dp\"\n    android:id=\"@+id/homeMain\"\n    tools:context=\".Home.HomeFragment\">\n\n\n    <androidx.recyclerview.widget.RecyclerView\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"100dp\"\n        android:id=\"@+id/dateItemRecycler\" />\n\n\n    <!--TextView\n        android:id=\"@+id/textView\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:text=\"To Do List\"\n        android:layout_centerHorizontal=\"true\"\n        android:textSize=\"25sp\"\n        android:textStyle=\"bold\"\n        android:textColor=\"@color/white\"\n        android:layout_margin=\"10dp\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toTopOf=\"parent\" /-->\n    <RelativeLayout\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"match_parent\"\n        android:layout_below=\"@id/dateItemRecycler\">\n\n        <androidx.recyclerview.widget.RecyclerView\n            android:id=\"@+id/recyclerView\"\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"match_parent\"\n            android:nestedScrollingEnabled=\"true\"/>\n\n        <com.google.android.material.floatingactionbutton.FloatingActionButton\n            android:id=\"@+id/addButton\"\n            android:layout_width=\"wrap_content\"\n            android:layout_height=\"wrap_content\"\n            android:layout_alignParentEnd=\"true\"\n            android:layout_alignParentBottom=\"true\"\n            android:layout_margin=\"20dp\"\n            android:src=\"@drawable/baseline_add_24\"/>\n\n    </RelativeLayout>\n\n</RelativeLayout>
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/res/layout/fragment_home.xml b/app/src/main/res/layout/fragment_home.xml
+---- a/app/src/main/res/layout/fragment_home.xml	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/res/layout/fragment_home.xml	(date 1744115786914)
+-@@ -7,7 +7,7 @@
+-     android:layout_height="match_parent"
+-     android:layout_marginBottom="60dp"
+-     android:id="@+id/homeMain"
+--    tools:context=".Home.HomeFragment">
+-+    tools:context=".FragmentHome.HomeFragment">
+- 
+- 
+-     <androidx.recyclerview.widget.RecyclerView
+-Index: app/src/main/java/com/example/modulus/Adapter/NestedPlannerAdapter.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.modulus.Adapter;\n\nimport android.annotation.SuppressLint;\nimport android.view.LayoutInflater;\nimport android.view.View;\nimport android.view.ViewGroup;\nimport android.widget.TextView;\n\nimport androidx.recyclerview.widget.RecyclerView;\n\nimport com.example.modulus.Class.Module;\nimport com.example.modulus.R;\n\nimport java.util.List;\n\npublic class NestedPlannerAdapter extends RecyclerView.Adapter<NestedPlannerAdapter.NestedModuleViewHolder> {\n    private List<Module> moduleList;\n\n    public NestedPlannerAdapter(List<Module> moduleList){\n        this.moduleList = moduleList;\n    }\n    @Override\n    public NestedModuleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {\n        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.planner_cell , parent , false);\n        return new NestedModuleViewHolder(view);\n    }\n\n    @SuppressLint(\"ResourceAsColor\")\n    @Override\n    public void onBindViewHolder(NestedModuleViewHolder holder, int position) {\n        if(moduleList.get(position) != null){\n            Module module = moduleList.get(position);\n            if (module.getName() == \"Capstone\"){\n                holder.plannerModule.setText(\"Capstone\");\n            } else{\n                holder.plannerModule.setText(module.toString());\n            }\n//        holder.plannerCell.setBackgroundColor(R.color.dark_pink);\n//        if(Objects.equals(module.getName(), \"Capstone\")){\n//            holder.plannerCell.setBackgroundColor(R.color.light_pink);\n//        }\n//        if(module.getTags() != null) {\n//            if (module.getTags().contains(\"HASS\")) {\n//                holder.plannerCell.setBackgroundColor(R.color.light_blue);\n//            }\n//        }\n        }\n    }\n\n    @Override\n    public int getItemCount() {\n        return moduleList.size();\n    }\n    public class NestedModuleViewHolder extends RecyclerView.ViewHolder{\n        TextView plannerModule;\n        public NestedModuleViewHolder(View itemView) {\n            super(itemView);\n            plannerModule = itemView.findViewById(R.id.plannerModule);\n        }\n    }\n}
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/modulus/Adapter/NestedPlannerAdapter.java b/app/src/main/java/com/example/modulus/Adapter/NestedPlannerAdapter.java
+---- a/app/src/main/java/com/example/modulus/Adapter/NestedPlannerAdapter.java	(revision b885100d791dbfdf131b4899218921ed4a61e5c7)
+-+++ b/app/src/main/java/com/example/modulus/Adapter/NestedPlannerAdapter.java	(date 1744115786888)
+-@@ -8,15 +8,15 @@
+- 
+- import androidx.recyclerview.widget.RecyclerView;
+- 
+--import com.example.modulus.Class.Module;
+-+import com.example.modulus.Model.ModuleModel;
+- import com.example.modulus.R;
+- 
+- import java.util.List;
+- 
+- public class NestedPlannerAdapter extends RecyclerView.Adapter<NestedPlannerAdapter.NestedModuleViewHolder> {
+--    private List<Module> moduleList;
+-+    private List<ModuleModel> moduleList;
+- 
+--    public NestedPlannerAdapter(List<Module> moduleList){
+-+    public NestedPlannerAdapter(List<ModuleModel> moduleList){
+-         this.moduleList = moduleList;
+-     }
+-     @Override
+-@@ -29,7 +29,7 @@
+-     @Override
+-     public void onBindViewHolder(NestedModuleViewHolder holder, int position) {
+-         if(moduleList.get(position) != null){
+--            Module module = moduleList.get(position);
+-+            ModuleModel module = moduleList.get(position);
+-             if (module.getName() == "Capstone"){
+-                 holder.plannerModule.setText("Capstone");
+-             } else{
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_8_4_25__8_36pm__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_8_4_25__8_36pm__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Update_at_8_4_25__8_36pm__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_8_4_25__8_36pm__Changes_.xml	(revision 3a7e97c62744d5c459f4d3a15ae742675a1b6319)
++++ /dev/null	(revision 3a7e97c62744d5c459f4d3a15ae742675a1b6319)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_8_4_25,_8_36 pm_[Changes]" date="1744115789255" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_8_4_25,_8_36 pm_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 8/4/25, 8:36 pm [Changes]" />
+-</changelist>
+\ No newline at end of file
+Index: app/src/main/java/com/example/modulus/FragmentPlanner/PlannerFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.FragmentPlanner;\n\nimport android.app.AlertDialog;\nimport android.content.Context;\nimport android.content.DialogInterface;\nimport android.content.Intent;\nimport android.content.SharedPreferences;\nimport android.content.res.ColorStateList;\nimport android.os.Bundle;\n\nimport androidx.activity.result.ActivityResult;\nimport androidx.activity.result.ActivityResultCallback;\nimport androidx.activity.result.ActivityResultLauncher;\nimport androidx.activity.result.contract.ActivityResultContracts;\nimport androidx.core.content.ContextCompat;\nimport androidx.fragment.app.Fragment;\nimport androidx.recyclerview.widget.LinearLayoutManager;\nimport androidx.recyclerview.widget.RecyclerView;\n\nimport android.util.Log;\nimport android.view.LayoutInflater;\nimport android.view.View;\nimport android.view.ViewGroup;\nimport android.widget.Button;\nimport android.widget.ImageView;\nimport android.widget.LinearLayout;\nimport android.widget.TextView;\nimport android.widget.Toast;\n\nimport com.example.modulus.Adapter.PlannerAdapter;\nimport com.example.modulus.Model.ModuleModel;\nimport com.example.modulus.Model.PlannerModel;\nimport com.example.modulus.FragmentInsights.InsightsFragment;\nimport com.example.modulus.Model.TrackModel;\nimport com.example.modulus.R;\nimport com.google.gson.Gson;\n\nimport java.util.ArrayList;\nimport java.util.Arrays;\nimport java.util.List;\n\npublic class PlannerFragment extends Fragment {\n    public static List<PlannerModel> basePlannerList;\n    public static List<PlannerModel> mPlannerList;\n    public static String myPillar;\n    public static String myTrack;\n    public static String myMinor;\n    public static TrackModel trackModel;\n    public static TrackModel minorModel;\n    PlannerAdapter adapter;\n    RecyclerView recyclerView;\n    DataBaseHelperPlanner myDB;\n    DataBaseHelperTracks tracksDB;\n    ImageView editButton;\n    SharedPreferences mPreferences;\n    static final String KEY_DATA_PILLAR = \"SHARED_PREF_DATA_PILLAR\";\n    static final String KEY_DATA_TRACK = \"SHARED_PREF_DATA_TRACK\";\n    static final String KEY_DATA_MINOR = \"SHARED_PREF_DATA_MINOR\";\n    static final String KEY_DATA_TERMS = \"SHARED_PREF_DATA_TERMS\";\n    static final String KEY_DATA_MODS = \"SHARED_PREF_DATA_MODS\";\n    static final String PREF_FILE = \"mainsharedpref\";\n    private final String TAG = \"PlannerModel\";\n    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {\n        // Inflate the layout for this fragment\n        View view = inflater.inflate(R.layout.fragment_planner, container, false);\n\n        recyclerView = view.findViewById(R.id.plannerRecyclerView);\n\n        myDB = new DataBaseHelperPlanner(getContext());\n        tracksDB = new DataBaseHelperTracks(getContext());\n\n        mPreferences = this.getActivity().getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);\n        if(mPreferences.getString(KEY_DATA_TERMS, \"\").equals(\"\")){\n            Log.d(TAG, \"New Account\");\n            basePlannerList = myDB.getPlanner(\"Default\");\n            mPlannerList = myDB.getPlanner(\"Default\");\n            System.out.println(basePlannerList);\n        }else{\n            onResume();\n            Log.d(TAG, \"Refresh\");\n        }\n        if(InsightsFragment.moduleList == null){\n            myDB = new DataBaseHelperPlanner(getContext());\n            InsightsFragment.moduleList = myDB.getAllModules();\n        }\n        int color = getColourR(myPillar);\n        adapter = new PlannerAdapter(mPlannerList,color);\n        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));\n        recyclerView.setAdapter(adapter);\n\n        LinearLayout editTab = view.findViewById(R.id.editTab);\n        editTab.setVisibility(View.GONE);\n        editButton = view.findViewById(R.id.editButton);\n        editButton.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                if(editTab.getVisibility() == View.VISIBLE){\n                    editTab.setVisibility(View.GONE);\n                }else{\n                    editTab.setVisibility(View.VISIBLE);\n                }\n            }\n        });\n\n        Button pillarButton = view.findViewById(R.id.pillarButton);\n        TextView pillarText = view.findViewById(R.id.pillarText);\n\n        String pillarPref = mPreferences.getString(KEY_DATA_PILLAR, \"\");\n        if(!pillarPref.isEmpty()){\n            pillarText.setText(pillarPref);\n            myPillar = pillarPref;\n        }\n        TextView trackText = view.findViewById(R.id.specializationText);\n        String trackPref = mPreferences.getString(KEY_DATA_TRACK, \"\");\n        if(!trackPref.isEmpty()){\n            trackText.setText(trackPref);\n            myTrack = trackPref;\n        }\n        TextView minorText = view.findViewById(R.id.minorText);\n        String minorPref = mPreferences.getString(KEY_DATA_MINOR, \"\");\n        if(!minorPref.isEmpty()){\n            minorText.setText(minorPref);\n            myMinor = minorPref;\n        }\n\n\n        String[] pillars = new String[]{\"ASD\", \"CSD\", \"DAI\", \"EPD\", \"ESD\"};\n        pillarButton.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());\n                mBuilder.setTitle(\"Select a Pillar\");\n                mBuilder.setSingleChoiceItems(pillars, -1, new DialogInterface.OnClickListener() {\n                    @Override\n                    public void onClick(DialogInterface dialog, int which) {\n                        myPillar = pillars[which];\n                        pillarText.setText(pillars[which]);\n\n                        SharedPreferences.Editor prefsEditor = mPreferences.edit();\n                        prefsEditor.putString(PlannerFragment.KEY_DATA_PILLAR, pillars[which]);\n                        trackText.setText(\"No Specialisation\");\n                        prefsEditor.putString(PlannerFragment.KEY_DATA_TRACK, \"No Specialisation\");\n                        minorText.setText(\"No Minor\");\n                        prefsEditor.putString(PlannerFragment.KEY_DATA_MINOR, \"No Minor\");\n                        prefsEditor.apply();\n\n\n                        updatePillarColor(view, pillars[which]);\n\n\n                        basePlannerList = myDB.getPlanner(pillars[which]);\n                        mPlannerList = myDB.getPlanner(pillars[which]);\n\n                        int newcolor = getColourR(myPillar);\n                        adapter = new PlannerAdapter(mPlannerList,newcolor);\n                        recyclerView.setAdapter(adapter);\n\n                        dialog.dismiss();\n                    }\n                });\n                mBuilder.setNeutralButton(\"Cancel\", new DialogInterface.OnClickListener() {\n                    @Override\n                    public void onClick(DialogInterface dialog, int which) {\n\n                    }\n                });\n                AlertDialog mDialog = mBuilder.create();\n                mDialog.show();\n            }\n        });\n\n\n\n\n\n\n\n        Button trackButton = view.findViewById(R.id.trackButton);\n        trackButton.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                if(myPillar == null){\n                    Toast.makeText(getContext(), \"Select Pillar First!\", Toast.LENGTH_SHORT).show();\n                }else if(myPillar.equals(\"ASD\") || myPillar.equals(\"DAI\")){\n                    Toast.makeText(getContext(), \"No Tracks Available\", Toast.LENGTH_SHORT).show();\n                }else {\n                    String[] tracks = tracksDB.getTracks(myPillar);\n                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());\n                    builder.setTitle(\"Select a Specialisation\");\n                    builder.setSingleChoiceItems(tracks, -1, new DialogInterface.OnClickListener() {\n                        @Override\n                        public void onClick(DialogInterface dialog, int which) {\n                            trackText.setText(tracks[which]);\n                            myTrack = tracks[which];\n                            trackModel = tracksDB.getTrackModel(tracks[which], pillarPref);\n                            SharedPreferences.Editor prefsEditor = mPreferences.edit();\n                            prefsEditor.putString(PlannerFragment.KEY_DATA_TRACK, tracks[which]);\n                            prefsEditor.apply();\n                            dialog.dismiss();\n                        }\n                    }).setNeutralButton(\"Cancel\", new DialogInterface.OnClickListener() {\n                        @Override\n                        public void onClick(DialogInterface dialog, int which) {\n                        }\n                    });\n                    AlertDialog mDialog = builder.create();\n                    mDialog.show();\n                }\n            }\n        });\n\n        Button minorButton = view.findViewById(R.id.minorButton);\n        minorButton.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                if(myPillar == null){\n                    Toast.makeText(getContext(), \"Select Pillar First!\", Toast.LENGTH_SHORT).show();\n                }else {\n                    String[] allMinors = tracksDB.getMinors();\n                    ArrayList<String[]> allMinorsEligibility = tracksDB.getMinorsEligibility();\n                    List<String> availableMinorsList = new ArrayList<>();\n\n                    for(int i = 0; i < allMinorsEligibility.size(); i++){\n                        List<String> eligibility = Arrays.asList(allMinorsEligibility.get(i));\n                        if(eligibility.contains(myPillar)){\n                            availableMinorsList.add(allMinors[i]);\n                        }\n                    }\n                    availableMinorsList.add(\"No Minor\");\n                    String[] availableMinors = availableMinorsList.toArray(new String[0]);\n\n                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());\n                    mBuilder.setTitle(\"Select a Minor\");\n                    mBuilder.setSingleChoiceItems(availableMinors, -1, new DialogInterface.OnClickListener() {\n                        @Override\n                        public void onClick(DialogInterface dialog, int which) {\n                            minorText.setText(availableMinors[which]);\n                            myMinor = availableMinors[which];\n                            if(!myMinor.equals(\"No Minor\")){\n                                minorModel = tracksDB.getTrackModel(availableMinors[which], pillarPref);\n                            }\n                            SharedPreferences.Editor prefsEditor = mPreferences.edit();\n                            prefsEditor.putString(PlannerFragment.KEY_DATA_MINOR, availableMinors[which]);\n                            prefsEditor.apply();\n                            dialog.dismiss();\n                        }\n                    });\n                    mBuilder.setNeutralButton(\"Cancel\", new DialogInterface.OnClickListener() {\n                        @Override\n                        public void onClick(DialogInterface dialog, int which) {\n                        }\n                    });\n                    AlertDialog mDialog = mBuilder.create();\n                    mDialog.show();\n                }\n            }\n        });\n\n        final ActivityResultLauncher<Intent> launcher = registerForActivityResult(\n                new ActivityResultContracts.StartActivityForResult(),\n                new ActivityResultCallback<ActivityResult>() {\n                    @Override\n                    public void onActivityResult(ActivityResult result) {\n                        // Result from DataEntryActivity is obtained\n                        // Get the data and insert it into datasource\n                        Log.d(\"TAG\", \"Back to Planner\");\n                        Bundle b = result.getData().getExtras();\n                        if(b != null){\n                            String newModules = b.getString(EditPlannerMenu.KEY_NAME);\n                            String term = b.getString(EditPlannerMenu.KEY_PATH);\n                            System.out.println(term);\n                            String[] updatedModules = newModules.split(\"\\n\");\n                            List<ModuleModel> newPlannerModules = new ArrayList<ModuleModel>();\n                            for(String moduleString: updatedModules){\n                                for(ModuleModel module: InsightsFragment.moduleList){\n                                    if(moduleString.contains(module.getId())){\n                                        newPlannerModules.add(module);\n                                    }\n                                }\n                            }\n                        for(PlannerModel planner: mPlannerList){\n                            if(planner.getTerm().equals(term)){\n                                planner.setModules(newPlannerModules);\n                            }\n                        }\n                        System.out.println(newPlannerModules.toString());\n                        Log.d(TAG, \"Planners Updated\");\n                        SharedPreferences.Editor prefsEditor = mPreferences.edit();\n                        Gson gson = new Gson();\n                        ArrayList<String> terms = new ArrayList<>();\n                        ArrayList<String> plannerModules = new ArrayList<>();\n                        for (PlannerModel planner: mPlannerList) {\n                            terms.add(planner.getTerm());\n                            if (planner.getModules() != null){\n                                for(ModuleModel module: planner.getModules()){\n                                    plannerModules.add(module.toString());\n                                }\n                                plannerModules.add(\"?\");\n                            }else{\n                                plannerModules.add(\"NIL\");\n                            }\n                        }\n                        String jsonTerms = gson.toJson(terms);\n                        String jsonMods = gson.toJson( plannerModules );\n                        prefsEditor.putString(KEY_DATA_TERMS, jsonTerms);\n                        prefsEditor.putString(KEY_DATA_MODS, jsonMods);\n                        prefsEditor.apply();\n                        }else{\n                            Log.d(TAG, \"Nothing to Update\");\n                        }\n                    }\n                }\n\n        );\n\n        Button edit = view.findViewById(R.id.planTermButton);\n        edit.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                Log.d(TAG, \"Edit\");\n                System.out.println(trackModel);\n                Intent intent = new Intent(getContext(), EditPlannerMenu.class);\n                launcher.launch(intent);\n            }\n        });\n\n        return view;\n    }\n\n    @Override\n    public void onPause(){\n        super.onPause();\n        SharedPreferences.Editor prefsEditor = mPreferences.edit();\n        Gson gson = new Gson();\n        ArrayList<String> terms = new ArrayList<>();\n        ArrayList<String> plannerModules = new ArrayList<>();\n        for (PlannerModel planner: mPlannerList) {\n            terms.add(planner.getTerm());\n            if (planner.getModules() != null){\n                for(ModuleModel module: planner.getModules()){\n                    plannerModules.add(module.toString());\n                }\n                plannerModules.add(\"?\");\n            }else{\n                plannerModules.add(\"NIL\");\n            }\n        }\n        String jsonTerms = gson.toJson(terms);\n        String jsonMods = gson.toJson( plannerModules );\n        prefsEditor.putString(KEY_DATA_TERMS, jsonTerms);\n        prefsEditor.putString(KEY_DATA_MODS, jsonMods);\n        prefsEditor.apply();\n    }\n\n    @Override\n    public void onResume(){\n        super.onResume();\n        Log.d(TAG, \"Resume\");\n        if(InsightsFragment.moduleList == null){\n            myDB = new DataBaseHelperPlanner(getContext());\n            InsightsFragment.moduleList = myDB.getAllModules();\n        }\n        String pillarPref = mPreferences.getString(KEY_DATA_PILLAR, \"\");\n        if(!pillarPref.isEmpty()){\n            myPillar = pillarPref;\n        }else{\n            myPillar = \"Default\";\n        }\n        if(basePlannerList == null){\n            myDB = new DataBaseHelperPlanner(getContext());\n            basePlannerList = myDB.getPlanner(myPillar);\n        }\n        Gson gson = new Gson();\n        String jsonTerms = mPreferences.getString(KEY_DATA_TERMS, \"\");\n        String jsonMods = mPreferences.getString(KEY_DATA_MODS, \"\");\n        ArrayList<String> terms = gson.fromJson(jsonTerms, ArrayList.class);\n        ArrayList<String> mods = gson.fromJson(jsonMods, ArrayList.class);\n        System.out.println(terms);\n        System.out.println(mods);\n        if(terms != null && mods != null){\n            mPlannerList = new ArrayList<>();\n            int modsPointer = 0;\n            for (int i = 0; i< terms.size(); i++) {\n                PlannerModel planner = new PlannerModel(terms.get(i));\n                List<ModuleModel> plannerModules = new ArrayList<ModuleModel>();\n                for(int j = modsPointer; j < mods.size(); j++){\n                    if(mods.get(j).equals(\"?\")){\n                        planner.setModules(plannerModules);\n                        mPlannerList.add(planner);\n                        modsPointer++;\n                        break;\n                    }else if(mods.get(j).equals(\"NIL\")){\n                        mPlannerList.add(planner);\n                        modsPointer++;\n                        break;\n                    }else {\n                        for(ModuleModel module: InsightsFragment.moduleList){\n                            if(mods.get(j).contains(module.getId())){\n                                plannerModules.add(module);\n                            }\n                        }\n                        modsPointer++;\n                    }\n                }\n            }\n            Log.d(TAG, \"Updated\");\n        }\n        int color = getColourR(myPillar);\n        adapter = new PlannerAdapter(mPlannerList,color);\n        recyclerView.setAdapter(adapter);\n        View view = getView();\n        if(view != null) {\n            updatePillarColor(view,myPillar);\n        }\n    }\n\n    private int getColourR(String pillar) {\n        switch (pillar){\n            case \"ASD\":\n                return R.color.ASD;\n            case \"EPD\":\n                return R.color.EPD;\n            case \"ESD\":\n                return R.color.ESD;\n            case \"DAI\":\n                return R.color.DAI;\n            case \"ISTD\":\n                return R.color.ISTD;\n            case \"CSD\":\n                return R.color.ISTD;\n            case \"HASS\":\n                return R.color.HASS;\n            case \"SMT\":\n                return R.color.SMT;\n            default:\n                return R.color.OTHERS;\n        }\n    }\n\n    private void updatePillarColor(View view,String pillar) {\n        int colour = getColourR(pillar);\n        TextView pillarText = view.findViewById(R.id.pillarText);\n        ImageView editb = view.findViewById(R.id.editButton);\n\n        pillarText.setText(pillar);\n        pillarText.setTextColor(ContextCompat.getColor(getContext(), colour));\n\n        editb.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), colour)));\n\n        com.google.android.material.card.MaterialCardView plannercard = view.findViewById(R.id.plannercard);\n        plannercard.setStrokeColor(ContextCompat.getColor(getContext(), colour));\n\n    }\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/FragmentPlanner/PlannerFragment.java b/app/src/main/java/com/example/modulus/FragmentPlanner/PlannerFragment.java
+--- a/app/src/main/java/com/example/modulus/FragmentPlanner/PlannerFragment.java	(revision 3a7e97c62744d5c459f4d3a15ae742675a1b6319)
++++ b/app/src/main/java/com/example/modulus/FragmentPlanner/PlannerFragment.java	(date 1744769760393)
+@@ -169,12 +169,6 @@
+             }
+         });
+ 
+-
+-
+-
+-
+-
+-
+         Button trackButton = view.findViewById(R.id.trackButton);
+         trackButton.setOnClickListener(new View.OnClickListener() {
+             @Override
+@@ -366,6 +360,15 @@
+         }else{
+             myPillar = "Default";
+         }
++        String trackPref = mPreferences.getString(KEY_DATA_TRACK, "");
++        if(!trackPref.isEmpty()){
++            myTrack = trackPref;
++        }
++        String minorPref = mPreferences.getString(KEY_DATA_MINOR, "");
++        if(!minorPref.isEmpty()){
++            myMinor = minorPref;
++        }
++
+         if(basePlannerList == null){
+             myDB = new DataBaseHelperPlanner(getContext());
+             basePlannerList = myDB.getPlanner(myPillar);
+Index: app/src/main/java/com/example/modulus/FragmentPlanner/EditPlannerMenu.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.FragmentPlanner;\n\nimport android.app.Activity;\nimport android.content.Context;\nimport android.content.DialogInterface;\nimport android.content.Intent;\nimport android.content.SharedPreferences;\nimport android.os.Bundle;\nimport android.util.Log;\nimport android.view.View;\nimport android.widget.Button;\nimport android.widget.ImageView;\nimport android.widget.TextView;\nimport android.widget.Toast;\n\nimport androidx.appcompat.app.AlertDialog;\nimport androidx.appcompat.app.AppCompatActivity;\nimport androidx.cardview.widget.CardView;\n\nimport com.example.modulus.Model.ModuleModel;\nimport com.example.modulus.Model.PlannerModel;\nimport com.example.modulus.FragmentInsights.InsightsFragment;\nimport com.example.modulus.R;\nimport com.google.android.material.card.MaterialCardView;\n\nimport java.util.ArrayList;\nimport java.util.List;\n\n\npublic class EditPlannerMenu extends AppCompatActivity {\n    List<PlannerModel> basePlannerList = PlannerFragment.basePlannerList;\n    PlannerModel selectedPlanner;\n    MaterialCardView selectTermCard; TextView tvTerm;\n    int electiveLimit;\n    CardView coreCard; TextView tvCore;\n    MaterialCardView selectElectivesCard; TextView tvElectives; String[] electivesList;\n    CardView term3HASSCard; TextView tvTerm3HASS;\n    MaterialCardView selectHASSCard; TextView tvHASS; String[] HASSList;\n    boolean[] selectedElectives;\n    boolean changed;\n    ArrayList<String> selectedModulesIndex = new ArrayList<>();\n    String[] filteredModulesList;\n    ImageView backButton;\n    Button confirmButton;\n    SharedPreferences mPreferences;\n    final static String KEY_NAME = \"Electives\";\n    final static String KEY_PATH = \"Term\";\n    final String TAG = \"Edit Planner\";\n    @Override\n    protected void onCreate(Bundle savedInstanceState){\n        super.onCreate(savedInstanceState);\n        setContentView(R.layout.dropdown_menu);\n        changed = false;\n\n        selectTermCard = findViewById(R.id.selectTermCard);\n        tvTerm = findViewById(R.id.tvTerm);\n        selectTermCard.setOnClickListener(v -> {\n            showTermDialog();\n        });\n\n\n        coreCard = findViewById(R.id.coreCard);\n        tvCore = findViewById(R.id.tvCore);\n        selectElectivesCard = findViewById(R.id.selectElectivesCard);\n        tvElectives = findViewById(R.id.tvElectives);\n        selectElectivesCard.setOnClickListener(v -> {\n            showElectivesDialog();\n        });\n\n        term3HASSCard = findViewById(R.id.term3HASS);\n        tvTerm3HASS = findViewById(R.id.tvTerm3HASS);\n        selectHASSCard = findViewById(R.id.selectHASSCard);\n        tvHASS = findViewById(R.id.tvHASS);\n        selectHASSCard.setOnClickListener(v -> {\n            showHASSDialog();\n        });\n\n        backButton = findViewById(R.id.backButton);\n        backButton.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                Intent resultIntent = new Intent();\n                setResult( Activity.RESULT_OK, resultIntent);\n                finish();\n            }\n        });\n\n        mPreferences = this.getSharedPreferences(PlannerFragment.PREF_FILE, Context.MODE_PRIVATE);\n        confirmButton = findViewById(R.id.confirmButton);\n        confirmButton.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                if(!changed){\n                    Toast.makeText(EditPlannerMenu.this, \"No Changes Detected\", Toast.LENGTH_SHORT).show();;\n                }\n                else{\n                    StringBuilder updatedModules = new StringBuilder();\n                    if(coreCard.getVisibility() == View.VISIBLE){\n                        updatedModules.append(tvCore.getText().toString()).append(\"\\n\");\n                        System.out.println(\"HELP\" + updatedModules);\n                        Log.d(TAG, \"core\");\n                    }\n                    if(selectElectivesCard.getVisibility() == View.VISIBLE){\n                        updatedModules.append(tvElectives.getText().toString()).append(\"\\n\");\n                        System.out.println(\"HELP\" + updatedModules);\n                        Log.d(TAG, \"elective\");\n                    }\n                    if(term3HASSCard.getVisibility() == View.VISIBLE){\n                        updatedModules.append(tvTerm3HASS.getText().toString()).append(\"\\n\");\n                        System.out.println(\"HELP\" + updatedModules);\n                        Log.d(TAG, \"term3\");\n                    }\n                    if(selectHASSCard.getVisibility() == View.VISIBLE){\n                        updatedModules.append(tvHASS.getText().toString()).append(\"\\n\");\n                        System.out.println(\"HELP\" + updatedModules);\n                        Log.d(TAG, \"hass\");\n                    }\n                    System.out.println(updatedModules);\n                    Intent resultIntent = new Intent();\n                    resultIntent.putExtra(KEY_NAME, updatedModules.toString());\n                    resultIntent.putExtra(KEY_PATH, selectedPlanner.getTerm());\n\n                    setResult( Activity.RESULT_OK, resultIntent);\n                    finish();\n                }\n            }\n        });\n    }\n\n    private void showTermDialog(){\n        tvTerm = findViewById(R.id.tvTerm);\n        AlertDialog.Builder builder = new AlertDialog.Builder(EditPlannerMenu.this);\n\n        builder.setTitle(\"Select Term\");\n        builder.setCancelable(false);\n\n        String[] terms = new String[]{\"Term 3\", \"Term 4\", \"Term 5\", \"Term 6\", \"Term 7\", \"Term 8\"};\n        builder.setSingleChoiceItems(terms, -1, new DialogInterface.OnClickListener() {\n            @Override\n            public void onClick(DialogInterface dialog, int which) {\n                tvTerm.setText(terms[which]);\n                selectedPlanner = getSelectedPlanner(terms[which]);\n                setValues();\n                dialog.dismiss();\n            }\n        }).setNeutralButton(\"Cancel\", new DialogInterface.OnClickListener() {\n            @Override\n            public void onClick(DialogInterface dialog, int which) {\n            }\n        });\n        AlertDialog mDialog = builder.create();\n        mDialog.show();\n    }\n    private void showElectivesDialog(){\n        if(selectedPlanner == null){\n            Toast.makeText(this, \"Select a Term first!\", Toast.LENGTH_SHORT).show();\n        }else{\n            selectedElectives = new boolean[electivesList.length];\n\n            AlertDialog.Builder builder = new AlertDialog.Builder(EditPlannerMenu.this);\n\n            builder.setTitle(\"Select Electives\");\n            builder.setCancelable(false);\n\n            builder.setMultiChoiceItems(electivesList, selectedElectives, new DialogInterface.OnMultiChoiceClickListener() {\n                int count = 0;\n                @Override\n                public void onClick(DialogInterface dialog, int which, boolean isChecked) {\n                    if(isChecked){\n                        selectedModulesIndex.add(String.valueOf(which));\n                    }else{\n                        selectedModulesIndex.remove(String.valueOf(which));\n                    }\n                    count += isChecked ? 1 : -1;\n                    int term = selectedPlanner.getTermInt();\n                    if(count > electiveLimit) {\n                        Toast.makeText(EditPlannerMenu.this, \"Limit Reached!.\", Toast.LENGTH_SHORT).show();\n                        selectedElectives[which] = false;\n                        selectedModulesIndex.remove(String.valueOf(which));\n                        count--;\n                        ((AlertDialog) dialog).getListView().setItemChecked(which, false);\n                    }\n                }\n            }).setPositiveButton(\"Select\", new DialogInterface.OnClickListener() {\n                @Override\n                public void onClick(DialogInterface dialog, int which) {\n                    tvElectives.setText(\"\");\n                    StringBuilder s = new StringBuilder();\n                    for(int i = 0; i < selectedModulesIndex.size(); i++){\n                        s.append(electivesList[Integer.parseInt(selectedModulesIndex.get(i))]);\n                        if(i != selectedModulesIndex.size() - 1){\n                            s.append(\"\\n\");\n                        }\n                    }\n                    tvElectives.setText(s.toString());\n                    changed = true;\n                }\n            }).setNegativeButton(\"Cancel\", new DialogInterface.OnClickListener() {\n                @Override\n                public void onClick(DialogInterface dialog, int which) {\n                    dialog.dismiss();\n                }\n            }).setNeutralButton(\"Clear All\", new DialogInterface.OnClickListener() {\n                @Override\n                public void onClick(DialogInterface dialog, int which) {\n                    for(int i = 0; i < selectedElectives.length; i++){\n                        selectedElectives[i] = false;\n                    }\n                    selectedModulesIndex.clear();\n                    tvElectives.setText(\"\");\n                }\n            });\n            AlertDialog mDialog = builder.create();\n            mDialog.show();\n        }\n    }\n\n    private void showHASSDialog(){\n        if(selectedPlanner == null){\n            Toast.makeText(this, \"Select a Term first!\", Toast.LENGTH_SHORT).show();\n        }else{\n            tvHASS = findViewById(R.id.tvHASS);\n            AlertDialog.Builder builder = new AlertDialog.Builder(EditPlannerMenu.this);\n\n            builder.setTitle(\"Select HASS\");\n            builder.setCancelable(false);\n\n            builder.setSingleChoiceItems(HASSList, -1, new DialogInterface.OnClickListener() {\n                @Override\n                public void onClick(DialogInterface dialog, int which) {\n                    tvHASS.setText(HASSList[which]);\n                    changed = true;\n                    dialog.dismiss();\n                }\n            }).setNeutralButton(\"Cancel\", new DialogInterface.OnClickListener() {\n                @Override\n                public void onClick(DialogInterface dialog, int which) {\n                }\n            });\n            AlertDialog mDialog = builder.create();\n            mDialog.show();\n        }\n    }\n\n    private PlannerModel getSelectedPlanner(String term) {\n        for (PlannerModel planner : basePlannerList) {\n            if(planner.getTerm().equals(term))\n                return planner;\n        }\n        Log.d(\"Edit\", \"No Planner\");\n        return null;\n    }\n\n    private void setValues() {\n        TextView tv = findViewById(R.id.tvTerm);\n        tv.setText(selectedPlanner.getTerm());\n\n        //filter available\n        List<String> stringFilteredModulesList = new ArrayList<String>();\n        List<String> stringHASSList = new ArrayList<String>();\n        List<String> stringElectivesList = new ArrayList<String>();\n        for(ModuleModel module: InsightsFragment.moduleList){\n            if(!selectedPlanner.getModules().toString().contains(module.toString())){\n                if( module.getTerm().contains(String.valueOf(selectedPlanner.getTermInt())) ){\n                    stringFilteredModulesList.add(module.toString());\n                    if(module.getTags().contains(\"HASS\")){\n                        stringHASSList.add(module.toString());\n                    }else{\n                        stringElectivesList.add(module.toString());\n                    }\n                }\n            }\n        }\n        filteredModulesList = stringFilteredModulesList.toArray(new String[0]);\n        HASSList = stringHASSList.toArray(new String[0]);\n        electivesList = stringElectivesList.toArray(new String[0]);\n\n        //set values\n        electiveLimit = 3;\n        List<ModuleModel> plannerModulesList = selectedPlanner.getModules();\n        if(plannerModulesList != null) {\n            StringBuilder setTvCore = new StringBuilder();\n            StringBuilder setHASSCore = new StringBuilder();\n            for (ModuleModel module : plannerModulesList) {\n                if (module.getTags().contains(\"HASS\")) {\n                    setHASSCore.append(module.toString());\n                } else{\n                    setTvCore.append(module.toString()).append(\"\\n\");\n                    electiveLimit -= 1;\n                }\n            }\n            if (setTvCore.length() > 0) {\n                coreCard.setVisibility(View.VISIBLE);\n                tvCore.setText(setTvCore.toString().substring(0, setTvCore.length()-1));\n                if(electiveLimit == 0){\n                    selectElectivesCard.setVisibility(View.GONE);\n                }else{\n                    selectElectivesCard.setVisibility(View.VISIBLE);\n                }\n            }else{\n                coreCard.setVisibility(View.GONE);\n                tvCore.setText(\"Core\");\n            }\n\n            if (setHASSCore.length() > 0) {\n                term3HASSCard.setVisibility(View.VISIBLE);\n                tvTerm3HASS.setText(setHASSCore.toString());\n                selectHASSCard.setVisibility(View.GONE);\n            }else{\n                term3HASSCard.setVisibility(View.GONE);\n                tvTerm3HASS.setText(\"Term 3 HASS\");\n                selectHASSCard.setVisibility(View.VISIBLE);\n            }\n\n        }\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/FragmentPlanner/EditPlannerMenu.java b/app/src/main/java/com/example/modulus/FragmentPlanner/EditPlannerMenu.java
+--- a/app/src/main/java/com/example/modulus/FragmentPlanner/EditPlannerMenu.java	(revision 3a7e97c62744d5c459f4d3a15ae742675a1b6319)
++++ b/app/src/main/java/com/example/modulus/FragmentPlanner/EditPlannerMenu.java	(date 1744769760395)
+@@ -255,9 +255,17 @@
+         TextView tv = findViewById(R.id.tvTerm);
+         tv.setText(selectedPlanner.getTerm());
+ 
++        List<ModuleModel> core = new ArrayList<>();
++        List<ModuleModel> rec = new ArrayList<>();
++        if(PlannerFragment.trackModel != null){
++            core = PlannerFragment.trackModel.getCore();
++            rec = PlannerFragment.trackModel.getRecMods();
++        }
++
+         //filter available
+         List<String> stringFilteredModulesList = new ArrayList<String>();
+         List<String> stringHASSList = new ArrayList<String>();
++        List<String> stringCoreList = new ArrayList<String>();
+         List<String> stringElectivesList = new ArrayList<String>();
+         for(ModuleModel module: InsightsFragment.moduleList){
+             if(!selectedPlanner.getModules().toString().contains(module.toString())){
+@@ -265,6 +273,9 @@
+                     stringFilteredModulesList.add(module.toString());
+                     if(module.getTags().contains("HASS")){
+                         stringHASSList.add(module.toString());
++                    }else if( (!core.isEmpty() && core.toString().contains(module.toString())) ||
++                            (!rec.isEmpty() && rec.toString().contains(module.toString()))){
++                        stringCoreList.add(module.toString());
+                     }else{
+                         stringElectivesList.add(module.toString());
+                     }
+@@ -273,7 +284,8 @@
+         }
+         filteredModulesList = stringFilteredModulesList.toArray(new String[0]);
+         HASSList = stringHASSList.toArray(new String[0]);
+-        electivesList = stringElectivesList.toArray(new String[0]);
++        stringCoreList.addAll(stringElectivesList);
++        electivesList = stringCoreList.toArray(new String[0]);
+ 
+         //set values
+         electiveLimit = 3;

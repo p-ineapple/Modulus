@@ -1,0 +1,365 @@
+Index: app/src/main/java/com/example/modulus/Model/ModuleVertex.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.modulus.Model;\n\nimport java.util.List;\n\npublic class ModuleVertex {\n    String type;\n    boolean preRequisite;\n    List<String> hard = null;\n    List<String> soft = null;\n    int soft_count = 0;\n    public ModuleVertex(ModuleModel module){\n        if(module.getTags().contains(\"HASS\")){\n            this.type = \"HASS\";\n        }else{\n            this.type = \"Pillar\";\n        }\n        List<String> preReq = module.getPrerequisites();\n        if(!preReq.equals(\"NIL\")){\n            preRequisite = true;\n            if(module.getCost().equals(\"Hard\")){\n                this.hard = preReq;\n            }else{\n                this.soft = preReq;\n                for(String preReqMod: preReq){\n                    if(preReqMod.contains(\"/\")){\n                        this.soft_count = 1;\n                    }else{\n                        this.soft_count = 0;\n                    }\n                }\n            }\n        }else{\n            preRequisite = false;\n        }\n    }\n\n    public String getType() {\n        return type;\n    }\n    public void setType(String type) {\n        this.type = type;\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/Model/ModuleVertex.java b/app/src/main/java/com/example/modulus/Model/ModuleVertex.java
+--- a/app/src/main/java/com/example/modulus/Model/ModuleVertex.java	(revision e662924ed77676152ffa3377b144e21db80bbb72)
++++ b/app/src/main/java/com/example/modulus/Model/ModuleVertex.java	(date 1744727239686)
+@@ -1,13 +1,15 @@
+ package com.example.modulus.Model;
+ 
++import com.example.modulus.FragmentInsights.InsightsFragment;
++
++import java.util.ArrayList;
+ import java.util.List;
+ 
+-public class ModuleVertex {
++public class ModuleVertex extends ModuleModel{
+     String type;
+     boolean preRequisite;
+-    List<String> hard = null;
+-    List<String> soft = null;
+-    int soft_count = 0;
++    List<ModuleVertex> hard = null;
++    List<ModuleVertex> soft = null;
+     public ModuleVertex(ModuleModel module){
+         if(module.getTags().contains("HASS")){
+             this.type = "HASS";
+@@ -16,18 +18,36 @@
+         }
+         List<String> preReq = module.getPrerequisites();
+         if(!preReq.equals("NIL")){
+-            preRequisite = true;
++            this.preRequisite = true;
++            List<ModuleVertex> preReqList = new ArrayList<>();
+             if(module.getCost().equals("Hard")){
+-                this.hard = preReq;
+-            }else{
+-                this.soft = preReq;
+-                for(String preReqMod: preReq){
+-                    if(preReqMod.contains("/")){
+-                        this.soft_count = 1;
+-                    }else{
+-                        this.soft_count = 0;
++                for(String mod: preReq){
++                    if(mod.contains("/")){
++                        String[] split = mod.split("/");
++                        for(String mm: split){
++                            ModuleModel moduleToAdd = InsightsFragment.moduleList.stream().filter(m -> mm.equals(m.getId())).findFirst().orElse(null);
++                            preReqList.add(new ModuleVertex(moduleToAdd));
++                        }
++                    }else{
++                        ModuleModel moduleToAdd = InsightsFragment.moduleList.stream().filter(m -> mod.equals(m.getId())).findFirst().orElse(null);
++                        preReqList.add(new ModuleVertex(moduleToAdd));
++                    }
++                }
++                this.hard = preReqList;
++            }else{
++                for(String mod: preReq){
++                    if(mod.contains("/")){
++                        String[] split = mod.split("/");
++                        for(String mm: split){
++                            ModuleModel moduleToAdd = InsightsFragment.moduleList.stream().filter(m -> mm.equals(m.getId())).findFirst().orElse(null);
++                            preReqList.add(new ModuleVertex(moduleToAdd));
++                        }
++                    }else{
++                        ModuleModel moduleToAdd = InsightsFragment.moduleList.stream().filter(m -> mod.equals(m.getId())).findFirst().orElse(null);
++                        preReqList.add(new ModuleVertex(moduleToAdd));
+                     }
+                 }
++                this.soft = preReqList;
+             }
+         }else{
+             preRequisite = false;
+Index: app/src/main/java/com/example/modulus/Model/Kahn.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>//package com.example.modulus.Model;\n//\n//import com.example.modulus.FragmentInsights.InsightsFragment;\n//\n//import java.util.List;\n//\n//public class Kahn {\n//\n//    List<ModuleVertex> adjList;\n//    public void setUpGraph(){\n//        for(ModuleModel mod: InsightsFragment.moduleList){\n//            adjList.add(new ModuleVertex(mod));\n//        }\n//    }\n//    public List<ModuleModel> RestrictedSet(Inputs){\n//\n//    }\n//1.\tRequired ← PillarCore ∪ TrackCore ∪ MinorCore ∪ TrackElectives ∪ MinorElectives\n//2.\tR ← Empty Set\n//3.\tfor each module v in G.V\n//    // Add module if its in required\n//4.\t\tif v in Required\n//5.\t\t\tAdd v to R\n//6.\t\t//Add module if its in required’s modules prerequisites\n//        7.\t\tElse if  isPREREQRequired(v,Required)\n//8.\t\t\tAdd v to R\n//9.\tReturn R\n//    function isPREREQRequired(v,Required)\n//1.\tfor each module u in Required\n//2.\t\tfor each module m in u.hard\n//3.\t\t\tif m == v\n//4.\t\t\tReturn TRUE\n//5.\t\tfor each module m in u.soft\n//6.\t\t\tif m == v\n//7.\t\t\tReturn TRUE\n//8.\n//        9.\tReturn FALSE\n//\n//    function Planner(Inputs)\n//1.\tAll ← Array to store all permutations\n//2.\tSchedule ← Array of 5 for 5 terms  (A[1 (Term 4)] …  A[5 (Term 8)])\n//            3.\tHASSflag ← Boolean to check got pending HASS\n//4.\tCurrentTerm ← 1 (Term 4)\n//            5.\tOrder ← Empty Array for modules (for adding on per term)\n//6.\tinDeg ← Array for all of v’s indegree\n//7.\tR ← RestrictedSet(Inputs)\n//8.\tPERMUTE(Inputs,All,Schedule,HASSflag,Order,inDeg, CurrentTerm,R)\n//9.\tReturn ALL\n//\n//    function PERMUTE(Inputs,All,Schedule,HASSflag,Order,inDeg,CurrentTerm,R)\n//    // Base case when permutations for all terms done\n//1.\tif currentTerm > TotalTerms then\n//2.\t\tif (PillarCore ⊆ Order & TrackCore ⊆ Order & MinorCore ⊆ Order & count(TrackElectives ∩ Order) >= TrackElectivesCount Order & count(MinorElectives ∩ Order) >= MinorElectivesCount ) then\n//3.\t\tAppend Order.copy to All\n//4.\t\treturn\n////Prepare the current term list\n//        5.\tCurrent_list ← Empty Array\n//6.\tSchedule[currentTerm] ← Current_list\n////Fill current term\n//7.\tFILL(Inputs,All,Schedule,HASSflag,Order,inDeg,CurrentTerm,0,R)\n//8.\treturn\n//\n//        0 is CountCapacity to track if TermCapacity is full\n//\n//    function FILL(Inputs,All,Schedule,HASSflag,Order,inDeg, CurrentTerm,CountCapacity,R)\n//    // Base case when current term is full , need go next term\n//1.\tif CountCapacity == TermCapacity then\n//    //Need to check if got HASS (I hate HASS)\n//2.\t\tHasHASS ← Boolean TRUE if count of v.type == “HASS” in schedule[currentTerm] == 1\n//            3.\t\tPendingHASS ← Boolean TRUE if HasHASS == FALSE\n//    //Append to current term modules if valid ordering\n//4.\t \tNewOrder ← Concatenate Order with Schedule[CurrentTerm]\n//            5.\t\t// Recursive loop into next term\n//            6.\t\tPERMUTE(Inputs,All,Schedule,PendingHASS (HASSflag changed to this),Order,inDeg, CurrentTerm+1,R)\n//            7.\t\tReturn\n//8.\t// Not full, need add module while checking requirements\n//        9.\tfor each module v in R not in Order\n//10.\t\t//Check if indegree 0 to allow adding and prereq is met\n//        11.\t\tif inDeg[v.index] == 0 and PREREQCHECK(v,Order,G)\n//12.\t\t\t//Enforce HASS if Pending and current is HASS\n//        if HASSflag and v.type ≠ “HASS”\n//            13.\t\t\t\tcontinue\n//            14.\t\t\t//Appending to current term\n//            15.\t\t\tAppend v to schedule[CurrentTerm]\n//            16.\t\t\tAppend to Order\n//    //explore the neighbours in v\n//17.\t\t\tu ← G.Adj[v].head\n//18.\t\t\twhile u ≠ NIL do\n//            19.\t\t\t\tinDeg[u.index] ← inDeg[u.index] - 1\n//            20.\t\t\t\tu ← u.next\n//9.\t\t\tFILL(Inputs,All,Schedule,HASSflag,Order,inDeg, CurrentTerm,CountCapacity+1,R))\n////backtracking\n//            21.\t\t\tu ← G.Adj[v].head\n//22.\t\t\twhile u ≠ NIL do\n//            23.\t\t\t\tinDeg[u.index] ← inDeg[u.index] + 1\n//            24.\t\t\t\tu ← u.next\n//25.\t\t\tRemove v from schedule[CurrentTerm]\n//            26.\t\t\tRemove v from  Order\n//27.\tReturn\n//\n//\n//\n//    function PREREQCHECK(v,Order,G)\n//    // Check hard prerequisites\n//1.\tfor each module u in v.hard\n//2.\t\tif u not in Order\n//3.\t\t\treturn FALSE\n//// Check soft prerequisites\n//4.\tactualCount ← 0\n//            5.\tfor each module u in v.soft\n//6.\t\tif u in Order\n//7.\t\t\tactualCount ← actualCount + 1\n//            8.\tif actualCount < v.soft_count\n//9.\t\treturn FALSE\n//10.\treturn TRUE\n//\n//}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/Model/Kahn.java b/app/src/main/java/com/example/modulus/Model/Kahn.java
+--- a/app/src/main/java/com/example/modulus/Model/Kahn.java	(revision e662924ed77676152ffa3377b144e21db80bbb72)
++++ b/app/src/main/java/com/example/modulus/Model/Kahn.java	(date 1744735507921)
+@@ -1,117 +1,93 @@
+-//package com.example.modulus.Model;
+-//
+-//import com.example.modulus.FragmentInsights.InsightsFragment;
+-//
+-//import java.util.List;
+-//
+-//public class Kahn {
+-//
+-//    List<ModuleVertex> adjList;
+-//    public void setUpGraph(){
+-//        for(ModuleModel mod: InsightsFragment.moduleList){
+-//            adjList.add(new ModuleVertex(mod));
++package com.example.modulus.Model;
++
++import com.example.modulus.FragmentInsights.InsightsFragment;
++
++import java.util.ArrayList;
++import java.util.HashSet;
++import java.util.List;
++
++public class Kahn {
++    List<ModuleVertex> adjList;
++    List<ModuleVertex> requiredList;
++    public void setUpGraph() {
++        for (ModuleModel mod : InsightsFragment.moduleList) {
++            adjList.add(new ModuleVertex(mod));
++        }
++
++    }
++
++    public List<ModuleVertex> RestrictedSet(TrackModel trackModel) {
++        ArrayList<ModuleModel> required = new ArrayList<>();
++        required.addAll(trackModel.getCore());
++        required.addAll(trackModel.getElectives());
++//        if (minorModel != null) {
++//            required.addAll(minorModel.getCore());
++//            required.addAll(minorModel.getElectives());
+ //        }
+-//    }
+-//    public List<ModuleModel> RestrictedSet(Inputs){
+-//
+-//    }
+-//1.	Required ← PillarCore ∪ TrackCore ∪ MinorCore ∪ TrackElectives ∪ MinorElectives
+-//2.	R ← Empty Set
+-//3.	for each module v in G.V
+-//    // Add module if its in required
+-//4.		if v in Required
+-//5.			Add v to R
+-//6.		//Add module if its in required’s modules prerequisites
+-//        7.		Else if  isPREREQRequired(v,Required)
+-//8.			Add v to R
+-//9.	Return R
+-//    function isPREREQRequired(v,Required)
+-//1.	for each module u in Required
+-//2.		for each module m in u.hard
+-//3.			if m == v
+-//4.			Return TRUE
+-//5.		for each module m in u.soft
+-//6.			if m == v
+-//7.			Return TRUE
+-//8.
+-//        9.	Return FALSE
+-//
+-//    function Planner(Inputs)
+-//1.	All ← Array to store all permutations
+-//2.	Schedule ← Array of 5 for 5 terms  (A[1 (Term 4)] …  A[5 (Term 8)])
+-//            3.	HASSflag ← Boolean to check got pending HASS
+-//4.	CurrentTerm ← 1 (Term 4)
+-//            5.	Order ← Empty Array for modules (for adding on per term)
+-//6.	inDeg ← Array for all of v’s indegree
+-//7.	R ← RestrictedSet(Inputs)
+-//8.	PERMUTE(Inputs,All,Schedule,HASSflag,Order,inDeg, CurrentTerm,R)
+-//9.	Return ALL
+-//
+-//    function PERMUTE(Inputs,All,Schedule,HASSflag,Order,inDeg,CurrentTerm,R)
+-//    // Base case when permutations for all terms done
+-//1.	if currentTerm > TotalTerms then
+-//2.		if (PillarCore ⊆ Order & TrackCore ⊆ Order & MinorCore ⊆ Order & count(TrackElectives ∩ Order) >= TrackElectivesCount Order & count(MinorElectives ∩ Order) >= MinorElectivesCount ) then
+-//3.		Append Order.copy to All
+-//4.		return
+-////Prepare the current term list
+-//        5.	Current_list ← Empty Array
+-//6.	Schedule[currentTerm] ← Current_list
+-////Fill current term
+-//7.	FILL(Inputs,All,Schedule,HASSflag,Order,inDeg,CurrentTerm,0,R)
+-//8.	return
+-//
+-//        0 is CountCapacity to track if TermCapacity is full
+-//
+-//    function FILL(Inputs,All,Schedule,HASSflag,Order,inDeg, CurrentTerm,CountCapacity,R)
+-//    // Base case when current term is full , need go next term
+-//1.	if CountCapacity == TermCapacity then
+-//    //Need to check if got HASS (I hate HASS)
+-//2.		HasHASS ← Boolean TRUE if count of v.type == “HASS” in schedule[currentTerm] == 1
+-//            3.		PendingHASS ← Boolean TRUE if HasHASS == FALSE
+-//    //Append to current term modules if valid ordering
+-//4.	 	NewOrder ← Concatenate Order with Schedule[CurrentTerm]
+-//            5.		// Recursive loop into next term
+-//            6.		PERMUTE(Inputs,All,Schedule,PendingHASS (HASSflag changed to this),Order,inDeg, CurrentTerm+1,R)
+-//            7.		Return
+-//8.	// Not full, need add module while checking requirements
+-//        9.	for each module v in R not in Order
+-//10.		//Check if indegree 0 to allow adding and prereq is met
+-//        11.		if inDeg[v.index] == 0 and PREREQCHECK(v,Order,G)
+-//12.			//Enforce HASS if Pending and current is HASS
+-//        if HASSflag and v.type ≠ “HASS”
+-//            13.				continue
+-//            14.			//Appending to current term
+-//            15.			Append v to schedule[CurrentTerm]
+-//            16.			Append to Order
+-//    //explore the neighbours in v
+-//17.			u ← G.Adj[v].head
+-//18.			while u ≠ NIL do
+-//            19.				inDeg[u.index] ← inDeg[u.index] - 1
+-//            20.				u ← u.next
+-//9.			FILL(Inputs,All,Schedule,HASSflag,Order,inDeg, CurrentTerm,CountCapacity+1,R))
+-////backtracking
+-//            21.			u ← G.Adj[v].head
+-//22.			while u ≠ NIL do
+-//            23.				inDeg[u.index] ← inDeg[u.index] + 1
+-//            24.				u ← u.next
+-//25.			Remove v from schedule[CurrentTerm]
+-//            26.			Remove v from  Order
+-//27.	Return
+-//
+-//
+-//
+-//    function PREREQCHECK(v,Order,G)
+-//    // Check hard prerequisites
+-//1.	for each module u in v.hard
+-//2.		if u not in Order
+-//3.			return FALSE
+-//// Check soft prerequisites
+-//4.	actualCount ← 0
+-//            5.	for each module u in v.soft
+-//6.		if u in Order
+-//7.			actualCount ← actualCount + 1
+-//            8.	if actualCount < v.soft_count
+-//9.		return FALSE
+-//10.	return TRUE
+-//
+-//}
++        ArrayList<ModuleVertex> requiredGraph = new ArrayList<>();
++        for(ModuleModel m: required){
++            requiredGraph.add(new ModuleVertex(m));
++        }
++        for(ModuleVertex v: adjList){
++            if(isPreReqRequired(v, requiredGraph)){
++                requiredGraph.add(v);
++            }
++        }
++        requiredList = requiredGraph;
++        return requiredGraph;
++    }
++
++    public boolean isPreReqRequired(ModuleVertex moduleModel, List<ModuleVertex> list) {
++        for (ModuleVertex u: list){
++            List<ModuleVertex> preReq = u.hard;
++            for(ModuleVertex m: preReq){
++                if(m.getId().equals(u.getId())){
++                    return true;
++                }
++            }
++        }return false;
++    }
++
++    public List<List<ModuleModel>> plan(){
++        List<List<ModuleModel>> all = new ArrayList<>();
++        List<PlannerModel> schedule = new ArrayList<>();
++        boolean HASSFlag = false;
++        int currentTerm = 0;
++        List<ModuleModel> order = new ArrayList<>();
++        //inDeg
++        permute();
++
++    }
++
++    public void permute(TrackModel trackModel, List<List<ModuleModel>> all, List<PlannerModel> schedule, boolean hassFlag, List<ModuleModel> order, int currentTerm){
++        if(currentTerm > 4){
++            if(new HashSet<>(order).containsAll(trackModel.getCore())){
++                all.add(order);
++                return;
++            }
++        }
++        List<ModuleModel> tempPlannerMods = new ArrayList<>();
++        schedule.get(currentTerm).setModules(tempPlannerMods);
++        fill(trackModel, all, schedule, hassFlag, order, currentTerm, 0);
++    }
++
++    public void fill(TrackModel trackModel, List<List<ModuleModel>> all, List<PlannerModel> schedule, boolean hassFlag, List<ModuleModel> order, int currentTerm, int count){
++        if(count == 4){
++            boolean hasHASS = false;
++            for(ModuleModel m: schedule.get(currentTerm).getModules()){
++                if(m.getTags().contains("HASS")){
++                    hasHASS = true;
++                }
++            }
++            order.addAll(schedule.get(currentTerm).getModules());
++            permute(trackModel, all, schedule, hasHASS, order, currentTerm);
++        }
++        for(ModuleVertex v: requiredList){
++            if(!order.toString().contains(v.toString())){
++
++            }
++        }
++    }
++
++    public boolean preReqCheck
++}
+\ No newline at end of file
+Index: app/src/main/java/com/example/modulus/Adapter/EditPlannerAdapter.java
+===================================================================
+diff --git a/app/src/main/java/com/example/modulus/Adapter/EditPlannerAdapter.java b/app/src/main/java/com/example/modulus/Adapter/EditPlannerAdapter.java
+deleted file mode 100644
+--- a/app/src/main/java/com/example/modulus/Adapter/EditPlannerAdapter.java	(revision e662924ed77676152ffa3377b144e21db80bbb72)
++++ /dev/null	(revision e662924ed77676152ffa3377b144e21db80bbb72)
+@@ -1,61 +0,0 @@
+-package com.example.modulus.Adapter;
+-
+-import android.annotation.SuppressLint;
+-import android.view.LayoutInflater;
+-import android.view.View;
+-import android.view.ViewGroup;
+-import android.widget.TextView;
+-
+-import androidx.recyclerview.widget.RecyclerView;
+-
+-import com.example.modulus.Model.PlannerModel;
+-import com.example.modulus.R;
+-
+-import java.util.List;
+-
+-public class EditPlannerAdapter extends RecyclerView.Adapter<EditPlannerAdapter.EditPlannerViewHolder> {
+-    public interface OnItemClickListener {
+-        void onItemClick(PlannerModel planner);
+-    }
+-    List<PlannerModel> plannerList;
+-    OnItemClickListener listener;
+-    public EditPlannerAdapter(List<PlannerModel> plannerList, OnItemClickListener listener) {
+-        this.plannerList = plannerList;
+-        this.listener = listener;
+-    }
+-
+-    @Override
+-    public EditPlannerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.term_button, parent, false);
+-        return new EditPlannerViewHolder(view);
+-    }
+-
+-    @SuppressLint("ResourceAsColor")
+-    @Override
+-    public void onBindViewHolder(EditPlannerAdapter.EditPlannerViewHolder holder, @SuppressLint("RecyclerView") int position) {
+-        PlannerModel planner = plannerList.get(position);
+-        holder.tv.setText(planner.getTerm());
+-        holder.bind(planner, listener);
+-    }
+-
+-    @Override
+-    public int getItemCount() {
+-        return plannerList.size();
+-    }
+-
+-    public class EditPlannerViewHolder extends RecyclerView.ViewHolder {
+-        TextView tv;
+-
+-        public EditPlannerViewHolder(View itemView) {
+-            super(itemView);
+-            tv = itemView.findViewById(R.id.term);
+-        }
+-        public void bind(PlannerModel item, final OnItemClickListener listener) {
+-            itemView.setOnClickListener(new View.OnClickListener() {
+-                @Override public void onClick(View v) {
+-                    listener.onItemClick(item);
+-                }
+-            });
+-        }
+-    }
+-}

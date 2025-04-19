@@ -17,47 +17,52 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.example.modulus.FragmentInsights.DataBaseHelperInsights;
 import com.example.modulus.Model.ModuleModel;
 import com.example.modulus.Model.PlannerModel;
 import com.example.modulus.FragmentInsights.InsightsFragment;
 import com.example.modulus.R;
+import com.example.modulus.Utils.ModuleGraph;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class EditPlannerMenu extends AppCompatActivity {
-    List<PlannerModel> basePlannerList = PlannerFragment.basePlannerList;
-    PlannerModel selectedPlanner;
-    MaterialCardView selectTermCard; TextView tvTerm;
-    int electiveLimit;
-    CardView coreCard; TextView tvCore;
-    MaterialCardView selectElectivesCard; TextView tvElectives; String[] electivesList;
-    CardView term3HASSCard; TextView tvTerm3HASS;
-    MaterialCardView selectHASSCard; TextView tvHASS; String[] HASSList;
-    boolean[] selectedElectives;
-    boolean changed;
-    ArrayList<String> selectedModulesIndex = new ArrayList<>();
-    String[] filteredModulesList;
-    ImageView backButton;
-    Button confirmButton;
-    SharedPreferences mPreferences;
-    final static String KEY_NAME = "Electives";
-    final static String KEY_PATH = "Term";
-    final String TAG = "Edit Planner";
+public class EditPlannerMenuActivity extends AppCompatActivity {
+    private final List<PlannerModel> basePlannerList = PlannerFragment.basePlannerList;
+    private final List<PlannerModel> mPlannerList = PlannerFragment.mPlannerList;
+    private ModuleGraph<String> g;
+    private PlannerModel selectedPlanner;
+    private List<String> modulesTillTerm;
+    private TextView tvTerm;
+    private int electiveLimit;
+    private CardView coreCard; private TextView tvCore;
+    private MaterialCardView selectElectivesCard; private TextView tvElectives; private String[] electivesList;
+    private CardView term3HASSCard; private TextView tvTerm3HASS;
+    private MaterialCardView selectHASSCard; private TextView tvHASS; private String[] HASSList;
+    private boolean[] selectedElectives;
+    private boolean changed;
+    private ArrayList<String> selectedModulesIndex = new ArrayList<>();
+    private String[] filteredModulesList;
+    private SharedPreferences mPreferences;
+    public final static String KEY_NAME = "Electives";
+    public final static String KEY_PATH = "Term";
+    private final String TAG = "Edit Planner";
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dropdown_menu);
+        setContentView(R.layout.planner_dropdown_menu);
         changed = false;
 
-        selectTermCard = findViewById(R.id.selectTermCard);
+        DataBaseHelperInsights myDB = new DataBaseHelperInsights(this);
+        g = myDB.getGraph();
+
+        MaterialCardView selectTermCard = findViewById(R.id.selectTermCard);
         tvTerm = findViewById(R.id.tvTerm);
         selectTermCard.setOnClickListener(v -> {
             showTermDialog();
         });
-
 
         coreCard = findViewById(R.id.coreCard);
         tvCore = findViewById(R.id.tvCore);
@@ -75,7 +80,7 @@ public class EditPlannerMenu extends AppCompatActivity {
             showHASSDialog();
         });
 
-        backButton = findViewById(R.id.backButton);
+        ImageView backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,36 +91,32 @@ public class EditPlannerMenu extends AppCompatActivity {
         });
 
         mPreferences = this.getSharedPreferences(PlannerFragment.PREF_FILE, Context.MODE_PRIVATE);
-        confirmButton = findViewById(R.id.confirmButton);
+        Button confirmButton = findViewById(R.id.confirmButton);
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!changed){
-                    Toast.makeText(EditPlannerMenu.this, "No Changes Detected", Toast.LENGTH_SHORT).show();;
+                    Toast.makeText(EditPlannerMenuActivity.this, "No Changes Detected", Toast.LENGTH_SHORT).show();;
                 }
                 else{
                     StringBuilder updatedModules = new StringBuilder();
                     if(coreCard.getVisibility() == View.VISIBLE){
                         updatedModules.append(tvCore.getText().toString()).append("\n");
-                        System.out.println("HELP" + updatedModules);
-                        Log.d(TAG, "core");
+                        Log.d(TAG, "core" + updatedModules);
                     }
                     if(selectElectivesCard.getVisibility() == View.VISIBLE){
                         updatedModules.append(tvElectives.getText().toString()).append("\n");
-                        System.out.println("HELP" + updatedModules);
-                        Log.d(TAG, "elective");
+                        Log.d(TAG, "elective" + updatedModules);
                     }
                     if(term3HASSCard.getVisibility() == View.VISIBLE){
                         updatedModules.append(tvTerm3HASS.getText().toString()).append("\n");
-                        System.out.println("HELP" + updatedModules);
-                        Log.d(TAG, "term3");
+                        Log.d(TAG, "term3" + updatedModules);
                     }
                     if(selectHASSCard.getVisibility() == View.VISIBLE){
                         updatedModules.append(tvHASS.getText().toString()).append("\n");
-                        System.out.println("HELP" + updatedModules);
-                        Log.d(TAG, "hass");
+                        Log.d(TAG, "hass" + updatedModules);
                     }
-                    System.out.println(updatedModules);
+                    Log.d(TAG, "Updated modules: " + updatedModules);
                     Intent resultIntent = new Intent();
                     resultIntent.putExtra(KEY_NAME, updatedModules.toString());
                     resultIntent.putExtra(KEY_PATH, selectedPlanner.getTerm());
@@ -129,7 +130,7 @@ public class EditPlannerMenu extends AppCompatActivity {
 
     private void showTermDialog(){
         tvTerm = findViewById(R.id.tvTerm);
-        AlertDialog.Builder builder = new AlertDialog.Builder(EditPlannerMenu.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(EditPlannerMenuActivity.this);
 
         builder.setTitle("Select Term");
         builder.setCancelable(false);
@@ -141,6 +142,7 @@ public class EditPlannerMenu extends AppCompatActivity {
                 tvTerm.setText(terms[which]);
                 selectedPlanner = getSelectedPlanner(terms[which]);
                 setValues();
+                modulesTillTerm = getModulesTillTerm(terms[which]);
                 dialog.dismiss();
             }
         }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
@@ -157,7 +159,7 @@ public class EditPlannerMenu extends AppCompatActivity {
         }else{
             selectedElectives = new boolean[electivesList.length];
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(EditPlannerMenu.this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(EditPlannerMenuActivity.this);
 
             builder.setTitle("Select Electives");
             builder.setCancelable(false);
@@ -166,15 +168,24 @@ public class EditPlannerMenu extends AppCompatActivity {
                 int count = 0;
                 @Override
                 public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                    boolean added = false;
                     if(isChecked){
-                        selectedModulesIndex.add(String.valueOf(which));
+                        String id = electivesList[which].split(" ")[0]; // String ID of module tapped
+                        if(checkPreReq(id)){
+                            selectedModulesIndex.add(String.valueOf(which));
+                            added = true;
+                        }else{
+                            Toast.makeText(EditPlannerMenuActivity.this, "Pre-Requisites not met: " + g.neighbours(id).toString(), Toast.LENGTH_SHORT).show();
+                            selectedElectives[which] = false;
+                            selectedModulesIndex.remove(String.valueOf(which));
+                            ((AlertDialog) dialog).getListView().setItemChecked(which, false);
+                        }
                     }else{
                         selectedModulesIndex.remove(String.valueOf(which));
                     }
-                    count += isChecked ? 1 : -1;
-                    int term = selectedPlanner.getTermInt();
+                    count += added ? 1 : -1;
                     if(count > electiveLimit) {
-                        Toast.makeText(EditPlannerMenu.this, "Limit Reached!.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditPlannerMenuActivity.this, "Limit Reached!", Toast.LENGTH_SHORT).show();
                         selectedElectives[which] = false;
                         selectedModulesIndex.remove(String.valueOf(which));
                         count--;
@@ -220,7 +231,7 @@ public class EditPlannerMenu extends AppCompatActivity {
             Toast.makeText(this, "Select a Term first!", Toast.LENGTH_SHORT).show();
         }else{
             tvHASS = findViewById(R.id.tvHASS);
-            AlertDialog.Builder builder = new AlertDialog.Builder(EditPlannerMenu.this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(EditPlannerMenuActivity.this);
 
             builder.setTitle("Select HASS");
             builder.setCancelable(false);
@@ -244,20 +255,42 @@ public class EditPlannerMenu extends AppCompatActivity {
 
     private PlannerModel getSelectedPlanner(String term) {
         for (PlannerModel planner : basePlannerList) {
-            if(planner.getTerm().equals(term))
+            if(planner.getTerm().equals(term)){
                 return planner;
+            }
         }
-        Log.d("Edit", "No Planner");
+        Log.d(TAG, "No Planner");
         return null;
+    }
+
+    private List<String> getModulesTillTerm(String term){
+        List<String> modsSoFar = new ArrayList<>();
+        for (PlannerModel planner : mPlannerList) {
+            for(ModuleModel m: planner.getModules()){
+                modsSoFar.add(m.getId());
+            }
+            if(planner.getTerm().equals(term)){
+                return modsSoFar;
+            }
+        }
+        return modsSoFar;
     }
 
     private void setValues() {
         TextView tv = findViewById(R.id.tvTerm);
         tv.setText(selectedPlanner.getTerm());
 
+        List<ModuleModel> core = new ArrayList<>();
+        List<ModuleModel> rec = new ArrayList<>();
+        if(PlannerFragment.trackModel != null){
+            core = PlannerFragment.trackModel.getCore();
+            rec = PlannerFragment.trackModel.getRecMods();
+        }
+
         //filter available
         List<String> stringFilteredModulesList = new ArrayList<String>();
         List<String> stringHASSList = new ArrayList<String>();
+        List<String> stringCoreList = new ArrayList<String>();
         List<String> stringElectivesList = new ArrayList<String>();
         for(ModuleModel module: InsightsFragment.moduleList){
             if(!selectedPlanner.getModules().toString().contains(module.toString())){
@@ -265,6 +298,9 @@ public class EditPlannerMenu extends AppCompatActivity {
                     stringFilteredModulesList.add(module.toString());
                     if(module.getTags().contains("HASS")){
                         stringHASSList.add(module.toString());
+                    }else if( (!core.isEmpty() && core.toString().contains(module.toString())) ||
+                            (!rec.isEmpty() && rec.toString().contains(module.toString()))){
+                        stringCoreList.add(module.toString());
                     }else{
                         stringElectivesList.add(module.toString());
                     }
@@ -273,7 +309,8 @@ public class EditPlannerMenu extends AppCompatActivity {
         }
         filteredModulesList = stringFilteredModulesList.toArray(new String[0]);
         HASSList = stringHASSList.toArray(new String[0]);
-        electivesList = stringElectivesList.toArray(new String[0]);
+        stringCoreList.addAll(stringElectivesList);
+        electivesList = stringCoreList.toArray(new String[0]);
 
         //set values
         electiveLimit = 3;
@@ -312,6 +349,53 @@ public class EditPlannerMenu extends AppCompatActivity {
                 selectHASSCard.setVisibility(View.VISIBLE);
             }
 
+        }
+    }
+
+    private boolean checkPreReq(String id){
+        String cost = g.getCost(id);
+        if(cost.equals("NIL")){ // Base Case: no preReq
+            Log.d(TAG, "no preReq");
+            return true;
+        }
+        List<String> neighbours = g.neighbours(id);
+        if(cost.equals("Soft")){ // Recursive Case: soft preReq, any 1 will return true
+            for(String s: neighbours){
+                if(modulesTillTerm.contains(s)){
+                    if(checkPreReq(s)){ // Recursively check preReq
+                        Log.d(TAG, "check successful");
+                        return true;
+                    }
+                }
+            }
+            Log.d(TAG, "check successful");
+            return false;
+        }else{ // // Recursive Case: hard preReq, must have all to return true,
+            // neighbours may have "/", which always has 2 mods, of these having either will count
+            int count = neighbours.size();
+            for(String s: neighbours){
+                if(s.contains("/")){
+                    String[] softMods = s.split("/");
+                    for(String soft: softMods){ // Check if either mod is in modsTillTerm
+                        if(modulesTillTerm.contains(soft)){
+                            if(checkPreReq(s)){ // Recursively check preReq
+                                count -= 1;
+                                break;
+                            }
+                        }
+                    }
+                }else{
+                    for(String s1: modulesTillTerm){
+                        if(s.equals(s1)){
+                            if(checkPreReq(s)) { // Recursively check preReq
+                                count -= 1;
+                            }
+                        }
+                    }
+                }
+            }
+            Log.d(TAG, "check successful");
+            return count == 0;
         }
     }
 }

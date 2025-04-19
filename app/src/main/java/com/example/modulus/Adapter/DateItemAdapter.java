@@ -16,6 +16,7 @@ import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
 
+// RecyclerView Adapter for Horizontal scrolling dates on top of HomeFragment
 public class DateItemAdapter extends RecyclerView.Adapter<DateItemAdapter.MyViewHolder> {
     private List<LocalDate> dateList;
     private OnItemClickListener listener;

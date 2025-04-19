@@ -7,10 +7,10 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,9 +26,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.modulus.Adapter.ReviewAdapter;
-import com.example.modulus.Adapter.ToDoAdapter;
-import com.example.modulus.FragmentHome.AddNewTask;
-import com.example.modulus.FragmentHome.HomeFragment;
 import com.example.modulus.Model.ModuleModel;
 import com.example.modulus.Model.ReviewModel;
 import com.example.modulus.R;
@@ -49,24 +46,20 @@ import java.util.concurrent.Executors;
 
 public class ModuleDetailsActivity extends AppCompatActivity implements OnDialogCloseListener {
     public static ModuleModel selectedModule;
-    RecyclerView reviewRecyclerView;
-    FloatingActionButton addReview;
-    List<ReviewModel> reviewList;
-    ReviewAdapter reviewAdapter;
-    DataBaseHelperReviews dbReview;
-    TextView overallScore;
-    RatingBar overallRating;
-    final String TAG = "Module Insights";
+    private List<ReviewModel> reviewList;
+    private ReviewAdapter reviewAdapter;
+    private DataBaseHelperReviews dbReview;
+    private final String TAG = "Module Details";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.insights_activity_module_details);
 
-
         getSelectedModule();
         setValues();
 
+        // Set buttons/texts and onClickListeners
         RelativeLayout backButton = findViewById(backgroup);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,13 +79,16 @@ public class ModuleDetailsActivity extends AppCompatActivity implements OnDialog
                 }
             }
         });
+
+        // Set up reviews
         dbReview = new DataBaseHelperReviews(this);
-        //insertReviewsFromJson();
 //        insertReviewsFromJson();
         float average = dbReview.getOverallRating(selectedModule.getId());
-        Log.d("OverallRating", "Average Rating: " + average);
-        overallScore = findViewById(R.id.overallScore);
-        overallRating = findViewById(R.id.overallRating);
+
+        Log.d(TAG, "Average Rating: " + average);
+
+        TextView overallScore = findViewById(R.id.overallScore);
+        RatingBar overallRating = findViewById(R.id.overallRating);
         overallScore.setText(String.format("%.1f", average));
         overallRating.setRating(average);
         int star = ContextCompat.getColor(this, selectedModule.getColor());
@@ -102,11 +98,8 @@ public class ModuleDetailsActivity extends AppCompatActivity implements OnDialog
         overallRating.setSecondaryProgressTintList(csl);
         overallScore.setTextColor(star);
 
-
-        reviewRecyclerView = findViewById(R.id.reviewRecyclerView);
         // Setup RecyclerView
-
-
+        RecyclerView reviewRecyclerView = findViewById(R.id.reviewRecyclerView);
         reviewList = new ArrayList<>();
         reviewList = dbReview.getModuleReviews(selectedModule.getId());
 
@@ -120,12 +113,13 @@ public class ModuleDetailsActivity extends AppCompatActivity implements OnDialog
         reviewAdapter.notifyDataSetChanged();
 
 
-        addReview = findViewById(R.id.addReviewButton);
+        // Set up add review button
+        FloatingActionButton addReview = findViewById(R.id.addReviewButton);
         addReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AddNewReview.newInstance().show(getSupportFragmentManager(), AddNewReview.TAG);
-                Log.d("addButton","AddNewReview instance");
+                Log.d(TAG,"AddNewReview instance");
             }
         });
 
@@ -157,19 +151,17 @@ public class ModuleDetailsActivity extends AppCompatActivity implements OnDialog
         return null;
     }
 
+    @SuppressLint("SetTextI18n")
     private void setValues() {
-
-
-
-        TextView Name = findViewById(R.id.moduleDetailsName);
-        Name.setText(selectedModule.getName());
+        // Set up values as stated
+        TextView name = findViewById(R.id.moduleDetailsName);
+        name.setText(selectedModule.getName());
 
         TextView pillar = findViewById(R.id.moduleDetailsPillar);
         pillar.setText(selectedModule.getPillar() + " " + selectedModule.getId());
         int color = ContextCompat.getColor(this, selectedModule.getColor());
         pillar.setTextColor(color);
         pillar.setCompoundDrawableTintList(ColorStateList.valueOf(color));
-
 
         TextView tags = findViewById(R.id.tags);
         tags.setText( selectedModule.getType());
@@ -178,7 +170,6 @@ public class ModuleDetailsActivity extends AppCompatActivity implements OnDialog
         TextView prof = findViewById(R.id.termProf);
         prof.setText(String.join(", ", selectedModule.getProf()));
         prof.setTextColor(color);
-
 
         RelativeLayout back = findViewById(R.id.backgroup);
         back.setBackgroundColor(color);
@@ -189,9 +180,6 @@ public class ModuleDetailsActivity extends AppCompatActivity implements OnDialog
 
         ImageView imageMod = findViewById(R.id.imageMod);
         imageMod.setImageDrawable(selectedModule.getImage());
-
-
-
 
         TextView preReq = findViewById(R.id.prerequisites);
         List<String> modPreReq = selectedModule.getPrerequisites();
@@ -217,23 +205,19 @@ public class ModuleDetailsActivity extends AppCompatActivity implements OnDialog
                 }
                 output.add(orString.toString());
             }
-
-
         }
 
         if (!output.isEmpty()){
             preReq.setText(Html.fromHtml(TextUtils.join("<br>", output), Html.FROM_HTML_MODE_LEGACY));
-
-
         } else{
             preReq.setText("No Pre-requisites");
         }
-
         preReq.setTextColor(color);
 
     }
 
     private void openURL(){
+        // Open URL using executor
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         Looper uiLooper = Looper.getMainLooper();
         final Handler handler = new Handler(uiLooper);
@@ -287,12 +271,11 @@ public class ModuleDetailsActivity extends AppCompatActivity implements OnDialog
 
                 dbReview.insertTask(model);
             }
-
-            Log.d("DB_INSERT", "Inserted " + jsonArray.length() + " reviews");
+            Log.d(TAG, "Inserted " + jsonArray.length() + " reviews");
 
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e("DB_INSERT", "Failed to insert reviews: " + e.getMessage());
+            Log.e(TAG, "Failed to insert reviews: " + e.getMessage());
         }
     }
 

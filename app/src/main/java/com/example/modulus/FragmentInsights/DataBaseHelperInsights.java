@@ -1,118 +1,52 @@
 package com.example.modulus.FragmentInsights;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteException;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 
+import com.example.modulus.Utils.ModuleGraph;
 import com.example.modulus.Model.ModuleModel;
 import com.example.modulus.R;
+import com.example.modulus.Utils.DataBaseHelper;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-public class DataBaseHelperInsights extends SQLiteOpenHelper {
-    private static final String dbName = "sutdModules.db";
+public class DataBaseHelperInsights extends DataBaseHelper {
     private static final String tableName = "sutdmodules";
-    private static final String plannerTable = "planner";
-    private static String dbPath = "/data/data/com.example.modulus/databases/";
-    SQLiteDatabase db;
-    private final Context mContext;
-    private static final String col0 = "Pillar";
-    private static final String col1 = "Tags";
-    private static final String col2 = "Term";
-    private static final String col3 = "ID";
-    private static final String col4 = "Name";
-    private static final String col5 = "Professors";
-    private static final String col6 = "Prerequisites";
+    private final String TAG = "DatabaseInsights";
+
+    private static final String COL_0 = "Pillar";
+    private static final String COL_1 = "Tags";
+    private static final String COL_2 = "Term";
+    private static final String COL_3 = "ID";
+    private static final String COL_4 = "Name";
+    private static final String COL_5 = "Professors";
+    private static final String COL_6 = "Prerequisites";
+    private static final String COL_7 = "Cost";
+    private static final String COL_8 = "Description";
+    private static final String COL_9 = "Type";
+
 
     public DataBaseHelperInsights(Context context) {
-        super(context, dbName, null, 1);
-        this.mContext = context;
+        super(context);
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-    }
-
-    private boolean checkDatabase() {
-        try {
-            final String mPath = dbPath + dbName;
-            Log.d("check", "check");
-            final File file = new File(mPath);
-            return file.exists();
-        } catch (SQLiteException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    private void copyDatabase() throws IOException {
-        try {
-            InputStream mInputStream = mContext.getAssets().open(dbName);
-            Log.d("DB", "Copying Database");
-            String outFileName = dbPath + dbName;
-            OutputStream mOutputStream = new FileOutputStream(outFileName);
-
-            byte[] buffer = new byte[2048];
-            int length;
-            while ((length = mInputStream.read(buffer)) > 0) {
-                mOutputStream.write(buffer, 0, length);
-            }
-            mOutputStream.flush();
-            mOutputStream.close();
-            mInputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void createDatabase() throws IOException {
-        boolean mDatabaseExists = checkDatabase();
-        Log.d("create", "create");
-        if (mDatabaseExists) {
-            this.getReadableDatabase();
-            this.close();
-            try {
-                copyDatabase();
-            } catch (IOException mIOException) {
-                mIOException.printStackTrace();
-                throw new Error("Error copying Database");
-            } finally {
-                this.close();
-            }
-        }
-    }
-
-    @Override
-    public synchronized void close() {
-        if (db != null) {
-            db.close();
-        }
-        SQLiteDatabase.releaseMemory();
-        super.close();
-    }
-
+    @SuppressLint("Range")
     public ArrayList<ModuleModel> getAllModules() {
         try {
             createDatabase();
+            Log.d(TAG, "DB created");
         } catch (IOException e) {
             e.printStackTrace();
+            Log.d(TAG, "DB error");
         }
         ArrayList<ModuleModel> result = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -120,26 +54,73 @@ public class DataBaseHelperInsights extends SQLiteOpenHelper {
         Cursor c = db.query(tableName, null, null, null, null, null, null);
 
         while (c.moveToNext()) {
-            String id = c.getString(3);
-            String name = c.getString(4);
+            String id = c.getString(c.getColumnIndex(COL_3));
+            String name = c.getString(c.getColumnIndex(COL_4));
             ModuleModel module = new ModuleModel(id, name);
-            module.setPillar(c.getString(0));
-            module.setTags(Arrays.asList(c.getString(1).split(",")));
-            module.setTerm(Arrays.asList(c.getString(2).split(",")));
-            module.setProf(Arrays.asList(c.getString(5).split(",")));
-            module.setPrerequisites(Arrays.asList(c.getString(6).split(",")));
-            module.setCost(c.getString(7));
-            module.setDescription(c.getString(8));
-            module.setColor(getColourR(c.getString(0)));
-            module.setImage(getImage(mContext,c.getString(0)));
-            module.setType(c.getString(9));
-            result.add(module);
+            String pillar = c.getString(c.getColumnIndex(COL_0));
+            module.setPillar(pillar);
+            module.setTags(Arrays.asList(c.getString(c.getColumnIndex(COL_1)).split(",")));
+            module.setTerm(Arrays.asList(c.getString(c.getColumnIndex(COL_2)).split(",")));
+            module.setProf(Arrays.asList(c.getString(c.getColumnIndex(COL_5)).split(",")));
+            module.setPrerequisites(Arrays.asList(c.getString(c.getColumnIndex(COL_6)).split(",")));
+            module.setDescription(c.getString(c.getColumnIndex(COL_8)));
 
+            module.setColor(getColourR(pillar));
+            module.setImage(getImage(this.getContext(),pillar));
+            module.setType(c.getString(c.getColumnIndex(COL_9)));
+
+            result.add(module);
         }
+        Log.d(TAG, result.size() + " modules added");
         c.close();
         db.close();
 
         return result;
+    }
+
+    @SuppressLint("Range")
+    public ModuleGraph<String> getGraph(){
+        try {
+            createDatabase();
+            Log.d(TAG, "DB created");
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d(TAG, "DB error");
+        }
+        ModuleGraph<String> g = new ModuleGraph<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor c = db.query(tableName, null, null, null, null, null, null);
+
+        while (c.moveToNext()) {
+            String id = c.getString(c.getColumnIndex(COL_3));
+            List<String> preReq = Arrays.asList(c.getString(c.getColumnIndex(COL_6)).split(","));
+            String cost = c.getString(c.getColumnIndex(COL_7));
+            if(cost.equals("NIL")){
+                g.addVertex(id, cost);
+            }else if(cost.equals("Soft")){
+                for(String s: preReq){
+                    if(s.contains("/")){
+                        List<String> softPreReq = Arrays.asList(s.split("/"));
+                        for(String s1: softPreReq){
+                            g.addEdge(id, s, cost);
+                        }
+                    }else{
+                        g.addEdge(id, s, cost);
+                    }
+
+                }
+            }else{
+                for(String s: preReq){
+                    g.addEdge(id, s, cost); // Destination vertex may contain "/", ignore for now
+                }
+            }
+        }
+        Log.d(TAG, g.getVertexCount() + " vertices added");
+        c.close();
+        db.close();
+
+        return g;
     }
 
     private int getColourR(String Pillar){

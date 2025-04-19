@@ -1,5 +1,6 @@
 package com.example.modulus.Adapter;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +16,13 @@ import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 
+// RecyclerView Adapter for modules list in InsightsFragment
 public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.moduleCellViewHolder>  {
     public interface OnItemClickListener {
         void onItemClick(ModuleModel module);
     }
-    ArrayList<ModuleModel> moduleList;
-    OnItemClickListener listener;
+    private final ArrayList<ModuleModel> moduleList;
+    private final OnItemClickListener listener;
     private String sortType = "name";
 
     public ModuleAdapter(ArrayList<ModuleModel> moduleList, OnItemClickListener listener) {
@@ -31,10 +33,11 @@ public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.moduleCell
     @NonNull
     @Override
     public moduleCellViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.module_cell, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.insights_module_cell, parent, false);
         return new moduleCellViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull moduleCellViewHolder holder, int position) {
         ModuleModel module = moduleList.get(position);

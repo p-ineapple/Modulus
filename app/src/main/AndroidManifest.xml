@@ -31,12 +31,9 @@
             android:parentActivityName=".MainActivity">
         </activity>
 
-        <activity android:name=".FragmentPlanner.EditPlanner"
-            android:parentActivityName=".MainActivity">
-        </activity>
 
-        <activity android:name=".FragmentPlanner.EditPlannerMenu"
-            android:parentActivityName=".FragmentPlanner.EditPlanner">
+        <activity android:name=".FragmentPlanner.EditPlannerMenuActivity"
+            android:parentActivityName=".MainActivity">
         </activity>
 
     </application>

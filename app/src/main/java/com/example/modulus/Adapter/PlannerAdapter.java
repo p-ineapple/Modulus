@@ -19,7 +19,7 @@ import com.example.modulus.Model.PlannerModel;
 import com.example.modulus.R;
 
 import java.util.List;
-
+// RecyclerView Adapter for terms in PlannerFragment
 public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.plannerViewHolder> {
     private final int colour;
     List<PlannerModel> plannerList;

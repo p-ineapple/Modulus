@@ -40,37 +40,31 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PlannerFragment extends Fragment {
-    public static List<PlannerModel> basePlannerList;
-    public static List<PlannerModel> mPlannerList;
-    public static String myPillar;
-    public static String myTrack;
-    public static String myMinor;
-    public static TrackModel trackModel;
-    public static TrackModel minorModel;
-    PlannerAdapter adapter;
-    RecyclerView recyclerView;
-    DataBaseHelperPlanner myDB;
-    DataBaseHelperTracks tracksDB;
-    ImageView editButton;
-    SharedPreferences mPreferences;
-    static final String KEY_DATA_PILLAR = "SHARED_PREF_DATA_PILLAR";
-    static final String KEY_DATA_TRACK = "SHARED_PREF_DATA_TRACK";
-    static final String KEY_DATA_MINOR = "SHARED_PREF_DATA_MINOR";
-    static final String KEY_DATA_TERMS = "SHARED_PREF_DATA_TERMS";
-    static final String KEY_DATA_MODS = "SHARED_PREF_DATA_MODS";
-    static final String PREF_FILE = "mainsharedpref";
-    private final String TAG = "PlannerModel";
+    public static List<PlannerModel> basePlannerList, mPlannerList;
+    public static String myPillar, myTrack, myMinor;
+    public static TrackModel trackModel, minorModel;
+    private PlannerAdapter adapter;
+    private RecyclerView recyclerView;
+    private DataBaseHelperPlanner myDB;
+    private DataBaseHelperTracks tracksDB;
+    private SharedPreferences mPreferences;
+    public static final String KEY_DATA_PILLAR = "SHARED_PREF_DATA_PILLAR";
+    public static final String KEY_DATA_TRACK = "SHARED_PREF_DATA_TRACK";
+    public static final String KEY_DATA_MINOR = "SHARED_PREF_DATA_MINOR";
+    public static final String KEY_DATA_TERMS = "SHARED_PREF_DATA_TERMS";
+    public static final String KEY_DATA_MODS = "SHARED_PREF_DATA_MODS";
+    public static final String PREF_FILE = "mainsharedpref";
+    private final String TAG = "Planner Fragment";
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_planner, container, false);
-
         recyclerView = view.findViewById(R.id.plannerRecyclerView);
 
         myDB = new DataBaseHelperPlanner(getContext());
         tracksDB = new DataBaseHelperTracks(getContext());
 
         mPreferences = this.getActivity().getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
-        if(mPreferences.getString(KEY_DATA_TERMS, "").equals("")){
+        if(mPreferences.getString(KEY_DATA_TERMS, "").isEmpty()){
             Log.d(TAG, "New Account");
             basePlannerList = myDB.getPlanner("Default");
             mPlannerList = myDB.getPlanner("Default");
@@ -79,15 +73,10 @@ public class PlannerFragment extends Fragment {
             onResume();
             Log.d(TAG, "Refresh");
         }
-        if(InsightsFragment.moduleList == null){
-            myDB = new DataBaseHelperPlanner(getContext());
-            InsightsFragment.moduleList = myDB.getAllModules();
-        }
-
 
         LinearLayout editTab = view.findViewById(R.id.editTab);
         editTab.setVisibility(View.GONE);
-        editButton = view.findViewById(R.id.editButton);
+        ImageView editButton = view.findViewById(R.id.editButton);
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,14 +90,8 @@ public class PlannerFragment extends Fragment {
 
         Button pillarButton = view.findViewById(R.id.pillarButton);
         TextView pillarText = view.findViewById(R.id.pillarText);
-
         String pillarPref = mPreferences.getString(KEY_DATA_PILLAR, "");
-        if(!pillarPref.isEmpty()){
-            pillarText.setText(pillarPref);
-            myPillar = pillarPref;
-        }else{
-            myPillar = "Pillar";
-        }
+        pillarText.setText(pillarPref);
 
         int color = getColourR(myPillar);
         adapter = new PlannerAdapter(mPlannerList,color);
@@ -117,17 +100,11 @@ public class PlannerFragment extends Fragment {
 
         TextView trackText = view.findViewById(R.id.specializationText);
         String trackPref = mPreferences.getString(KEY_DATA_TRACK, "");
-        if(!trackPref.isEmpty()){
-            trackText.setText(trackPref);
-            myTrack = trackPref;
-        }
+        trackText.setText(trackPref);
+
         TextView minorText = view.findViewById(R.id.minorText);
         String minorPref = mPreferences.getString(KEY_DATA_MINOR, "");
-        if(!minorPref.isEmpty()){
-            minorText.setText(minorPref);
-            myMinor = minorPref;
-        }
-
+        minorText.setText(minorPref);
 
         String[] pillars = new String[]{"ASD", "CSD", "DAI", "EPD", "ESD"};
         pillarButton.setOnClickListener(new View.OnClickListener() {
@@ -140,6 +117,7 @@ public class PlannerFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         myPillar = pillars[which];
                         pillarText.setText(pillars[which]);
+                        updatePillarColor(view, pillars[which]);
 
                         SharedPreferences.Editor prefsEditor = mPreferences.edit();
                         prefsEditor.putString(PlannerFragment.KEY_DATA_PILLAR, pillars[which]);
@@ -149,15 +127,11 @@ public class PlannerFragment extends Fragment {
                         prefsEditor.putString(PlannerFragment.KEY_DATA_MINOR, "No Minor");
                         prefsEditor.apply();
 
-
-                        updatePillarColor(view, pillars[which]);
-
-
                         basePlannerList = myDB.getPlanner(pillars[which]);
                         mPlannerList = myDB.getPlanner(pillars[which]);
 
-                        int newcolor = getColourR(myPillar);
-                        adapter = new PlannerAdapter(mPlannerList,newcolor);
+                        int newColor = getColourR(myPillar);
+                        adapter = new PlannerAdapter(mPlannerList,newColor);
                         recyclerView.setAdapter(adapter);
 
                         dialog.dismiss();
@@ -265,8 +239,8 @@ public class PlannerFragment extends Fragment {
                         Log.d("TAG", "Back to Planner");
                         Bundle b = result.getData().getExtras();
                         if(b != null){
-                            String newModules = b.getString(EditPlannerMenu.KEY_NAME);
-                            String term = b.getString(EditPlannerMenu.KEY_PATH);
+                            String newModules = b.getString(EditPlannerMenuActivity.KEY_NAME);
+                            String term = b.getString(EditPlannerMenuActivity.KEY_PATH);
                             System.out.println(term);
                             String[] updatedModules = newModules.split("\n");
                             List<ModuleModel> newPlannerModules = new ArrayList<ModuleModel>();
@@ -318,7 +292,7 @@ public class PlannerFragment extends Fragment {
             public void onClick(View v) {
                 Log.d(TAG, "Edit");
                 System.out.println(trackModel);
-                Intent intent = new Intent(getContext(), EditPlannerMenu.class);
+                Intent intent = new Intent(getContext(), EditPlannerMenuActivity.class);
                 launcher.launch(intent);
             }
         });
@@ -355,6 +329,7 @@ public class PlannerFragment extends Fragment {
     public void onResume(){
         super.onResume();
         Log.d(TAG, "Resume");
+
         if(InsightsFragment.moduleList == null){
             myDB = new DataBaseHelperPlanner(getContext());
             InsightsFragment.moduleList = myDB.getAllModules();
@@ -373,7 +348,6 @@ public class PlannerFragment extends Fragment {
         if(!minorPref.isEmpty()){
             myMinor = minorPref;
         }
-
         if(basePlannerList == null){
             myDB = new DataBaseHelperPlanner(getContext());
             basePlannerList = myDB.getPlanner(myPillar);

@@ -2,37 +2,14 @@
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="HardcodedText"
-    tools:showIn = "navigation_view">
+    tools:ignore="HardcodedText">
 
-    <group
-        android:checkableBehavior="single">
-
-        <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/home"
-            android:title="Home" />
-
-<!--        <item-->
-<!--            android:id="@+id/nav_settings"-->
-<!--            android:icon="@drawable/settings"-->
-<!--            android:title="Settings"/>-->
-
-        <!--item
-            android:id="@+id/nav_share"
-            android:icon="@drawable/nav_share"
-            android:title="Share"/-->
-
-<!--        <item-->
-<!--            android:id="@+id/nav_about"-->
-<!--            android:icon="@drawable/about_tbr"-->
-<!--            android:title="About Us"/>-->
-    </group>
-<!--    <group android:checkableBehavior="none">-->
-<!--        <item-->
-<!--            android:id="@+id/nav_logout"-->
-<!--            android:icon="@drawable/logout"-->
-<!--            android:title="Logout"/>-->
-<!--    </group>-->
-
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/home"
+        android:title="Home" />
+    <item
+        android:id="@+id/nav_logout"
+        android:icon="@drawable/logout"
+        android:title="Logout" />
 </menu>
