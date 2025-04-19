@@ -93,6 +93,7 @@
                 android:id="@+id/tvCore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
                 android:textAlignment="center"
                 android:text="Core"
                 android:textSize="20sp"
@@ -148,6 +149,7 @@
                 android:id="@+id/tvTerm3HASS"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
                 android:textAlignment="center"
                 android:text="Term 3 HASS"
                 android:textSize="20sp"
@@ -172,8 +174,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="Select HASS"
-                android:textAlignment="center"
                 android:layout_centerInParent="true"
+                android:textAlignment="center"
                 android:textSize="20sp"
                 android:layout_margin="4dp" />
 

@@ -322,6 +322,7 @@ public class EditPlannerMenuActivity extends AppCompatActivity {
                 if (module.getTags().contains("HASS")) {
                     setHASSCore.append(module.toString());
                 } else{
+                    Log.d(TAG, "Core mods: " + module.toString());
                     setTvCore.append(module.toString()).append("\n");
                     electiveLimit -= 1;
                 }
