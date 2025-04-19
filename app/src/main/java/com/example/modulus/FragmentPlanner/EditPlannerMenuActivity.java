@@ -43,7 +43,7 @@ public class EditPlannerMenuActivity extends AppCompatActivity {
     private MaterialCardView selectHASSCard; private TextView tvHASS; private String[] HASSList;
     private boolean[] selectedElectives;
     private boolean changed;
-    private ArrayList<String> selectedModulesIndex = new ArrayList<>();
+    private ArrayList<String> selectedModulesIndex;
     private String[] filteredModulesList;
     private SharedPreferences mPreferences;
     public final static String KEY_NAME = "Electives";
@@ -158,6 +158,7 @@ public class EditPlannerMenuActivity extends AppCompatActivity {
             Toast.makeText(this, "Select a Term first!", Toast.LENGTH_SHORT).show();
         }else{
             selectedElectives = new boolean[electivesList.length];
+            selectedModulesIndex = new ArrayList<>();
 
             AlertDialog.Builder builder = new AlertDialog.Builder(EditPlannerMenuActivity.this);
 
@@ -195,7 +196,6 @@ public class EditPlannerMenuActivity extends AppCompatActivity {
             }).setPositiveButton("Select", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    tvElectives.setText("");
                     StringBuilder s = new StringBuilder();
                     for(int i = 0; i < selectedModulesIndex.size(); i++){
                         s.append(electivesList[Integer.parseInt(selectedModulesIndex.get(i))]);
