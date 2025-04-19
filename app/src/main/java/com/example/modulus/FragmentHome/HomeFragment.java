@@ -19,13 +19,12 @@ import android.widget.TextView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.modulus.Adapter.DateItemAdapter;
 import com.example.modulus.Adapter.ToDoAdapter;
-import com.example.modulus.Model.MergeSort;
+import com.example.modulus.Utils.MergeSort;
 import com.example.modulus.Model.ToDoModel;
 import com.example.modulus.R;
 import com.example.modulus.Utils.OnDialogCloseListener;
@@ -44,33 +43,30 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 public class HomeFragment extends Fragment implements OnDialogCloseListener {
-    RecyclerView taskRecyclerView, dateItemRecycler;
-    FloatingActionButton addButton;
-    DataBaseHelperHome myDB;
-    Button allButton, toDoButton, completedButton;
-    TextView homeTitle;
+    private RecyclerView taskRecyclerView, dateItemRecycler;
+    private DataBaseHelperHome myDB;
+    private Button allButton, toDoButton, completedButton;
 
-    MergeSort sortTime = new MergeSort(ToDoModel.timeCompare);
     private List<ToDoModel> mList;
     private ToDoAdapter toDoAdapter;
-    final Calendar calendar = Calendar.getInstance();
-    final int year = calendar.get(Calendar.YEAR);
-    final int month = calendar.get(Calendar.MONTH) + 1;
-    final int day = calendar.get(Calendar.DAY_OF_MONTH);
-    String currentDate = day + "/" + month + "/" + year;
+    private final Calendar calendar = Calendar.getInstance();
+    private final int year = calendar.get(Calendar.YEAR);
+    private final int month = calendar.get(Calendar.MONTH) + 1;
+    private final int day = calendar.get(Calendar.DAY_OF_MONTH);
+    private final String currentDate = day + "/" + month + "/" + year;
+    private final MergeSort sortTime = new MergeSort(ToDoModel.timeCompare);
 
     public String clickedDate = currentDate;
-
+    private final String TAG = "Home Fragment";
     @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        insertTasksFromJson(this.getContext());
+        insertTasksFromJson(this.getContext());
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.homeMain), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -78,31 +74,25 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
             return insets;
         });
 
-        // Set Title to current date
-        homeTitle = view.findViewById(R.id.homeTitle);
-        // Convert your currentDate string to a LocalDate
+        // Set Title to current date, convert currentDate string to a LocalDate
+        TextView homeTitle = view.findViewById(R.id.homeTitle);
         DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("d/M/yyyy");
         LocalDate todayDate = LocalDate.parse(currentDate, inputFormatter);
+        Log.d(TAG, "date formatted");
 
-        // Extract day of week, day of month, and month name
+        // Extract day of week, day of month, and month name, set display text
         DayOfWeek dayOfWeek = todayDate.getDayOfWeek();
         int dayOfMonth = todayDate.getDayOfMonth();
         String monthName = todayDate.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH); // "April"
-
-        // Format the display text
         String displayText = String.format("Welcome! It's %s %d %s", dayOfWeek.getDisplayName(TextStyle.FULL, Locale.ENGLISH), dayOfMonth, monthName);
-
-        // Set the formatted text to your TextView
         homeTitle.setText(displayText);
-
+        Log.d(TAG, "home title set");
 
         //Date Items Recycler
         dateItemRecycler = view.findViewById(R.id.dateItemRecycler);
-        //LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false);
         ScaleCenterItemManager layoutManager = new ScaleCenterItemManager(this.getContext(),LinearLayoutManager.HORIZONTAL,false);
         dateItemRecycler.setLayoutManager(layoutManager);
         generateData();
-
 
         //Task Recycler
         taskRecyclerView = view.findViewById(R.id.recyclerView);
@@ -110,17 +100,14 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
         toDoAdapter = new ToDoAdapter(myDB, this);
         taskRecyclerView.setHasFixedSize(true);
         taskRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        taskRecyclerView.setAdapter(HomeFragment.this.toDoAdapter);
-        mList = sort(myDB.getDateTask(currentDate)); // Adjust format if needed
-//        Collections.reverse(mList);
-        HomeFragment.this.toDoAdapter.setTasks(mList);
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new RecyclerViewTouchHelper(toDoAdapter));
-        itemTouchHelper.attachToRecyclerView(taskRecyclerView);
-
-
+        taskRecyclerView.setAdapter(toDoAdapter);
+//        mList = sort(myDB.getDateTask(currentDate)); // Adjust format if needed
+//        toDoAdapter.setTasks(mList);
+//        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new RecyclerViewTouchHelper(toDoAdapter));
+//        itemTouchHelper.attachToRecyclerView(taskRecyclerView);
 
         //Add Button
-        addButton = view.findViewById(R.id.addButton);
+        FloatingActionButton addButton = view.findViewById(R.id.addButton);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,8 +123,7 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
             @Override
             public void onClick(View v) {
                 mList = sort(myDB.getDateTask(clickedDate)); // Adjust format if needed
-//                Collections.reverse(mList);
-                HomeFragment.this.toDoAdapter.setTasks(mList);
+                toDoAdapter.setTasks(mList);
                 highlightSelectedButton(allButton, toDoButton, completedButton);
             }
         });
@@ -147,8 +133,7 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
             @Override
             public void onClick(View v) {
                 mList = sort(myDB.getStatustask(0,clickedDate)); // Adjust format if needed
-//                Collections.reverse(mList);
-                HomeFragment.this.toDoAdapter.setTasks(mList);
+                toDoAdapter.setTasks(mList);
                 highlightSelectedButton(toDoButton, allButton, completedButton);
             }
         });
@@ -158,7 +143,6 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
             @Override
             public void onClick(View v) {
                 mList = sort(myDB.getStatustask(1, clickedDate)); // Adjust format if needed
-//                Collections.reverse(mList);
                 HomeFragment.this.toDoAdapter.setTasks(mList);
                 highlightSelectedButton(completedButton, allButton, toDoButton);
             }
@@ -192,23 +176,23 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
                 clickedDate = getDate;
                 taskRecyclerView.setAdapter(HomeFragment.this.toDoAdapter);
                 mList = sort(myDB.getDateTask(getDate)); // Adjust format if needed
-//                Collections.reverse(mList);
                 HomeFragment.this.toDoAdapter.setTasks(mList);
             }
         });
 
         dateItemRecycler.setAdapter(adapter);
+        Log.d(TAG, "adapter set");
 
         // Scroll to current date when opening
         int todayPosition = today.getDayOfMonth() - 1;
         dateItemRecycler.scrollToPosition(todayPosition-2);
+        Log.d(TAG, "current date view");
     }
 
     @Override
     public void onDialogClose(DialogInterface dialogInterface) {
         Log.d("Home", "onDialogClose");
-        mList = sort(myDB.getAllTasks());
-//        Collections.reverse(mList);
+        mList = sort(myDB.getDateTask(clickedDate));
         toDoAdapter.setTasks(mList);
         toDoAdapter.notifyDataSetChanged();
 
@@ -253,11 +237,11 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
                 dbHelper.insertTask(model);
             }
 
-            Log.d("DB_INSERT", "All tasks inserted successfully");
+            Log.d(TAG, "All tasks inserted successfully");
 
         } catch (IOException | JSONException e) {
             e.printStackTrace();
-            Log.e("DB_INSERT", "Error inserting tasks: " + e.getMessage());
+            Log.e(TAG, "Error inserting tasks: " + e.getMessage());
         }
     }
 
@@ -265,7 +249,7 @@ public class HomeFragment extends Fragment implements OnDialogCloseListener {
         List<ToDoModel> status1 = new ArrayList<>();
         List<ToDoModel> status2 = new ArrayList<>();
         for(ToDoModel task: list){
-            if(task.getStatus() == 0 ){
+            if(task.getStatus() == 0){
                 status1.add(task);
             }else{
                 status2.add(task);

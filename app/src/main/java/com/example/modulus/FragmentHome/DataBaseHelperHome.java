@@ -21,7 +21,6 @@ public class DataBaseHelperHome extends SQLiteOpenHelper {
     private static final String COL_3 = "STATUS";
     private static final String COL_4 = "DATE";
     private static final String COL_5 = "TIME";
-
     private static final String COL_6 = "CATEGORY";
 
     private final String TAG = "Home DB";
