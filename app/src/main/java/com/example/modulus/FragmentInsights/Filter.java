@@ -9,19 +9,19 @@ import java.util.List;
 
 public class Filter {
     // Function names define usage
-    public static void addFilter(List<String> selectedFilters, String status) {
+    public void addFilter(List<String> selectedFilters, String status) {
         if (status != null && !selectedFilters.contains(status)) {
             selectedFilters.add(status);
         }
     }
 
-    public static void removeFilter(List<String> selectedFilters, String status) {
+    public void removeFilter(List<String> selectedFilters, String status) {
         if (status != null){
             selectedFilters.remove(status);
         }
     }
 
-    public static ArrayList<ModuleModel> applySelectedFilter(List<ModuleModel> moduleList, List<String> selectedFilters) {
+    public ArrayList<ModuleModel> applySelectedFilter(List<ModuleModel> moduleList, List<String> selectedFilters) {
         ArrayList<ModuleModel> filteredModules = new ArrayList<ModuleModel>();
         List<String> pillars = Arrays.asList(("ASD,ESD,EPD,DAI,ISTD,HASS,SMT").split(","));
         List<String> terms = Arrays.asList(("Term 1,Term 2,Term 3,Term 4,Term 5,Term 6,Term 7,Term 8").split(","));
@@ -47,7 +47,7 @@ public class Filter {
         }
         return filteredModules;
     }
-    public static List<ModuleModel> applySearchText(List<ModuleModel> moduleList, String currentSearchText){
+    public List<ModuleModel> applySearchText(List<ModuleModel> moduleList, String currentSearchText){
         List<ModuleModel> searchModules = new ArrayList<ModuleModel>();
         for (ModuleModel module : moduleList) {
             if (module.getName().toLowerCase().contains(currentSearchText.toLowerCase()) || module.getId().contains(currentSearchText)) {
@@ -56,7 +56,7 @@ public class Filter {
         }
         return searchModules;
     }
-    public static List<ModuleModel> checkForFilter(List<ModuleModel> moduleList, List<String> selectedFilters, String currentSearchText) {
+    public List<ModuleModel> checkForFilter(List<ModuleModel> moduleList, List<String> selectedFilters, String currentSearchText) {
         if (selectedFilters.isEmpty()) {
             if (currentSearchText.isEmpty()) {
                 return moduleList;
