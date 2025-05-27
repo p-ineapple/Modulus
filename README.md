@@ -21,29 +21,15 @@
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- GETTING STARTED -->
-## Getting Started
-
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
-### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
-
-### Installation
+## Setting Up Modulus
 
 1. Open Android Studio IDE.
-2. Clone the repo.
+2. Copy the repository link and clone it in Android Studio.
    ```sh
-   git clone https://github.com/p-ineapple/Modulus.git
+   https://github.com/p-ineapple/Modulus.git
    ```
 3. After all files are ready, run the application through an emulator, or through a connected android device.
 4. Log in test for both "username" and "password" fields.
-5. You are now ready to use modulus!
+5. You are now ready to use Modulus!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
