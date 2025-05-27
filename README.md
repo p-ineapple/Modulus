@@ -29,7 +29,7 @@
    https://github.com/p-ineapple/Modulus.git
    ```
 3. After all files are ready, run the application through an emulator, or through a connected android device.
-4. Log in test for both "username" and "password" fields.
+4. Log in with "test", for both "username" and "password" fields, if that does not work, re-run the application and try again.
 5. You are now ready to use Modulus!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
