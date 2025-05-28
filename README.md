@@ -5,7 +5,7 @@
 
 <h1 align="center">Modulus</h1>
   <p align="center">
-    Modulus is a mobile application aimed to enhance the student experience by simplifying academic planning and imporving access to information for SUTD students. It is an academic planner that simplfies complex track requirements and fragmented course planning, consolidates all reminders, assignments and examinations into a condensed calender as well as providing a platform for peers to give their honest reviews on courses to increase course transparency.
+    Modulus is a mobile application aimed at enhancing the student experience, by simplifying academic planning and improving access to information for SUTD students. It is an academic planner that simplfies complex track requirements and fragmented course planning, consolidates all reminders, assignments and examinations into a condensed calender as well as providing a platform for peers to give their honest reviews on courses to increase course transparency.
   </p>
 </div>
 
