@@ -12,7 +12,7 @@
 ## About The Project
 <img src="https://github.com/user-attachments/assets/d0f1d061-3d3b-4f35-83fe-18d6488565ee" alt="Image" width="600"/>
 
-### 🚀 Built With
+## Built With
 
 * [![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=java&logoColor=white)](https://www.java.com/)
 * [![XML](https://img.shields.io/badge/XML-0060AC?style=for-the-badge&logo=xml&logoColor=white)](https://en.wikipedia.org/wiki/XML)
